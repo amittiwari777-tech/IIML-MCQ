@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCM MCQ — 50 Questions · IIM Lucknow</title>
+<style>
+  :root {
+    --bg:#1a1c22;--bg2:#22252e;--bg3:#2a2d38;--card:#252830;--card2:#2e3140;
+    --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+    --text:#e8e6e1;--text2:#a8a49e;--text3:#626070;
+    --a1:#8b7ff0;--a2:#2ec4a5;--a3:#e08b20;--a4:#e05c5c;--a5:#4d9de0;
+    --a6:#c07fe0;--a7:#20b8a0;
+    --red:#e05c5c;--green:#2ec47a;
+    --serif:Georgia,'Times New Roman',serif;--sans:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;--mono:'Courier New',Courier,monospace;
+    --r:10px;--r2:6px;
+    --sh:0 1px 3px rgba(0,0,0,0.35),0 1px 2px rgba(0,0,0,0.25);
+    --sh2:0 4px 12px rgba(0,0,0,0.45);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.65;min-height:100vh}
+
+  /* HEADER */
+  .mh{background:var(--bg2);border-bottom:1px solid var(--border2);padding:30px 40px 22px;position:relative;overflow:hidden;box-shadow:var(--sh)}
+  .mh::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(139,127,240,.08) 0%,transparent 70%);pointer-events:none}
+  .ey{font-family:var(--mono);font-size:10.5px;letter-spacing:1.8px;color:var(--text3);text-transform:uppercase;margin-bottom:8px}
+  .ht{font-family:var(--serif);font-size:clamp(22px,3.5vw,36px);font-weight:600;color:var(--text);line-height:1.2;margin-bottom:5px}
+  .ht em{font-style:italic;color:var(--a1)}
+  .hs{font-size:13px;color:var(--text3);margin-bottom:18px}
+
+  /* SCORE BAR */
+  .score-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 40px;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:100;box-shadow:var(--sh)}
+  .score-label{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:1px;text-transform:uppercase}
+  .score-val{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--a1)}
+  .score-sep{color:var(--text3)}
+  .progress-wrap{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;max-width:300px}
+  .progress-bar{height:100%;background:linear-gradient(90deg,var(--a1),var(--a2));border-radius:3px;transition:width .4s ease;width:0%}
+  .btn-reset{font-family:var(--mono);font-size:11px;padding:4px 14px;border-radius:14px;border:1.5px solid var(--border2);color:var(--text3);cursor:pointer;background:var(--bg3);transition:all .15s;margin-left:auto}
+  .btn-reset:hover{border-color:var(--a4);color:var(--a4)}
+
+  /* LAYOUT */
+  .layout{display:flex;min-height:calc(100vh - 140px)}
+
+  /* SIDEBAR */
+  .sidebar{width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);padding:16px 0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;box-shadow:2px 0 8px rgba(0,0,0,0.3)}
+  .sidebar::-webkit-scrollbar{width:4px}
+  .sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+  .sdh{display:flex;align-items:center;gap:7px;padding:8px 14px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.4px;color:var(--text2);margin-top:8px;border-radius:4px}
+  .sdh.d1{color:#a89cf5;background:rgba(139,127,240,0.10)}
+  .sdh.d2{color:#2ec4a5;background:rgba(46,196,165,0.10)}
+  .sdh.d3{color:#e08b20;background:rgba(224,139,32,0.10)}
+  .sdh.d4{color:#e05c5c;background:rgba(224,92,92,0.10)}
+  .sdh.d5{color:#4d9de0;background:rgba(77,157,224,0.10)}
+  .sdh.d7{color:#20b8a0;background:rgba(32,184,160,0.10)}
+  .sdh.d6{color:#c07fe0;background:rgba(192,127,224,0.10)}
+  .sl{display:flex;align-items:center;gap:7px;padding:6px 14px 6px 26px;font-size:11.5px;color:var(--text3);cursor:pointer;border-left:2px solid transparent;transition:all .15s;text-decoration:none}
+  .sl:hover{color:var(--text);background:var(--bg3)}
+  .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+  .dot.d1{background:var(--a1)}.dot.d2{background:var(--a2)}.dot.d3{background:var(--a3)}.dot.d4{background:var(--a4)}.dot.d5{background:var(--a5)}.dot.d6{background:var(--a6)}.dot.d7{background:var(--a7)}
+
+  /* MAIN */
+  .main{flex:1;overflow-y:auto;padding:28px 36px;max-width:860px}
+
+  /* SECTION HEADER */
+  .sec-hdr{display:flex;align-items:center;gap:14px;margin-bottom:20px;margin-top:36px;padding-bottom:12px;border-bottom:1.5px solid var(--border)}
+  .sec-hdr:first-child{margin-top:0}
+  .ds{width:4px;height:44px;border-radius:2px;flex-shrink:0}
+  .ds.d1{background:var(--a1)}.ds.d2{background:var(--a2)}.ds.d3{background:var(--a3)}.ds.d4{background:var(--a4)}.ds.d5{background:var(--a5)}.ds.d6{background:var(--a6)}.ds.d7{background:var(--a7)}
+  .sec-meta .sec-label{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--text3);text-transform:uppercase;margin-bottom:4px}
+  .sec-meta h2{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--text)}
+
+  /* QUESTION CARD */
+  .qcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;margin-bottom:14px;box-shadow:var(--sh);transition:border-color .2s}
+  .qcard.answered-correct{border-color:var(--green)}
+  .qcard.answered-wrong{border-color:var(--a4)}
+  .q-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+  .q-num{font-family:var(--mono);font-size:11px;color:var(--text3);background:var(--bg3);border-radius:4px;padding:2px 8px;flex-shrink:0;margin-top:2px;letter-spacing:.5px}
+  .q-text{font-size:13.5px;color:var(--text);line-height:1.7;font-weight:500}
+  .q-text strong{color:var(--a1)}
+
+  /* OPTIONS */
+  .options{display:flex;flex-direction:column;gap:7px}
+  .opt{display:flex;align-items:flex-start;gap:10px;padding:9px 13px;border-radius:var(--r2);border:1.5px solid var(--border);background:var(--bg2);cursor:pointer;transition:all .15s;font-size:13px;color:var(--text2);line-height:1.5}
+  .opt:hover{border-color:var(--border2);background:var(--bg3);color:var(--text)}
+  .opt.selected{border-color:var(--a1);background:#2a2840;color:var(--text)}
+  .opt.correct{border-color:var(--green);background:#1a2a20;color:var(--text);cursor:default}
+  .opt.wrong{border-color:var(--a4);background:#2a1a1a;color:var(--text2);cursor:default}
+  .opt.revealed-correct{border-color:var(--green);background:#1a2a20;color:var(--text);cursor:default}
+  .opt.disabled{cursor:default;pointer-events:none}
+  .opt-key{font-family:var(--mono);font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:3px;display:flex;align-items:center;justify-content:center;background:var(--bg3);color:var(--text3);flex-shrink:0;margin-top:1px}
+  .opt.selected .opt-key{background:var(--a1);color:#fff}
+  .opt.correct .opt-key{background:var(--green);color:#fff}
+  .opt.wrong .opt-key{background:var(--a4);color:#fff}
+  .opt.revealed-correct .opt-key{background:var(--green);color:#fff}
+
+  /* CHECK BUTTON */
+  .q-footer{display:flex;align-items:center;gap:10px;margin-top:12px}
+  .btn-check{font-size:12px;font-weight:600;padding:6px 18px;border-radius:14px;border:1.5px solid var(--a1);color:var(--a1);background:#2a2840;cursor:pointer;transition:all .15s;font-family:var(--sans)}
+  .btn-check:hover{background:#342e55;box-shadow:var(--sh)}
+  .btn-check:disabled{opacity:.4;cursor:default;pointer-events:none}
+
+  /* EXPLANATION */
+  .explanation{margin-top:11px;padding:10px 13px;border-radius:var(--r2);border-left:3px solid var(--a2);background:#1a2a25;font-size:12.5px;color:var(--text2);line-height:1.65;display:none}
+  .explanation.show{display:block}
+  .explanation strong{color:var(--text);font-weight:600}
+  .result-tag{font-family:var(--mono);font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:10px;letter-spacing:.5px}
+  .result-tag.correct{background:#1a2a20;color:var(--green);border:1px solid var(--green)}
+  .result-tag.wrong{background:#2a1a1a;color:var(--a4);border:1px solid var(--a4)}
+
+  /* RESULTS PANEL */
+  .results-panel{background:var(--card2);border:1px solid var(--border2);border-radius:var(--r);padding:20px 24px;margin-top:32px;display:none}
+  .results-panel.show{display:block}
+  .rp-title{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--text);margin-bottom:8px}
+  .rp-score{font-family:var(--mono);font-size:36px;font-weight:700;margin:12px 0 4px}
+  .rp-grade{font-size:13px;color:var(--text3);margin-bottom:16px}
+  .rp-breakdown{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:12px}
+  .rp-cell{background:var(--bg3);border-radius:var(--r2);padding:9px 11px;border:1px solid var(--border)}
+  .rp-cell-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+  .rp-cell-val{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--text)}
+
+  .divider{height:1px;background:var(--border2);margin:28px 0}
+  .jt{display:inline-block;margin-top:12px;font-size:11px;color:var(--text3);cursor:pointer;text-decoration:none;transition:color .15s;font-family:var(--mono)}
+  .jt:hover{color:var(--text2)}
+
+  @media(max-width:700px){.sidebar{display:none}.main{padding:16px}}
+  @media print{.sidebar,.score-bar{display:none}.main{padding:20px}}
+</style>
+</head>
+<body>
+
+<noscript><div style="background:#e05c5c;color:#fff;text-align:center;padding:12px 20px;font-size:14px;font-weight:600;">⚠️ JavaScript is disabled or blocked. To use this interactive quiz, please download this file and open it in Chrome, Firefox, or Edge.</div></noscript>
+
+<div style="background:#2a2d38;border-bottom:2px solid #8b7ff0;padding:10px 20px;text-align:center;font-size:12.5px;color:#a8a49e;">
+  <strong style="color:#8b7ff0;">How to use:</strong> If this quiz appears non-interactive, <strong style="color:#e8e6e1;">download this file</strong> and open it in <strong style="color:#e8e6e1;">Chrome, Firefox, or Edge</strong>. Viewing inside Gmail, Outlook, or a messaging app will disable the quiz functionality.
+</div>
+
+<header class="mh" id="top">
+  <div class="ey">IIM Lucknow · Prof. Suresh K Jakhar · Supply Chain Management</div>
+  <div class="ht">SCM <em>Practice</em> — 50 MCQs</div>
+  <div class="hs">All six documents · Both case studies · Select an option then click Check Answer · Explanations revealed on submission</div>
+</header>
+
+<div class="score-bar">
+  <span class="score-label">Score</span>
+  <span class="score-val" id="scoreVal">0</span>
+  <span class="score-sep">/</span>
+  <span class="score-val" id="totalAttempted" style="color:var(--text3);font-size:14px">0 attempted</span>
+  <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+  <button class="btn-reset" onclick="resetAll()">Reset All</button>
+</div>
+
+<div class="layout">
+
+<aside class="sidebar">
+  <div class="sdh d1"><span class="dot d1"></span>Financial Flow</div>
+  <a href="#s1" class="sl">Q1–Q8</a>
+  <div class="sdh d2"><span class="dot d2"></span>Information Sharing</div>
+  <a href="#s2" class="sl">Q9–Q16</a>
+  <div class="sdh d3"><span class="dot d3"></span>Managing SC Ops</div>
+  <a href="#s3" class="sl">Q17–Q24</a>
+  <div class="sdh d4"><span class="dot d4"></span>SC Visibility</div>
+  <a href="#s4" class="sl">Q25–Q32</a>
+  <div class="sdh d5"><span class="dot d5"></span>Right Supply Chain</div>
+  <a href="#s5" class="sl">Q33–Q40</a>
+  <div class="sdh d7"><span class="dot d7"></span>Strategic Fit</div>
+  <a href="#s6" class="sl">Q41–Q47</a>
+  <div class="sdh d6"><span class="dot d6"></span>Case Studies</div>
+  <a href="#s7" class="sl">Q48–Q50</a>
+</aside>
+
+<main class="main">
+
+<!-- ═══════════ SECTION 1 — FINANCIAL FLOW ═══════════ -->
+<div id="s1" style="scroll-margin-top:70px">
+<div class="sec-hdr">
+  <div class="ds d1"></div>
+  <div class="sec-meta"><div class="sec-label">Document 01</div><h2>Financial Flow in Supply Chain</h2></div>
+</div>
+
+<!-- Q1 -->
+<div class="qcard" id="qcard-1">
+  <div class="q-top">
+    <span class="q-num">Q01</span>
+    <div class="q-text">The Cash Conversion Cycle (CCC) is calculated as:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(1,'A')"><span class="opt-key">A</span>Days Payable + Days Inventory − Days Receivable</div>
+    <div class="opt" onclick="selectOpt(1,'B')"><span class="opt-key">B</span>Days Inventory + Days Receivable − Days Payable</div>
+    <div class="opt" onclick="selectOpt(1,'C')"><span class="opt-key">C</span>Days Receivable − Days Payable + Days Sales</div>
+    <div class="opt" onclick="selectOpt(1,'D')"><span class="opt-key">D</span>Days Payable − Days Inventory + Days Receivable</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-1" onclick="checkAnswer(1,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-1"><strong>B is correct.</strong> CCC = Days Inventory + Days Receivable − Days Payable. A negative CCC means a company collects cash from customers before it needs to pay suppliers — Apple's CCC of −70.57 days is the extreme example of structural buyer power.</div>
+</div>
+
+<!-- Q2 -->
+<div class="qcard" id="qcard-2">
+  <div class="q-top">
+    <span class="q-num">Q02</span>
+    <div class="q-text">Apple's CCC (FY2022) was approximately −70.57 days. What does this <strong>negative CCC</strong> primarily indicate?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(2,'A')"><span class="opt-key">A</span>Apple takes 70 days to convert raw materials into finished goods</div>
+    <div class="opt" onclick="selectOpt(2,'B')"><span class="opt-key">B</span>Apple pays its suppliers 70 days before receiving payment from customers</div>
+    <div class="opt" onclick="selectOpt(2,'C')"><span class="opt-key">C</span>Apple collects cash from customers approximately 70 days before it pays suppliers</div>
+    <div class="opt" onclick="selectOpt(2,'D')"><span class="opt-key">D</span>Apple's inventory sits idle for 70 days on average</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-2" onclick="checkAnswer(2,'C')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-2"><strong>C is correct.</strong> A negative CCC means the company receives payment from customers before it must pay its suppliers — effectively using supplier money as free working capital. This offloads the entire working capital burden onto capital-constrained SME suppliers.</div>
+</div>
+
+<!-- Q3 -->
+<div class="qcard" id="qcard-3">
+  <div class="q-top">
+    <span class="q-num">Q03</span>
+    <div class="q-text">In <strong>Reverse Factoring</strong>, who underwrites the supplier's receivables, allowing the supplier to borrow at a lower interest rate?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(3,'A')"><span class="opt-key">A</span>The supplier's own bank, based on the supplier's credit rating</div>
+    <div class="opt" onclick="selectOpt(3,'B')"><span class="opt-key">B</span>The buyer, using its superior credit rating to back supplier borrowing</div>
+    <div class="opt" onclick="selectOpt(3,'C')"><span class="opt-key">C</span>A government trade finance agency</div>
+    <div class="opt" onclick="selectOpt(3,'D')"><span class="opt-key">D</span>An invoice trading platform that auctions the receivables</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-3" onclick="checkAnswer(3,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-3"><strong>B is correct.</strong> In reverse factoring (SCF), the buyer underwrites the supplier's receivables — the supplier borrows at the buyer's superior credit rating via a bank. This is a genuine win-win: suppliers get cheaper credit, buyers extend payment terms, banks get low-risk loans. P&G's 2013 programme and Walmart's Supplier Alliance (2009) are key examples.</div>
+</div>
+
+<!-- Q4 -->
+<div class="qcard" id="qcard-4">
+  <div class="q-top">
+    <span class="q-num">Q04</span>
+    <div class="q-text"><strong>Dynamic Trade Finance (DTF)</strong> differs from traditional trade finance primarily because:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(4,'A')"><span class="opt-key">A</span>The loan is repaid in instalments rather than a lump sum</div>
+    <div class="opt" onclick="selectOpt(4,'B')"><span class="opt-key">B</span>The interest rate adjusts downward as the order passes each trade process step</div>
+    <div class="opt" onclick="selectOpt(4,'C')"><span class="opt-key">C</span>It is exclusively used for pre-shipment financing</div>
+    <div class="opt" onclick="selectOpt(4,'D')"><span class="opt-key">D</span>It replaces blockchain with traditional bank guarantees</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-4" onclick="checkAnswer(4,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-4"><strong>B is correct.</strong> DTF (Wells Fargo's "variable trade financing") adjusts the interest rate dynamically at each trade step. As the collateral value rises with each completed step, risk falls — so the rate falls too. This aligns cost with actual risk better than static-rate contracts.</div>
+</div>
+
+<!-- Q5 -->
+<div class="qcard" id="qcard-5">
+  <div class="q-top">
+    <span class="q-num">Q05</span>
+    <div class="q-text">A supplier sells its accounts receivable to a bank at a discount in exchange for immediate cash. This instrument is called:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(5,'A')"><span class="opt-key">A</span>Reverse Factoring</div>
+    <div class="opt" onclick="selectOpt(5,'B')"><span class="opt-key">B</span>Invoice Trading</div>
+    <div class="opt" onclick="selectOpt(5,'C')"><span class="opt-key">C</span>Factoring</div>
+    <div class="opt" onclick="selectOpt(5,'D')"><span class="opt-key">D</span>Purchase Order Financing</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-5" onclick="checkAnswer(5,'C')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-5"><strong>C is correct.</strong> Factoring = supplier sells accounts receivable at a discount to a bank (the "factor") for immediate cash. It is post-shipment financing. The bank assumes the buyer's credit risk. The supplier sacrifices margin for liquidity. Reverse factoring is different — it is buyer-initiated and supplier borrows at the buyer's credit rating.</div>
+</div>
+
+<!-- Q6 -->
+<div class="qcard" id="qcard-6">
+  <div class="q-top">
+    <span class="q-num">Q06</span>
+    <div class="q-text"><strong>Zero-Knowledge Proofs (ZKP)</strong> in supply chain finance solve which specific problem?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(6,'A')"><span class="opt-key">A</span>They eliminate the need for banks entirely from trade finance</div>
+    <div class="opt" onclick="selectOpt(6,'B')"><span class="opt-key">B</span>They allow facts (e.g., bank balance) to be verified without revealing sensitive underlying data</div>
+    <div class="opt" onclick="selectOpt(6,'C')"><span class="opt-key">C</span>They automate payment when goods are delivered</div>
+    <div class="opt" onclick="selectOpt(6,'D')"><span class="opt-key">D</span>They convert LTL shipments to FTL for cost savings</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-6" onclick="checkAnswer(6,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-6"><strong>B is correct.</strong> ZKP is a cryptographic method that allows a party to verify a fact (e.g., a supplier's bank balance) without seeing the underlying sensitive details (identity, transaction records). Skuchain uses ZKP so banks can verify supplier creditworthiness in deep-tier SCF without breaching privacy — solving the visibility-vs-privacy dilemma.</div>
+</div>
+
+<!-- Q7 -->
+<div class="qcard" id="qcard-7">
+  <div class="q-top">
+    <span class="q-num">Q07</span>
+    <div class="q-text">Smart contracts (e.g., TradeLens, Trusple) primarily eliminate which friction in trade finance?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(7,'A')"><span class="opt-key">A</span>Currency conversion risk between trading countries</div>
+    <div class="opt" onclick="selectOpt(7,'B')"><span class="opt-key">B</span>7–10 day manual verification delays affecting 80% of transactions</div>
+    <div class="opt" onclick="selectOpt(7,'C')"><span class="opt-key">C</span>The need for buyer credit ratings in reverse factoring</div>
+    <div class="opt" onclick="selectOpt(7,'D')"><span class="opt-key">D</span>Excess inventory at tier-2 suppliers</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-7" onclick="checkAnswer(7,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-7"><strong>B is correct.</strong> Smart contracts are self-executing digital contracts on blockchain that auto-trigger payment when trade conditions are verified (e.g., goods received). They eliminate manual verification which causes 7–10 day delays in 80% of transactions. Examples: TradeLens (Maersk+IBM), Trusple (AntChain), Skuchain EC3.</div>
+</div>
+
+<!-- Q8 -->
+<div class="qcard" id="qcard-8">
+  <div class="q-top">
+    <span class="q-num">Q08</span>
+    <div class="q-text">According to BIS (2022), trade finance accounts for approximately what share of global exports?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(8,'A')"><span class="opt-key">A</span>$18 trillion of $22 trillion (~82%)</div>
+    <div class="opt" onclick="selectOpt(8,'B')"><span class="opt-key">B</span>$5 trillion of $22 trillion (~23%)</div>
+    <div class="opt" onclick="selectOpt(8,'C')"><span class="opt-key">C</span>$22 trillion of $30 trillion (~73%)</div>
+    <div class="opt" onclick="selectOpt(8,'D')"><span class="opt-key">D</span>$10 trillion of $22 trillion (~45%)</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-8" onclick="checkAnswer(8,'A')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-8"><strong>A is correct.</strong> Trade finance accounts for over $18 trillion of $22 trillion in global exports (BIS, 2022) — approximately 82%. This underscores how central buyer intermediation in supplier financing is to global trade efficiency.</div>
+</div>
+
+<a href="#top" class="jt">↑ Back to top</a>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════ SECTION 2 — INFORMATION SHARING ═══════════ -->
+<div id="s2" style="scroll-margin-top:70px">
+<div class="sec-hdr">
+  <div class="ds d2"></div>
+  <div class="sec-meta"><div class="sec-label">Document 02</div><h2>Information Sharing in Supply Chain</h2></div>
+</div>
+
+<!-- Q9 -->
+<div class="qcard" id="qcard-9">
+  <div class="q-top">
+    <span class="q-num">Q09</span>
+    <div class="q-text">In the CHEAP-B framework, what does the letter <strong>"C"</strong> stand for as a barrier to information sharing?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(9,'A')"><span class="opt-key">A</span>Complexity of data systems</div>
+    <div class="opt" onclick="selectOpt(9,'B')"><span class="opt-key">B</span>Coopetition — simultaneous cooperation and competition</div>
+    <div class="opt" onclick="selectOpt(9,'C')"><span class="opt-key">C</span>Cost of sharing information</div>
+    <div class="opt" onclick="selectOpt(9,'D')"><span class="opt-key">D</span>Channel translation latency</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-9" onclick="checkAnswer(9,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-9"><strong>B is correct.</strong> CHEAP-B = Coopetition · Hidden (multi-chain) · Equity/Fairness · Asymmetric Cheap Talk · Power (Bargaining) · Breach/Security. Coopetition — where a partner is simultaneously a supplier AND a competitor (e.g., Sony to Dell) — creates a genuine barrier: sharing demand data could hand a competitive advantage to a rival.</div>
+</div>
+
+<!-- Q10 -->
+<div class="qcard" id="qcard-10">
+  <div class="q-top">
+    <span class="q-num">Q10</span>
+    <div class="q-text">Cisco's $2.2 billion inventory write-off in 2001 is cited as the canonical example of:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(10,'A')"><span class="opt-key">A</span>Coopetition leading to competitive intelligence theft</div>
+    <div class="opt" onclick="selectOpt(10,'B')"><span class="opt-key">B</span>Cheap talk — inflated, non-binding retailer forecasts triggering massive over-production</div>
+    <div class="opt" onclick="selectOpt(10,'C')"><span class="opt-key">C</span>A supply chain visibility failure due to ERP limitations</div>
+    <div class="opt" onclick="selectOpt(10,'D')"><span class="opt-key">D</span>Market mediation cost exceeding physical cost for a functional product</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-10" onclick="checkAnswer(10,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-10"><strong>B is correct.</strong> Cisco's $2.2B write-off is the canonical example of cheap talk — forecasts that are costless, non-binding, and non-verifiable. Retailers inflated orders (soft orders cancellable at no cost); Cisco manufactured to those inflated signals; when actual demand was lower, billions in inventory became worthless. Pervasive in electronics, semiconductors, and medical equipment.</div>
+</div>
+
+<!-- Q11 -->
+<div class="qcard" id="qcard-11">
+  <div class="q-top">
+    <span class="q-num">Q11</span>
+    <div class="q-text"><strong>Information Rent</strong> refers to:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(11,'A')"><span class="opt-key">A</span>The monthly fee paid by suppliers to access a platform's data portal</div>
+    <div class="opt" onclick="selectOpt(11,'B')"><span class="opt-key">B</span>Extra profit earned by a party that possesses superior private information</div>
+    <div class="opt" onclick="selectOpt(11,'C')"><span class="opt-key">C</span>The cost of implementing ERP across supply chain partners</div>
+    <div class="opt" onclick="selectOpt(11,'D')"><span class="opt-key">D</span>Revenue sharing between platform and third-party sellers</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-11" onclick="checkAnswer(11,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-11"><strong>B is correct.</strong> Information rent = extra profit earned by possessing superior private information. Retailers can only be rationally induced to share demand data if they are compensated for this rent. Otherwise, sharing reduces their profit advantage — making non-sharing a fully rational (not malicious) choice. This explains why moral appeals fail; only structural coordinating contracts work.</div>
+</div>
+
+<!-- Q12 -->
+<div class="qcard" id="qcard-12">
+  <div class="q-top">
+    <span class="q-num">Q12</span>
+    <div class="q-text">When retailers deliberately inflate orders during a supply shortage to receive a larger allocation, this behaviour is called:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(12,'A')"><span class="opt-key">A</span>Demand amplification</div>
+    <div class="opt" onclick="selectOpt(12,'B')"><span class="opt-key">B</span>Shortage gaming</div>
+    <div class="opt" onclick="selectOpt(12,'C')"><span class="opt-key">C</span>Coopetition signalling</div>
+    <div class="opt" onclick="selectOpt(12,'D')"><span class="opt-key">D</span>Dynamic trade finance</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-12" onclick="checkAnswer(12,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-12"><strong>B is correct.</strong> Shortage gaming = buyers deliberately inflate orders during scarcity to receive a larger proportional allocation. This makes demand signals meaningless upstream, triggering bullwhip-like over-production. It is a deliberate manipulation, unlike demand amplification which is an emergent structural effect.</div>
+</div>
+
+<!-- Q13 -->
+<div class="qcard" id="qcard-13">
+  <div class="q-top">
+    <span class="q-num">Q13</span>
+    <div class="q-text">The Warner-Lambert + Walmart information sharing experiment resulted in Walmart's in-stock level for Listerine improving from:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(13,'A')"><span class="opt-key">A</span>70% to 90%</div>
+    <div class="opt" onclick="selectOpt(13,'B')"><span class="opt-key">B</span>85% to 98%</div>
+    <div class="opt" onclick="selectOpt(13,'C')"><span class="opt-key">C</span>60% to 85%</div>
+    <div class="opt" onclick="selectOpt(13,'D')"><span class="opt-key">D</span>90% to 99.5%</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-13" onclick="checkAnswer(13,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-13"><strong>B is correct.</strong> Warner-Lambert shared demand forecasts 6 months in advance for Listerine. Walmart's in-stock level improved from 85% to 98%, while Warner-Lambert also benefited from smoother production scheduling. This is the textbook example of successful voluntary information sharing with mutual gains.</div>
+</div>
+
+<!-- Q14 -->
+<div class="qcard" id="qcard-14">
+  <div class="q-top">
+    <span class="q-num">Q14</span>
+    <div class="q-text">According to the course, the <strong>only sustainable solution</strong> to information withholding in supply chains is:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(14,'A')"><span class="opt-key">A</span>Mandatory government regulation requiring data disclosure</div>
+    <div class="opt" onclick="selectOpt(14,'B')"><span class="opt-key">B</span>Appeals to cooperation and relationship trust</div>
+    <div class="opt" onclick="selectOpt(14,'C')"><span class="opt-key">C</span>Properly designed coordinating contracts that align individual incentives with chain profit</div>
+    <div class="opt" onclick="selectOpt(14,'D')"><span class="opt-key">D</span>Platform ownership of all SC data</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-14" onclick="checkAnswer(14,'C')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-14"><strong>C is correct.</strong> Coordinating contracts (revenue sharing, buyback contracts, quantity flexibility) are the structural solution — they make sharing individually rational for all parties. Moral appeals ("cooperate for the good of the chain") are not sustainable because they fight against rational self-interest. The contracts must make sharing the dominant strategy.</div>
+</div>
+
+<!-- Q15 -->
+<div class="qcard" id="qcard-15">
+  <div class="q-top">
+    <span class="q-num">Q15</span>
+    <div class="q-text">Which of the following best describes <strong>Coopetition</strong>?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(15,'A')"><span class="opt-key">A</span>A supply chain strategy combining cooperation across all tiers</div>
+    <div class="opt" onclick="selectOpt(15,'B')"><span class="opt-key">B</span>A situation where a partner simultaneously cooperates in the supply chain and competes in the market</div>
+    <div class="opt" onclick="selectOpt(15,'C')"><span class="opt-key">C</span>The practice of two competitors jointly developing a new product</div>
+    <div class="opt" onclick="selectOpt(15,'D')"><span class="opt-key">D</span>A pricing strategy that matches competitor prices in real time</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-15" onclick="checkAnswer(15,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-15"><strong>B is correct.</strong> Coopetition = simultaneous cooperation and competition. Sony is both a supplier (components) AND a competitor (electronics products) to Dell. This makes coopetition the most complex SC relationship — sharing demand data helps coordinate the supply chain but risks handing competitive intelligence to a direct rival.</div>
+</div>
+
+<!-- Q16 -->
+<div class="qcard" id="qcard-16">
+  <div class="q-top">
+    <span class="q-num">Q16</span>
+    <div class="q-text">Information is described as the <strong>"glue"</strong> binding supply chain drivers. Which of the following is NOT listed as one of the core SC drivers that information connects?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(16,'A')"><span class="opt-key">A</span>Sourcing and Pricing</div>
+    <div class="opt" onclick="selectOpt(16,'B')"><span class="opt-key">B</span>Inventory and Transportation</div>
+    <div class="opt" onclick="selectOpt(16,'C')"><span class="opt-key">C</span>Marketing and Branding</div>
+    <div class="opt" onclick="selectOpt(16,'D')"><span class="opt-key">D</span>Facilities</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-16" onclick="checkAnswer(16,'C')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-16"><strong>C is correct.</strong> The SC drivers that information connects are: Sourcing, Inventory, Transportation, Pricing, and Facilities. Marketing and Branding are not listed as SC drivers in this framework — they belong to the demand generation side, not the supply chain structure.</div>
+</div>
+
+<a href="#top" class="jt">↑ Back to top</a>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════ SECTION 3 — MANAGING SC OPERATIONS ═══════════ -->
+<div id="s3" style="scroll-margin-top:70px">
+<div class="sec-hdr">
+  <div class="ds d3"></div>
+  <div class="sec-meta"><div class="sec-label">Document 03</div><h2>Managing Supply Chain Operations</h2></div>
+</div>
+
+<!-- Q17 -->
+<div class="qcard" id="qcard-17">
+  <div class="q-top">
+    <span class="q-num">Q17</span>
+    <div class="q-text">The <strong>three supply chain revolutions</strong> evolved in this order:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(17,'A')"><span class="opt-key">A</span>Toyota lean/Keiretsu → Ford vertical integration → Virtual global customisation</div>
+    <div class="opt" onclick="selectOpt(17,'B')"><span class="opt-key">B</span>Ford vertical integration → Toyota lean/Keiretsu → Virtual global customisation</div>
+    <div class="opt" onclick="selectOpt(17,'C')"><span class="opt-key">C</span>Virtual global customisation → Ford vertical integration → Toyota lean/Keiretsu</div>
+    <div class="opt" onclick="selectOpt(17,'D')"><span class="opt-key">D</span>Ford vertical integration → Virtual global customisation → Toyota lean/Keiretsu</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-17" onclick="checkAnswer(17,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-17"><strong>B is correct.</strong> Revolution 1: Ford's vertically integrated, single-product model. Revolution 2: Toyota's lean, Keiretsu-networked variety model. Revolution 3: Today's virtually integrated global customisation model. Each revolution expanded product variety while reducing the ownership footprint required to deliver it.</div>
+</div>
+
+<!-- Q18 -->
+<div class="qcard" id="qcard-18">
+  <div class="q-top">
+    <span class="q-num">Q18</span>
+    <div class="q-text">In Toyota's <strong>Keiretsu</strong> system, Toyota owns approximately what percentage of Toyoda Gosei (a key supplier)?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(18,'A')"><span class="opt-key">A</span>9.1%</div>
+    <div class="opt" onclick="selectOpt(18,'B')"><span class="opt-key">B</span>23.51%</div>
+    <div class="opt" onclick="selectOpt(18,'C')"><span class="opt-key">C</span>42.8%</div>
+    <div class="opt" onclick="selectOpt(18,'D')"><span class="opt-key">D</span>51%</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-18" onclick="checkAnswer(18,'C')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-18"><strong>C is correct.</strong> Toyota's Keiretsu stakes: Denso (9.1%), Aisin (23.51%), Toyoda Gosei (42.8%). The cross-shareholding creates long-term loyalty and information sharing. Japanese suppliers contribute 51% of engineering vs only 14% in the US system — and only 1 in 6 Japanese auto projects are delayed vs 1 in 2 in the US.</div>
+</div>
+
+<!-- Q19 -->
+<div class="qcard" id="qcard-19">
+  <div class="q-top">
+    <span class="q-num">Q19</span>
+    <div class="q-text">The <strong>3Ts of supply chain disruption</strong> are:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(19,'A')"><span class="opt-key">A</span>Trade, Technology, and Transportation</div>
+    <div class="opt" onclick="selectOpt(19,'B')"><span class="opt-key">B</span>Tariffs, Terrorism, and Tsunamis</div>
+    <div class="opt" onclick="selectOpt(19,'C')"><span class="opt-key">C</span>Time, Trust, and Transparency</div>
+    <div class="opt" onclick="selectOpt(19,'D')"><span class="opt-key">D</span>Taxes, Transit delays, and Technology risk</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-19" onclick="checkAnswer(19,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-19"><strong>B is correct.</strong> 3Ts = Tariffs (geopolitical/trade), Terrorism (man-made), Tsunamis (natural disasters). The US-China trade war caused customs delays of 3–5 days (normal) up to 15 days (intensive examination). Russia-Ukraine disrupted neon gas critical to semiconductor manufacturing. These represent the three permanent categories of external SC risk.</div>
+</div>
+
+<!-- Q20 -->
+<div class="qcard" id="qcard-20">
+  <div class="q-top">
+    <span class="q-num">Q20</span>
+    <div class="q-text">In Japan vs the US automotive industry, the number of employee suggestions per year was approximately:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(20,'A')"><span class="opt-key">A</span>Japan 2.9 suggestions vs US 0.4 suggestions</div>
+    <div class="opt" onclick="selectOpt(20,'B')"><span class="opt-key">B</span>Japan 61.6 suggestions vs US 0.4 suggestions</div>
+    <div class="opt" onclick="selectOpt(20,'C')"><span class="opt-key">C</span>Japan 0.2 days inventory vs US 2.9 days inventory</div>
+    <div class="opt" onclick="selectOpt(20,'D')"><span class="opt-key">D</span>Japan 14% supplier engineering vs US 51% supplier engineering</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-20" onclick="checkAnswer(20,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-20"><strong>B is correct.</strong> Japan achieved 61.6 employee suggestions/year vs US 0.4 — empirical proof that lean/kaizen principles create a culture of continuous improvement. Japan also achieved 0.2 days of inventory vs 2.9 days in the US. These numbers demonstrate measurable competitive advantage from lean principles.</div>
+</div>
+
+<!-- Q21 -->
+<div class="qcard" id="qcard-21">
+  <div class="q-top">
+    <span class="q-num">Q21</span>
+    <div class="q-text">In a <strong>postponement strategy</strong>, the push-pull boundary is deliberately set so that:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(21,'A')"><span class="opt-key">A</span>All production happens before any customer demand signal</div>
+    <div class="opt" onclick="selectOpt(21,'B')"><span class="opt-key">B</span>Final customisation or differentiation is delayed until after a customer order is received</div>
+    <div class="opt" onclick="selectOpt(21,'C')"><span class="opt-key">C</span>Inventory is pushed through the entire chain with no demand signal</div>
+    <div class="opt" onclick="selectOpt(21,'D')"><span class="opt-key">D</span>Suppliers are paid only after final customers make a purchase</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-21" onclick="checkAnswer(21,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-21"><strong>B is correct.</strong> Postponement delays final customisation/differentiation to after the customer order — reducing inventory risk while maintaining responsiveness. Quincy Apparel used this: garments taken 80% to completion at factories, final 20% (fit customisation) done post-order. The risk: returned custom garments become stranded inventory with near-zero resale value.</div>
+</div>
+
+<!-- Q22 -->
+<div class="qcard" id="qcard-22">
+  <div class="q-top">
+    <span class="q-num">Q22</span>
+    <div class="q-text">Which of the following is one of the <strong>9 key challenges</strong> of managing supply chains?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(22,'A')"><span class="opt-key">A</span>Negative Cash Conversion Cycles</div>
+    <div class="opt" onclick="selectOpt(22,'B')"><span class="opt-key">B</span>Fragmented Ownership</div>
+    <div class="opt" onclick="selectOpt(22,'C')"><span class="opt-key">C</span>Information rent extraction</div>
+    <div class="opt" onclick="selectOpt(22,'D')"><span class="opt-key">D</span>Zero-knowledge proof limitations</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-22" onclick="checkAnswer(22,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-22"><strong>B is correct.</strong> The 9 SC challenges are: Complexity · Conflicting Objectives · Product Proliferation · Shrinking Life Cycles · Changing Technology · Fragmented Ownership · Globalization · Disruptions (3Ts) · Sustainability. Fragmented Ownership (6) is one of them — the modern SC crosses many companies' boundaries, making coordination inherently hard.</div>
+</div>
+
+<!-- Q23 -->
+<div class="qcard" id="qcard-23">
+  <div class="q-top">
+    <span class="q-num">Q23</span>
+    <div class="q-text">In a <strong>pull system</strong>, production is triggered by:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(23,'A')"><span class="opt-key">A</span>Forecasted demand from supply chain partners upstream</div>
+    <div class="opt" onclick="selectOpt(23,'B')"><span class="opt-key">B</span>Actual customer demand signals</div>
+    <div class="opt" onclick="selectOpt(23,'C')"><span class="opt-key">C</span>Annual production targets set by the manufacturer</div>
+    <div class="opt" onclick="selectOpt(23,'D')"><span class="opt-key">D</span>Supplier capacity availability</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-23" onclick="checkAnswer(23,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-23"><strong>B is correct.</strong> In a pull system, production is triggered by actual customer demand signals — not forecasts. This eliminates overproduction and excess inventory. A push system, by contrast, uses forecasts and produces in advance. Most modern SC strategies combine both: push upstream (where demand is predictable) and pull downstream (where demand is variable).</div>
+</div>
+
+<!-- Q24 -->
+<div class="qcard" id="qcard-24">
+  <div class="q-top">
+    <span class="q-num">Q24</span>
+    <div class="q-text">Russia's invasion of Ukraine is cited in the course as an example of which type of SC disruption, and for which product/material?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(24,'A')"><span class="opt-key">A</span>Tariff disruption — disrupting wheat supply chains</div>
+    <div class="opt" onclick="selectOpt(24,'B')"><span class="opt-key">B</span>Tsunami disruption — disrupting coastal port operations</div>
+    <div class="opt" onclick="selectOpt(24,'C')"><span class="opt-key">C</span>Terrorism disruption — disrupting neon gas supply for semiconductors</div>
+    <div class="opt" onclick="selectOpt(24,'D')"><span class="opt-key">D</span>Terrorism/Tariff disruption — disrupting neon gas supply for semiconductors</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-24" onclick="checkAnswer(24,'D')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-24"><strong>D is correct.</strong> Russia-Ukraine disrupted neon gas supply — neon is critical for semiconductor manufacturing (used in laser lithography). This is classified under the Terrorism/geopolitical category of the 3Ts. Ukraine was responsible for a significant share of global neon gas production, making it a critical single-source vulnerability in the semiconductor supply chain.</div>
+</div>
+
+<a href="#top" class="jt">↑ Back to top</a>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════ SECTION 4 — SC VISIBILITY ═══════════ -->
+<div id="s4" style="scroll-margin-top:70px">
+<div class="sec-hdr">
+  <div class="ds d4"></div>
+  <div class="sec-meta"><div class="sec-label">Document 04</div><h2>Supply Chain Visibility</h2></div>
+</div>
+
+<!-- Q25 -->
+<div class="qcard" id="qcard-25">
+  <div class="q-top">
+    <span class="q-num">Q25</span>
+    <div class="q-text">The <strong>4 types of latency</strong> that make supply chain visibility difficult are:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(25,'A')"><span class="opt-key">A</span>Data · Network · Semantic · Channel Translation</div>
+    <div class="opt" onclick="selectOpt(25,'B')"><span class="opt-key">B</span>Financial · Operational · Strategic · Tactical</div>
+    <div class="opt" onclick="selectOpt(25,'C')"><span class="opt-key">C</span>Supplier · Manufacturer · Distributor · Retailer</div>
+    <div class="opt" onclick="selectOpt(25,'D')"><span class="opt-key">D</span>ERP · IoT · Blockchain · AI latency</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-25" onclick="checkAnswer(25,'A')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-25"><strong>A is correct.</strong> The 4 latency types (memory hook: "DNS Channel"): Data Latency (IT processing delay) + Supply Network Latency (physical/info movement delay) + Semantic Reconciliation (mismatched data definitions across partners) + Channel Translation Latency (cross-partner alignment delay). Together they create poor visibility → poor decisions.</div>
+</div>
+
+<!-- Q26 -->
+<div class="qcard" id="qcard-26">
+  <div class="q-top">
+    <span class="q-num">Q26</span>
+    <div class="q-text">According to the SC Visibility document, the real barrier to supply chain visibility is:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(26,'A')"><span class="opt-key">A</span>Insufficient investment in ERP systems</div>
+    <div class="opt" onclick="selectOpt(26,'B')"><span class="opt-key">B</span>Lack of IoT sensors and 5G connectivity</div>
+    <div class="opt" onclick="selectOpt(26,'C')"><span class="opt-key">C</span>Organisational silos — not technology</div>
+    <div class="opt" onclick="selectOpt(26,'D')"><span class="opt-key">D</span>Venture capital buyouts of network providers</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-26" onclick="checkAnswer(26,'C')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-26"><strong>C is correct.</strong> "Supply chain visibility is not a technology problem — it is an organisational problem." Each function has different data structures embedded in siloed processes, creating misalignment that no ERP can fix. Two decades of IT investment in ERP has clearly shown it is not the answer. New thinking, real-time architectures, and cross-functional alignment are needed.</div>
+</div>
+
+<!-- Q27 -->
+<div class="qcard" id="qcard-27">
+  <div class="q-top">
+    <span class="q-num">Q27</span>
+    <div class="q-text">The <strong>CINS</strong> mnemonic for the 4 Lessons of SC Visibility stands for:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(27,'A')"><span class="opt-key">A</span>Connect · Integrate · Navigate · Standardise</div>
+    <div class="opt" onclick="selectOpt(27,'B')"><span class="opt-key">B</span>Clear (map black holes) · Interoperability over integration · Network stagnation · Solve with new thinking</div>
+    <div class="opt" onclick="selectOpt(27,'C')"><span class="opt-key">C</span>Centralise · Integrate · Notify · Share</div>
+    <div class="opt" onclick="selectOpt(27,'D')"><span class="opt-key">D</span>Collaborate · Identify · Navigate · Synchronise</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-27" onclick="checkAnswer(27,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-27"><strong>B is correct.</strong> CINS = Clear (form cross-functional team, map supply chain black holes, size the prize) · Interoperability over integration (tight integration = fragility) · Network stagnation (VC buyouts stalled innovation — 13 networks operate as islands) · Solve with new thinking (not ERP — invest in real-time analytics and event-driven architectures).</div>
+</div>
+
+<!-- Q28 -->
+<div class="qcard" id="qcard-28">
+  <div class="q-top">
+    <span class="q-num">Q28</span>
+    <div class="q-text">Why is <strong>Interoperability preferred over Integration</strong> for supply chain visibility?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(28,'A')"><span class="opt-key">A</span>Integration is more expensive to implement than interoperability</div>
+    <div class="opt" onclick="selectOpt(28,'B')"><span class="opt-key">B</span>Tight integration increases fragility; interoperability achieves data sync with minimal coupling</div>
+    <div class="opt" onclick="selectOpt(28,'C')"><span class="opt-key">C</span>ERP systems do not support integration across companies</div>
+    <div class="opt" onclick="selectOpt(28,'D')"><span class="opt-key">D</span>Interoperability eliminates the need for data standards</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-28" onclick="checkAnswer(28,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-28"><strong>B is correct.</strong> "Tight integration increases fragility and decreases resilience." Interoperability focuses on data synchronisation and harmonisation — preserving the semantic layer — without tightly coupling processes. This means a change in one partner's system doesn't cascade as a failure across the chain. Resilience requires loose coupling, not tight integration.</div>
+</div>
+
+<!-- Q29 -->
+<div class="qcard" id="qcard-29">
+  <div class="q-top">
+    <span class="q-num">Q29</span>
+    <div class="q-text">The term "Internet of Things" was coined by <strong>Kevin Ashton</strong> in which year?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(29,'A')"><span class="opt-key">A</span>1995</div>
+    <div class="opt" onclick="selectOpt(29,'B')"><span class="opt-key">B</span>1999</div>
+    <div class="opt" onclick="selectOpt(29,'C')"><span class="opt-key">C</span>2003</div>
+    <div class="opt" onclick="selectOpt(29,'D')"><span class="opt-key">D</span>2007</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-29" onclick="checkAnswer(29,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-29"><strong>B is correct.</strong> Kevin Ashton coined "Internet of Things" in 1999. Combined with 5G and real-time analytics, IoT is finally making genuine supply chain visibility a practical reality. The 4IR (Fourth Industrial Revolution) = interconnectivity + smart automation, and it is this combination — not ERP — that is driving next-generation visibility.</div>
+</div>
+
+<!-- Q30 -->
+<div class="qcard" id="qcard-30">
+  <div class="q-top">
+    <span class="q-num">Q30</span>
+    <div class="q-text">The <strong>3 key functionalities</strong> of a supply chain visibility solution (IST) are:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(30,'A')"><span class="opt-key">A</span>Integrate · Synchronise · Track</div>
+    <div class="opt" onclick="selectOpt(30,'B')"><span class="opt-key">B</span>Identify &amp; Resolve exceptions · Simplify &amp; Automate workflows · Track &amp; Trace compliance</div>
+    <div class="opt" onclick="selectOpt(30,'C')"><span class="opt-key">C</span>Inventory visibility · Shipment tracking · ERP integration</div>
+    <div class="opt" onclick="selectOpt(30,'D')"><span class="opt-key">D</span>Interoperability · Standardisation · Transparency</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-30" onclick="checkAnswer(30,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-30"><strong>B is correct.</strong> IST = Identify &amp; Resolve (identify exceptions proactively, allow managers corrective action in real time) · Simplify &amp; Automate (streamline problem resolution via predefined workflows and business rules) · Track &amp; Trace (automate compliance and regulatory requirements across geographies).</div>
+</div>
+
+<!-- Q31 -->
+<div class="qcard" id="qcard-31">
+  <div class="q-top">
+    <span class="q-num">Q31</span>
+    <div class="q-text">Why has innovation in supply chain multi-tier networks <strong>stalled over the last decade</strong>?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(31,'A')"><span class="opt-key">A</span>Lack of demand from enterprises for visibility solutions</div>
+    <div class="opt" onclick="selectOpt(31,'B')"><span class="opt-key">B</span>Venture capital buyouts prioritised returns over interoperability, leaving 13 networks as islands</div>
+    <div class="opt" onclick="selectOpt(31,'C')"><span class="opt-key">C</span>ERP vendors monopolised the market and blocked new entrants</div>
+    <div class="opt" onclick="selectOpt(31,'D')"><span class="opt-key">D</span>Blockchain technology proved too expensive to deploy at scale</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-31" onclick="checkAnswer(31,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-31"><strong>B is correct.</strong> VC buyouts (Ariba→SAP 2012, GT Nexus→Infor 2015, Coupa→Thoma Bravo 2022, etc.) stalled innovation. 13 primary multi-tier networks now operate as islands. Despite technological progress, cross-network single sign-on and interoperability remain unsolved. The recommendation: force SAP/Infor to enable cross-network interoperability.</div>
+</div>
+
+<!-- Q32 -->
+<div class="qcard" id="qcard-32">
+  <div class="q-top">
+    <span class="q-num">Q32</span>
+    <div class="q-text"><strong>Semantic Reconciliation Latency</strong> refers to:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(32,'A')"><span class="opt-key">A</span>The time taken to physically move goods between supply chain nodes</div>
+    <div class="opt" onclick="selectOpt(32,'B')"><span class="opt-key">B</span>Delays caused by mismatched data definitions across supply chain partners</div>
+    <div class="opt" onclick="selectOpt(32,'C')"><span class="opt-key">C</span>The delay in IT systems processing incoming data batches</div>
+    <div class="opt" onclick="selectOpt(32,'D')"><span class="opt-key">D</span>The time required to translate documents into multiple languages</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-32" onclick="checkAnswer(32,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-32"><strong>B is correct.</strong> Semantic Reconciliation Latency is the delay caused by mismatched data definitions across partners (e.g., "SKU" means something different in one company's ERP vs another's). This is why the course emphasises preserving the "semantic layer" — harmonising what data means across organisations — as the key focus of interoperability over integration.</div>
+</div>
+
+<a href="#top" class="jt">↑ Back to top</a>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════ SECTION 5 — RIGHT SUPPLY CHAIN ═══════════ -->
+<div id="s5" style="scroll-margin-top:70px">
+<div class="sec-hdr">
+  <div class="ds d5"></div>
+  <div class="sec-meta"><div class="sec-label">Document 05</div><h2>What is the Right Supply Chain?</h2></div>
+</div>
+
+<!-- Q33 -->
+<div class="qcard" id="qcard-33">
+  <div class="q-top">
+    <span class="q-num">Q33</span>
+    <div class="q-text">According to the <strong>Fisher Matrix</strong>, the average demand forecast error for <strong>innovative products</strong> is:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(33,'A')"><span class="opt-key">A</span>Less than 5%</div>
+    <div class="opt" onclick="selectOpt(33,'B')"><span class="opt-key">B</span>Around 10%</div>
+    <div class="opt" onclick="selectOpt(33,'C')"><span class="opt-key">C</span>40–100%</div>
+    <div class="opt" onclick="selectOpt(33,'D')"><span class="opt-key">D</span>20–30%</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-33" onclick="checkAnswer(33,'C')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-33"><strong>C is correct.</strong> Fisher Matrix: Innovative products have average forecast error of 40–100% (vs functional products at ~10%). This high uncertainty is why innovative products need market-responsive SCs — the cost of getting the forecast wrong (stockouts + markdowns) is very high. Functional products' predictable demand allows efficient SCs to optimise on cost.</div>
+</div>
+
+<!-- Q34 -->
+<div class="qcard" id="qcard-34">
+  <div class="q-top">
+    <span class="q-num">Q34</span>
+    <div class="q-text"><strong>Market Mediation Costs</strong> include which of the following?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(34,'A')"><span class="opt-key">A</span>Costs of sea transportation and warehousing</div>
+    <div class="opt" onclick="selectOpt(34,'B')"><span class="opt-key">B</span>Costs from excess inventory disposal, lost sales, and customer goodwill loss due to stockouts</div>
+    <div class="opt" onclick="selectOpt(34,'C')"><span class="opt-key">C</span>Costs of building and maintaining manufacturing facilities</div>
+    <div class="opt" onclick="selectOpt(34,'D')"><span class="opt-key">D</span>Costs of lean production and cross-docking operations</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-34" onclick="checkAnswer(34,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-34"><strong>B is correct.</strong> Market mediation costs arise from supply/demand uncertainty: excess inventory disposal (markdowns), lost sales (stockouts), and lost customer goodwill. These dominate for innovative products. Physical costs (A, C, D) dominate for functional products. The key insight: for innovative products, paying more for air freight to avoid a stockout is rational — market mediation cost &gt;&gt; physical cost.</div>
+</div>
+
+<!-- Q35 -->
+<div class="qcard" id="qcard-35">
+  <div class="q-top">
+    <span class="q-num">Q35</span>
+    <div class="q-text">Apple reserves air cargo and distribution capacity in advance of holiday seasons. This decision is best explained by:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(35,'A')"><span class="opt-key">A</span>Apple using a physically efficient SC to minimise transportation costs</div>
+    <div class="opt" onclick="selectOpt(35,'B')"><span class="opt-key">B</span>Apple accepting higher physical costs to avoid far greater market mediation costs from stockouts</div>
+    <div class="opt" onclick="selectOpt(35,'C')"><span class="opt-key">C</span>Apple's Keiretsu-style supplier relationships requiring air shipment</div>
+    <div class="opt" onclick="selectOpt(35,'D')"><span class="opt-key">D</span>Apple's negative CCC enabling it to fund expensive air freight easily</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-35" onclick="checkAnswer(35,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-35"><strong>B is correct.</strong> "Apple reserves air cargo and distribution capacity in advance of holiday seasons — deliberately accepting higher physical costs to avoid the far greater market mediation costs of a stockout." An iPhone stockout at Christmas = lost sales + brand damage = market mediation cost &gt;&gt; cost of air cargo. This is the market-responsive SC logic in action.</div>
+</div>
+
+<!-- Q36 -->
+<div class="qcard" id="qcard-36">
+  <div class="q-top">
+    <span class="q-num">Q36</span>
+    <div class="q-text">Zara's supply chain competitive advantage is primarily built on:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(36,'A')"><span class="opt-key">A</span>Outsourcing production to low-cost locations in Asia</div>
+    <div class="opt" onclick="selectOpt(36,'B')"><span class="opt-key">B</span>Vertical integration enabling design-to-store in a few weeks</div>
+    <div class="opt" onclick="selectOpt(36,'C')"><span class="opt-key">C</span>Everyday low prices through cross-docking distribution</div>
+    <div class="opt" onclick="selectOpt(36,'D')"><span class="opt-key">D</span>Direct-to-customer mass customisation eliminating intermediaries</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-36" onclick="checkAnswer(36,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-36"><strong>B is correct.</strong> Zara (Inditex) uses a vertically integrated, market-responsive SC that takes products from design to store in only a few weeks — demonstrating that supply chain design is a strategic weapon. Option A describes Walmart's strategy. Option C describes Walmart. Option D describes Dell's direct model. Zara's proximity + speed through vertical integration is the distinguishing factor.</div>
+</div>
+
+<!-- Q37 -->
+<div class="qcard" id="qcard-37">
+  <div class="q-top">
+    <span class="q-num">Q37</span>
+    <div class="q-text">Which of the following is a characteristic of a <strong>Physically Efficient Supply Chain</strong>?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(37,'A')"><span class="opt-key">A</span>Buffer inventory of parts/products to handle demand spikes</div>
+    <div class="opt" onclick="selectOpt(37,'B')"><span class="opt-key">B</span>Production located close to the customer</div>
+    <div class="opt" onclick="selectOpt(37,'C')"><span class="opt-key">C</span>High manufacturing utilisation, lean methods, low-cost sourcing</div>
+    <div class="opt" onclick="selectOpt(37,'D')"><span class="opt-key">D</span>Fast transportation mode (air freight) aggressively used</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-37" onclick="checkAnswer(37,'C')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-37"><strong>C is correct.</strong> Physically Efficient SC: high utilisation + lean + low-cost = Walmart model. A and D describe Market Responsive SC. B (close to customer) is also a responsive characteristic. Efficient SCs use low-cost locations (China, Vietnam, Bangladesh), sea transport, and minimise inventory throughout the chain.</div>
+</div>
+
+<!-- Q38 -->
+<div class="qcard" id="qcard-38">
+  <div class="q-top">
+    <span class="q-num">Q38</span>
+    <div class="q-text">The average stockout rate for <strong>functional products</strong> per the Fisher Matrix is:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(38,'A')"><span class="opt-key">A</span>10–40%</div>
+    <div class="opt" onclick="selectOpt(38,'B')"><span class="opt-key">B</span>5–10%</div>
+    <div class="opt" onclick="selectOpt(38,'C')"><span class="opt-key">C</span>1–2%</div>
+    <div class="opt" onclick="selectOpt(38,'D')"><span class="opt-key">D</span>25–35%</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-38" onclick="checkAnswer(38,'C')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-38"><strong>C is correct.</strong> Fisher Matrix: Functional products have a 1–2% average stockout rate. Innovative products have 10–40% stockout rates. This is because functional products have predictable demand (forecast error ~10%), making inventory management tractable. Innovative products' high variability (forecast error 40–100%) makes stockouts near-inevitable without a responsive SC.</div>
+</div>
+
+<!-- Q39 -->
+<div class="qcard" id="qcard-39">
+  <div class="q-top">
+    <span class="q-num">Q39</span>
+    <div class="q-text">The SHIM acronym for Innovative Product characteristics stands for:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(39,'A')"><span class="opt-key">A</span>Scale · High demand · Inventory lean · Margin low</div>
+    <div class="opt" onclick="selectOpt(39,'B')"><span class="opt-key">B</span>Short life cycle · High forecast error · Inventory risk (stockouts+markdowns) · Margin high</div>
+    <div class="opt" onclick="selectOpt(39,'C')"><span class="opt-key">C</span>Speed · Hybrid SC · Interoperability · Market proximity</div>
+    <div class="opt" onclick="selectOpt(39,'D')"><span class="opt-key">D</span>Supplier flexibility · High variety · Innovation rate · Market responsiveness</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-39" onclick="checkAnswer(39,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-39"><strong>B is correct.</strong> SHIM = Short life cycle · High forecast error · Inventory risk (stockouts + markdowns) · Margin high → needs Responsive SC. The companion is FILM for Functional products: Forecast accurate · Inventory low stockout · Long life cycle · Margin low → needs Efficient SC.</div>
+</div>
+
+<!-- Q40 -->
+<div class="qcard" id="qcard-40">
+  <div class="q-top">
+    <span class="q-num">Q40</span>
+    <div class="q-text"><strong>Strategic Fit</strong> in supply chain management means:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(40,'A')"><span class="opt-key">A</span>Choosing the cheapest suppliers regardless of product type</div>
+    <div class="opt" onclick="selectOpt(40,'B')"><span class="opt-key">B</span>Alignment between the supply chain strategy chosen and the product type / market characteristics it serves</div>
+    <div class="opt" onclick="selectOpt(40,'C')"><span class="opt-key">C</span>Maximising the number of product variants to serve all customer segments</div>
+    <div class="opt" onclick="selectOpt(40,'D')"><span class="opt-key">D</span>Ensuring every supply chain partner uses the same ERP system</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-40" onclick="checkAnswer(40,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-40"><strong>B is correct.</strong> Strategic fit = alignment between product characteristics and supply chain strategy. Misfit = using an efficient SC for innovative products (causes stockouts/markdowns) OR using a responsive SC for functional products (unnecessary cost). "A mismatch is a leading cause of SC underperformance." Getting this alignment right is the central challenge of SC design.</div>
+</div>
+
+<a href="#top" class="jt">↑ Back to top</a>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════ SECTION 6 — STRATEGIC FIT ═══════════ -->
+<div id="s6" style="scroll-margin-top:70px">
+<div class="sec-hdr">
+  <div class="ds d7"></div>
+  <div class="sec-meta"><div class="sec-label">Document 06</div><h2>Strategic Fit, 7Vs &amp; Real-World Cases</h2></div>
+</div>
+
+<!-- Q41 -->
+<div class="qcard" id="qcard-41">
+  <div class="q-top">
+    <span class="q-num">Q41</span>
+    <div class="q-text">The <strong>7Vs framework</strong> used to diagnose the right supply chain strategy consists of:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(41,'A')"><span class="opt-key">A</span>Value · Velocity · Volume · Variety · Variability · Visibility · Validity</div>
+    <div class="opt" onclick="selectOpt(41,'B')"><span class="opt-key">B</span>Value · Velocity · Volume · Variety · Variability · Vulnerability · Validity</div>
+    <div class="opt" onclick="selectOpt(41,'C')"><span class="opt-key">C</span>Value · Velocity · Volume · Variety · Variability · Visibility · Versatility</div>
+    <div class="opt" onclick="selectOpt(41,'D')"><span class="opt-key">D</span>Value · Velocity · Volatility · Variety · Variability · Visibility · Validity</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-41" onclick="checkAnswer(41,'A')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-41"><strong>A is correct.</strong> 7Vs = Value (margin level) · Velocity (lead time/selling speed) · Volume (scale benefits) · Variety (SKU complexity) · Variability (demand/supply uncertainty — core driver) · Visibility (SC transparency) · Validity (shelf life — short validity demands lean/pull). All 7 must be mapped before choosing SC strategy.</div>
+</div>
+
+<!-- Q42 -->
+<div class="qcard" id="qcard-42">
+  <div class="q-top">
+    <span class="q-num">Q42</span>
+    <div class="q-text">In the <strong>P&amp;G + Tupperware horizontal collaboration</strong> (Project TINA), truck volume utilisation improved from approximately:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(42,'A')"><span class="opt-key">A</span>70% to 95%</div>
+    <div class="opt" onclick="selectOpt(42,'B')"><span class="opt-key">B</span>50% to 85%</div>
+    <div class="opt" onclick="selectOpt(42,'C')"><span class="opt-key">C</span>60% to 90%</div>
+    <div class="opt" onclick="selectOpt(42,'D')"><span class="opt-key">D</span>40% to 80%</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-42" onclick="checkAnswer(42,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-42"><strong>B is correct.</strong> P&amp;G had 95% weight utilisation but only 50% volume utilisation (heavy but compact products). Tupperware had the inverse: light but bulky. Together = perfectly complementary load profiles. Volume utilisation went from 50% to 85%. This is the classic coopetition/horizontal collaboration example — two competitors sharing logistics to mutual benefit.</div>
+</div>
+
+<!-- Q43 -->
+<div class="qcard" id="qcard-43">
+  <div class="q-top">
+    <span class="q-num">Q43</span>
+    <div class="q-text">A <strong>Dark Store</strong> in the quick commerce context is:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(43,'A')"><span class="opt-key">A</span>A retail store that operates only during night hours</div>
+    <div class="opt" onclick="selectOpt(43,'B')"><span class="opt-key">B</span>A small warehouse (2,000–2,500 sq ft) optimised for picking/packing online orders — not open to walk-in shoppers</div>
+    <div class="opt" onclick="selectOpt(43,'C')"><span class="opt-key">C</span>An underground storage facility for high-value inventory</div>
+    <div class="opt" onclick="selectOpt(43,'D')"><span class="opt-key">D</span>A distribution centre with no exterior signage for competitive secrecy</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-43" onclick="checkAnswer(43,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-43"><strong>B is correct.</strong> A dark store is a small, customer-facing warehouse (2,000–2,500 sq ft) optimised for picking and packing online orders — not open to walk-in shoppers. Zepto's hub-and-spoke model uses dark stores within 1.7–2 km of customers. 60–90 sec pack time + 8.5 min travel at 20–21 km/h = 10-minute delivery. Setup cost: INR 25–40 lakh per store, 13–14 staff.</div>
+</div>
+
+<!-- Q44 -->
+<div class="qcard" id="qcard-44">
+  <div class="q-top">
+    <span class="q-num">Q44</span>
+    <div class="q-text"><strong>India 1</strong>, as defined in the quick commerce context, represents approximately what share of India's population and consumption?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(44,'A')"><span class="opt-key">A</span>~30% of population, consumes 1.5× the rest</div>
+    <div class="opt" onclick="selectOpt(44,'B')"><span class="opt-key">B</span>~10% of population, consumes 3× more than India 2+3 combined</div>
+    <div class="opt" onclick="selectOpt(44,'C')"><span class="opt-key">C</span>~20% of population, contributes 50% of GDP</div>
+    <div class="opt" onclick="selectOpt(44,'D')"><span class="opt-key">D</span>~5% of population, equal in consumption to India 2</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-44" onclick="checkAnswer(44,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-44"><strong>B is correct.</strong> India 1 = ~120 million people (&lt;10% of India's total population) who consume 3× more than the rest of the country combined. India 1 GDP alone is ~$1.3 trillion. They are convenience-sensitive, NOT price-sensitive — willing to pay ₹7 more for Thums Up on Blinkit + delivery fee = 18% premium for 10-minute delivery. Quick commerce is India 1 infrastructure.</div>
+</div>
+
+<!-- Q45 -->
+<div class="qcard" id="qcard-45">
+  <div class="q-top">
+    <span class="q-num">Q45</span>
+    <div class="q-text">Kulicke &amp; Soffa products sit in which quadrant of the Product-SC Strategy matrix, and what does this demand?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(45,'A')"><span class="opt-key">A</span>Quadrant A — Efficient SC, push/lean production</div>
+    <div class="opt" onclick="selectOpt(45,'B')"><span class="opt-key">B</span>Quadrant C — Efficient SC with some flexibility for supply variability</div>
+    <div class="opt" onclick="selectOpt(45,'C')"><span class="opt-key">C</span>Quadrant D — Responsive, flexible SC with buffer capacity (innovative product + evolving supply)</div>
+    <div class="opt" onclick="selectOpt(45,'D')"><span class="opt-key">D</span>Quadrant B — Responsive SC but with stable supply side</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-45" onclick="checkAnswer(45,'C')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-45"><strong>C is correct.</strong> K&amp;S products are Quadrant D: innovative product (high demand variability from semiconductor industry cycles) + evolving supply side (complex semi-finished/finished split, labour turnover risk if relocating). This demands a responsive, flexible SC with buffer capacity and customer proximity — which is why China (close to 83% of demand in Asia) was the winning choice.</div>
+</div>
+
+<!-- Q46 -->
+<div class="qcard" id="qcard-46">
+  <div class="q-top">
+    <span class="q-num">Q46</span>
+    <div class="q-text">Blinkit's Average Order Value (AOV) leadership over Zepto is primarily explained by:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(46,'A')"><span class="opt-key">A</span>Blinkit having faster delivery times than Zepto</div>
+    <div class="opt" onclick="selectOpt(46,'B')"><span class="opt-key">B</span>Blinkit stocking high-ASP categories (iPhones, electronics) in dark stores — deliberate category mix strategy</div>
+    <div class="opt" onclick="selectOpt(46,'C')"><span class="opt-key">C</span>Blinkit operating in more cities than Zepto</div>
+    <div class="opt" onclick="selectOpt(46,'D')"><span class="opt-key">D</span>Blinkit charging higher delivery fees than Zepto</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-46" onclick="checkAnswer(46,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-46"><strong>B is correct.</strong> Blinkit's AOV (₹635 vs Zepto's ₹450) reflects a deliberate SC strategy to stock high-ASP categories in dark stores. "Category mix is supply chain strategy at the shelf level." One iPhone delivery = equivalent margin of ~110 grocery orders. Zepto wins on speed; Blinkit wins on AOV. Speed is the door-opener; category depth is the margin maker.</div>
+</div>
+
+<!-- Q47 -->
+<div class="qcard" id="qcard-47">
+  <div class="q-top">
+    <span class="q-num">Q47</span>
+    <div class="q-text">The <strong>Zone of Strategic Fit</strong> diagram shows that:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(47,'A')"><span class="opt-key">A</span>All supply chains should aim to be maximally efficient</div>
+    <div class="opt" onclick="selectOpt(47,'B')"><span class="opt-key">B</span>High-variability products need highly responsive SCs; low-variability products need efficient SCs — gaps represent strategic misfits</div>
+    <div class="opt" onclick="selectOpt(47,'C')"><span class="opt-key">C</span>A supply chain must be either fully efficient or fully responsive — no middle ground</div>
+    <div class="opt" onclick="selectOpt(47,'D')"><span class="opt-key">D</span>Responsiveness always beats efficiency as the source of competitive advantage</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-47" onclick="checkAnswer(47,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-47"><strong>B is correct.</strong> The Zone of Strategic Fit is a diagonal band on the Variability vs Responsiveness chart. Products above the zone: SC is too efficient for their variability (stockouts). Products below the zone: SC is too responsive for their variability (excess cost). The goal is to stay inside the band — matched SC strategy to product variability level.</div>
+</div>
+
+<a href="#top" class="jt">↑ Back to top</a>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════ SECTION 7 — CASE STUDIES ═══════════ -->
+<div id="s7" style="scroll-margin-top:70px">
+<div class="sec-hdr">
+  <div class="ds d6"></div>
+  <div class="sec-meta"><div class="sec-label">Case Studies</div><h2>Quincy Apparel &amp; Kulicke &amp; Soffa</h2></div>
+</div>
+
+<!-- Q48 -->
+<div class="qcard" id="qcard-48">
+  <div class="q-top">
+    <span class="q-num">Q48</span>
+    <div class="q-text">Quincy Apparel's primary supply chain failure was best described as:</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(48,'A')"><span class="opt-key">A</span>Choosing the wrong product category — women's workwear had no market</div>
+    <div class="opt" onclick="selectOpt(48,'B')"><span class="opt-key">B</span>A strategic misfit — market-responsive CVP built on an outsourced, low-scale SC with no supplier relationships</div>
+    <div class="opt" onclick="selectOpt(48,'C')"><span class="opt-key">C</span>Over-investment in technology at the expense of product development</div>
+    <div class="opt" onclick="selectOpt(48,'D')"><span class="opt-key">D</span>Failing to raise any venture capital funding before launch</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-48" onclick="checkAnswer(48,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-48"><strong>B is correct.</strong> Quincy's competitive strategy (affordable targeted fit = responsive CVP) required a market-responsive SC. But their supply chain was outsourced, low-scale, with no factory relationships — a classic strategic misfit. The CVP was compelling (50%+ trunk show conversion, WSJ/NYT/FT coverage, 39% repeat purchase). The failure was entirely operational. They raised $950K vs a $1.2–1.5M target, had 35% return rate (68% due to poor fit), and a 7-week cash runway at the final board meeting.</div>
+</div>
+
+<!-- Q49 -->
+<div class="qcard" id="qcard-49">
+  <div class="q-top">
+    <span class="q-num">Q49</span>
+    <div class="q-text">In the Kulicke &amp; Soffa case, the Israel + China option was chosen over all alternatives. Which of the following best explains why China dominated the non-cost scorecard?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(49,'A')"><span class="opt-key">A</span>China scored +6 across all 6 non-cost factors: labour, tax, location, positive externalities, infrastructure, and political risk</div>
+    <div class="opt" onclick="selectOpt(49,'B')"><span class="opt-key">B</span>China was the only option with a manufacturing cost below $1/unit</div>
+    <div class="opt" onclick="selectOpt(49,'C')"><span class="opt-key">C</span>China offered the shortest lead time to US customers</div>
+    <div class="opt" onclick="selectOpt(49,'D')"><span class="opt-key">D</span>China's Suzhou park had an existing wire bonding cluster K&amp;S could join</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-49" onclick="checkAnswer(49,'A')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-49"><strong>A is correct.</strong> China scored +6 on all 6 non-cost factors: labour availability, tax incentives, geographic proximity (close to 83% of demand in Asia + Shanghai), positive externalities (industrial ecosystem), infrastructure (reliable), and political risk (manageable). Singapore scored +3; Jordan −1; Israel 0. Combined with being the cheapest option ($37.27M vs Israel-only $50.85M), China was unambiguously the dominant choice.</div>
+</div>
+
+<!-- Q50 -->
+<div class="qcard" id="qcard-50">
+  <div class="q-top">
+    <span class="q-num">Q50</span>
+    <div class="q-text">Which of the following <strong>cross-document synthesis</strong> statements is most accurate?</div>
+  </div>
+  <div class="options">
+    <div class="opt" onclick="selectOpt(50,'A')"><span class="opt-key">A</span>ERP investment solves information latency; Blockchain solves financial flow; Strategic fit solves operational complexity</div>
+    <div class="opt" onclick="selectOpt(50,'B')"><span class="opt-key">B</span>Product Flow (Lean) + Info Flow (Sharing+Visibility) + Financial Flow (SCF) + Right SC Strategy = SC Competitive Advantage</div>
+    <div class="opt" onclick="selectOpt(50,'C')"><span class="opt-key">C</span>Responsive supply chains are always superior to efficient supply chains regardless of product type</div>
+    <div class="opt" onclick="selectOpt(50,'D')"><span class="opt-key">D</span>Integration of processes is more important than synchronisation of data for achieving supply chain visibility</div>
+  </div>
+  <div class="q-footer">
+    <button class="btn-check" id="btn-50" onclick="checkAnswer(50,'B')" disabled>Check Answer</button>
+  </div>
+  <div class="explanation" id="exp-50"><strong>B is correct.</strong> The master synthesis: Product Flow (Lean Ops, Doc 3) + Info Flow (Sharing + Visibility, Docs 2 &amp; 4) + Financial Flow (SCF, Doc 1) + Right SC Strategy (Efficient vs Responsive, Docs 5 &amp; 6) = SC Competitive Advantage. All five documents converge on this. A is wrong (ERP is not the answer per Doc 4). C is wrong (strategic fit determines which is superior). D is wrong (interoperability &gt; integration per Doc 4).</div>
+</div>
+
+<a href="#top" class="jt">↑ Back to top</a>
+</div>
+
+<!-- RESULTS PANEL -->
+<div class="results-panel" id="resultsPanel">
+  <div class="rp-title">Your Results</div>
+  <div class="rp-score" id="rpScore" style="color:var(--a2)">–</div>
+  <div class="rp-grade" id="rpGrade">Complete more questions to see your score</div>
+  <div class="rp-breakdown">
+    <div class="rp-cell"><div class="rp-cell-label">Correct</div><div class="rp-cell-val" id="rpCorrect" style="color:var(--green)">0</div></div>
+    <div class="rp-cell"><div class="rp-cell-label">Wrong</div><div class="rp-cell-val" id="rpWrong" style="color:var(--red)">0</div></div>
+    <div class="rp-cell"><div class="rp-cell-label">Attempted</div><div class="rp-cell-val" id="rpAttempted">0</div></div>
+    <div class="rp-cell"><div class="rp-cell-label">Remaining</div><div class="rp-cell-val" id="rpRemaining" style="color:var(--a3)">50</div></div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+  const state = {};
+  const total = 50;
+
+  function selectOpt(qNum, key) {
+    if (state[qNum] && state[qNum].answered) return;
+    const card = document.getElementById('qcard-' + qNum);
+    card.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+    const opts = card.querySelectorAll('.opt');
+    const keys = ['A','B','C','D'];
+    opts[keys.indexOf(key)].classList.add('selected');
+    if (!state[qNum]) state[qNum] = {};
+    state[qNum].selected = key;
+    document.getElementById('btn-' + qNum).disabled = false;
+  }
+
+  function checkAnswer(qNum, correctKey) {
+    const s = state[qNum];
+    if (!s || !s.selected || s.answered) return;
+    s.answered = true;
+
+    const card = document.getElementById('qcard-' + qNum);
+    const opts = card.querySelectorAll('.opt');
+    const keys = ['A','B','C','D'];
+    const selectedIdx = keys.indexOf(s.selected);
+    const correctIdx = keys.indexOf(correctKey);
+
+    opts.forEach((o, i) => {
+      o.classList.add('disabled');
+      o.classList.remove('selected');
+      if (i === correctIdx) o.classList.add('revealed-correct');
+    });
+
+    if (s.selected === correctKey) {
+      s.correct = true;
+      opts[selectedIdx].classList.remove('revealed-correct');
+      opts[selectedIdx].classList.add('correct');
+      card.classList.add('answered-correct');
+    } else {
+      s.correct = false;
+      opts[selectedIdx].classList.add('wrong');
+      card.classList.add('answered-wrong');
+    }
+
+    document.getElementById('btn-' + qNum).disabled = true;
+    const exp = document.getElementById('exp-' + qNum);
+    exp.classList.add('show');
+
+    updateScore();
+  }
+
+  function updateScore() {
+    let correct = 0, wrong = 0, attempted = 0;
+    for (let i = 1; i <= total; i++) {
+      if (state[i] && state[i].answered) {
+        attempted++;
+        if (state[i].correct) correct++; else wrong++;
+      }
+    }
+    document.getElementById('scoreVal').textContent = correct;
+    document.getElementById('totalAttempted').textContent = attempted + ' attempted';
+    document.getElementById('progressBar').style.width = (attempted / total * 100) + '%';
+
+    if (attempted > 0) {
+      document.getElementById('resultsPanel').classList.add('show');
+      document.getElementById('rpScore').textContent = correct + ' / ' + attempted;
+      const pct = Math.round(correct / attempted * 100);
+      let grade = pct >= 90 ? '🏆 Excellent — exam-ready!' : pct >= 75 ? '✅ Good — review weak areas' : pct >= 60 ? '📖 Fair — revise key frameworks' : '⚠️ Needs revision — go back to notes';
+      document.getElementById('rpGrade').textContent = pct + '% accuracy — ' + grade;
+      document.getElementById('rpCorrect').textContent = correct;
+      document.getElementById('rpWrong').textContent = wrong;
+      document.getElementById('rpAttempted').textContent = attempted;
+      document.getElementById('rpRemaining').textContent = total - attempted;
+    }
+  }
+
+  function resetAll() {
+    for (let i = 1; i <= total; i++) {
+      delete state[i];
+      const card = document.getElementById('qcard-' + i);
+      card.classList.remove('answered-correct','answered-wrong');
+      card.querySelectorAll('.opt').forEach(o => {
+        o.classList.remove('selected','correct','wrong','revealed-correct','disabled');
+      });
+      document.getElementById('exp-' + i).classList.remove('show');
+      document.getElementById('btn-' + i).disabled = true;
+    }
+    document.getElementById('scoreVal').textContent = '0';
+    document.getElementById('totalAttempted').textContent = '0 attempted';
+    document.getElementById('progressBar').style.width = '0%';
+    document.getElementById('resultsPanel').classList.remove('show');
+  }
+
+  // Keyboard: 1–4 to select option, Enter to check
+  let currentFocus = null;
+  document.addEventListener('keydown', e => {
+    if (['1','2','3','4'].includes(e.key)) {
+      // find first unanswered card in view
+      for (let i = 1; i <= total; i++) {
+        if (!state[i] || !state[i].answered) {
+          const keys = ['A','B','C','D'];
+          selectOpt(i, keys[parseInt(e.key)-1]);
+          currentFocus = i;
+          break;
+        }
+      }
+    }
+    if (e.key === 'Enter' && currentFocus) {
+      document.getElementById('btn-' + currentFocus).click();
+      currentFocus = null;
+    }
+  });
+</script>
+</body>
+</html>

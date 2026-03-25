@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketing · CRM & PM Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #1a1c22;
+    --card: #252830;
+    --card-hover: #2d3040;
+    --border: #353845;
+    --text: #e8e6e1;
+    --text-muted: #9895a0;
+    --text-dim: #6b6878;
+    --crm: #8b7ff0;
+    --crm-dim: rgba(139,127,240,0.15);
+    --crm-glow: rgba(139,127,240,0.3);
+    --pm: #8b3fe0;
+    --pm-dim: rgba(139,63,224,0.15);
+    --pm-glow: rgba(139,63,224,0.3);
+    --correct: #3ecf8e;
+    --correct-dim: rgba(62,207,142,0.15);
+    --wrong: #e05252;
+    --wrong-dim: rgba(224,82,82,0.15);
+    --gold: #f0c040;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ── Header ── */
+  .app-header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .app-title {
+    font-family: 'Lora', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+
+  .app-title span.crm { color: var(--crm); }
+  .app-title span.pm  { color: var(--pm); }
+
+  .score-display {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    white-space: nowrap;
+  }
+
+  .score-display .score-num {
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  /* ── Filter Bar ── */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    padding: 20px 24px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .filter-btn {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.8rem;
+    padding: 7px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+  }
+
+  .filter-btn:hover { background: var(--card-hover); color: var(--text); }
+
+  .filter-btn.active-all  { background: rgba(255,255,255,0.08); color: var(--text); border-color: rgba(255,255,255,0.2); }
+  .filter-btn.active-crm  { background: var(--crm-dim); color: var(--crm); border-color: var(--crm); }
+  .filter-btn.active-pm   { background: var(--pm-dim); color: var(--pm); border-color: var(--pm); }
+
+  /* ── Main layout ── */
+  .main-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 20px;
+  }
+
+  /* ── Progress ── */
+  .progress-area {
+    margin-bottom: 24px;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-family: 'Fira Code', monospace;
+    margin-bottom: 8px;
+  }
+
+  .progress-track {
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    background: linear-gradient(90deg, var(--crm), var(--pm));
+  }
+
+  /* ── Question Card ── */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    animation: slideUp 0.3s ease;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .subject-tag {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .subject-tag.crm {
+    background: var(--crm-dim);
+    color: var(--crm);
+    border: 1px solid rgba(139,127,240,0.3);
+  }
+
+  .subject-tag.pm {
+    background: var(--pm-dim);
+    color: var(--pm);
+    border: 1px solid rgba(139,63,224,0.3);
+  }
+
+  .session-label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-style: italic;
+    font-family: 'Lora', serif;
+  }
+
+  .question-num {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-left: auto;
+  }
+
+  .question-text {
+    font-family: 'Lora', serif;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  /* ── Answer Options ── */
+  .options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .option-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-align: left;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    transition: all 0.18s ease;
+    position: relative;
+  }
+
+  .option-btn:not(.disabled):hover {
+    background: var(--card-hover);
+    border-color: rgba(255,255,255,0.15);
+    transform: translateX(3px);
+  }
+
+  .option-btn.disabled { cursor: default; }
+
+  .option-letter {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.8rem;
+    font-weight: 500;
+    min-width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: var(--border);
+    color: var(--text-muted);
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.18s ease;
+  }
+
+  .option-btn:not(.disabled):hover .option-letter {
+    background: rgba(255,255,255,0.12);
+    color: var(--text);
+  }
+
+  .option-btn.correct {
+    background: var(--correct-dim);
+    border-color: var(--correct);
+  }
+
+  .option-btn.correct .option-letter {
+    background: var(--correct);
+    color: #fff;
+  }
+
+  .option-btn.wrong {
+    background: var(--wrong-dim);
+    border-color: var(--wrong);
+  }
+
+  .option-btn.wrong .option-letter {
+    background: var(--wrong);
+    color: #fff;
+  }
+
+  /* keyboard hint */
+  .key-hint {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    display: none;
+  }
+
+  @media (min-width: 600px) {
+    .option-btn:not(.disabled) .key-hint { display: block; }
+  }
+
+  /* ── Explanation Panel ── */
+  .explanation-panel {
+    display: none;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--crm);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    margin-top: 8px;
+    animation: fadeIn 0.25s ease;
+  }
+
+  .explanation-panel.show { display: block; }
+  .explanation-panel.pm-border { border-left-color: var(--pm); }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .explanation-label {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+
+  .explanation-text {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  /* ── Next / Action Buttons ── */
+  .card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+    justify-content: flex-end;
+  }
+
+  .btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    padding: 10px 22px;
+    border-radius: var(--radius-sm);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--crm), var(--pm));
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(139,127,240,0.35);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ghost:hover {
+    background: var(--card-hover);
+    color: var(--text);
+  }
+
+  .btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+    transform: none;
+  }
+
+  /* ── Results Screen ── */
+  .results-screen {
+    display: none;
+    animation: slideUp 0.4s ease;
+  }
+
+  .results-screen.show { display: block; }
+
+  .results-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 32px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+
+  .results-tier {
+    font-family: 'Lora', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, var(--crm), var(--pm));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .results-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    font-style: italic;
+    font-family: 'Lora', serif;
+  }
+
+  .results-scores {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  @media (max-width: 500px) {
+    .results-scores { grid-template-columns: 1fr; }
+  }
+
+  .score-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 12px;
+  }
+
+  .score-block-label {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+
+  .score-block-value {
+    font-family: 'Lora', serif;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
+  .score-block-value.all  { color: var(--gold); }
+  .score-block-value.crm  { color: var(--crm); }
+  .score-block-value.pm   { color: var(--pm); }
+
+  .score-block-sub {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+    font-family: 'Fira Code', monospace;
+  }
+
+  .results-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .btn-crm {
+    background: var(--crm-dim);
+    color: var(--crm);
+    border: 1px solid var(--crm);
+  }
+  .btn-crm:hover { background: rgba(139,127,240,0.25); }
+
+  .btn-pm {
+    background: var(--pm-dim);
+    color: var(--pm);
+    border: 1px solid var(--pm);
+  }
+  .btn-pm:hover { background: rgba(139,63,224,0.25); }
+
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+    font-family: 'Lora', serif;
+    font-size: 0.95rem;
+    display: none;
+  }
+
+  /* ── Keyboard hints footer ── */
+  .keyboard-hint-bar {
+    text-align: center;
+    margin-top: 20px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .kh-item { display: flex; align-items: center; gap: 6px; }
+
+  .kh-key {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 7px;
+    color: var(--text-muted);
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  @media (max-width: 500px) {
+    .app-header { padding: 12px 16px; }
+    .main-wrap  { padding: 20px 14px; }
+    .question-card { padding: 20px 16px; }
+    .question-text { font-size: 0.97rem; }
+    .results-card { padding: 24px 16px; }
+    .keyboard-hint-bar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="app-header">
+  <div class="app-title">
+    Marketing · <span class="crm">CRM</span> &amp; <span class="pm">PM</span> Quiz
+  </div>
+  <div class="score-display" id="scoreDisplay">
+    Score: <span class="score-num" id="scoreNum">0</span> / <span id="scoreDen">0</span>
+  </div>
+</header>
+
+<!-- ── FILTER BAR ── -->
+<div class="filter-bar">
+  <button class="filter-btn active-all" id="btnAll"  onclick="setFilter('all')">All 50</button>
+  <button class="filter-btn"            id="btnCrm"  onclick="setFilter('crm')">CRM (25)</button>
+  <button class="filter-btn"            id="btnPm"   onclick="setFilter('pm')">PM (25)</button>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main-wrap">
+
+  <!-- Progress -->
+  <div class="progress-area" id="progressArea">
+    <div class="progress-label">
+      <span id="progressText">Question 1 of 50</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Quiz Area -->
+  <div id="quizArea">
+    <div class="question-card" id="questionCard">
+
+      <div class="card-meta">
+        <span class="subject-tag" id="subjectTag">CRM</span>
+        <span class="session-label" id="sessionLabel"></span>
+        <span class="question-num" id="questionNum">#1</span>
+      </div>
+
+      <div class="question-text" id="questionText"></div>
+
+      <div class="options-grid" id="optionsGrid"></div>
+
+      <div class="explanation-panel" id="explanationPanel">
+        <div class="explanation-label">Explanation</div>
+        <div class="explanation-text" id="explanationText"></div>
+      </div>
+
+      <div class="card-actions" id="cardActions">
+        <button class="btn btn-primary" id="nextBtn" style="display:none" onclick="nextQuestion()">
+          Next →
+        </button>
+      </div>
+
+    </div>
+
+    <div class="keyboard-hint-bar">
+      <div class="kh-item"><span class="kh-key">1–4</span> Select answer</div>
+      <div class="kh-item"><span class="kh-key">Enter</span> Next question</div>
+      <div class="kh-item"><span class="kh-key">R</span> Restart</div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" id="emptyState">No questions match this filter.</div>
+
+  <!-- Results Screen -->
+  <div class="results-screen" id="resultsScreen">
+    <div class="results-card">
+      <div class="results-tier" id="resultsTier"></div>
+      <div class="results-subtitle" id="resultsSubtitle"></div>
+
+      <div class="results-scores">
+        <div class="score-block">
+          <div class="score-block-label">Total</div>
+          <div class="score-block-value all" id="rTotal">—</div>
+          <div class="score-block-sub" id="rTotalSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">CRM</div>
+          <div class="score-block-value crm" id="rCrm">—</div>
+          <div class="score-block-sub" id="rCrmSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">PM</div>
+          <div class="score-block-value pm" id="rPm">—</div>
+          <div class="score-block-sub" id="rPmSub"></div>
+        </div>
+      </div>
+
+      <div class="results-actions">
+        <button class="btn btn-primary" onclick="startQuiz('all')">Restart All 50</button>
+        <button class="btn btn-crm"    onclick="startQuiz('crm')">CRM Only</button>
+        <button class="btn btn-pm"     onclick="startQuiz('pm')">PM Only</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main-wrap -->
+
+<script>
+/* ═══════════════════════════════════════════
+   QUESTION DATA
+═══════════════════════════════════════════ */
+const ALL_QUESTIONS = [
+  /* ── CRM ── */
+  {
+    id: 1, subject: "crm", session: "Session 1 · Relational Intelligence",
+    q: "What does \"Relational Intelligence\" primarily refer to in CRM?",
+    opts: [
+      "A firm's ability to deploy CRM software effectively",
+      "The firm's awareness of the range of relationships customers can have with it, and the ability to reinforce or change those relationships",
+      "The ability to predict purchases using machine learning",
+      "A customer's digital literacy score"
+    ],
+    correct: 1,
+    exp: "Relational Intelligence is the company's awareness of the range of relationships customers can have with it. Most CRM failures are relational intelligence failures, not technology failures."
+  },
+  {
+    id: 2, subject: "crm", session: "Session 1 · Relational Intelligence",
+    q: "In the Target pregnancy prediction case, what probability was inferred from purchase patterns like cocoa-butter lotion and zinc supplements?",
+    opts: ["72%", "80%", "87%", "94%"],
+    correct: 2,
+    exp: "Target's predictive model assigned an 87% pregnancy probability based on specific SKU purchase patterns. This illustrates both the power of predictive analytics and the ethical tension of acting on inferred personal data."
+  },
+  {
+    id: 3, subject: "crm", session: "Session 1 · Relational Intelligence",
+    q: "Which of the following is NOT one of the three CRM failure archetypes from Avery, Fournier & Wittenbraker?",
+    opts: ["Disinterested", "Dumped", "Overcommitted", "Non-understanding"],
+    correct: 2,
+    exp: "The three archetypes are: Disinterested (wrong relationship intensity), Dumped (abandoned loyal segment), and Non-understanding (wrong solution given). \"Overcommitted\" is not one of them."
+  },
+  {
+    id: 4, subject: "crm", session: "Session 1 · Relational Intelligence",
+    q: "A clothing brand repositions itself to target younger, thinner customers — abandoning its loyal plus-size Baby Boomer base. This is called:",
+    opts: ["Market Repositioning", "Customer Dumping", "Segment Pruning", "Disinterested CRM"],
+    correct: 1,
+    exp: "Customer Dumping is when a firm abandons or repositions away from an existing loyal customer segment in pursuit of a new target demographic. It is one of the costliest strategic errors in customer management."
+  },
+  {
+    id: 5, subject: "crm", session: "Session 1 · Relational Intelligence",
+    q: "Permission Marketing is best described as:",
+    opts: [
+      "Allowing customers to set their own prices",
+      "Marketing that targets only legally permitted geographic zones",
+      "A firm seeking advance consent before sending promotional messages",
+      "Using AI to auto-approve customer communications"
+    ],
+    correct: 2,
+    exp: "Permission Marketing seeks advance consent before communicating. It converts opt-in consent into a trust signal — the opposite of spam."
+  },
+  {
+    id: 6, subject: "crm", session: "Session 2 · Acquisition & Retention",
+    q: "What is the correct order of the 5-A Customer Acquisition Funnel?",
+    opts: [
+      "Aware → Ask → Appeal → Act → Advocate",
+      "Appeal → Aware → Ask → Advocate → Act",
+      "Aware → Appeal → Ask → Act → Advocate",
+      "Ask → Aware → Appeal → Act → Advocate"
+    ],
+    correct: 2,
+    exp: "The 5-A Funnel runs: Aware → Appeal → Ask → Act → Advocate. Memory hook: \"Always Ask About Actual Advocates.\""
+  },
+  {
+    id: 7, subject: "crm", session: "Session 2 · Acquisition & Retention",
+    q: "Retaining a customer is approximately how many times cheaper than acquiring a new one?",
+    opts: ["2–3×", "3–4×", "5–7×", "10–12×"],
+    correct: 2,
+    exp: "Retaining a customer is 5–7× cheaper than acquiring a new one — yet most marketing budgets over-index on acquisition. This is a critical exam fact."
+  },
+  {
+    id: 8, subject: "crm", session: "Session 2 · Acquisition & Retention",
+    q: "According to Reichheld (Bain), even a 5% reduction in churn can increase profitability by:",
+    opts: ["5–10%", "10–20%", "25–95%", "50–100%"],
+    correct: 2,
+    exp: "A 5% churn reduction can increase profitability by 25–95%. This staggering range underlines why retention investment is strategically critical, especially in mature markets."
+  },
+  {
+    id: 9, subject: "crm", session: "Session 2 · Acquisition & Retention",
+    q: "Which stage of the 5-A funnel represents the highest-value customer outcome for the firm?",
+    opts: ["Act", "Ask", "Appeal", "Advocate"],
+    correct: 3,
+    exp: "The Advocate is the highest-value outcome — an unpaid brand ambassador who recruits new customers at zero acquisition cost. Firms that stop at \"Act\" (purchase) miss this compounding benefit."
+  },
+  {
+    id: 10, subject: "crm", session: "Session 2 · Acquisition & Retention",
+    q: "Which of the following is NOT a recognised type of switching cost?",
+    opts: ["Financial", "Procedural", "Cognitive", "Relational"],
+    correct: 2,
+    exp: "The three switching cost types are Financial, Procedural, and Relational. \"Cognitive\" is not one of the recognised categories in this framework."
+  },
+  {
+    id: 11, subject: "crm", session: "Session 3 · Loyalty & Satisfaction",
+    q: "NPS (Net Promoter Score) is calculated as:",
+    opts: [
+      "% Passives − % Detractors",
+      "% Promoters + % Passives",
+      "% Promoters ÷ Total respondents",
+      "% Promoters − % Detractors"
+    ],
+    correct: 3,
+    exp: "NPS = % Promoters (score 9–10) minus % Detractors (score 0–6). Passives (7–8) are excluded from the calculation. High NPS correlates strongly with revenue growth."
+  },
+  {
+    id: 12, subject: "crm", session: "Session 3 · Loyalty & Satisfaction",
+    q: "On the 0–10 NPS scale, customers are classified as \"Promoters\" when they score:",
+    opts: ["7–8", "8–10", "9–10", "6–10"],
+    correct: 2,
+    exp: "Promoters score 9–10, Passives score 7–8, and Detractors score 0–6. Only Promoters and Detractors enter the NPS calculation."
+  },
+  {
+    id: 13, subject: "crm", session: "Session 3 · Loyalty & Satisfaction",
+    q: "Which statement about satisfaction and loyalty is most accurate?",
+    opts: [
+      "High satisfaction always guarantees high loyalty",
+      "Satisfaction is sufficient for loyalty in highly competitive markets",
+      "Loyalty precedes satisfaction in all customer journeys",
+      "Satisfaction is necessary but not sufficient for loyalty"
+    ],
+    correct: 3,
+    exp: "Satisfaction is the floor, not the ceiling. A satisfied customer can still defect if a better option appears. Delight creates loyalty; satisfaction merely prevents defection."
+  },
+  {
+    id: 14, subject: "crm", session: "Session 3 · Loyalty & Satisfaction",
+    q: "Which of the following methods provides REAL-TIME monitoring of brand mentions across social platforms?",
+    opts: ["Mystery Shopping", "CSAT Surveys", "Social Listening", "Churn Analysis"],
+    correct: 2,
+    exp: "Social Listening is a real-time monitoring method for brand mentions across platforms. Other methods (surveys, mystery shopping, churn analysis) are periodic or retrospective."
+  },
+  {
+    id: 15, subject: "crm", session: "Session 3 · Loyalty & Satisfaction",
+    q: "The Satisfaction–Loyalty Hierarchy in correct order from lowest to highest engagement is:",
+    opts: [
+      "Dissatisfied → Loyal → Satisfied → Delighted → Evangelist",
+      "Dissatisfied → Satisfied → Loyal → Delighted → Evangelist",
+      "Dissatisfied → Satisfied → Delighted → Loyal → Evangelist",
+      "Dissatisfied → Delighted → Satisfied → Loyal → Evangelist"
+    ],
+    correct: 2,
+    exp: "The hierarchy is: Dissatisfied → Satisfied → Delighted → Loyal → Evangelist. Delight is the bridge between satisfaction and loyalty; evangelism is the apex."
+  },
+  {
+    id: 16, subject: "crm", session: "Session 4 · CRM & UGC",
+    q: "What percentage of consumers read online reviews before making a purchase decision?",
+    opts: ["78%", "88%", "92%", "97%"],
+    correct: 3,
+    exp: "97% of consumers read online reviews — making review management a non-negotiable CRM discipline. Ignoring your review presence means ignoring nearly every potential customer's decision process."
+  },
+  {
+    id: 17, subject: "crm", session: "Session 4 · CRM & UGC",
+    q: "What percentage of consumers trust online reviews as much as personal recommendations from friends?",
+    opts: ["65%", "75%", "85%", "95%"],
+    correct: 2,
+    exp: "85% of consumers trust online reviews as much as personal recommendations. This is why UGC is more trusted than any firm-generated content — peers are perceived as unbiased."
+  },
+  {
+    id: 18, subject: "crm", session: "Session 4 · CRM & UGC",
+    q: "What is the minimum star rating required before 71% of consumers will even consider using a business?",
+    opts: ["2 stars", "3 stars", "4 stars", "4.5 stars"],
+    correct: 1,
+    exp: "71% of consumers require at least 3 stars before considering a business. Combined with the need for at least 20 reviews, this defines the \"20-3-88\" CRM review audit checklist."
+  },
+  {
+    id: 19, subject: "crm", session: "Session 4 · CRM & UGC",
+    q: "What percentage of consumers say they will use a business that responds to ALL of its reviews?",
+    opts: ["72%", "80%", "88%", "95%"],
+    correct: 2,
+    exp: "88% of consumers will use a business that responds to all reviews — making responsiveness itself a trust signal. Silence on reviews signals indifference."
+  },
+  {
+    id: 20, subject: "crm", session: "Session 4 · CRM & UGC",
+    q: "How many reviews do 74% of consumers need before they trust a business?",
+    opts: ["5", "10", "15", "20"],
+    correct: 3,
+    exp: "74% of consumers need at least 20 reviews to trust a business. Reviews older than 3 months are considered irrelevant by most consumers — recency matters as much as volume."
+  },
+  {
+    id: 21, subject: "crm", session: "Session 5 · Complaints & CLV",
+    q: "What percentage of dissatisfied customers actually complain to the firm?",
+    opts: ["5%", "15%", "25%", "35%"],
+    correct: 0,
+    exp: "Only 5% of unhappy customers complain — the silent 95% are invisible churn risk. Proactive satisfaction measurement is the only way to find the silent majority before they defect."
+  },
+  {
+    id: 22, subject: "crm", session: "Session 5 · Complaints & CLV",
+    q: "The \"Service Recovery Paradox\" states that:",
+    opts: [
+      "Service failures permanently reduce customer loyalty",
+      "More complaints indicate stronger brand engagement",
+      "A complaint resolved excellently can create loyalty higher than if no problem had occurred",
+      "Silent customers are more loyal than vocal complainers"
+    ],
+    correct: 2,
+    exp: "The Service Recovery Paradox holds that excellent, swift resolution can elevate loyalty above pre-complaint levels. It only works when recovery is genuinely excellent and perceived as fair — mediocre recovery doesn't trigger it."
+  },
+  {
+    id: 23, subject: "crm", session: "Session 5 · Complaints & CLV",
+    q: "What is the re-purchase probability when a customer's complaint is resolved QUICKLY?",
+    opts: ["50–70%", "70–80%", "80–85%", "Up to 95%"],
+    correct: 3,
+    exp: "When resolved quickly, up to 95% of complainants will do business again. If resolved eventually (not quickly), 50–70% return. Silent defectors have near-zero recovery probability."
+  },
+  {
+    id: 24, subject: "crm", session: "Session 5 · Complaints & CLV",
+    q: "The FILM mnemonic for CLV drivers stands for:",
+    opts: [
+      "Frequency, Influence, Loyalty, Marketing",
+      "Frequency, Income, Lifespan, Margin",
+      "Funnel, Influence, Lifetime, Metrics",
+      "Frequency, Interest, Lifetime, Monetisation"
+    ],
+    correct: 1,
+    exp: "FILM = Frequency × Income per transaction × Lifespan × Margin. Higher any of these = higher CLV = more worth investing in acquisition and retention."
+  },
+  {
+    id: 25, subject: "crm", session: "Session 5 · Complaints & CLV",
+    q: "An unsatisfied customer tells approximately how many people about their negative experience — creating a WOM snowball effect?",
+    opts: ["5", "8", "11", "15"],
+    correct: 2,
+    exp: "Unsatisfied customers tell approximately 11 people — compared to 5 for satisfied customers. In the digital age, those 11 can reach thousands. Every unresolved complaint is a reputational liability."
+  },
+
+  /* ── PM ── */
+  {
+    id: 26, subject: "pm", session: "Section 1 · Product Management",
+    q: "A Product Manager is often described as:",
+    opts: [
+      "The head of engineering with cross-functional authority",
+      "The CEO of the product without direct authority",
+      "A project manager focused on timelines and budgets",
+      "The CMO responsible for all marketing decisions"
+    ],
+    correct: 1,
+    exp: "The Product Manager is the CEO of the product — owning vision, roadmap, and outcomes — but without direct authority over engineers, designers, or sales. Success depends on influence, not command."
+  },
+  {
+    id: 27, subject: "pm", session: "Section 3 · NPD Types",
+    q: "In the NPD type spectrum, which type carries the HIGHEST risk?",
+    opts: ["Line Extension", "Repositioning", "New Product Line", "New-to-World"],
+    correct: 3,
+    exp: "New-to-World products (e.g., early Tesla EVs, original iPhone) carry the highest risk as they create entirely new categories with no proven demand. Cost Reduction carries the lowest risk."
+  },
+  {
+    id: 28, subject: "pm", session: "Section 3 · NPD Types",
+    q: "Coca-Cola Zero is an example of which NPD type?",
+    opts: ["New-to-World", "New Product Line", "Line Extension", "Repositioning"],
+    correct: 2,
+    exp: "Coca-Cola Zero is a Line Extension — a new item within an existing product category (cola beverages), using the same brand. It expands the line without creating an entirely new category."
+  },
+  {
+    id: 29, subject: "pm", session: "Section 3 · NPD Types",
+    q: "Maggi being repositioned as a \"healthy snack\" is an example of which NPD type?",
+    opts: ["Line Extension", "New Product Line", "Cost Reduction", "Repositioning"],
+    correct: 3,
+    exp: "Repositioning involves targeting an existing product at a new segment or changing its perceived identity. Maggi repositioned from a quick meal to a \"healthy snack\" — same product, new narrative."
+  },
+  {
+    id: 30, subject: "pm", session: "Section 2 · Development Process",
+    q: "The correct sequence of the first three stages in the 8-stage product development process is:",
+    opts: [
+      "Concept Development → Idea Generation → Screening",
+      "Business Analysis → Idea Generation → Idea Screening",
+      "Idea Screening → Idea Generation → Concept Development",
+      "Idea Generation → Idea Screening → Concept Development & Testing"
+    ],
+    correct: 3,
+    exp: "The process begins: Idea Generation → Idea Screening → Concept Development & Testing → Marketing Strategy → Business Analysis → Product Development → Test Marketing → Commercialisation."
+  },
+  {
+    id: 31, subject: "pm", session: "Section 2 · Development Process",
+    q: "According to the framework, where do MOST product failures originate?",
+    opts: [
+      "During full-scale commercialisation",
+      "During distribution and channel setup",
+      "Before launch — during idea validation and concept testing",
+      "In the post-launch review phase"
+    ],
+    correct: 2,
+    exp: "Most failures occur before launch when bad assumptions go unchallenged during idea validation and concept testing. The development process exists to kill bad ideas cheaply — the further a bad idea travels, the more expensive the failure."
+  },
+  {
+    id: 32, subject: "pm", session: "Section 4 · Product Life Cycle",
+    q: "Which set of characteristics best describes the MATURITY stage of the PLC?",
+    opts: [
+      "Rapid sales growth, few competitors, rising profits",
+      "Low sales, high cost, no profit, few competitors",
+      "Sales plateau, heavy competition, price wars, profit pressure",
+      "Falling sales, customer defection, profits eroding"
+    ],
+    correct: 2,
+    exp: "Maturity is characterised by sales plateau, heavy competition, price wars, and profit pressure. Strategy here requires the most creative thinking: repositioning, new markets, product evolution, cost reduction."
+  },
+  {
+    id: 33, subject: "pm", session: "Section 4 · Product Life Cycle",
+    q: "What is the recommended strategic response during the DECLINE stage of the PLC?",
+    opts: [
+      "Heavy advertising investment to re-stimulate demand",
+      "Aggressive pricing to regain market share",
+      "Launch product extensions to reach new segments",
+      "Harvest (cut costs) or divest; niche down or exit"
+    ],
+    correct: 3,
+    exp: "In decline (e.g., DVD players, print newspapers), the right move is to harvest remaining profits while reducing costs, or exit entirely. Panic spending on a dying product amplifies losses."
+  },
+  {
+    id: 34, subject: "pm", session: "Section 4 · Product Life Cycle",
+    q: "The PLC memory mnemonic \"I Grew Mighty and Died\" maps to which stages in order?",
+    opts: [
+      "Innovation → Growth → Momentum → Decline",
+      "Introduction → Growth → Market → Decline",
+      "Introduction → Growth → Maturity → Decline",
+      "Introduction → Gain → Maturity → Decline"
+    ],
+    correct: 2,
+    exp: "\"I Grew Mighty and Died\" = Introduction → Growth → Maturity → Decline. A useful emotional arc to remember PLC stage order."
+  },
+  {
+    id: 35, subject: "pm", session: "Section 5 · Branding",
+    q: "Toyota launching Lexus as a completely separate premium brand identity is an example of:",
+    opts: ["Line Extension", "Brand Extension", "Multi-Brand Strategy", "New Brand Strategy"],
+    correct: 3,
+    exp: "New Brand Strategy creates an entirely new brand identity for a new product — often used to enter a different segment without diluting the parent brand. Toyota kept Lexus separate from its mass-market identity."
+  },
+  {
+    id: 36, subject: "pm", session: "Section 5 · Branding",
+    q: "P&G offering both Ariel and Tide — competing brands in the same detergent category — is called:",
+    opts: ["Line Extension", "Brand Extension", "Multi-Brand Strategy", "New Brand Strategy"],
+    correct: 2,
+    exp: "Multi-Brand Strategy involves maintaining multiple brands in the same product category (also including Pantene, Head & Shoulders). This maximises shelf space and captures different consumer segments."
+  },
+  {
+    id: 37, subject: "pm", session: "Section 5 · Branding",
+    q: "Dove soap expanding into Dove shampoo is an example of:",
+    opts: ["Line Extension", "Brand Extension", "Multi-Brand Strategy", "New Brand Strategy"],
+    correct: 1,
+    exp: "Brand Extension applies the same brand name to a new product category. Dove moved from soap (personal wash) to shampoo (hair care) — a different category, same brand equity."
+  },
+  {
+    id: 38, subject: "pm", session: "Section 6 · Pricing",
+    q: "Which pricing strategy involves setting a high initial price and systematically reducing it as market adoption broadens?",
+    opts: ["Penetration Pricing", "Psychological Pricing", "Premium Pricing", "Price Skimming"],
+    correct: 3,
+    exp: "Price Skimming extracts maximum surplus from early adopters willing to pay a premium, then lowers price as the mass market is targeted. Used for innovative, patent-protected products."
+  },
+  {
+    id: 39, subject: "pm", session: "Section 6 · Pricing",
+    q: "Jio's ₹0 entry pricing to rapidly capture the Indian telecom market is a classic example of:",
+    opts: ["Price Skimming", "Penetration Pricing", "Premium Pricing", "Cost-based Pricing"],
+    correct: 1,
+    exp: "Penetration Pricing sets a very low (or zero) initial price to gain rapid market share — especially effective in network-effect businesses that need critical mass. It sacrifices margin for scale."
+  },
+  {
+    id: 40, subject: "pm", session: "Section 6 · Pricing",
+    q: "Which pricing approach is described as \"the most strategically sound\" because it charges what the customer believes the product is worth?",
+    opts: ["Cost-based Pricing", "Competition-based Pricing", "Value-based Pricing", "Dynamic Pricing"],
+    correct: 2,
+    exp: "Value-based pricing is the most strategically sound: charge what the customer perceives it is worth, not what it cost to make. Apple's iPhone pricing is a prime example."
+  },
+  {
+    id: 41, subject: "pm", session: "Section 6 · Pricing",
+    q: "Price is described as unique among the 4Ps because:",
+    opts: [
+      "It is the most visible element to competitors",
+      "It is the only element that generates revenue",
+      "It is the hardest element to change quickly",
+      "It has the least impact on customer perception"
+    ],
+    correct: 1,
+    exp: "Price is the only P that generates revenue — all others (Product, Place, Promotion) generate costs. This makes pricing decisions the most directly profit-impacting marketing decisions."
+  },
+  {
+    id: 42, subject: "pm", session: "Section 7 · STP Model",
+    q: "In the STP framework, \"Targeting\" answers which strategic question?",
+    opts: [
+      "Who are the different groups in the market?",
+      "How should we be perceived versus competitors?",
+      "What marketing mix should we execute?",
+      "Which segment(s) should we focus on?"
+    ],
+    correct: 3,
+    exp: "Segmentation asks WHO the groups are. Targeting selects WHICH groups to serve (based on attractiveness, fit with capabilities). Positioning defines HOW to be perceived. Execution follows."
+  },
+  {
+    id: 43, subject: "pm", session: "Section 7 · STP Model",
+    q: "\"Volvo = Safety,\" \"BMW = Driving Pleasure,\" \"Mercedes = Prestige\" are examples of which STP stage?",
+    opts: ["Segmentation", "Targeting", "Positioning", "Promotion"],
+    correct: 2,
+    exp: "These are Positioning statements — how each brand wants to be perceived in the customer's mind relative to alternatives. Ries & Trout: \"Positioning is what you do to the mind of the customer.\""
+  },
+  {
+    id: 44, subject: "pm", session: "Section 7 · STP Model",
+    q: "Ries & Trout's famous quote completes as: \"Positioning is not what you do to the product — it's what you do to the ___\":",
+    opts: ["Market", "Competition", "Brand identity", "Mind of the customer"],
+    correct: 3,
+    exp: "Positioning is entirely a mental construct — it exists in the customer's perception, not in the product's features. This is why two technically similar products can have completely different market positions."
+  },
+  {
+    id: 45, subject: "pm", session: "Section 8 · Product Mix",
+    q: "Which dimension of the Product Mix refers to the total NUMBER OF DISTINCT PRODUCT LINES a company offers?",
+    opts: ["Depth", "Length", "Consistency", "Width"],
+    correct: 3,
+    exp: "Width = number of product lines (e.g., Samsung: phones, TVs, appliances, chips). Length = total products. Depth = variants per product. Consistency = how related the lines are."
+  },
+  {
+    id: 46, subject: "pm", session: "Section 8 · Product Mix",
+    q: "Samsung's Galaxy S24 being available in 128GB, 256GB, and 512GB variants represents which product mix dimension?",
+    opts: ["Width", "Length", "Depth", "Consistency"],
+    correct: 2,
+    exp: "Depth = the number of variants within a specific product (storage options, colours, sizes). Greater depth allows a firm to serve more precise customer preferences within a product line."
+  },
+  {
+    id: 47, subject: "pm", session: "Section 9 · Product Failure",
+    q: "The primary diagnostic framework for product failure asks:",
+    opts: [
+      "Was the product technically inferior to competitors?",
+      "Was the marketing budget insufficient?",
+      "Wrong product? Wrong market? Wrong timing? Wrong price? Wrong message?",
+      "Was the development process rushed?"
+    ],
+    correct: 2,
+    exp: "Product failure = mismatch between product and market. Google Glass failed on use case (wrong product/market). Nokia failed on positioning. Amazon Fire Phone failed on price mismatch. Each maps to a different failure dimension."
+  },
+  {
+    id: 48, subject: "pm", session: "Section 10 · Test Marketing",
+    q: "Which test marketing method is cheapest, fastest, and avoids revealing the product to competitors?",
+    opts: ["Standard Test Market", "Controlled Test Market", "Simulated Test Market", "Regional Pilot Launch"],
+    correct: 2,
+    exp: "Simulated Test Market is conducted in a lab environment — consumers are shown ads, purchase the product, and usage is tracked — without any public exposure. It's the lowest-cost and most confidential method."
+  },
+  {
+    id: 49, subject: "pm", session: "Section 11 · Commercialisation",
+    q: "The three critical decisions that define a Commercialisation strategy are:",
+    opts: ["Who, What, When", "What, Where, Why", "How, Why, Who", "When, Where, How"],
+    correct: 3,
+    exp: "The 3W Launch Framework: WHEN to launch (timing, seasonality), WHERE to launch (geography — local rollout vs. global simultaneous), and HOW to launch (channels, pricing tiers, promotional approach)."
+  },
+  {
+    id: 50, subject: "pm", session: "Section 13 · Customer Value",
+    q: "The Customer Value equation is best expressed as:",
+    opts: [
+      "Total Revenue − Total Cost of Production",
+      "Brand Equity × Purchase Frequency",
+      "Benefits Received + Price Paid",
+      "Total Benefits − Total Cost of Ownership"
+    ],
+    correct: 3,
+    exp: "Customer Value = Total Benefits − Total Cost of Ownership. Benefits include functional, emotional, social, and epistemic value. Costs include monetary price, time, effort, and psychological risk. The job of every 4P decision is ultimately to increase perceived customer value."
+  }
+];
+
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+let state = {
+  filter: 'all',
+  deck: [],
+  idx: 0,
+  answered: false,
+  score: 0,
+  crmCorrect: 0, crmTotal: 0,
+  pmCorrect: 0,  pmTotal: 0
+};
+
+/* ═══════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════ */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pct(n, d) { return d === 0 ? 0 : Math.round((n / d) * 100); }
+
+function getTier(p) {
+  if (p >= 90) return { tier: "IIM-Level — Distinction", sub: "Exceptional command of CRM & Product Management frameworks." };
+  if (p >= 75) return { tier: "Strong Command — Pass with Merit", sub: "Solid understanding with minor gaps worth revisiting." };
+  if (p >= 60) return { tier: "Adequate — Revise Key Frameworks", sub: "Core concepts are present; reinforce the weaker sessions." };
+  return         { tier: "Needs Work — Return to Notes", sub: "Systematic revision recommended before the exam." };
+}
+
+/* ═══════════════════════════════════════════
+   FILTER
+═══════════════════════════════════════════ */
+function setFilter(f) {
+  state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.className = 'filter-btn';
+  });
+  if (f === 'all') document.getElementById('btnAll').classList.add('active-all');
+  if (f === 'crm') document.getElementById('btnCrm').classList.add('active-crm');
+  if (f === 'pm')  document.getElementById('btnPm').classList.add('active-pm');
+  startQuiz(f);
+}
+
+/* ═══════════════════════════════════════════
+   QUIZ FLOW
+═══════════════════════════════════════════ */
+function startQuiz(f) {
+  if (f) state.filter = f;
+
+  // sync filter buttons if called from results
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  if (state.filter === 'all') document.getElementById('btnAll').classList.add('active-all');
+  if (state.filter === 'crm') document.getElementById('btnCrm').classList.add('active-crm');
+  if (state.filter === 'pm')  document.getElementById('btnPm').classList.add('active-pm');
+
+  const pool = ALL_QUESTIONS.filter(q => state.filter === 'all' || q.subject === state.filter);
+  state.deck = shuffle(pool);
+  state.idx = 0;
+  state.score = 0;
+  state.crmCorrect = 0; state.crmTotal = 0;
+  state.pmCorrect  = 0; state.pmTotal  = 0;
+
+  // count totals
+  state.deck.forEach(q => {
+    if (q.subject === 'crm') state.crmTotal++;
+    else state.pmTotal++;
+  });
+
+  updateScore();
+
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizArea').style.display = 'block';
+  document.getElementById('progressArea').style.display = 'block';
+  document.getElementById('emptyState').style.display = 'none';
+
+  if (state.deck.length === 0) {
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = state.deck[state.idx];
+  const total = state.deck.length;
+  const num   = state.idx + 1;
+
+  state.answered = false;
+
+  // progress
+  const fillPct = ((num - 1) / total) * 100;
+  document.getElementById('progressFill').style.width = fillPct + '%';
+  document.getElementById('progressText').textContent = `Question ${num} of ${total}`;
+  document.getElementById('progressPct').textContent  = Math.round(fillPct) + '%';
+
+  // meta
+  const tag = document.getElementById('subjectTag');
+  tag.textContent  = q.subject.toUpperCase();
+  tag.className    = 'subject-tag ' + q.subject;
+
+  document.getElementById('sessionLabel').textContent = q.session;
+  document.getElementById('questionNum').textContent  = `#${q.id}`;
+  document.getElementById('questionText').textContent = q.q;
+
+  // options
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span class="option-text">${opt}</span><span class="key-hint">${i+1}</span>`;
+    btn.addEventListener('click', () => selectAnswer(i));
+    grid.appendChild(btn);
+  });
+
+  // hide explanation & next
+  const ep = document.getElementById('explanationPanel');
+  ep.classList.remove('show', 'pm-border');
+  document.getElementById('explanationText').textContent = '';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  // animate card
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  card.offsetHeight; // reflow
+  card.style.animation = 'slideUp 0.3s ease';
+}
+
+function selectAnswer(chosen) {
+  if (state.answered) return;
+  state.answered = true;
+
+  const q = state.deck[state.idx];
+  const btns = document.querySelectorAll('.option-btn');
+  const correct = q.correct;
+
+  btns.forEach((btn, i) => {
+    btn.classList.add('disabled');
+    if (i === correct) btn.classList.add('correct');
+    else if (i === chosen) btn.classList.add('wrong');
+  });
+
+  const isCorrect = chosen === correct;
+  if (isCorrect) {
+    state.score++;
+    if (q.subject === 'crm') state.crmCorrect++;
+    else state.pmCorrect++;
+  }
+
+  updateScore();
+
+  // show explanation
+  const ep = document.getElementById('explanationPanel');
+  document.getElementById('explanationText').textContent = q.exp;
+  ep.classList.add('show');
+  if (q.subject === 'pm') ep.classList.add('pm-border');
+
+  document.getElementById('nextBtn').style.display = 'inline-flex';
+
+  // scroll explanation into view gently
+  setTimeout(() => {
+    ep.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+}
+
+function nextQuestion() {
+  if (!state.answered) return;
+  state.idx++;
+  if (state.idx >= state.deck.length) {
+    showResults();
+  } else {
+    renderQuestion();
+    // scroll to top of card
+    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function updateScore() {
+  const den = state.crmTotal + state.pmTotal;
+  const answered = state.crmCorrect + state.pmCorrect;
+  // show answered correctly / answered so far
+  const answeredSoFar = state.idx + (state.answered ? 1 : 0);
+  document.getElementById('scoreNum').textContent = state.score;
+  document.getElementById('scoreDen').textContent = Math.max(answeredSoFar, state.score);
+}
+
+/* ═══════════════════════════════════════════
+   RESULTS
+═══════════════════════════════════════════ */
+function showResults() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('progressArea').style.display = 'none';
+
+  const total    = state.deck.length;
+  const crmTot   = state.crmTotal;
+  const pmTot    = state.pmTotal;
+  const totalPct = pct(state.score, total);
+
+  const { tier, sub } = getTier(totalPct);
+
+  document.getElementById('resultsTier').textContent    = tier;
+  document.getElementById('resultsSubtitle').textContent = sub;
+
+  document.getElementById('rTotal').textContent    = `${state.score}/${total}`;
+  document.getElementById('rTotalSub').textContent = `${totalPct}%`;
+
+  if (crmTot > 0) {
+    document.getElementById('rCrm').textContent    = `${state.crmCorrect}/${crmTot}`;
+    document.getElementById('rCrmSub').textContent = `${pct(state.crmCorrect, crmTot)}%`;
+  } else {
+    document.getElementById('rCrm').textContent    = '—';
+    document.getElementById('rCrmSub').textContent = 'not attempted';
+  }
+
+  if (pmTot > 0) {
+    document.getElementById('rPm').textContent    = `${state.pmCorrect}/${pmTot}`;
+    document.getElementById('rPmSub').textContent = `${pct(state.pmCorrect, pmTot)}%`;
+  } else {
+    document.getElementById('rPm').textContent    = '—';
+    document.getElementById('rPmSub').textContent = 'not attempted';
+  }
+
+  document.getElementById('resultsScreen').classList.add('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ═══════════════════════════════════════════
+   KEYBOARD SHORTCUTS
+═══════════════════════════════════════════ */
+document.addEventListener('keydown', (e) => {
+  const tag = e.target.tagName.toLowerCase();
+  if (tag === 'input' || tag === 'textarea') return;
+
+  const key = e.key;
+
+  // 1–4: select answer
+  if (['1','2','3','4'].includes(key)) {
+    if (!state.answered && document.getElementById('quizArea').style.display !== 'none') {
+      selectAnswer(parseInt(key) - 1);
+    }
+    return;
+  }
+
+  // Enter or Space: next
+  if ((key === 'Enter' || key === ' ') && state.answered) {
+    e.preventDefault();
+    nextQuestion();
+    return;
+  }
+
+  // R: restart
+  if (key === 'r' || key === 'R') {
+    startQuiz(state.filter);
+  }
+});
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+startQuiz('all');
+</script>
+</body>
+</html>

@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketing & CRM + PM — 50Q Quiz · IIM Lucknow</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --bg: #0f1117;
+  --bg2: #161921;
+  --bg3: #1d2130;
+  --card: #1a1e2a;
+  --card2: #20253a;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.12);
+  --text: #edeae4;
+  --text2: #9fa4b4;
+  --text3: #6b7080;
+  --crm: #7c6fe0;
+  --crm-soft: rgba(124,111,224,0.12);
+  --pm: #e06f8b;
+  --pm-soft: rgba(224,111,139,0.12);
+  --green: #3ecf85;
+  --green-soft: rgba(62,207,133,0.12);
+  --red: #e05c6f;
+  --red-soft: rgba(224,92,111,0.12);
+  --yellow: #e0b84a;
+  --yellow-soft: rgba(224,184,74,0.10);
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --r: 12px;
+  --r2: 8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.header {
+  background: linear-gradient(135deg, #141624 0%, #1a1530 50%, #141624 100%);
+  border-bottom: 1px solid var(--border2);
+  padding: 44px 48px 36px;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute;
+  top: -120px; right: -120px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(124,111,224,0.10) 0%, transparent 65%);
+  pointer-events: none;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: 30%;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(224,111,139,0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+.header h1 {
+  font-family: var(--serif);
+  font-size: clamp(26px, 4vw, 42px);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.header h1 em { font-style: italic; color: var(--crm); }
+.header-sub { font-size: 13.5px; color: var(--text3); margin-bottom: 24px; }
+
+.stats-row { display: flex; gap: 14px; flex-wrap: wrap; }
+.stat-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1.5px solid;
+}
+.stat-pill.crm { background: var(--crm-soft); border-color: rgba(124,111,224,0.35); color: #a89cf5; }
+.stat-pill.pm  { background: var(--pm-soft);  border-color: rgba(224,111,139,0.35); color: #f0a4ba; }
+.stat-pill.tot { background: rgba(255,255,255,0.04); border-color: var(--border2); color: var(--text2); }
+
+/* ── CONTROLS BAR ── */
+.controls {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 48px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+.controls-label { font-size: 11px; font-family: var(--mono); color: var(--text3); margin-right: 6px; }
+.filter-btn {
+  padding: 5px 14px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1.5px solid var(--border2);
+  background: transparent;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all .18s;
+}
+.filter-btn:hover { border-color: var(--crm); color: var(--crm); }
+.filter-btn.active-crm { background: var(--crm-soft); border-color: var(--crm); color: #a89cf5; }
+.filter-btn.active-pm  { background: var(--pm-soft);  border-color: var(--pm);  color: #f0a4ba; }
+.filter-btn.active-all { background: rgba(255,255,255,0.05); border-color: var(--border2); color: var(--text); }
+
+.spacer { flex: 1; }
+.score-display {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 5px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+.score-display span { color: var(--green); font-weight: 600; }
+
+.btn-submit, .btn-reset {
+  padding: 7px 20px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: all .2s;
+  border: none;
+}
+.btn-submit {
+  background: var(--crm);
+  color: #fff;
+}
+.btn-submit:hover { background: #9185f5; transform: translateY(-1px); }
+.btn-reset {
+  background: var(--bg3);
+  color: var(--text2);
+  border: 1px solid var(--border2);
+}
+.btn-reset:hover { border-color: var(--red); color: var(--red); }
+
+/* ── QUIZ AREA ── */
+.quiz-area {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 36px 48px 80px;
+}
+
+/* ── SECTION DIVIDER ── */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 40px 0 24px;
+  padding: 14px 20px;
+  border-radius: var(--r);
+  border: 1px solid;
+}
+.section-divider.crm { background: var(--crm-soft); border-color: rgba(124,111,224,0.25); }
+.section-divider.pm  { background: var(--pm-soft);  border-color: rgba(224,111,139,0.25); }
+.sd-icon { font-size: 20px; }
+.sd-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 1.8px; margin-bottom: 2px; }
+.sd-label.crm { color: var(--crm); }
+.sd-label.pm  { color: var(--pm);  }
+.sd-title { font-family: var(--serif); font-size: 17px; color: var(--text); }
+.sd-count { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--text3); }
+
+/* ── QUESTION CARD ── */
+.q-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 22px 24px;
+  margin-bottom: 14px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.q-card:hover { border-color: var(--border2); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.q-card.correct  { border-color: rgba(62,207,133,0.5) !important; background: linear-gradient(135deg, var(--card) 0%, rgba(62,207,133,0.04) 100%); }
+.q-card.wrong    { border-color: rgba(224,92,111,0.5)  !important; background: linear-gradient(135deg, var(--card) 0%, rgba(224,92,111,0.04) 100%); }
+.q-card.skipped  { border-color: rgba(224,184,74,0.3)  !important; }
+
+.q-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.q-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 2px 9px;
+  border-radius: 6px;
+}
+.q-tag {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.q-tag.crm { background: var(--crm-soft); color: #a89cf5; }
+.q-tag.pm  { background: var(--pm-soft);  color: #f0a4ba; }
+.q-difficulty {
+  font-size: 10px;
+  color: var(--text3);
+  font-family: var(--mono);
+  margin-left: auto;
+}
+.q-difficulty.easy   { color: var(--green); }
+.q-difficulty.medium { color: var(--yellow); }
+.q-difficulty.hard   { color: var(--red); }
+
+.q-text {
+  font-size: 14.5px;
+  color: var(--text);
+  line-height: 1.65;
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+
+/* ── OPTIONS ── */
+.options { display: flex; flex-direction: column; gap: 8px; }
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--r2);
+  border: 1.5px solid var(--border);
+  background: var(--bg2);
+  cursor: pointer;
+  transition: all .18s;
+  position: relative;
+}
+.option:hover:not(.locked) { border-color: var(--border2); background: var(--bg3); transform: translateX(2px); }
+.option.selected:not(.locked) { border-color: var(--crm); background: var(--crm-soft); }
+.option.correct-opt { border-color: var(--green) !important; background: var(--green-soft) !important; }
+.option.wrong-opt   { border-color: var(--red)   !important; background: var(--red-soft)   !important; }
+.option.locked { cursor: default; }
+
+.opt-key {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background: var(--bg3);
+  color: var(--text3);
+  margin-top: 1px;
+  transition: all .18s;
+}
+.option.selected:not(.locked) .opt-key { background: var(--crm); color: #fff; }
+.option.correct-opt .opt-key { background: var(--green); color: #fff; }
+.option.wrong-opt   .opt-key { background: var(--red);   color: #fff; }
+
+.opt-text { font-size: 13.5px; color: var(--text2); line-height: 1.5; }
+.option.selected:not(.locked) .opt-text { color: var(--text); }
+.option.correct-opt .opt-text { color: var(--text); }
+
+/* ── FEEDBACK ── */
+.feedback {
+  margin-top: 14px;
+  padding: 11px 14px;
+  border-radius: var(--r2);
+  font-size: 13px;
+  line-height: 1.6;
+  display: none;
+  border-left: 3px solid;
+}
+.feedback.show { display: block; }
+.feedback.correct-fb { border-color: var(--green); background: var(--green-soft); color: #8de8c0; }
+.feedback.wrong-fb   { border-color: var(--red);   background: var(--red-soft);   color: #f0a4ad; }
+.feedback strong { color: var(--text); }
+
+/* ── RESULTS PANEL ── */
+.results-panel {
+  display: none;
+  background: var(--card2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 32px 36px;
+  margin: 36px 0;
+  text-align: center;
+}
+.results-panel.show { display: block; }
+.results-score {
+  font-family: var(--serif);
+  font-size: 64px;
+  line-height: 1;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.results-score span { color: var(--crm); font-style: italic; }
+.results-label { font-size: 13px; color: var(--text3); font-family: var(--mono); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 24px; }
+.results-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 0 auto 24px; max-width: 560px; }
+.result-stat { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--r2); padding: 14px 10px; }
+.result-stat-n { font-family: var(--mono); font-size: 22px; font-weight: 600; margin-bottom: 3px; }
+.result-stat-l { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; }
+.result-stat.c  .result-stat-n { color: var(--green); }
+.result-stat.w  .result-stat-n { color: var(--red); }
+.result-stat.sk .result-stat-n { color: var(--yellow); }
+.result-stat.sc .result-stat-n { color: var(--crm); }
+.results-grade { font-size: 15px; color: var(--text2); line-height: 1.65; }
+.results-grade strong { color: var(--text); }
+
+/* ── PROGRESS BAR ── */
+.progress-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--crm), var(--pm));
+  border-radius: 2px;
+  transition: width .4s ease;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 680px) {
+  .header { padding: 28px 20px 24px; }
+  .controls { padding: 10px 16px; }
+  .quiz-area { padding: 24px 16px 60px; }
+  .results-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="eyebrow">IIM Lucknow · Marketing Management</div>
+  <h1>CRM + Product Management — <em>50 Question Quiz</em></h1>
+  <div class="header-sub">Customer Relationship Management · Product Management · Complete Assessment · IIM Lucknow</div>
+  <div class="stats-row">
+    <div class="stat-pill crm">📘 CRM — 25 Questions</div>
+    <div class="stat-pill pm">🧠 Product Management — 25 Questions</div>
+    <div class="stat-pill tot">⏱ Recommended: 40 min</div>
+  </div>
+</header>
+
+<nav class="controls">
+  <span class="controls-label">Filter:</span>
+  <button class="filter-btn active-all" onclick="filterQuestions('all', this)">All 50</button>
+  <button class="filter-btn" onclick="filterQuestions('crm', this)">CRM Only</button>
+  <button class="filter-btn" onclick="filterQuestions('pm', this)">PM Only</button>
+  <div class="spacer"></div>
+  <div class="score-display" id="score-display">Answered: <span id="answered-count">0</span> / 50</div>
+  <button class="btn-reset" onclick="resetQuiz()">↺ Reset</button>
+  <button class="btn-submit" onclick="submitQuiz()">Submit Quiz</button>
+</nav>
+
+<div class="quiz-area">
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+  <!-- RESULTS PANEL -->
+  <div class="results-panel" id="results-panel">
+    <div class="results-score" id="results-score">0<span>/50</span></div>
+    <div class="results-label">Final Score</div>
+    <div class="results-grid">
+      <div class="result-stat c"><div class="result-stat-n" id="r-correct">0</div><div class="result-stat-l">Correct</div></div>
+      <div class="result-stat w"><div class="result-stat-n" id="r-wrong">0</div><div class="result-stat-l">Wrong</div></div>
+      <div class="result-stat sk"><div class="result-stat-n" id="r-skipped">0</div><div class="result-stat-l">Unanswered</div></div>
+      <div class="result-stat sc"><div class="result-stat-n" id="r-pct">0%</div><div class="result-stat-l">Percentage</div></div>
+    </div>
+    <div class="results-grade" id="results-grade"></div>
+  </div>
+
+  <!-- ══════════════════════════════════ CRM SECTION -->
+  <div class="section-divider crm" data-section="crm">
+    <div class="sd-icon">📘</div>
+    <div>
+      <div class="sd-label crm">Section A</div>
+      <div class="sd-title">Customer Relationship Management</div>
+    </div>
+    <div class="sd-count">Q1 – Q25</div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-card" data-subject="crm" data-correct="B" id="q1">
+    <div class="q-meta">
+      <span class="q-num">Q01</span>
+      <span class="q-tag crm">CRM</span>
+      <span class="q-difficulty easy">Easy</span>
+    </div>
+    <div class="q-text">What is "Relational Intelligence" in the context of CRM?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q1','A')"><span class="opt-key">A</span><span class="opt-text">The firm's ability to use AI for customer segmentation</span></div>
+      <div class="option" onclick="selectOption(this,'q1','B')"><span class="opt-key">B</span><span class="opt-text">The company's awareness of the range of relationships customers can have with it, and the ability to reinforce or change those relationships</span></div>
+      <div class="option" onclick="selectOption(this,'q1','C')"><span class="opt-key">C</span><span class="opt-text">Emotional intelligence training for customer service staff</span></div>
+      <div class="option" onclick="selectOption(this,'q1','D')"><span class="opt-key">D</span><span class="opt-text">A database system that tracks customer purchase history</span></div>
+    </div>
+    <div class="feedback" id="fb-q1"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card" data-subject="crm" data-correct="C" id="q2">
+    <div class="q-meta"><span class="q-num">Q02</span><span class="q-tag crm">CRM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">The Target pregnancy prediction case illustrates which CRM concept most directly?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q2','A')"><span class="opt-key">A</span><span class="opt-text">Permission Marketing</span></div>
+      <div class="option" onclick="selectOption(this,'q2','B')"><span class="opt-key">B</span><span class="opt-text">Customer Dumping</span></div>
+      <div class="option" onclick="selectOption(this,'q2','C')"><span class="opt-key">C</span><span class="opt-text">Predictive Analytics and its ethical boundaries</span></div>
+      <div class="option" onclick="selectOption(this,'q2','D')"><span class="opt-key">D</span><span class="opt-text">Churn Rate management</span></div>
+    </div>
+    <div class="feedback" id="fb-q2"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card" data-subject="crm" data-correct="A" id="q3">
+    <div class="q-meta"><span class="q-num">Q03</span><span class="q-tag crm">CRM</span><span class="q-difficulty easy">Easy</span></div>
+    <div class="q-text">According to the document, most CRM failures are primarily caused by:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q3','A')"><span class="opt-key">A</span><span class="opt-text">Poor relational intelligence, not poor technology</span></div>
+      <div class="option" onclick="selectOption(this,'q3','B')"><span class="opt-key">B</span><span class="opt-text">Insufficient marketing budgets</span></div>
+      <div class="option" onclick="selectOption(this,'q3','C')"><span class="opt-key">C</span><span class="opt-text">Outdated CRM software platforms</span></div>
+      <div class="option" onclick="selectOption(this,'q3','D')"><span class="opt-key">D</span><span class="opt-text">Poorly trained sales staff</span></div>
+    </div>
+    <div class="feedback" id="fb-q3"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card" data-subject="crm" data-correct="D" id="q4">
+    <div class="q-meta"><span class="q-num">Q04</span><span class="q-tag crm">CRM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">"Customer Dumping" in CRM refers to:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q4','A')"><span class="opt-key">A</span><span class="opt-text">Spamming customers with too many promotional emails</span></div>
+      <div class="option" onclick="selectOption(this,'q4','B')"><span class="opt-key">B</span><span class="opt-text">A strategy of aggressively acquiring new customers</span></div>
+      <div class="option" onclick="selectOption(this,'q4','C')"><span class="opt-key">C</span><span class="opt-text">Removing inactive customers from the CRM database</span></div>
+      <div class="option" onclick="selectOption(this,'q4','D')"><span class="opt-key">D</span><span class="opt-text">Abandoning or repositioning away from an existing loyal customer segment in pursuit of a new target demographic</span></div>
+    </div>
+    <div class="feedback" id="fb-q4"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-card" data-subject="crm" data-correct="B" id="q5">
+    <div class="q-meta"><span class="q-num">Q05</span><span class="q-tag crm">CRM</span><span class="q-difficulty easy">Easy</span></div>
+    <div class="q-text">What is the correct order of the 5-A Customer Acquisition Funnel?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q5','A')"><span class="opt-key">A</span><span class="opt-text">Aware → Ask → Appeal → Act → Advocate</span></div>
+      <div class="option" onclick="selectOption(this,'q5','B')"><span class="opt-key">B</span><span class="opt-text">Aware → Appeal → Ask → Act → Advocate</span></div>
+      <div class="option" onclick="selectOption(this,'q5','C')"><span class="opt-key">C</span><span class="opt-text">Attract → Appeal → Ask → Act → Advocate</span></div>
+      <div class="option" onclick="selectOption(this,'q5','D')"><span class="opt-key">D</span><span class="opt-text">Aware → Attract → Ask → Affirm → Advocate</span></div>
+    </div>
+    <div class="feedback" id="fb-q5"></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-card" data-subject="crm" data-correct="C" id="q6">
+    <div class="q-meta"><span class="q-num">Q06</span><span class="q-tag crm">CRM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">Retaining a customer is approximately how many times cheaper than acquiring a new one?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q6','A')"><span class="opt-key">A</span><span class="opt-text">2–3 times</span></div>
+      <div class="option" onclick="selectOption(this,'q6','B')"><span class="opt-key">B</span><span class="opt-text">3–4 times</span></div>
+      <div class="option" onclick="selectOption(this,'q6','C')"><span class="opt-key">C</span><span class="opt-text">5–7 times</span></div>
+      <div class="option" onclick="selectOption(this,'q6','D')"><span class="opt-key">D</span><span class="opt-text">10–12 times</span></div>
+    </div>
+    <div class="feedback" id="fb-q6"></div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-card" data-subject="crm" data-correct="A" id="q7">
+    <div class="q-meta"><span class="q-num">Q07</span><span class="q-tag crm">CRM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">A 5% reduction in churn rate can increase profitability by approximately:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q7','A')"><span class="opt-key">A</span><span class="opt-text">25–95%</span></div>
+      <div class="option" onclick="selectOption(this,'q7','B')"><span class="opt-key">B</span><span class="opt-text">5–10%</span></div>
+      <div class="option" onclick="selectOption(this,'q7','C')"><span class="opt-key">C</span><span class="opt-text">10–20%</span></div>
+      <div class="option" onclick="selectOption(this,'q7','D')"><span class="opt-key">D</span><span class="opt-text">100–200%</span></div>
+    </div>
+    <div class="feedback" id="fb-q7"></div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-card" data-subject="crm" data-correct="D" id="q8">
+    <div class="q-meta"><span class="q-num">Q08</span><span class="q-tag crm">CRM</span><span class="q-difficulty hard">Hard</span></div>
+    <div class="q-text">Which of the following is NOT a type of switching cost?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q8','A')"><span class="opt-key">A</span><span class="opt-text">Financial switching cost</span></div>
+      <div class="option" onclick="selectOption(this,'q8','B')"><span class="opt-key">B</span><span class="opt-text">Procedural switching cost</span></div>
+      <div class="option" onclick="selectOption(this,'q8','C')"><span class="opt-key">C</span><span class="opt-text">Relational switching cost</span></div>
+      <div class="option" onclick="selectOption(this,'q8','D')"><span class="opt-key">D</span><span class="opt-text">Technological switching cost</span></div>
+    </div>
+    <div class="feedback" id="fb-q8"></div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-card" data-subject="crm" data-correct="B" id="q9">
+    <div class="q-meta"><span class="q-num">Q09</span><span class="q-tag crm">CRM</span><span class="q-difficulty easy">Easy</span></div>
+    <div class="q-text">NPS (Net Promoter Score) is calculated as:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q9','A')"><span class="opt-key">A</span><span class="opt-text">% Promoters + % Passives − % Detractors</span></div>
+      <div class="option" onclick="selectOption(this,'q9','B')"><span class="opt-key">B</span><span class="opt-text">% Promoters − % Detractors</span></div>
+      <div class="option" onclick="selectOption(this,'q9','C')"><span class="opt-key">C</span><span class="opt-text">Total positive reviews ÷ Total reviews × 100</span></div>
+      <div class="option" onclick="selectOption(this,'q9','D')"><span class="opt-key">D</span><span class="opt-text">% Satisfied customers − % Dissatisfied customers</span></div>
+    </div>
+    <div class="feedback" id="fb-q9"></div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-card" data-subject="crm" data-correct="C" id="q10">
+    <div class="q-meta"><span class="q-num">Q10</span><span class="q-tag crm">CRM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">In the NPS framework, which score range classifies customers as "Promoters"?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q10','A')"><span class="opt-key">A</span><span class="opt-text">7–8 on a 0–10 scale</span></div>
+      <div class="option" onclick="selectOption(this,'q10','B')"><span class="opt-key">B</span><span class="opt-text">8–10 on a 0–10 scale</span></div>
+      <div class="option" onclick="selectOption(this,'q10','C')"><span class="opt-key">C</span><span class="opt-text">9–10 on a 0–10 scale</span></div>
+      <div class="option" onclick="selectOption(this,'q10','D')"><span class="opt-key">D</span><span class="opt-text">6–10 on a 0–10 scale</span></div>
+    </div>
+    <div class="feedback" id="fb-q10"></div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="q-card" data-subject="crm" data-correct="A" id="q11">
+    <div class="q-meta"><span class="q-num">Q11</span><span class="q-tag crm">CRM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">An "Evangelist Customer" is best described as:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q11','A')"><span class="opt-key">A</span><span class="opt-text">A highly loyal customer who proactively advocates for the brand without financial incentive, driven by genuine passion or identity alignment</span></div>
+      <div class="option" onclick="selectOption(this,'q11','B')"><span class="opt-key">B</span><span class="opt-text">A paid brand ambassador hired by the company</span></div>
+      <div class="option" onclick="selectOption(this,'q11','C')"><span class="opt-key">C</span><span class="opt-text">A customer in the "Act" stage of the 5-A funnel</span></div>
+      <div class="option" onclick="selectOption(this,'q11','D')"><span class="opt-key">D</span><span class="opt-text">A customer who participates in loyalty programmes</span></div>
+    </div>
+    <div class="feedback" id="fb-q11"></div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="q-card" data-subject="crm" data-correct="D" id="q12">
+    <div class="q-meta"><span class="q-num">Q12</span><span class="q-tag crm">CRM</span><span class="q-difficulty hard">Hard</span></div>
+    <div class="q-text">What percentage of consumers reportedly read online reviews, according to the CRM data in the document?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q12','A')"><span class="opt-key">A</span><span class="opt-text">74%</span></div>
+      <div class="option" onclick="selectOption(this,'q12','B')"><span class="opt-key">B</span><span class="opt-text">85%</span></div>
+      <div class="option" onclick="selectOption(this,'q12','C')"><span class="opt-key">C</span><span class="opt-text">88%</span></div>
+      <div class="option" onclick="selectOption(this,'q12','D')"><span class="opt-key">D</span><span class="opt-text">97%</span></div>
+    </div>
+    <div class="feedback" id="fb-q12"></div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="q-card" data-subject="crm" data-correct="B" id="q13">
+    <div class="q-meta"><span class="q-num">Q13</span><span class="q-tag crm">CRM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">UGC (User-Generated Content) is generally trusted MORE than firm-generated content because:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q13','A')"><span class="opt-key">A</span><span class="opt-text">It is produced by professional agencies</span></div>
+      <div class="option" onclick="selectOption(this,'q13','B')"><span class="opt-key">B</span><span class="opt-text">It is perceived as unbiased and authentic since it comes from real customers</span></div>
+      <div class="option" onclick="selectOption(this,'q13','C')"><span class="opt-key">C</span><span class="opt-text">Companies legally endorse all UGC before it is published</span></div>
+      <div class="option" onclick="selectOption(this,'q13','D')"><span class="opt-key">D</span><span class="opt-text">UGC is always verified for factual accuracy</span></div>
+    </div>
+    <div class="feedback" id="fb-q13"></div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="q-card" data-subject="crm" data-correct="C" id="q14">
+    <div class="q-meta"><span class="q-num">Q14</span><span class="q-tag crm">CRM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">In the context of customer satisfaction, the document states that satisfaction is:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q14','A')"><span class="opt-key">A</span><span class="opt-text">Sufficient to guarantee repurchase and advocacy</span></div>
+      <div class="option" onclick="selectOption(this,'q14','B')"><span class="opt-key">B</span><span class="opt-text">The highest achievable tier of customer engagement</span></div>
+      <div class="option" onclick="selectOption(this,'q14','C')"><span class="opt-key">C</span><span class="opt-text">Necessary but not sufficient for loyalty — a satisfied customer can still defect</span></div>
+      <div class="option" onclick="selectOption(this,'q14','D')"><span class="opt-key">D</span><span class="opt-text">Equivalent to loyalty in mature markets</span></div>
+    </div>
+    <div class="feedback" id="fb-q14"></div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="q-card" data-subject="crm" data-correct="A" id="q15">
+    <div class="q-meta"><span class="q-num">Q15</span><span class="q-tag crm">CRM</span><span class="q-difficulty hard">Hard</span></div>
+    <div class="q-text">Which of the following correctly ranks the Satisfaction → Loyalty hierarchy from lowest to highest?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q15','A')"><span class="opt-key">A</span><span class="opt-text">Dissatisfied → Satisfied → Delighted → Loyal → Evangelist</span></div>
+      <div class="option" onclick="selectOption(this,'q15','B')"><span class="opt-key">B</span><span class="opt-text">Dissatisfied → Neutral → Satisfied → Loyal → Evangelist</span></div>
+      <div class="option" onclick="selectOption(this,'q15','C')"><span class="opt-key">C</span><span class="opt-text">Unaware → Satisfied → Delighted → Loyal → Advocate</span></div>
+      <div class="option" onclick="selectOption(this,'q15','D')"><span class="opt-key">D</span><span class="opt-text">Dissatisfied → Satisfied → Loyal → Delighted → Evangelist</span></div>
+    </div>
+    <div class="feedback" id="fb-q15"></div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="q-card" data-subject="crm" data-correct="D" id="q16">
+    <div class="q-meta"><span class="q-num">Q16</span><span class="q-tag crm">CRM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">What percentage of consumers will use a business that responds to ALL reviews?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q16','A')"><span class="opt-key">A</span><span class="opt-text">71%</span></div>
+      <div class="option" onclick="selectOption(this,'q16','B')"><span class="opt-key">B</span><span class="opt-text">74%</span></div>
+      <div class="option" onclick="selectOption(this,'q16','C')"><span class="opt-key">C</span><span class="opt-text">85%</span></div>
+      <div class="option" onclick="selectOption(this,'q16','D')"><span class="opt-key">D</span><span class="opt-text">88%</span></div>
+    </div>
+    <div class="feedback" id="fb-q16"></div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="q-card" data-subject="crm" data-correct="B" id="q17">
+    <div class="q-meta"><span class="q-num">Q17</span><span class="q-tag crm">CRM</span><span class="q-difficulty easy">Easy</span></div>
+    <div class="q-text">What does CRM stand for, and which of the following is the most complete definition?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q17','A')"><span class="opt-key">A</span><span class="opt-text">Customer Revenue Management — managing revenue from each customer</span></div>
+      <div class="option" onclick="selectOption(this,'q17','B')"><span class="opt-key">B</span><span class="opt-text">Customer Relationship Management — the process of carefully managing detailed information about individual customers and all customer touchpoints to maximise loyalty</span></div>
+      <div class="option" onclick="selectOption(this,'q17','C')"><span class="opt-key">C</span><span class="opt-text">Customer Retention Model — a framework for retaining at-risk customers</span></div>
+      <div class="option" onclick="selectOption(this,'q17','D')"><span class="opt-key">D</span><span class="opt-text">Customer Referral Mechanism — an automated word-of-mouth programme</span></div>
+    </div>
+    <div class="feedback" id="fb-q17"></div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="q-card" data-subject="crm" data-correct="C" id="q18">
+    <div class="q-meta"><span class="q-num">Q18</span><span class="q-tag crm">CRM</span><span class="q-difficulty hard">Hard</span></div>
+    <div class="q-text">In the CRM Failure Archetypes framework (Avery, Fournier & Wittenbraker), failures occur because firms:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q18','A')"><span class="opt-key">A</span><span class="opt-text">Spend too much on CRM software rather than hiring people</span></div>
+      <div class="option" onclick="selectOption(this,'q18','B')"><span class="opt-key">B</span><span class="opt-text">Focus exclusively on acquisition and ignore retention</span></div>
+      <div class="option" onclick="selectOption(this,'q18','C')"><span class="opt-key">C</span><span class="opt-text">Misread what kind of relationship the customer actually wants — forcing intimacy, sending unwanted communications, or dumping loyal customers</span></div>
+      <div class="option" onclick="selectOption(this,'q18','D')"><span class="opt-key">D</span><span class="opt-text">Fail to measure customer satisfaction with NPS surveys</span></div>
+    </div>
+    <div class="feedback" id="fb-q18"></div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="q-card" data-subject="crm" data-correct="A" id="q19">
+    <div class="q-meta"><span class="q-num">Q19</span><span class="q-tag crm">CRM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">Maggi's comeback after the 2015 India ban was primarily attributed to:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q19','A')"><span class="opt-key">A</span><span class="opt-text">Customer evangelism — emotional loyalty surviving a major brand crisis through organic UGC and brand stories</span></div>
+      <div class="option" onclick="selectOption(this,'q19','B')"><span class="opt-key">B</span><span class="opt-text">An aggressive price reduction strategy</span></div>
+      <div class="option" onclick="selectOption(this,'q19','C')"><span class="opt-key">C</span><span class="opt-text">A celebrity endorsement campaign</span></div>
+      <div class="option" onclick="selectOption(this,'q19','D')"><span class="opt-key">D</span><span class="opt-text">Distribution network expansion into new geographies</span></div>
+    </div>
+    <div class="feedback" id="fb-q19"></div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="q-card" data-subject="crm" data-correct="D" id="q20">
+    <div class="q-meta"><span class="q-num">Q20</span><span class="q-tag crm">CRM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">"Permission Marketing" as a concept is best contrasted with:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q20','A')"><span class="opt-key">A</span><span class="opt-text">Loyalty programmes</span></div>
+      <div class="option" onclick="selectOption(this,'q20','B')"><span class="opt-key">B</span><span class="opt-text">Social media advertising</span></div>
+      <div class="option" onclick="selectOption(this,'q20','C')"><span class="opt-key">C</span><span class="opt-text">Influencer marketing</span></div>
+      <div class="option" onclick="selectOption(this,'q20','D')"><span class="opt-key">D</span><span class="opt-text">Spam — unsolicited promotional messages sent without advance consent</span></div>
+    </div>
+    <div class="feedback" id="fb-q20"></div>
+  </div>
+
+  <!-- Q21 -->
+  <div class="q-card" data-subject="crm" data-correct="B" id="q21">
+    <div class="q-meta"><span class="q-num">Q21</span><span class="q-tag crm">CRM</span><span class="q-difficulty hard">Hard</span></div>
+    <div class="q-text">CLV (Customer Lifetime Value) is best defined as:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q21','A')"><span class="opt-key">A</span><span class="opt-text">The total revenue a customer generates in a single year</span></div>
+      <div class="option" onclick="selectOption(this,'q21','B')"><span class="opt-key">B</span><span class="opt-text">The present value of the entire future profit stream expected from a customer over the duration of the relationship</span></div>
+      <div class="option" onclick="selectOption(this,'q21','C')"><span class="opt-key">C</span><span class="opt-text">The cost of acquiring and serving a customer over their lifetime</span></div>
+      <div class="option" onclick="selectOption(this,'q21','D')"><span class="opt-key">D</span><span class="opt-text">The average purchase value multiplied by monthly visit frequency</span></div>
+    </div>
+    <div class="feedback" id="fb-q21"></div>
+  </div>
+
+  <!-- Q22 -->
+  <div class="q-card" data-subject="crm" data-correct="C" id="q22">
+    <div class="q-meta"><span class="q-num">Q22</span><span class="q-tag crm">CRM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">Which method of measuring customer satisfaction involves disguised evaluators assessing service quality at touchpoints?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q22','A')"><span class="opt-key">A</span><span class="opt-text">Social Listening</span></div>
+      <div class="option" onclick="selectOption(this,'q22','B')"><span class="opt-key">B</span><span class="opt-text">Churn Analysis</span></div>
+      <div class="option" onclick="selectOption(this,'q22','C')"><span class="opt-key">C</span><span class="opt-text">Mystery Shopping</span></div>
+      <div class="option" onclick="selectOption(this,'q22','D')"><span class="opt-key">D</span><span class="opt-text">Complaint Tracking</span></div>
+    </div>
+    <div class="feedback" id="fb-q22"></div>
+  </div>
+
+  <!-- Q23 -->
+  <div class="q-card" data-subject="crm" data-correct="A" id="q23">
+    <div class="q-meta"><span class="q-num">Q23</span><span class="q-tag crm">CRM</span><span class="q-difficulty hard">Hard</span></div>
+    <div class="q-text">At what market stage should a firm's strategy shift most strongly toward retention over acquisition?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q23','A')"><span class="opt-key">A</span><span class="opt-text">Market maturity — when the market is saturated and every lost customer is a costly replacement problem</span></div>
+      <div class="option" onclick="selectOption(this,'q23','B')"><span class="opt-key">B</span><span class="opt-text">New business phase — when building the customer base is the priority</span></div>
+      <div class="option" onclick="selectOption(this,'q23','C')"><span class="opt-key">C</span><span class="opt-text">Growth phase — when expansion is still possible</span></div>
+      <div class="option" onclick="selectOption(this,'q23','D')"><span class="opt-key">D</span><span class="opt-text">Decline phase — when customers are naturally leaving the category</span></div>
+    </div>
+    <div class="feedback" id="fb-q23"></div>
+  </div>
+
+  <!-- Q24 -->
+  <div class="q-card" data-subject="crm" data-correct="D" id="q24">
+    <div class="q-meta"><span class="q-num">Q24</span><span class="q-tag crm">CRM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">Customer loyalty has which two core components?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q24','A')"><span class="opt-key">A</span><span class="opt-text">Rational and irrational</span></div>
+      <div class="option" onclick="selectOption(this,'q24','B')"><span class="opt-key">B</span><span class="opt-text">Short-term and long-term</span></div>
+      <div class="option" onclick="selectOption(this,'q24','C')"><span class="opt-key">C</span><span class="opt-text">Active and passive</span></div>
+      <div class="option" onclick="selectOption(this,'q24','D')"><span class="opt-key">D</span><span class="opt-text">Attitudinal (emotional) and behavioural (repeat purchase)</span></div>
+    </div>
+    <div class="feedback" id="fb-q24"></div>
+  </div>
+
+  <!-- Q25 -->
+  <div class="q-card" data-subject="crm" data-correct="B" id="q25">
+    <div class="q-meta"><span class="q-num">Q25</span><span class="q-tag crm">CRM</span><span class="q-difficulty hard">Hard</span></div>
+    <div class="q-text">Churn rate is described in the document as a "lagging indicator." This means:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q25','A')"><span class="opt-key">A</span><span class="opt-text">It measures how slowly customers are acquired</span></div>
+      <div class="option" onclick="selectOption(this,'q25','B')"><span class="opt-key">B</span><span class="opt-text">By the time a customer leaves, the relationship has already been deteriorating for months — churn is visible only after the damage is done</span></div>
+      <div class="option" onclick="selectOption(this,'q25','C')"><span class="opt-key">C</span><span class="opt-text">It takes a long time to calculate churn from company data</span></div>
+      <div class="option" onclick="selectOption(this,'q25','D')"><span class="opt-key">D</span><span class="opt-text">Churned customers tend to return after a period of inactivity</span></div>
+    </div>
+    <div class="feedback" id="fb-q25"></div>
+  </div>
+
+  <!-- ══════════════════════════════════ PM SECTION -->
+  <div class="section-divider pm" data-section="pm">
+    <div class="sd-icon">🧠</div>
+    <div>
+      <div class="sd-label pm">Section B</div>
+      <div class="sd-title">Product Management</div>
+    </div>
+    <div class="sd-count">Q26 – Q50</div>
+  </div>
+
+  <!-- Q26 -->
+  <div class="q-card" data-subject="pm" data-correct="C" id="q26">
+    <div class="q-meta"><span class="q-num">Q26</span><span class="q-tag pm">PM</span><span class="q-difficulty easy">Easy</span></div>
+    <div class="q-text">The Product Manager is often described as the "CEO of the product." This analogy highlights that a PM:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q26','A')"><span class="opt-key">A</span><span class="opt-text">Has direct authority over engineers, designers, and sales teams</span></div>
+      <div class="option" onclick="selectOption(this,'q26','B')"><span class="opt-key">B</span><span class="opt-text">Controls the company's entire product budget</span></div>
+      <div class="option" onclick="selectOption(this,'q26','C')"><span class="opt-key">C</span><span class="opt-text">Owns product vision and outcomes but must succeed through influence rather than direct authority</span></div>
+      <div class="option" onclick="selectOption(this,'q26','D')"><span class="opt-key">D</span><span class="opt-text">Reports directly to the CEO and makes all product decisions unilaterally</span></div>
+    </div>
+    <div class="feedback" id="fb-q26"></div>
+  </div>
+
+  <!-- Q27 -->
+  <div class="q-card" data-subject="pm" data-correct="A" id="q27">
+    <div class="q-meta"><span class="q-num">Q27</span><span class="q-tag pm">PM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">What is the correct sequence of the 8-stage Product Development Process?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q27','A')"><span class="opt-key">A</span><span class="opt-text">Idea Gen → Screening → Concept Test → Mkt Strategy → Biz Analysis → Build → Test Mkt → Launch</span></div>
+      <div class="option" onclick="selectOption(this,'q27','B')"><span class="opt-key">B</span><span class="opt-text">Screening → Idea Gen → Concept Test → Biz Analysis → Mkt Strategy → Build → Test Mkt → Launch</span></div>
+      <div class="option" onclick="selectOption(this,'q27','C')"><span class="opt-key">C</span><span class="opt-text">Idea Gen → Concept Test → Screening → Mkt Strategy → Build → Biz Analysis → Test Mkt → Launch</span></div>
+      <div class="option" onclick="selectOption(this,'q27','D')"><span class="opt-key">D</span><span class="opt-text">Idea Gen → Screening → Biz Analysis → Mkt Strategy → Concept Test → Build → Test Mkt → Launch</span></div>
+    </div>
+    <div class="feedback" id="fb-q27"></div>
+  </div>
+
+  <!-- Q28 -->
+  <div class="q-card" data-subject="pm" data-correct="D" id="q28">
+    <div class="q-meta"><span class="q-num">Q28</span><span class="q-tag pm">PM</span><span class="q-difficulty easy">Easy</span></div>
+    <div class="q-text">According to the document, MOST product failures occur:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q28','A')"><span class="opt-key">A</span><span class="opt-text">After the product has been in the market for over a year</span></div>
+      <div class="option" onclick="selectOption(this,'q28','B')"><span class="opt-key">B</span><span class="opt-text">During the test marketing phase</span></div>
+      <div class="option" onclick="selectOption(this,'q28','C')"><span class="opt-key">C</span><span class="opt-text">At the commercialisation and full-scale launch stage</span></div>
+      <div class="option" onclick="selectOption(this,'q28','D')"><span class="opt-key">D</span><span class="opt-text">Before launch — during idea validation and concept testing when bad assumptions go unchallenged</span></div>
+    </div>
+    <div class="feedback" id="fb-q28"></div>
+  </div>
+
+  <!-- Q29 -->
+  <div class="q-card" data-subject="pm" data-correct="B" id="q29">
+    <div class="q-meta"><span class="q-num">Q29</span><span class="q-tag pm">PM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">Which NPD type carries the HIGHEST risk?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q29','A')"><span class="opt-key">A</span><span class="opt-text">Line Extension (e.g., Coca-Cola Zero)</span></div>
+      <div class="option" onclick="selectOption(this,'q29','B')"><span class="opt-key">B</span><span class="opt-text">New-to-World (e.g., Tesla EV in early 2000s)</span></div>
+      <div class="option" onclick="selectOption(this,'q29','C')"><span class="opt-key">C</span><span class="opt-text">Repositioning (e.g., Maggi as a healthy snack)</span></div>
+      <div class="option" onclick="selectOption(this,'q29','D')"><span class="opt-key">D</span><span class="opt-text">Improvement (e.g., iPhone 14 → 15)</span></div>
+    </div>
+    <div class="feedback" id="fb-q29"></div>
+  </div>
+
+  <!-- Q30 -->
+  <div class="q-card" data-subject="pm" data-correct="C" id="q30">
+    <div class="q-meta"><span class="q-num">Q30</span><span class="q-tag pm">PM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">The Product Life Cycle (PLC) consists of four stages. Which of the following correctly lists them in order?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q30','A')"><span class="opt-key">A</span><span class="opt-text">Introduction → Maturity → Growth → Decline</span></div>
+      <div class="option" onclick="selectOption(this,'q30','B')"><span class="opt-key">B</span><span class="opt-text">Launch → Expansion → Plateau → Exit</span></div>
+      <div class="option" onclick="selectOption(this,'q30','C')"><span class="opt-key">C</span><span class="opt-text">Introduction → Growth → Maturity → Decline</span></div>
+      <div class="option" onclick="selectOption(this,'q30','D')"><span class="opt-key">D</span><span class="opt-text">Concept → Growth → Maturity → Withdrawal</span></div>
+    </div>
+    <div class="feedback" id="fb-q30"></div>
+  </div>
+
+  <!-- Q31 -->
+  <div class="q-card" data-subject="pm" data-correct="A" id="q31">
+    <div class="q-meta"><span class="q-num">Q31</span><span class="q-tag pm">PM</span><span class="q-difficulty hard">Hard</span></div>
+    <div class="q-text">In the Decline stage of the PLC, the recommended strategy is to:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q31','A')"><span class="opt-key">A</span><span class="opt-text">Harvest (cut costs and milk remaining profits) or divest; consider niche positioning or an exit</span></div>
+      <div class="option" onclick="selectOption(this,'q31','B')"><span class="opt-key">B</span><span class="opt-text">Aggressively increase marketing spend to reverse the decline</span></div>
+      <div class="option" onclick="selectOption(this,'q31','C')"><span class="opt-key">C</span><span class="opt-text">Launch a line extension to attract new customer segments</span></div>
+      <div class="option" onclick="selectOption(this,'q31','D')"><span class="opt-key">D</span><span class="opt-text">Focus on building brand awareness through heavy advertising</span></div>
+    </div>
+    <div class="feedback" id="fb-q31"></div>
+  </div>
+
+  <!-- Q32 -->
+  <div class="q-card" data-subject="pm" data-correct="D" id="q32">
+    <div class="q-meta"><span class="q-num">Q32</span><span class="q-tag pm">PM</span><span class="q-difficulty easy">Easy</span></div>
+    <div class="q-text">A brand, according to the document, primarily lives:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q32','A')"><span class="opt-key">A</span><span class="opt-text">In the company's logo and visual identity system</span></div>
+      <div class="option" onclick="selectOption(this,'q32','B')"><span class="opt-key">B</span><span class="opt-text">In the product's quality and manufacturing standards</span></div>
+      <div class="option" onclick="selectOption(this,'q32','C')"><span class="opt-key">C</span><span class="opt-text">In the company's marketing department</span></div>
+      <div class="option" onclick="selectOption(this,'q32','D')"><span class="opt-key">D</span><span class="opt-text">In the customer's mind — as a set of perceptions, associations, and emotions</span></div>
+    </div>
+    <div class="feedback" id="fb-q32"></div>
+  </div>
+
+  <!-- Q33 -->
+  <div class="q-card" data-subject="pm" data-correct="B" id="q33">
+    <div class="q-meta"><span class="q-num">Q33</span><span class="q-tag pm">PM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">Toyota launching "Lexus" as a separate premium brand is an example of which branding strategy?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q33','A')"><span class="opt-key">A</span><span class="opt-text">Brand Extension</span></div>
+      <div class="option" onclick="selectOption(this,'q33','B')"><span class="opt-key">B</span><span class="opt-text">New Brand (entirely new identity for a new product)</span></div>
+      <div class="option" onclick="selectOption(this,'q33','C')"><span class="opt-key">C</span><span class="opt-text">Line Extension</span></div>
+      <div class="option" onclick="selectOption(this,'q33','D')"><span class="opt-key">D</span><span class="opt-text">Multi-Brand strategy</span></div>
+    </div>
+    <div class="feedback" id="fb-q33"></div>
+  </div>
+
+  <!-- Q34 -->
+  <div class="q-card" data-subject="pm" data-correct="C" id="q34">
+    <div class="q-meta"><span class="q-num">Q34</span><span class="q-tag pm">PM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">Which pricing strategy involves starting with a HIGH price and reducing it as adoption grows, targeting early adopters willing to pay a premium?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q34','A')"><span class="opt-key">A</span><span class="opt-text">Penetration Pricing</span></div>
+      <div class="option" onclick="selectOption(this,'q34','B')"><span class="opt-key">B</span><span class="opt-text">Premium Pricing</span></div>
+      <div class="option" onclick="selectOption(this,'q34','C')"><span class="opt-key">C</span><span class="opt-text">Price Skimming</span></div>
+      <div class="option" onclick="selectOption(this,'q34','D')"><span class="opt-key">D</span><span class="opt-text">Psychological Pricing</span></div>
+    </div>
+    <div class="feedback" id="fb-q34"></div>
+  </div>
+
+  <!-- Q35 -->
+  <div class="q-card" data-subject="pm" data-correct="A" id="q35">
+    <div class="q-meta"><span class="q-num">Q35</span><span class="q-tag pm">PM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">Reliance Jio's entry into the Indian telecom market with ₹0 pricing is a classic example of:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q35','A')"><span class="opt-key">A</span><span class="opt-text">Penetration Pricing — low/zero price to gain rapid market share and achieve critical mass</span></div>
+      <div class="option" onclick="selectOption(this,'q35','B')"><span class="opt-key">B</span><span class="opt-text">Price Skimming — extracting maximum surplus from early adopters</span></div>
+      <div class="option" onclick="selectOption(this,'q35','C')"><span class="opt-key">C</span><span class="opt-text">Cost-based pricing — aligned to production cost</span></div>
+      <div class="option" onclick="selectOption(this,'q35','D')"><span class="opt-key">D</span><span class="opt-text">Psychological Pricing — using ₹0 as an anchor price</span></div>
+    </div>
+    <div class="feedback" id="fb-q35"></div>
+  </div>
+
+  <!-- Q36 -->
+  <div class="q-card" data-subject="pm" data-correct="D" id="q36">
+    <div class="q-meta"><span class="q-num">Q36</span><span class="q-tag pm">PM</span><span class="q-difficulty easy">Easy</span></div>
+    <div class="q-text">What do the letters S, T, P stand for in the STP marketing framework?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q36','A')"><span class="opt-key">A</span><span class="opt-text">Strategy, Tactics, Planning</span></div>
+      <div class="option" onclick="selectOption(this,'q36','B')"><span class="opt-key">B</span><span class="opt-text">Sales, Tracking, Promotion</span></div>
+      <div class="option" onclick="selectOption(this,'q36','C')"><span class="opt-key">C</span><span class="opt-text">Segmentation, Testing, Positioning</span></div>
+      <div class="option" onclick="selectOption(this,'q36','D')"><span class="opt-key">D</span><span class="opt-text">Segmentation, Targeting, Positioning</span></div>
+    </div>
+    <div class="feedback" id="fb-q36"></div>
+  </div>
+
+  <!-- Q37 -->
+  <div class="q-card" data-subject="pm" data-correct="B" id="q37">
+    <div class="q-meta"><span class="q-num">Q37</span><span class="q-tag pm">PM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">In the STP model, the "Targeting" step answers which core question?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q37','A')"><span class="opt-key">A</span><span class="opt-text">How should we be perceived versus competitors?</span></div>
+      <div class="option" onclick="selectOption(this,'q37','B')"><span class="opt-key">B</span><span class="opt-text">Which segment(s) should we focus our resources on, based on attractiveness and fit?</span></div>
+      <div class="option" onclick="selectOption(this,'q37','C')"><span class="opt-key">C</span><span class="opt-text">Who are the different groups in the total market?</span></div>
+      <div class="option" onclick="selectOption(this,'q37','D')"><span class="opt-key">D</span><span class="opt-text">What is the optimal pricing for each segment?</span></div>
+    </div>
+    <div class="feedback" id="fb-q37"></div>
+  </div>
+
+  <!-- Q38 -->
+  <div class="q-card" data-subject="pm" data-correct="C" id="q38">
+    <div class="q-meta"><span class="q-num">Q38</span><span class="q-tag pm">PM</span><span class="q-difficulty hard">Hard</span></div>
+    <div class="q-text">According to Ries & Trout (as cited in the document), positioning is:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q38','A')"><span class="opt-key">A</span><span class="opt-text">What you do to the product's features and packaging</span></div>
+      <div class="option" onclick="selectOption(this,'q38','B')"><span class="opt-key">B</span><span class="opt-text">The process of selecting a target market segment</span></div>
+      <div class="option" onclick="selectOption(this,'q38','C')"><span class="opt-key">C</span><span class="opt-text">What you do to the mind of the customer</span></div>
+      <div class="option" onclick="selectOption(this,'q38','D')"><span class="opt-key">D</span><span class="opt-text">A synonym for pricing strategy in competitive markets</span></div>
+    </div>
+    <div class="feedback" id="fb-q38"></div>
+  </div>
+
+  <!-- Q39 -->
+  <div class="q-card" data-subject="pm" data-correct="A" id="q39">
+    <div class="q-meta"><span class="q-num">Q39</span><span class="q-tag pm">PM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">Which dimension of the Product Mix refers to the number of variants within a single product (e.g., Galaxy S24 in 128GB, 256GB, 512GB)?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q39','A')"><span class="opt-key">A</span><span class="opt-text">Depth</span></div>
+      <div class="option" onclick="selectOption(this,'q39','B')"><span class="opt-key">B</span><span class="opt-text">Width</span></div>
+      <div class="option" onclick="selectOption(this,'q39','C')"><span class="opt-key">C</span><span class="opt-text">Length</span></div>
+      <div class="option" onclick="selectOption(this,'q39','D')"><span class="opt-key">D</span><span class="opt-text">Consistency</span></div>
+    </div>
+    <div class="feedback" id="fb-q39"></div>
+  </div>
+
+  <!-- Q40 -->
+  <div class="q-card" data-subject="pm" data-correct="D" id="q40">
+    <div class="q-meta"><span class="q-num">Q40</span><span class="q-tag pm">PM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">Samsung's product portfolio spanning phones, TVs, appliances, and chips is an example of high product mix:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q40','A')"><span class="opt-key">A</span><span class="opt-text">Depth</span></div>
+      <div class="option" onclick="selectOption(this,'q40','B')"><span class="opt-key">B</span><span class="opt-text">Length</span></div>
+      <div class="option" onclick="selectOption(this,'q40','C')"><span class="opt-key">C</span><span class="opt-text">Consistency</span></div>
+      <div class="option" onclick="selectOption(this,'q40','D')"><span class="opt-key">D</span><span class="opt-text">Width</span></div>
+    </div>
+    <div class="feedback" id="fb-q40"></div>
+  </div>
+
+  <!-- Q41 -->
+  <div class="q-card" data-subject="pm" data-correct="B" id="q41">
+    <div class="q-meta"><span class="q-num">Q41</span><span class="q-tag pm">PM</span><span class="q-difficulty hard">Hard</span></div>
+    <div class="q-text">Nokia's failure in the smartphone era is cited in the document as primarily an example of which root cause of product failure?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q41','A')"><span class="opt-key">A</span><span class="opt-text">Market Overestimation — they overestimated demand for their phones</span></div>
+      <div class="option" onclick="selectOption(this,'q41','B')"><span class="opt-key">B</span><span class="opt-text">Bad Positioning — positioned as feature phones in the smartphone era with the wrong message to the wrong segment</span></div>
+      <div class="option" onclick="selectOption(this,'q41','C')"><span class="opt-key">C</span><span class="opt-text">Poor Research — they had no data on customer smartphone preferences</span></div>
+      <div class="option" onclick="selectOption(this,'q41','D')"><span class="opt-key">D</span><span class="opt-text">Pricing Mismatch — their phones were priced too high for the market</span></div>
+    </div>
+    <div class="feedback" id="fb-q41"></div>
+  </div>
+
+  <!-- Q42 -->
+  <div class="q-card" data-subject="pm" data-correct="C" id="q42">
+    <div class="q-meta"><span class="q-num">Q42</span><span class="q-tag pm">PM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">Test Marketing is best described as:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q42','A')"><span class="opt-key">A</span><span class="opt-text">Showing a product concept to consumers in a focus group before building it</span></div>
+      <div class="option" onclick="selectOption(this,'q42','B')"><span class="opt-key">B</span><span class="opt-text">Running online A/B tests on website landing pages</span></div>
+      <div class="option" onclick="selectOption(this,'q42','C')"><span class="opt-key">C</span><span class="opt-text">A limited-scope, real-world launch in a controlled geography or user segment to evaluate product performance before full commercialisation</span></div>
+      <div class="option" onclick="selectOption(this,'q42','D')"><span class="opt-key">D</span><span class="opt-text">Sending free samples to existing customers to gather feedback</span></div>
+    </div>
+    <div class="feedback" id="fb-q42"></div>
+  </div>
+
+  <!-- Q43 -->
+  <div class="q-card" data-subject="pm" data-correct="A" id="q43">
+    <div class="q-meta"><span class="q-num">Q43</span><span class="q-tag pm">PM</span><span class="q-difficulty hard">Hard</span></div>
+    <div class="q-text">What is the key trade-off with Test Marketing that firms must weigh?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q43','A')"><span class="opt-key">A</span><span class="opt-text">The cost and time of gathering real market information vs. the risk of tipping off competitors and potentially losing first-mover advantage</span></div>
+      <div class="option" onclick="selectOption(this,'q43','B')"><span class="opt-key">B</span><span class="opt-text">Customer satisfaction vs. profitability</span></div>
+      <div class="option" onclick="selectOption(this,'q43','C')"><span class="opt-key">C</span><span class="opt-text">Brand consistency vs. product innovation</span></div>
+      <div class="option" onclick="selectOption(this,'q43','D')"><span class="opt-key">D</span><span class="opt-text">Short-term revenue vs. long-term brand equity</span></div>
+    </div>
+    <div class="feedback" id="fb-q43"></div>
+  </div>
+
+  <!-- Q44 -->
+  <div class="q-card" data-subject="pm" data-correct="D" id="q44">
+    <div class="q-meta"><span class="q-num">Q44</span><span class="q-tag pm">PM</span><span class="q-difficulty easy">Easy</span></div>
+    <div class="q-text">Among the 4Ps of Marketing, which is the ONLY element that generates revenue (rather than costs)?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q44','A')"><span class="opt-key">A</span><span class="opt-text">Product</span></div>
+      <div class="option" onclick="selectOption(this,'q44','B')"><span class="opt-key">B</span><span class="opt-text">Place</span></div>
+      <div class="option" onclick="selectOption(this,'q44','C')"><span class="opt-key">C</span><span class="opt-text">Promotion</span></div>
+      <div class="option" onclick="selectOption(this,'q44','D')"><span class="opt-key">D</span><span class="opt-text">Price</span></div>
+    </div>
+    <div class="feedback" id="fb-q44"></div>
+  </div>
+
+  <!-- Q45 -->
+  <div class="q-card" data-subject="pm" data-correct="B" id="q45">
+    <div class="q-meta"><span class="q-num">Q45</span><span class="q-tag pm">PM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">Value-based pricing sets the price based on:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q45','A')"><span class="opt-key">A</span><span class="opt-text">Production cost plus a standard profit margin</span></div>
+      <div class="option" onclick="selectOption(this,'q45','B')"><span class="opt-key">B</span><span class="opt-text">The perceived value of the product in the customer's mind — what they believe it is worth</span></div>
+      <div class="option" onclick="selectOption(this,'q45','C')"><span class="opt-key">C</span><span class="opt-text">The average price charged by competitors in the market</span></div>
+      <div class="option" onclick="selectOption(this,'q45','D')"><span class="opt-key">D</span><span class="opt-text">The price point that maximises unit volume sold</span></div>
+    </div>
+    <div class="feedback" id="fb-q45"></div>
+  </div>
+
+  <!-- Q46 -->
+  <div class="q-card" data-subject="pm" data-correct="C" id="q46">
+    <div class="q-meta"><span class="q-num">Q46</span><span class="q-tag pm">PM</span><span class="q-difficulty hard">Hard</span></div>
+    <div class="q-text">The document describes Customer Value as:</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q46','A')"><span class="opt-key">A</span><span class="opt-text">The revenue generated by a customer over their lifetime</span></div>
+      <div class="option" onclick="selectOption(this,'q46','B')"><span class="opt-key">B</span><span class="opt-text">The emotional satisfaction a customer derives from a brand</span></div>
+      <div class="option" onclick="selectOption(this,'q46','C')"><span class="opt-key">C</span><span class="opt-text">Benefits minus Total Cost of Ownership</span></div>
+      <div class="option" onclick="selectOption(this,'q46','D')"><span class="opt-key">D</span><span class="opt-text">The NPS score multiplied by average transaction value</span></div>
+    </div>
+    <div class="feedback" id="fb-q46"></div>
+  </div>
+
+  <!-- Q47 -->
+  <div class="q-card" data-subject="pm" data-correct="A" id="q47">
+    <div class="q-meta"><span class="q-num">Q47</span><span class="q-tag pm">PM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">P&G managing Ariel, Tide, Pantene, and Head & Shoulders as separate brands in overlapping categories is an example of which branding strategy?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q47','A')"><span class="opt-key">A</span><span class="opt-text">Multi-Brand strategy — multiple brands competing in the same category under one parent company</span></div>
+      <div class="option" onclick="selectOption(this,'q47','B')"><span class="opt-key">B</span><span class="opt-text">Brand Extension — using one brand name across multiple categories</span></div>
+      <div class="option" onclick="selectOption(this,'q47','C')"><span class="opt-key">C</span><span class="opt-text">Line Extension — adding new variants to an existing product line</span></div>
+      <div class="option" onclick="selectOption(this,'q47','D')"><span class="opt-key">D</span><span class="opt-text">New Brand — launching entirely new identities for each product</span></div>
+    </div>
+    <div class="feedback" id="fb-q47"></div>
+  </div>
+
+  <!-- Q48 -->
+  <div class="q-card" data-subject="pm" data-correct="D" id="q48">
+    <div class="q-meta"><span class="q-num">Q48</span><span class="q-tag pm">PM</span><span class="q-difficulty hard">Hard</span></div>
+    <div class="q-text">The "IIM-Level Answer Formula" presented in the document for exam success involves which sequence?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q48','A')"><span class="opt-key">A</span><span class="opt-text">Define → Debate → Conclude → Recommend</span></div>
+      <div class="option" onclick="selectOption(this,'q48','B')"><span class="opt-key">B</span><span class="opt-text">STP → 4Ps → CLV → NPS</span></div>
+      <div class="option" onclick="selectOption(this,'q48','C')"><span class="opt-key">C</span><span class="opt-text">Problem → Analysis → Solution → Conclusion</span></div>
+      <div class="option" onclick="selectOption(this,'q48','D')"><span class="opt-key">D</span><span class="opt-text">Define Concept → Apply Framework → Give Example → Add Insight</span></div>
+    </div>
+    <div class="feedback" id="fb-q48"></div>
+  </div>
+
+  <!-- Q49 -->
+  <div class="q-card" data-subject="pm" data-correct="B" id="q49">
+    <div class="q-meta"><span class="q-num">Q49</span><span class="q-tag pm">PM</span><span class="q-difficulty medium">Medium</span></div>
+    <div class="q-text">Which of the following best describes a "Simulated Test Market"?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q49','A')"><span class="opt-key">A</span><span class="opt-text">A full product launch in select cities with real retail distribution</span></div>
+      <div class="option" onclick="selectOption(this,'q49','B')"><span class="opt-key">B</span><span class="opt-text">A lab environment where consumers are shown ads, purchase the product, and usage is tracked — the cheapest method with no competitive leakage</span></div>
+      <div class="option" onclick="selectOption(this,'q49','C')"><span class="opt-key">C</span><span class="opt-text">A panel of pre-selected stores where the product is placed and tracked precisely</span></div>
+      <div class="option" onclick="selectOption(this,'q49','D')"><span class="opt-key">D</span><span class="opt-text">An online survey asking customers to rate their purchase intention</span></div>
+    </div>
+    <div class="feedback" id="fb-q49"></div>
+  </div>
+
+  <!-- Q50 -->
+  <div class="q-card" data-subject="pm" data-correct="C" id="q50">
+    <div class="q-meta"><span class="q-num">Q50</span><span class="q-tag pm">PM</span><span class="q-difficulty hard">Hard</span></div>
+    <div class="q-text">The document's mnemonic "I Grew Mighty and Died" helps remember the PLC stages. What does "M" stand for, and what is the strategic implication at that stage?</div>
+    <div class="options">
+      <div class="option" onclick="selectOption(this,'q50','A')"><span class="opt-key">A</span><span class="opt-text">M = Marketing; the stage where heavy marketing spend is first introduced to build awareness</span></div>
+      <div class="option" onclick="selectOption(this,'q50','B')"><span class="opt-key">B</span><span class="opt-text">M = Momentum; the stage of rapid sales growth where the firm must defend market share</span></div>
+      <div class="option" onclick="selectOption(this,'q50','C')"><span class="opt-key">C</span><span class="opt-text">M = Maturity; the stage where sales plateau, competition intensifies, and the firm must differentiate, reduce costs, or find new segments — requiring the most strategic creativity</span></div>
+      <div class="option" onclick="selectOption(this,'q50','D')"><span class="opt-key">D</span><span class="opt-text">M = Maximisation; the stage of peak profitability requiring price increases</span></div>
+    </div>
+    <div class="feedback" id="fb-q50"></div>
+  </div>
+
+</div><!-- /quiz-area -->
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+const FEEDBACK = {
+  q1:  { correct: "Correct! Relational Intelligence is the firm's awareness of the range of customer relationship types and its ability to reinforce or change those relationships. It's the foundation of effective CRM.", wrong: "Not quite. Relational Intelligence is specifically about understanding what <strong>kind of relationship</strong> each customer wants — not about technology, staff training, or databases." },
+  q2:  { correct: "Correct! The Target case is the canonical example of Predictive Analytics — using purchase behaviour data to infer pregnancy status. It also highlights the ethical risk of over-personalisation feeling intrusive.", wrong: "Not quite. The key insight from the Target case is <strong>Predictive Analytics</strong> — specifically how behavioural data predicts future needs, and where that crosses ethical lines." },
+  q3:  { correct: "Correct! The document explicitly states: 'CRM failures often stem not from poor technology but from poor relational intelligence.'", wrong: "Not quite. The document is clear: most CRM failures are <strong>relational intelligence failures, not technology failures</strong>. Firms misread what customers want from the relationship." },
+  q4:  { correct: "Correct! Customer Dumping is when a firm repositions away from its existing loyal customers to chase a new demographic — alienating the base that made it successful.", wrong: "Not quite. Customer Dumping specifically means <strong>abandoning loyal customers</strong> by repositioning to a new target — like a clothing brand that drops plus-size Baby Boomers." },
+  q5:  { correct: "Correct! The 5-A funnel is: <strong>Aware → Appeal → Ask → Act → Advocate</strong>. Each stage requires different marketing actions.", wrong: "Not quite. The correct 5-A sequence is <strong>Aware → Appeal → Ask → Act → Advocate</strong>. The key insight is that Advocate is the final stage — not just purchase (Act)." },
+  q6:  { correct: "Correct! The document states retention is 5–7× cheaper than acquisition — a critical exam data point from Reichheld and Bain research.", wrong: "Not quite. The figure cited in the document is <strong>5–7 times</strong> cheaper to retain than acquire — a key exam data point. Many firms under-invest in retention as a result." },
+  q7:  { correct: "Correct! Even a 5% reduction in churn can boost profitability by 25–95% (Reichheld, Bain) — demonstrating the outsized return on retention investment.", wrong: "Not quite. The specific figure cited is <strong>25–95%</strong> profit boost from just a 5% churn reduction (Reichheld, Bain). This wide range reflects how CLV varies across industries." },
+  q8:  { correct: "Correct! The document identifies three types of switching costs: Financial, Procedural, and Relational. 'Technological' is not one of them — it is a distractor.", wrong: "Not quite. The three switching cost types are <strong>Financial, Procedural, and Relational</strong>. 'Technological' is not one of the defined categories — it was the distractor." },
+  q9:  { correct: "Correct! NPS = % Promoters − % Detractors. Simple and powerful — a high NPS means customers are doing your marketing for you.", wrong: "Not quite. NPS is calculated as: <strong>% Promoters − % Detractors</strong>. Passives (7–8) are excluded from the calculation, which is why a high NPS is genuinely meaningful." },
+  q10: { correct: "Correct! Promoters score 9–10, Passives score 7–8, and Detractors score 0–6. Only Promoters and Detractors count in the NPS calculation.", wrong: "Not quite. <strong>Promoters score 9–10</strong> on the 0–10 scale. The 7–8 scores are Passives, who are excluded from the NPS formula." },
+  q11: { correct: "Correct! An Evangelist is more valuable than a mere loyalist because they recruit new customers at zero acquisition cost through genuine, unpaid advocacy.", wrong: "Not quite. An Evangelist Customer is <strong>unpaid and intrinsically motivated</strong> — they advocate from genuine passion or identity alignment, not because the firm hired or incentivised them." },
+  q12: { correct: "Correct! 97% of consumers read online reviews — making review management a core CRM function. This is a high-impact exam statistic.", wrong: "Not quite. The figure is <strong>97%</strong> — a strikingly high number that underscores why firms must actively manage their online review presence as part of CRM strategy." },
+  q13: { correct: "Correct! UGC is trusted more because it's perceived as unbiased — it comes from real customers with no financial motive, unlike firm-generated content.", wrong: "Not quite. UGC earns trust because it's seen as <strong>authentic and unbiased</strong>. Consumers know companies have an incentive to exaggerate; other customers supposedly don't." },
+  q14: { correct: "Correct! The document explicitly states: 'A satisfied customer can still defect if a better option appears.' Satisfaction is the floor, delight creates loyalty.", wrong: "Not quite. The key insight is: <strong>satisfaction is necessary but not sufficient</strong> for loyalty. A satisfied customer can still leave for a better offer — delight is what creates stickiness." },
+  q15: { correct: "Correct! The full hierarchy is: Dissatisfied → Satisfied → Delighted → Loyal → Evangelist. Delight is the bridge between satisfaction and true loyalty.", wrong: "Not quite. The correct hierarchy is: <strong>Dissatisfied → Satisfied → Delighted → Loyal → Evangelist</strong>. Note that Delight comes before Loyalty — satisfaction alone doesn't get you there." },
+  q16: { correct: "Correct! 88% of consumers will use a business that responds to all reviews — making responsiveness itself a trust signal and CRM discipline.", wrong: "Not quite. The specific figure is <strong>88%</strong>. The document also notes: 74% require at least 20 reviews, and 71% require at least 3 stars before considering a business." },
+  q17: { correct: "Correct! CRM is both a philosophy (customer-centricity) and a technology (database + analytics systems) — managing touchpoints to maximise loyalty.", wrong: "Not quite. CRM stands for <strong>Customer Relationship Management</strong>. The key definition: carefully managing detailed information about individual customers and all touchpoints to maximise loyalty." },
+  q18: { correct: "Correct! Avery, Fournier & Wittenbraker identify CRM failure archetypes rooted in firms misunderstanding what relationship the customer wants — forcing intimacy, dumping loyal customers, or sending unwanted messages.", wrong: "Not quite. The framework by Avery, Fournier & Wittenbraker identifies failures as <strong>relational mismatches</strong> — firms push unwanted intimacy, misread relationship types, or abandon loyal customers." },
+  q19: { correct: "Correct! Maggi's comeback is the document's prime example of customer evangelism — proof that deep emotional loyalty can survive even a catastrophic brand crisis like a government ban.", wrong: "Not quite. The document cites Maggi as the example of <strong>customer evangelism</strong> — organic UGC and emotional brand stories from loyal customers powered the comeback, not paid campaigns." },
+  q20: { correct: "Correct! Permission Marketing is explicitly contrasted with spam — it's the approach of only communicating with customers who have opted in, increasing relevance and reducing opt-out rates.", wrong: "Not quite. Permission Marketing is contrasted with <strong>spam</strong> — unsolicited promotional messages. Seth Godin's concept: earn the right to communicate before you send the message." },
+  q21: { correct: "Correct! CLV is the present value of the total future profit stream from a customer — this framing guides how much to invest in acquiring and retaining different customer types.", wrong: "Not quite. CLV is specifically the <strong>present value of the future profit stream</strong> — not just revenue, not just one year, and discounted to account for the time value of money." },
+  q22: { correct: "Correct! Mystery Shopping involves disguised evaluators objectively assessing service quality at real touchpoints — providing unfiltered data the firm can't get from surveys alone.", wrong: "Not quite. <strong>Mystery Shopping</strong> uses disguised evaluators. Social listening monitors online mentions; churn analysis reviews exit patterns; complaint tracking records unsolicited feedback." },
+  q23: { correct: "Correct! At market maturity, the customer base is largely fixed. Every lost customer is expensive to replace — so retention becomes the primary strategic priority over acquisition.", wrong: "Not quite. The shift toward retention should happen at <strong>market maturity</strong> — when the market is saturated and acquisition costs can no longer be justified over the cost of retention." },
+  q24: { correct: "Correct! Loyalty has an attitudinal component (emotional attachment, love of the brand) and a behavioural component (actual repeat purchase behaviour) — both must be present for true loyalty.", wrong: "Not quite. The two components are <strong>Attitudinal (emotional)</strong> and <strong>Behavioural (repeat purchase)</strong>. A customer can repurchase habitually without emotional attachment — that's spurious loyalty." },
+  q25: { correct: "Correct! Churn is a lagging indicator — the relationship erodes months before exit. By the time a customer leaves, the firm has already missed the intervention window.", wrong: "Not quite. Churn is 'lagging' because <strong>by the time a customer leaves, the relationship has already been failing for months</strong>. The exit is the final signal, not the first one." },
+  q26: { correct: "Correct! The 'CEO without authority' framing captures it perfectly — a PM owns the outcomes but must achieve them through cross-functional influence: aligning engineering, design, sales, and marketing.", wrong: "Not quite. A PM does NOT have direct authority over other teams. Success depends on <strong>influence, not command</strong>. This is the core tension and skill of great product management." },
+  q27: { correct: "Correct! The 8-stage sequence is: Idea Generation → Screening → Concept Testing → Marketing Strategy → Business Analysis → Product Development → Test Marketing → Commercialisation.", wrong: "Not quite. The correct 8-stage sequence starts with <strong>Idea Gen → Screening → Concept Test → Marketing Strategy → Business Analysis → Build → Test Marketing → Launch</strong>." },
+  q28: { correct: "Correct! The document states: 'Most product failures occur before launch — during idea validation and concept testing — when bad assumptions go unchallenged.'", wrong: "Not quite. The key insight is counterintuitive: most failures happen <strong>before launch</strong> during idea validation. Bad ideas that aren't killed early become expensive failures after launch." },
+  q29: { correct: "Correct! New-to-World products (like Tesla EV) carry the highest risk — they create entirely new categories with no existing market validation, unknown customer acceptance, and high development costs.", wrong: "Not quite. <strong>New-to-World</strong> carries the highest risk. It creates an entirely new product category — no existing market exists to validate demand, making it the most uncertain NPD type." },
+  q30: { correct: "Correct! The four PLC stages in order are: Introduction → Growth → Maturity → Decline. The mnemonic 'I Grew Mighty and Died' helps remember this.", wrong: "Not quite. The correct PLC sequence is: <strong>Introduction → Growth → Maturity → Decline</strong>. Remember the mnemonic: 'I Grew Mighty and Died' — each letter matches a stage." },
+  q31: { correct: "Correct! In Decline, the strategy is to Harvest (milk remaining profits while cutting costs) or Divest. Panic spending at this stage accelerates losses, not recovery.", wrong: "Not quite. In the Decline stage, the correct strategy is to <strong>Harvest or Divest</strong> — cutting costs and extracting remaining value, or exiting. Spending more in decline usually wastes resources." },
+  q32: { correct: "Correct! 'The brand lives in the customer's mind, not the company's HQ' — companies shape perceptions, but customers own the brand through their associations and feelings.", wrong: "Not quite. A brand is <strong>a set of perceptions in the customer's mind</strong> — not the logo, not the product itself, not the marketing team's intentions. Customers ultimately define the brand." },
+  q33: { correct: "Correct! Lexus is the textbook example of a New Brand strategy — Toyota created a completely separate brand identity to enter the premium segment without diluting the Toyota brand.", wrong: "Not quite. This is a <strong>New Brand</strong> strategy — creating an entirely new identity. Brand Extension would have been 'Toyota Luxury.' The Lexus decision protected Toyota's mainstream positioning." },
+  q34: { correct: "Correct! Price Skimming extracts maximum surplus from early adopters with a high launch price, then reduces price over time as the product moves into mass market adoption.", wrong: "Not quite. <strong>Price Skimming</strong> starts high and reduces over time. Premium Pricing is permanently high. Penetration starts low. Don't confuse skimming with premium — skimming decreases over time." },
+  q35: { correct: "Correct! Jio's ₹0 entry is the canonical penetration pricing example — sacrificing margin entirely to achieve critical mass in a price-sensitive market and lock in users before monetising.", wrong: "Not quite. Jio is the quintessential <strong>Penetration Pricing</strong> example — aggressively low pricing to capture market share rapidly. It worked because network effects kicked in once critical mass was achieved." },
+  q36: { correct: "Correct! STP = Segmentation, Targeting, Positioning. This is the foundational framework for strategic marketing and the default answer structure recommended for most IIM exam questions.", wrong: "Not quite. STP = <strong>Segmentation, Targeting, Positioning</strong>. The document recommends defaulting to STP when unsure how to structure any strategic marketing exam answer." },
+  q37: { correct: "Correct! Targeting asks: 'Which segment(s) should we serve?' — evaluated on attractiveness, competitive intensity, and fit with the firm's capabilities.", wrong: "Not quite. <strong>Targeting</strong> answers: 'Which segment(s) should we focus on?' — Segmentation asks who exists; Positioning asks how to be perceived. Targeting is the selection step in between." },
+  q38: { correct: "Correct! 'Positioning is not what you do to the product — it's what you do to the mind of the customer.' (Ries & Trout, Positioning: The Battle for Your Mind) — a canonical marketing insight.", wrong: "Not quite. The Ries & Trout quote is: <strong>'Positioning is what you do to the mind of the customer.'</strong> It's a battle for perception, not a product feature decision." },
+  q39: { correct: "Correct! Depth = the number of variants within a single product. The Galaxy S24 example (128GB, 256GB, 512GB) perfectly illustrates depth — multiple variants of one product.", wrong: "Not quite. <strong>Depth</strong> = variants per product. Width = number of product lines. Length = total products across all lines. Consistency = how related the lines are to each other." },
+  q40: { correct: "Correct! Width = the number of distinct product lines a company has. Samsung's phones, TVs, appliances, and chips are four separate product lines — demonstrating wide product mix width.", wrong: "Not quite. This is <strong>Width</strong> — the number of different product lines in the portfolio. Samsung spans phones, TVs, appliances, chips — each is a separate product line." },
+  q41: { correct: "Correct! Nokia had the wrong positioning — they were perceived as feature phone makers when the market had moved to smartphones. The right product (sort of) with the wrong message to the wrong segment.", wrong: "Not quite. Nokia's failure is cited as <strong>Bad Positioning</strong> — they couldn't reposition themselves from feature phones to smartphones in the customer's mind fast enough." },
+  q42: { correct: "Correct! Test Marketing is a controlled, real-world launch in a limited geography to get actual purchase data — not just survey intent — before committing to a full-scale launch.", wrong: "Not quite. Test Marketing is a <strong>limited real-world launch</strong> — distinct from concept testing (which is pre-build) and A/B testing (which is digital/website testing)." },
+  q43: { correct: "Correct! The core trade-off: real market data (valuable) vs. time taken and competitive intelligence leakage (costly). Skipping test marketing saves time but multiplies failure risk.", wrong: "Not quite. The key trade-off is: <strong>information value vs. time cost and competitive leakage</strong>. Test marketing reveals your product to competitors — worth it for most products, not always for fast-moving markets." },
+  q44: { correct: "Correct! Price is the only P that generates revenue — Product, Place, and Promotion all generate costs. This makes pricing decisions the most directly profit-impacting marketing decisions.", wrong: "Not quite. <strong>Price</strong> is the only revenue-generating P. Product creates value but costs to develop; Place creates availability but costs distribution; Promotion drives awareness but costs spend." },
+  q45: { correct: "Correct! Value-based pricing charges what the customer believes the product is worth — not what it cost to produce. This is the most strategically sophisticated pricing approach.", wrong: "Not quite. <strong>Value-based pricing</strong> is set by perceived customer value, not cost or competition. It requires deep understanding of what customers gain from the product and what alternatives they'd use." },
+  q46: { correct: "Correct! Customer Value = Benefits − Total Cost of Ownership. TCO includes the purchase price plus usage costs, switching costs, and all associated costs of owning/using the product.", wrong: "Not quite. The document defines Customer Value as <strong>Benefits minus Total Cost of Ownership</strong> — not just the purchase price, but all costs the customer incurs over the product's lifetime." },
+  q47: { correct: "Correct! P&G's Multi-Brand strategy deliberately places competing brands in the same category to capture different segments and prevent any single brand from dominating (or being displaced).", wrong: "Not quite. This is a <strong>Multi-Brand</strong> strategy — multiple brands within the same category under one corporate parent. P&G uses it to dominate shelf space and target different segments simultaneously." },
+  q48: { correct: "Correct! The IIM-Level Answer Formula is: Define Concept → Apply Framework → Give Example → Add Insight. This stack is what separates a 6/10 answer from a 10/10.", wrong: "Not quite. The formula is: <strong>Define Concept → Apply Framework → Give Example → Add Insight</strong>. Average answers define; IIM answers define, then apply, then exemplify, then elevate." },
+  q49: { correct: "Correct! Simulated Test Markets use lab settings — no actual market launch, no competitive leakage, cheapest method. Ideal for initial screening before committing to broader test marketing.", wrong: "Not quite. A <strong>Simulated Test Market</strong> is a lab-based method — the cheapest and most private option. Standard = real cities, real stores. Controlled = selected stores, tracked precisely." },
+  q50: { correct: "Correct! M = Maturity — the stage where sales plateau, competition is fiercest, and the firm must deploy the most strategic creativity to extend the product's commercial life.", wrong: "Not quite. <strong>M = Maturity</strong> in 'I Grew Mighty and Died.' The Maturity stage is where sales plateau and price wars intensify — requiring the most strategic creativity to differentiate or find new markets." }
+};
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+const answers = {};
+let submitted = false;
+
+// ── SELECT OPTION ─────────────────────────────────────────────────────────
+function selectOption(el, qId, key) {
+  if (submitted) return;
+  const card = document.getElementById(qId);
+  card.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  answers[qId] = key;
+  updateProgress();
+}
+
+// ── PROGRESS ──────────────────────────────────────────────────────────────
+function updateProgress() {
+  const count = Object.keys(answers).length;
+  document.getElementById('answered-count').textContent = count;
+  document.getElementById('progress-fill').style.width = (count / 50 * 100) + '%';
+}
+
+// ── SUBMIT ────────────────────────────────────────────────────────────────
+function submitQuiz() {
+  if (submitted) return;
+  submitted = true;
+
+  let correct = 0, wrong = 0, skipped = 0;
+  const allCards = document.querySelectorAll('.q-card');
+
+  allCards.forEach(card => {
+    const qId = card.id;
+    const correctKey = card.getAttribute('data-correct');
+    const userKey = answers[qId];
+    const fb = document.getElementById('fb-' + qId);
+    card.querySelectorAll('.option').forEach(o => o.classList.add('locked'));
+
+    // Highlight correct answer always
+    const opts = card.querySelectorAll('.option');
+    opts.forEach((o, i) => {
+      const k = ['A','B','C','D'][i];
+      if (k === correctKey) o.classList.add('correct-opt');
+    });
+
+    if (!userKey) {
+      skipped++;
+      card.classList.add('skipped');
+      fb.innerHTML = `<strong>Not answered.</strong> The correct answer was <strong>${correctKey}</strong>. ${FEEDBACK[qId].wrong}`;
+      fb.className = 'feedback show wrong-fb';
+    } else if (userKey === correctKey) {
+      correct++;
+      card.classList.add('correct');
+      fb.innerHTML = `✓ ${FEEDBACK[qId].correct}`;
+      fb.className = 'feedback show correct-fb';
+    } else {
+      wrong++;
+      card.classList.add('wrong');
+      // Mark user's wrong choice
+      opts.forEach((o, i) => {
+        const k = ['A','B','C','D'][i];
+        if (k === userKey) o.classList.add('wrong-opt');
+      });
+      fb.innerHTML = `✗ You chose <strong>${userKey}</strong>. ${FEEDBACK[qId].wrong}`;
+      fb.className = 'feedback show wrong-fb';
+    }
+  });
+
+  // Update score display
+  document.getElementById('answered-count').textContent = '50';
+  document.getElementById('progress-fill').style.width = '100%';
+
+  // Show results panel
+  const pct = Math.round(correct / 50 * 100);
+  document.getElementById('results-score').innerHTML = `${correct}<span>/50</span>`;
+  document.getElementById('r-correct').textContent = correct;
+  document.getElementById('r-wrong').textContent = wrong;
+  document.getElementById('r-skipped').textContent = skipped;
+  document.getElementById('r-pct').textContent = pct + '%';
+
+  let grade = '';
+  if (pct >= 90) grade = `<strong>Outstanding — ${pct}%!</strong> You've mastered both CRM and Product Management. Full exam confidence warranted.`;
+  else if (pct >= 75) grade = `<strong>Strong Performance — ${pct}%.</strong> Very solid grasp of the material. Review the questions you missed and consolidate the frameworks.`;
+  else if (pct >= 60) grade = `<strong>Decent — ${pct}%.</strong> Good foundation, but several gaps remain. Focus on the sections where you made errors and revisit the revision document.`;
+  else if (pct >= 45) grade = `<strong>Needs Work — ${pct}%.</strong> Return to the revision notes, especially the frameworks and key data points. Revise and retry.`;
+  else grade = `<strong>Keep Studying — ${pct}%.</strong> Go back to the source material systematically. Master one section at a time before re-attempting.`;
+
+  document.getElementById('results-grade').innerHTML = grade;
+  const panel = document.getElementById('results-panel');
+  panel.classList.add('show');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── RESET ─────────────────────────────────────────────────────────────────
+function resetQuiz() {
+  submitted = false;
+  Object.keys(answers).forEach(k => delete answers[k]);
+  document.querySelectorAll('.q-card').forEach(card => {
+    card.classList.remove('correct', 'wrong', 'skipped');
+    card.querySelectorAll('.option').forEach(o => {
+      o.classList.remove('selected', 'locked', 'correct-opt', 'wrong-opt');
+    });
+    const fb = card.querySelector('.feedback');
+    fb.className = 'feedback';
+    fb.innerHTML = '';
+  });
+  document.getElementById('results-panel').classList.remove('show');
+  document.getElementById('answered-count').textContent = '0';
+  document.getElementById('progress-fill').style.width = '0%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── FILTER ────────────────────────────────────────────────────────────────
+function filterQuestions(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-all', 'active-crm', 'active-pm'));
+  btn.classList.add(type === 'all' ? 'active-all' : type === 'crm' ? 'active-crm' : 'active-pm');
+
+  document.querySelectorAll('.q-card').forEach(card => {
+    const subj = card.getAttribute('data-subject');
+    card.style.display = (type === 'all' || subj === type) ? '' : 'none';
+  });
+  document.querySelectorAll('.section-divider').forEach(div => {
+    const sec = div.getAttribute('data-section');
+    div.style.display = (type === 'all' || sec === type) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

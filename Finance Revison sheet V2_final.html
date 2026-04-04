@@ -1,0 +1,2711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLP-08 Financial Statement Analysis – Sessions 1–4 Revision</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #faf7f2;
+    --paper2: #f3ede3;
+    --paper3: #ede5d8;
+    --ruled: rgba(139,105,60,0.15);
+    --accent: #b5451b;
+    --accent2: #1b5c8f;
+    --accent3: #1e7a4b;
+    --accent4: #8b5a1b;
+    --gold: #c9922a;
+    --muted: #6b5a47;
+    --border: rgba(139,105,60,0.25);
+    --serif: 'Source Serif 4', Georgia, serif;
+    --display: 'Playfair Display', Georgia, serif;
+    --mono: 'JetBrains Mono', monospace;
+    --r: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ─────────────────────────────────────────────── */
+  .masthead {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 48px 60px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .masthead::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 40px,
+      rgba(255,255,255,0.02) 40px,
+      rgba(255,255,255,0.02) 41px
+    );
+  }
+  .masthead-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .masthead-title {
+    font-family: var(--display);
+    font-size: clamp(28px, 4.5vw, 52px);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .masthead-title em {
+    font-style: italic;
+    color: var(--gold);
+    font-weight: 400;
+  }
+  .masthead-sub {
+    font-size: 14px;
+    color: rgba(250,247,242,0.6);
+    margin-bottom: 28px;
+  }
+  .badge-row {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-family: var(--mono);
+    font-weight: 600;
+    border: 1.5px solid;
+    text-decoration: none;
+    transition: all .2s;
+    cursor: pointer;
+  }
+  .badge.red  { border-color: #e06040; color: #e09070; background: rgba(224,96,64,.12); }
+  .badge.blue { border-color: #4a9de0; color: #7ab8e8; background: rgba(74,157,224,.12); }
+  .badge.grn  { border-color: #3ec47a; color: #6ed4a0; background: rgba(62,196,122,.12); }
+  .badge.gld  { border-color: #c9922a; color: #ddb060; background: rgba(201,146,42,.12); }
+  .badge:hover { transform: translateY(-1px); opacity: 0.85; }
+
+  /* ── NAV ─────────────────────────────────────────────────── */
+  .topnav {
+    background: var(--paper2);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 60px;
+    display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  .nav-label { font-family: var(--mono); font-size: 9px; color: var(--muted); margin-right: 4px; letter-spacing: 1px; text-transform: uppercase; }
+  .nav-pill {
+    font-family: var(--mono); font-size: 10.5px;
+    padding: 3px 11px; border-radius: 14px;
+    border: 1px solid var(--border);
+    color: var(--muted); cursor: pointer; text-decoration: none;
+    transition: all .15s; background: transparent;
+  }
+  .nav-pill:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* ── LAYOUT ──────────────────────────────────────────────── */
+  .layout { display: flex; min-height: calc(100vh - 160px); }
+
+  /* ── SIDEBAR ─────────────────────────────────────────────── */
+  .sidebar {
+    width: 220px; flex-shrink: 0;
+    background: var(--paper2);
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    position: sticky; top: 47px;
+    height: calc(100vh - 47px);
+    overflow-y: auto;
+  }
+  .sidebar::-webkit-scrollbar { width: 3px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .sb-group-label {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--muted);
+    padding: 12px 16px 4px;
+  }
+  .sb-link {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 16px; font-size: 12px; color: var(--muted);
+    cursor: pointer; text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: all .15s;
+  }
+  .sb-link:hover, .sb-link.active {
+    color: var(--ink); background: var(--paper3);
+    border-left-color: var(--accent);
+  }
+  .sb-num { font-family: var(--mono); font-size: 9px; color: var(--border); min-width: 18px; }
+
+  /* ── MAIN ────────────────────────────────────────────────── */
+  .main {
+    flex: 1; padding: 40px 56px;
+    max-width: 900px;
+    overflow-y: auto;
+  }
+
+  /* ── SECTION ─────────────────────────────────────────────── */
+  .section { margin-bottom: 64px; scroll-margin-top: 60px; }
+
+  .section-header {
+    display: flex; align-items: flex-start; gap: 16px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 12px; margin-bottom: 24px;
+  }
+  .section-stripe {
+    width: 5px; height: 52px; border-radius: 3px; flex-shrink: 0; margin-top: 2px;
+  }
+  .stripe-red { background: var(--accent); }
+  .stripe-blue { background: var(--accent2); }
+  .stripe-grn { background: var(--accent3); }
+  .stripe-gld { background: var(--gold); }
+
+  .section-meta { flex: 1; }
+  .section-eyebrow {
+    font-family: var(--mono); font-size: 9.5px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 2px;
+  }
+  .section-title {
+    font-family: var(--display); font-size: 22px; font-weight: 700; line-height: 1.2;
+  }
+
+  /* ── BLOCK LABELS ────────────────────────────────────────── */
+  .block { margin-bottom: 24px; }
+  .block-label {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--muted);
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 10px;
+  }
+  .block-label::after { content: ''; flex: 1; height: 1px; background: var(--ruled); }
+
+  /* ── ANALOGY CARD ────────────────────────────────────────── */
+  .analogy {
+    background: var(--paper2);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    border-radius: var(--r);
+    padding: 16px 18px;
+    margin-bottom: 14px;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .analogy-icon { font-size: 20px; margin-bottom: 6px; display: block; }
+  .analogy strong { color: var(--accent4); }
+
+  /* ── DEFINITION CARDS ────────────────────────────────────── */
+  .def-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media(max-width:700px) { .def-grid { grid-template-columns: 1fr; } }
+  .def-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 13px 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: box-shadow .2s;
+  }
+  .def-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.09); }
+  .def-term {
+    font-family: var(--display); font-size: 14px; font-weight: 700;
+    color: var(--ink); margin-bottom: 4px;
+  }
+  .def-meaning { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 6px; }
+  .def-example {
+    font-size: 11.5px; color: var(--accent4);
+    border-left: 2px solid var(--border); padding-left: 8px;
+    font-style: italic; line-height: 1.4;
+  }
+
+  /* ── EQUATION BOX ────────────────────────────────────────── */
+  .equation {
+    background: var(--ink); color: var(--paper);
+    border-radius: var(--r); padding: 16px 20px;
+    font-family: var(--mono); font-size: 14px;
+    margin-bottom: 12px; text-align: center;
+    letter-spacing: 0.5px;
+  }
+  .equation .eq-label { font-size: 9px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; margin-bottom: 6px; }
+  .equation .eq-main { font-size: 18px; font-weight: 600; color: #fff; }
+  .equation .eq-note { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 6px; }
+
+  /* ── STAIR DIAGRAM ───────────────────────────────────────── */
+  .stair-diagram { margin: 16px 0; }
+  .stair-step {
+    display: flex; align-items: stretch; margin-bottom: 3px;
+  }
+  .stair-indent { flex-shrink: 0; background: transparent; }
+  .stair-box {
+    flex: 1; background: var(--paper2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 9px 14px;
+    font-size: 13px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px;
+  }
+  .stair-box.highlight { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .stair-box.highlight .stair-amount { color: var(--gold); }
+  .stair-box.deduct { border-color: rgba(181,69,27,0.3); }
+  .stair-label { font-weight: 600; }
+  .stair-amount { font-family: var(--mono); font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .stair-arrow { text-align: center; color: var(--muted); font-size: 12px; margin: 1px 0 1px 20px; }
+
+  /* ── BALANCE SHEET VISUAL ────────────────────────────────── */
+  .bs-visual {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    margin: 16px 0;
+  }
+  @media(max-width:600px) { .bs-visual { grid-template-columns: 1fr; } }
+  .bs-side {
+    border: 1.5px solid var(--border); border-radius: var(--r);
+    overflow: hidden;
+  }
+  .bs-header {
+    padding: 8px 14px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px;
+    text-transform: uppercase; font-weight: 600;
+  }
+  .bs-header.assets { background: var(--accent2); color: #fff; }
+  .bs-header.equity { background: var(--accent3); color: #fff; }
+  .bs-row {
+    padding: 7px 14px; border-top: 1px solid var(--ruled);
+    font-size: 12.5px; display: flex; justify-content: space-between;
+    align-items: center;
+  }
+  .bs-row:nth-child(even) { background: var(--paper2); }
+  .bs-row.total-row {
+    background: var(--paper3); font-weight: 700;
+    font-family: var(--mono); font-size: 12px;
+    border-top: 2px solid var(--border);
+  }
+  .bs-value { font-family: var(--mono); font-size: 11px; color: var(--accent2); }
+  .bs-value.grn { color: var(--accent3); }
+  .bs-value.red { color: var(--accent); }
+
+  /* ── FLOW CARD ───────────────────────────────────────────── */
+  .flow-row {
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 12px 0;
+  }
+  .flow-pill {
+    padding: 6px 14px; border-radius: 20px;
+    font-size: 12px; font-weight: 600;
+    border: 1.5px solid;
+  }
+  .pill-red   { background: rgba(181,69,27,.1); border-color: var(--accent); color: var(--accent); }
+  .pill-blue  { background: rgba(27,92,143,.1); border-color: var(--accent2); color: var(--accent2); }
+  .pill-grn   { background: rgba(30,122,75,.1); border-color: var(--accent3); color: var(--accent3); }
+  .pill-gld   { background: rgba(201,146,42,.1); border-color: var(--gold); color: var(--gold); }
+  .pill-grey  { background: var(--paper2); border-color: var(--border); color: var(--muted); }
+  .flow-arr   { color: var(--muted); font-size: 16px; }
+
+  /* ── RATIO CARD ──────────────────────────────────────────── */
+  .ratio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  @media(max-width:600px) { .ratio-grid { grid-template-columns: 1fr; } }
+  .ratio-card {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: var(--r); padding: 14px 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .ratio-name {
+    font-family: var(--display); font-size: 14px; font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .ratio-formula {
+    font-family: var(--mono); font-size: 11px;
+    background: var(--paper2); padding: 6px 10px;
+    border-radius: 4px; margin-bottom: 8px;
+    border: 1px solid var(--ruled);
+  }
+  .ratio-example {
+    font-size: 12px; color: var(--muted); line-height: 1.5;
+  }
+  .ratio-itc {
+    margin-top: 8px; font-family: var(--mono); font-size: 11px;
+    color: var(--accent2);
+    background: rgba(27,92,143,.06); padding: 5px 9px;
+    border-radius: 4px;
+    border-left: 3px solid var(--accent2);
+  }
+
+  /* ── POWER LINES ─────────────────────────────────────────── */
+  .power-lines { display: flex; flex-direction: column; gap: 8px; }
+  .power-line {
+    padding: 11px 14px; border-radius: 5px;
+    border-left: 3px solid; font-size: 13.5px; line-height: 1.6;
+    background: var(--paper2);
+  }
+  .pl-red   { border-color: var(--accent); }
+  .pl-blue  { border-color: var(--accent2); }
+  .pl-grn   { border-color: var(--accent3); }
+  .pl-gld   { border-color: var(--gold); }
+  .power-line em { font-style: normal; font-weight: 700; color: var(--ink); }
+
+  /* ── QUICK REVISION GRID ─────────────────────────────────── */
+  .qr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media(max-width:600px) { .qr-grid { grid-template-columns: 1fr; } }
+  .qr-item {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: var(--r); padding: 10px 13px;
+    font-size: 12.5px; line-height: 1.5; color: var(--ink);
+  }
+
+  /* ── MEMORY HOOKS ────────────────────────────────────────── */
+  .hook-box {
+    background: var(--paper2); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 14px 16px; margin-bottom: 10px;
+  }
+  .hook-label {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+  }
+  .hook-text { font-size: 13.5px; color: var(--ink); line-height: 1.65; }
+  .hook-text strong { color: var(--accent4); }
+
+  /* ── COMPARISON TABLE ────────────────────────────────────── */
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-top: 8px; }
+  .cmp-table th {
+    background: var(--ink); color: var(--paper);
+    padding: 9px 12px; text-align: left;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+  }
+  .cmp-table td {
+    padding: 8px 12px; border-bottom: 1px solid var(--ruled); color: var(--muted);
+    vertical-align: top;
+  }
+  .cmp-table td:first-child { color: var(--ink); font-weight: 600; }
+  .cmp-table tr:last-child td { border-bottom: none; }
+  .cmp-table tr:nth-child(even) td { background: var(--paper2); }
+
+  /* ── CALLOUT ─────────────────────────────────────────────── */
+  .callout {
+    border: 1.5px solid; border-radius: var(--r);
+    padding: 14px 18px; margin: 14px 0; font-size: 13.5px; line-height: 1.65;
+  }
+  .callout-grn { border-color: var(--accent3); background: rgba(30,122,75,.05); }
+  .callout-blue { border-color: var(--accent2); background: rgba(27,92,143,.05); }
+  .callout-red  { border-color: var(--accent); background: rgba(181,69,27,.05); }
+  .callout-gld  { border-color: var(--gold); background: rgba(201,146,42,.06); }
+  .callout-icon { font-size: 18px; margin-bottom: 6px; display: block; }
+
+  /* ── DIVIDER ─────────────────────────────────────────────── */
+  .divider { height: 1px; background: var(--ruled); margin: 32px 0; }
+
+  /* ── BACK TO TOP ─────────────────────────────────────────── */
+  .back-top {
+    display: inline-block; margin-top: 16px;
+    font-family: var(--mono); font-size: 10.5px; color: var(--muted);
+    text-decoration: none; cursor: pointer;
+    transition: color .15s;
+  }
+  .back-top:hover { color: var(--accent); }
+
+  /* ── INLINE HIGHLIGHT ────────────────────────────────────── */
+  mark { background: rgba(201,146,42,0.18); padding: 1px 4px; border-radius: 3px; }
+
+  /* ── ITC SNAPSHOT ────────────────────────────────────────── */
+  .itc-snap {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0;
+  }
+  @media(max-width:600px) { .itc-snap { grid-template-columns: 1fr 1fr; } }
+  .snap-card {
+    background: var(--ink); color: var(--paper);
+    border-radius: var(--r); padding: 14px 14px 12px;
+    text-align: center;
+  }
+  .snap-label { font-family: var(--mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(250,247,242,0.5); margin-bottom: 6px; }
+  .snap-value { font-family: var(--display); font-size: 20px; font-weight: 700; color: var(--gold); }
+  .snap-sub { font-size: 10.5px; color: rgba(250,247,242,0.45); margin-top: 3px; }
+
+  /* ── CASH FLOW CIRCLES ───────────────────────────────────── */
+  .cf-row { display: flex; gap: 12px; margin: 14px 0; flex-wrap: wrap; }
+  .cf-circle {
+    flex: 1; min-width: 140px;
+    border: 2px solid; border-radius: 12px;
+    padding: 16px 12px; text-align: center;
+  }
+  .cf-circle .cf-emoji { font-size: 26px; margin-bottom: 8px; display: block; }
+  .cf-circle .cf-name { font-weight: 700; font-size: 13px; margin-bottom: 5px; }
+  .cf-circle .cf-desc { font-size: 11.5px; color: var(--muted); line-height: 1.4; }
+  .cf-ops  { border-color: var(--accent2); }
+  .cf-inv  { border-color: var(--gold); }
+  .cf-fin  { border-color: var(--accent3); }
+
+  /* Scroll spy JS */
+</style>
+</head>
+<body id="top">
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header class="masthead">
+  <div class="masthead-label">SLP-08 · Sessions 1–4 · 26 Apr – 17 May 2025</div>
+  <h1 class="masthead-title">Financial Statements<br><em>Explained Simply</em></h1>
+  <div class="masthead-sub">Sessions 1–4 · Balance Sheet · Income Statement · DuPont · WACC · Operating DuPont · Working Cycle · Zomato · Cost Concepts · CVP Analysis</div>
+  <div class="badge-row">
+    <a href="#balance-sheet" class="badge red">📊 Balance Sheet</a>
+    <a href="#income-stmt" class="badge blue">📈 Income Statement</a>
+    <a href="#cash-flow" class="badge grn">💸 Cash Flow</a>
+    <a href="#ratios" class="badge gld">🔢 P/E &amp; P/B</a>
+    <a href="#itc" class="badge red">🏭 ITC Case</a>
+    <a href="#roe" class="badge blue">📐 ROE &amp; DuPont</a>
+    <a href="#growth" class="badge grn">🌱 Growth Rates</a>
+    <a href="#wacc" class="badge gld">💰 WACC</a>
+    <a href="#op-dupont" class="badge red">🔬 Op. DuPont</a>
+    <a href="#zomato" class="badge blue">🍕 Zomato</a>
+    <a href="#s4-costs" class="badge grn">💰 Cost Concepts</a>
+    <a href="#s4-cvp" class="badge red">📊 CVP &amp; BEP</a>
+    <a href="#s4-tools" class="badge blue">🧮 MOS &amp; DOL</a>
+    <a href="#quickrev" class="badge grn">⚡ Quick Rev</a>
+  </div>
+</header>
+
+<!-- ═══════════ TOP NAV ═══════════ -->
+<nav class="topnav">
+  <span class="nav-label">Jump →</span>
+  <a href="#why-fs" class="nav-pill">Why Statements?</a>
+  <a href="#balance-sheet" class="nav-pill">Balance Sheet</a>
+  <a href="#income-stmt" class="nav-pill">Income Statement</a>
+  <a href="#cash-flow" class="nav-pill">Cash Flow</a>
+  <a href="#ratios" class="nav-pill">P/E &amp; P/B</a>
+  <a href="#itc" class="nav-pill">ITC Deep Dive</a>
+  <a href="#wacc" class="nav-pill">WACC</a>
+  <a href="#op-dupont" class="nav-pill">Op. DuPont</a>
+  <a href="#working-cycle" class="nav-pill">Working Cycle</a>
+  <a href="#strategies" class="nav-pill">ROE Strategies</a>
+  <a href="#zomato" class="nav-pill">Zomato</a>
+  <a href="#s4-costs" class="nav-pill">Cost Objects</a>
+  <a href="#s4-directvar" class="nav-pill">Var/Fixed Costs</a>
+  <a href="#s4-cvp" class="nav-pill">CVP &amp; BEP</a>
+  <a href="#s4-tools" class="nav-pill">MOS &amp; DOL</a>
+  <a href="#quickrev" class="nav-pill">Quick Rev</a>
+  <a href="#hooks" class="nav-pill">Memory Hooks</a>
+</nav>
+
+<!-- ═══════════ LAYOUT ═══════════ -->
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-group-label">Foundations</div>
+  <a href="#why-fs" class="sb-link"><span class="sb-num">01</span> Why Statements?</a>
+  <a href="#balance-sheet" class="sb-link"><span class="sb-num">02</span> Balance Sheet</a>
+  <a href="#income-stmt" class="sb-link"><span class="sb-num">03</span> Income Statement</a>
+  <a href="#cash-flow" class="sb-link"><span class="sb-num">04</span> Cash Flow</a>
+  <div class="sb-group-label">Valuation</div>
+  <a href="#ratios" class="sb-link"><span class="sb-num">05</span> P/E &amp; P/B Ratios</a>
+  <a href="#itc" class="sb-link"><span class="sb-num">06</span> ITC Case Study</a>
+  <div class="sb-group-label" style="margin-top:16px;color:#8b5a1b;">── Session 2 ──</div>
+  <a href="#roe" class="sb-link"><span class="sb-num">09</span> ROE &amp; Profitability</a>
+  <a href="#dupont" class="sb-link"><span class="sb-num">10</span> DuPont Analysis</a>
+  <a href="#growth" class="sb-link"><span class="sb-num">11</span> Growth Rates</a>
+  <a href="#analysis-tools" class="sb-link"><span class="sb-num">12</span> Analysis Tools</a>
+  <div class="sb-group-label" style="margin-top:16px;color:#1b5c8f;">── Session 3 ──</div>
+  <a href="#wacc" class="sb-link"><span class="sb-num">13</span> WACC &amp; Cost of Capital</a>
+  <a href="#op-dupont" class="sb-link"><span class="sb-num">14</span> Operating DuPont</a>
+  <a href="#working-cycle" class="sb-link"><span class="sb-num">15</span> Working Cycle</a>
+  <a href="#strategies" class="sb-link"><span class="sb-num">16</span> ROE Strategies</a>
+  <a href="#zomato" class="sb-link"><span class="sb-num">17</span> Zomato Case Study</a>
+  <div class="sb-group-label" style="margin-top:16px;color:#1e7a4b;">── Session 4 ──</div>
+  <a href="#s4-costs" class="sb-link"><span class="sb-num">18</span> Cost Objects &amp; Types</a>
+  <a href="#s4-directvar" class="sb-link"><span class="sb-num">19</span> Direct / Variable Costs</a>
+  <a href="#s4-cvp" class="sb-link"><span class="sb-num">20</span> CVP &amp; Break Even</a>
+  <a href="#s4-tools" class="sb-link"><span class="sb-num">21</span> MOS &amp; Leverage</a>
+  <div class="sb-group-label">Recall</div>
+  <a href="#quickrev" class="sb-link"><span class="sb-num">18</span> Quick Revision</a>
+  <a href="#hooks" class="sb-link"><span class="sb-num">19</span> Memory Hooks</a>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- ══════ 01 — WHY FINANCIAL STATEMENTS ══════ -->
+  <section class="section" id="why-fs">
+    <div class="section-header">
+      <div class="section-stripe stripe-red"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Section 01 · The Big Picture</div>
+        <div class="section-title">Why Do Financial Statements Exist?</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Core Insight</div>
+      <div class="analogy">
+        <span class="analogy-icon">🏠</span>
+        Think of a business like a household. Just like you track your salary, savings, and bills — a company tracks its money through financial statements. They answer three questions: <strong>Where did the money come from? Where did it go? Where is it now?</strong>
+      </div>
+      <div class="analogy">
+        <span class="analogy-icon">👔</span>
+        <strong>The Manager's Job:</strong> Managers are decision-makers. Every decision requires choosing between alternatives and making the best use of limited resources. Financial statements are the manager's scoreboard — they show how well resources were deployed.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The 4 Financial Statements</div>
+      <div class="def-grid">
+        <div class="def-card">
+          <div class="def-term">📊 Balance Sheet</div>
+          <div class="def-meaning">A <em>photograph</em> of the company at one moment in time — what it owns, what it owes, and what's left for owners.</div>
+          <div class="def-example">Like checking your bank account + property value on a specific date.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">📈 Income Statement</div>
+          <div class="def-meaning">A <em>video</em> of the company over a period — how much was earned and spent.</div>
+          <div class="def-example">Like your monthly salary slip showing earnings and deductions.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">💸 Cash Flow Statement</div>
+          <div class="def-meaning">Tracks the actual movement of cash — money coming in vs. going out.</div>
+          <div class="def-example">Profit on paper ≠ cash in hand. This shows the difference.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">📋 Shareholders' Equity</div>
+          <div class="def-meaning">Shows how the owners' stake in the company has changed over time.</div>
+          <div class="def-example">Like tracking how your personal net worth grew or shrank over a year.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════ 02 — BALANCE SHEET ══════ -->
+  <section class="section" id="balance-sheet">
+    <div class="section-header">
+      <div class="section-stripe stripe-blue"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Section 02 · Resource Statement</div>
+        <div class="section-title">The Balance Sheet</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Golden Rule</div>
+      <div class="equation">
+        <div class="eq-label">The Fundamental Equation</div>
+        <div class="eq-main">ASSETS = LIABILITIES + SHAREHOLDERS' EQUITY</div>
+        <div class="eq-note">Everything a company owns must be funded either by borrowing (liabilities) or by owner money (equity). Always balanced. Always.</div>
+      </div>
+      <div class="analogy">
+        <span class="analogy-icon">🏡</span>
+        <strong>House Analogy:</strong> You bought a ₹50L house. You paid ₹20L yourself (your equity) and borrowed ₹30L from the bank (liability). The house (asset = ₹50L) = Your money (₹20L) + Bank loan (₹30L). <em>Balanced!</em>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Three Parts</div>
+      <div class="def-grid">
+        <div class="def-card">
+          <div class="def-term">🏭 Assets (Left Side)</div>
+          <div class="def-meaning">Everything the company <em>owns</em> or controls that has value. Ordered from most liquid (easiest to convert to cash) to least liquid.</div>
+          <div class="def-example"><strong>Current Assets</strong> → convert to cash within 1 year (inventory, receivables, cash)<br><strong>Non-Current Assets</strong> → long-term (land, machinery, goodwill)</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">💳 Liabilities (Right Side)</div>
+          <div class="def-meaning">Money the company <em>owes</em> to others — banks, suppliers, employees, government.</div>
+          <div class="def-example"><strong>Current Liabilities</strong> → payable within 1 year<br><strong>Non-Current Liabilities</strong> → payable after 1 year (long-term loans)</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">👥 Shareholders' Equity</div>
+          <div class="def-meaning">The <em>leftover</em> after paying all liabilities — this belongs to the owners/shareholders. Also called "net worth" or "book value".</div>
+          <div class="def-example">If the company sold everything and paid all debts, equity is what's left. Think of it as the owners' share of the business.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">✨ Goodwill (Special Asset)</div>
+          <div class="def-meaning">The extra premium paid when acquiring another company — value of brand, reputation, customer base beyond physical assets.</div>
+          <div class="def-example">ITC buys Company X (book value ₹100Cr) for ₹150Cr → ₹50Cr appears as Goodwill on ITC's balance sheet.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">ITC Balance Sheet Snapshot (FY 2024)</div>
+      <div class="bs-visual">
+        <div class="bs-side">
+          <div class="bs-header assets">ASSETS (What ITC Owns)</div>
+          <div class="bs-row"><span>Non-Current Assets</span><span class="bs-value">₹50,761 Cr</span></div>
+          <div class="bs-row"><span>↳ Property &amp; Equipment</span><span class="bs-value">₹23,082 Cr</span></div>
+          <div class="bs-row"><span>↳ Long-term Investments</span><span class="bs-value">₹17,620 Cr</span></div>
+          <div class="bs-row"><span>↳ Other Intangibles</span><span class="bs-value">₹2,678 Cr</span></div>
+          <div class="bs-row"><span>Current Assets</span><span class="bs-value">₹41,066 Cr</span></div>
+          <div class="bs-row"><span>↳ Inventories</span><span class="bs-value">₹14,153 Cr</span></div>
+          <div class="bs-row"><span>↳ Short-term Investments</span><span class="bs-value">₹12,944 Cr</span></div>
+          <div class="bs-row"><span>↳ Cash &amp; Bank</span><span class="bs-value">₹7,218 Cr</span></div>
+          <div class="bs-row total-row"><span>TOTAL ASSETS</span><span class="bs-value">₹91,826 Cr</span></div>
+        </div>
+        <div class="bs-side">
+          <div class="bs-header equity">EQUITY + LIABILITIES (Who Funded It)</div>
+          <div class="bs-row"><span>Equity (Owner Funds)</span><span class="bs-value grn">₹74,890 Cr</span></div>
+          <div class="bs-row"><span>↳ Share Capital</span><span class="bs-value grn">₹1,248 Cr</span></div>
+          <div class="bs-row"><span>↳ Other Equity (Retained Profit etc.)</span><span class="bs-value grn">₹73,259 Cr</span></div>
+          <div class="bs-row"><span>Non-Current Liabilities</span><span class="bs-value red">₹3,246 Cr</span></div>
+          <div class="bs-row"><span>↳ Long-term Borrowings</span><span class="bs-value red">₹1.76 Cr</span></div>
+          <div class="bs-row"><span>Current Liabilities</span><span class="bs-value red">₹13,690 Cr</span></div>
+          <div class="bs-row"><span>↳ Trade Payables</span><span class="bs-value red">₹4,798 Cr</span></div>
+          <div class="bs-row total-row"><span>TOTAL EQUITY + LIABILITIES</span><span class="bs-value">₹91,826 Cr</span></div>
+        </div>
+      </div>
+      <div class="callout callout-grn">
+        <span class="callout-icon">💡</span>
+        <strong>Key Insight from ITC's Balance Sheet:</strong> 83% of ITC's funding comes from equity (₹74,890 / ₹91,826). This means ITC has almost no debt — very low financial risk. It's like owning a house mostly with your own money, not the bank's.
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════ 03 — INCOME STATEMENT ══════ -->
+  <section class="section" id="income-stmt">
+    <div class="section-header">
+      <div class="section-stripe stripe-grn"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Section 03 · Activity Statement</div>
+        <div class="section-title">The Income Statement (P&amp;L)</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">What It Is</div>
+      <div class="analogy">
+        <span class="analogy-icon">🪜</span>
+        <strong>Think of it as a staircase going downward.</strong> You start at the top with all the money earned (Revenue), and at each step you subtract various costs. What's left at the very bottom — after all deductions — is called <strong>Net Profit (PAT)</strong>. This is the "bottom line" everyone talks about.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Staircase — From Revenue to Net Profit</div>
+      <div class="stair-diagram">
+        <div class="stair-step">
+          <div class="stair-indent" style="width:0px"></div>
+          <div class="stair-box highlight">
+            <span class="stair-label">🔝 Revenue from Operations ("Top Line")</span>
+            <span class="stair-amount">ITC: ₹76,840 Cr</span>
+          </div>
+        </div>
+        <div class="stair-arrow">↓ minus Cost of Materials &amp; Production</div>
+        <div class="stair-step">
+          <div class="stair-indent" style="width:20px"></div>
+          <div class="stair-box deduct">
+            <span class="stair-label">= Gross Profit</span>
+            <span class="stair-amount">Revenue − Cost of Goods Sold</span>
+          </div>
+        </div>
+        <div class="stair-arrow" style="margin-left:40px">↓ minus Operating Expenses (Salaries, Rent, Marketing…)</div>
+        <div class="stair-step">
+          <div class="stair-indent" style="width:40px"></div>
+          <div class="stair-box">
+            <span class="stair-label">= Operating Profit (EBIT)</span>
+            <span class="stair-amount">Profit from core operations</span>
+          </div>
+        </div>
+        <div class="stair-arrow" style="margin-left:60px">↓ minus Interest &amp; Tax</div>
+        <div class="stair-step">
+          <div class="stair-indent" style="width:60px"></div>
+          <div class="stair-box highlight">
+            <span class="stair-label">⬇ Net Profit / PAT ("Bottom Line")</span>
+            <span class="stair-amount">ITC: ₹20,751 Cr</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-blue">
+        <strong>ITC's P&amp;L in one line:</strong> ITC earned ₹76,840 Cr in revenue, spent ₹52,448 Cr in costs, paid ₹6,388 Cr in taxes, and kept ₹20,751 Cr as profit. That profit belongs to shareholders — which is what drives the stock price.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Key Terms in the Income Statement</div>
+      <div class="def-grid">
+        <div class="def-card">
+          <div class="def-term">Revenue / Top Line</div>
+          <div class="def-meaning">Total money earned from selling goods or services before any costs are removed.</div>
+          <div class="def-example">ITC's cigarettes, foods, hotels, paperboards all together = ₹76,840 Cr</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">COGS (Cost of Goods Sold)</div>
+          <div class="def-meaning">Direct cost to produce what was sold — raw materials, manufacturing labour, factory costs.</div>
+          <div class="def-example">Tobacco leaf, wheat flour, packaging — whatever goes directly into making the product.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">Depreciation &amp; Amortisation</div>
+          <div class="def-meaning">Machinery and equipment wear out over time. Depreciation spreads the cost of an asset over its useful life — even though no cash is spent each year.</div>
+          <div class="def-example">A ₹10Cr machine lasting 10 years = ₹1Cr depreciation charged each year. ITC: ₹1,816 Cr.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">PAT (Profit After Tax) / Net Profit</div>
+          <div class="def-meaning">The final take-home profit after all expenses and taxes are paid. Divided among shareholders or reinvested.</div>
+          <div class="def-example">ITC's PAT = ₹20,751 Cr. This is the "bottom line" that investors care about most.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">EPS (Earnings Per Share)</div>
+          <div class="def-meaning">PAT ÷ Total shares outstanding. Tells you how much profit belongs to each share you hold.</div>
+          <div class="def-example">ITC EPS = ₹16.42 (Basic). So each ₹1 face-value share earns ₹16.42 in profit for the year.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">Other Comprehensive Income</div>
+          <div class="def-meaning">Gains/losses that bypass the main P&amp;L — e.g. revaluation of investments, foreign exchange translation. These still affect equity.</div>
+          <div class="def-example">ITC had ₹2,957 Cr of equity investment gains here — not in "normal" profit but still real value.</div>
+        </div>
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════ 04 — CASH FLOW ══════ -->
+  <section class="section" id="cash-flow">
+    <div class="section-header">
+      <div class="section-stripe stripe-gld"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Section 04</div>
+        <div class="section-title">Cash Flow Statement</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Why Cash Flow ≠ Profit</div>
+      <div class="analogy">
+        <span class="analogy-icon">🧾</span>
+        <strong>The classic trap:</strong> A shop sells ₹10L worth of goods on credit (the buyer hasn't paid yet). The Income Statement shows ₹10L profit. The cash account shows ₹0 received. <em>Which one helps pay salaries?</em> Cash does. That's why we need the Cash Flow Statement separately.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Three Buckets of Cash Flow</div>
+      <div class="cf-row">
+        <div class="cf-circle cf-ops">
+          <span class="cf-emoji">⚙️</span>
+          <div class="cf-name">Operating Activities</div>
+          <div class="cf-desc">Cash from running the day-to-day business — selling products, collecting from customers, paying suppliers and employees.</div>
+        </div>
+        <div class="cf-circle cf-inv">
+          <span class="cf-emoji">🏗️</span>
+          <div class="cf-name">Investing Activities</div>
+          <div class="cf-desc">Cash spent or received from buying/selling long-term assets — factories, equipment, investments. Usually negative (spending).</div>
+        </div>
+        <div class="cf-circle cf-fin">
+          <span class="cf-emoji">🏦</span>
+          <div class="cf-name">Financing Activities</div>
+          <div class="cf-desc">Cash raised or returned from owners and lenders — issuing shares, taking/repaying loans, paying dividends.</div>
+        </div>
+      </div>
+      <div class="callout callout-gld">
+        <strong>Rule of thumb for healthy companies:</strong> Operating Cash Flow should be <em>positive</em> (business generates cash). Investing Cash Flow is usually <em>negative</em> (growing by spending on assets). Financing can go either way.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Non-Cash Items: The Reconciliation Trick</div>
+      <div class="analogy">
+        <span class="analogy-icon">🔄</span>
+        The cash flow statement starts with net profit and <strong>adds back depreciation</strong>. Why? Because depreciation is an expense on the P&amp;L that reduces profit — but <em>no cash actually left the company</em>. So we add it back to get to true cash generated. ITC added back ₹1,816 Cr of depreciation this way.
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════ 05 — RATIOS & VALUATION ══════ -->
+  <section class="section" id="ratios">
+    <div class="section-header">
+      <div class="section-stripe stripe-red"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Section 05 · Valuation Ratios</div>
+        <div class="section-title">P/E and P/B — Are You Overpaying?</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Core Question</div>
+      <div class="analogy">
+        <span class="analogy-icon">🛒</span>
+        If a shop is earning ₹1 lakh/month, how much would you pay to buy it? ₹10L? ₹25L? That's what valuation ratios answer for stock markets — <strong>how much are investors paying relative to what the company earns or owns?</strong>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">P/E and P/B Side by Side</div>
+      <div class="ratio-grid">
+        <div class="ratio-card">
+          <div class="ratio-name">📈 P/E Ratio (Price-to-Earnings)</div>
+          <div class="ratio-formula">P/E = Market Price per Share ÷ EPS</div>
+          <div class="ratio-example">
+            Tells you: "How many rupees am I paying for every ₹1 of the company's earnings?"<br><br>
+            <strong>P/E = 25</strong> → You're paying ₹25 to earn ₹1 annually.<br>
+            Higher P/E = more expensive / higher growth expectations.<br><br>
+            <em>Used for: Profitable companies in most industries.</em>
+          </div>
+          <div class="ratio-itc">ITC Market P/E ≈ 22× | Calculated P/E = 420 ÷ 16.42 = 25.6×</div>
+        </div>
+        <div class="ratio-card">
+          <div class="ratio-name">📚 P/B Ratio (Price-to-Book)</div>
+          <div class="ratio-formula">P/B = Market Price per Share ÷ Book Value per Share</div>
+          <div class="ratio-example">
+            Book Value = what the company is worth on paper (Total Assets − Total Liabilities).<br><br>
+            <strong>P/B = 3</strong> → You're paying ₹3 for every ₹1 of the company's net assets.<br>
+            P/B &lt; 1 = stock may be undervalued.<br><br>
+            <em>Preferred for: Banks &amp; financial companies.</em>
+          </div>
+          <div class="ratio-itc">ITC Market P/B ≈ 4× | Calculated P/B = 420 ÷ 60 = 7.0×</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">How to Calculate Book Value Per Share (BVPS)</div>
+      <div class="equation">
+        <div class="eq-label">Step by Step</div>
+        <div class="eq-main">BVPS = Total Shareholders' Equity ÷ Total Shares Outstanding</div>
+        <div class="eq-note">ITC: ₹74,890 Cr equity ÷ 1,248 Cr shares ≈ ₹60 per share</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Why P/B is Better for Banks</div>
+      <table class="cmp-table">
+        <thead>
+          <tr><th>Aspect</th><th>P/E for Banks</th><th>P/B for Banks</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>When it works</td>
+            <td>Only when the bank is profitable</td>
+            <td>Even when making losses — book value still exists</td>
+          </tr>
+          <tr>
+            <td>What it measures</td>
+            <td>Earnings quality</td>
+            <td>Efficiency of fund utilisation (how well assets generate value)</td>
+          </tr>
+          <tr>
+            <td>NPA impact</td>
+            <td>Doesn't capture bad loans directly</td>
+            <td>Bad loans reduce book value → P/B rises or falls clearly</td>
+          </tr>
+          <tr>
+            <td>Industry comparison</td>
+            <td>P/E varies widely due to provisioning cycles</td>
+            <td>P/B is consistent across macro cycles (Basel ratios tie to assets)</td>
+          </tr>
+          <tr>
+            <td>Best used with</td>
+            <td>P/B (use together)</td>
+            <td>ROE (P/B + ROE together = most effective analysis)</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="callout callout-blue">
+        <strong>Why P/B + ROE is the power combo for banks:</strong> If a bank's ROE is rising alongside its P/B, that's a healthy signal — investors pay more because the bank genuinely creates more value from its assets. A high P/B with low ROE? Overvalued.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Other Key Ratios (Quick Reference)</div>
+      <div class="ratio-grid">
+        <div class="ratio-card">
+          <div class="ratio-name">⚖️ Debt-to-Equity Ratio</div>
+          <div class="ratio-formula">D/E = Total Liabilities ÷ Shareholders' Equity</div>
+          <div class="ratio-example">D/E = 2 → Company has ₹2 of debt for every ₹1 of owner money. Lower is safer. ITC's D/E is near zero — almost no debt.</div>
+        </div>
+        <div class="ratio-card">
+          <div class="ratio-name">💰 Working Capital</div>
+          <div class="ratio-formula">Working Capital = Current Assets − Current Liabilities</div>
+          <div class="ratio-example">Positive = company can pay short-term bills. ITC: ₹41,066 − ₹13,690 = ₹27,376 Cr surplus. Very healthy.</div>
+        </div>
+        <div class="ratio-card">
+          <div class="ratio-name">📦 Inventory Turnover</div>
+          <div class="ratio-formula">= Cost of Sales ÷ Average Inventory</div>
+          <div class="ratio-example">Ratio of 5 = inventory converts to sales 5 times a year. Higher is usually better — means goods aren't sitting unsold.</div>
+        </div>
+        <div class="ratio-card">
+          <div class="ratio-name">📊 Operating Margin</div>
+          <div class="ratio-formula">= Operating Income ÷ Net Revenue × 100</div>
+          <div class="ratio-example">Shows what % of each sales rupee is actual operating profit. Higher = more efficient. Compare within same industry only.</div>
+        </div>
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════ 06 — ITC CASE STUDY ══════ -->
+  <section class="section" id="itc">
+    <div class="section-header">
+      <div class="section-stripe stripe-blue"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Section 06 · Real World Application</div>
+        <div class="section-title">ITC Ltd — Full Case Study</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">ITC At a Glance (FY2024)</div>
+      <div class="itc-snap">
+        <div class="snap-card">
+          <div class="snap-label">Total Assets</div>
+          <div class="snap-value">₹91,826 Cr</div>
+          <div class="snap-sub">Total resources deployed</div>
+        </div>
+        <div class="snap-card">
+          <div class="snap-label">Revenue</div>
+          <div class="snap-value">₹76,840 Cr</div>
+          <div class="snap-sub">Top Line (Core Operations)</div>
+        </div>
+        <div class="snap-card">
+          <div class="snap-label">Net Profit (PAT)</div>
+          <div class="snap-value">₹20,751 Cr</div>
+          <div class="snap-sub">Bottom Line</div>
+        </div>
+        <div class="snap-card">
+          <div class="snap-label">Equity</div>
+          <div class="snap-value">₹74,890 Cr</div>
+          <div class="snap-sub">83% of total funding</div>
+        </div>
+        <div class="snap-card">
+          <div class="snap-label">EPS (Basic)</div>
+          <div class="snap-value">₹16.42</div>
+          <div class="snap-sub">Profit per share</div>
+        </div>
+        <div class="snap-card">
+          <div class="snap-label">Book Value/Share</div>
+          <div class="snap-value">≈₹60</div>
+          <div class="snap-sub">Net assets per share</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Two Valuation Calculations (Class Focus)</div>
+      <div class="ratio-grid">
+        <div class="ratio-card">
+          <div class="ratio-name">ITC P/E Calculation</div>
+          <div class="ratio-formula">P/E = Stock Price ÷ EPS<br>= ₹420 ÷ ₹16.42 = <mark>25.6×</mark></div>
+          <div class="ratio-example">
+            Market P/E is ~22×. Our calculated P/E is ~25.6×.<br><br>
+            <strong>What this means:</strong> Investors are paying ₹25.60 for every ₹1 of ITC's annual profit. The stock is slightly above market average P/E — suggests modest premium / growth expectation.
+          </div>
+        </div>
+        <div class="ratio-card">
+          <div class="ratio-name">ITC P/B Calculation</div>
+          <div class="ratio-formula">P/B = Stock Price ÷ BVPS<br>= ₹420 ÷ ₹60 = <mark>7.0×</mark></div>
+          <div class="ratio-example">
+            Market P/B is ~4×. Our calculated P/B is ~7×.<br><br>
+            <strong>What this means:</strong> Investors pay ₹7 for every ₹1 of ITC's book value. They expect management to generate strong returns on assets — hence the premium over book.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">4 Key Insights From ITC's Financials (Class Notes)</div>
+      <div class="power-lines">
+        <div class="power-line pl-grn">
+          <em>1. Equity-heavy financing (83%):</em> ITC's total equity is ₹74,890 Cr out of ₹91,826 Cr total assets. This means almost no dependence on debt — very low financial risk and strong credit quality.
+        </div>
+        <div class="power-line pl-blue">
+          <em>2. Excess liquidity (cash-rich):</em> Current Assets = ₹41,066 Cr vs. Current Liabilities = ₹13,690 Cr. The ratio is nearly 3:1. The formula (Cash + Bank + Short-term investments) ÷ Long-term Debt = (~₹20,000 Cr ÷ ₹3,200 Cr) &gt; 1 confirms ITC is holding excess cash.
+        </div>
+        <div class="power-line pl-red">
+          <em>3. Goodwill tells acquisition history:</em> ₹779.73 Cr goodwill on ITC's balance sheet means ITC paid a premium when acquiring businesses — the gap between what they paid and the book value of those firms.
+        </div>
+        <div class="power-line pl-gld">
+          <em>4. Balance Sheet = Resource Statement:</em> The class framing: Balance Sheet shows <em>how much resources</em> the company has and <em>who provided them</em> (equity vs. debt). P&amp;L shows <em>how those resources performed</em> to generate revenue and profit.
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Time Series vs. Cross-Section Analysis</div>
+      <table class="cmp-table">
+        <thead>
+          <tr><th>Method</th><th>What it means</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Time Series Analysis</td>
+            <td>Compare the same company across different years — looking for growth or decline trends.</td>
+            <td>ITC total assets grew from ₹85,883 Cr (FY23) to ₹91,826 Cr (FY24) — 7% growth</td>
+          </tr>
+          <tr>
+            <td>Cross-Section Analysis</td>
+            <td>Compare the company against peers / industry benchmarks at the same point in time.</td>
+            <td>Comparing ITC's P/E of 25.6× against Hindustan Unilever, Nestle etc. in FMCG sector</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════ 09 — ROE & PROFITABILITY ══════ -->
+  <section class="section" id="roe">
+    <div class="section-header">
+      <div class="section-stripe stripe-gld"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Session 2 · Section 09 · 03 May 2025</div>
+        <div class="section-title">ROE &amp; Profitability Analysis</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Why Profitability Analysis?</div>
+      <div class="analogy">
+        <span class="analogy-icon">🎯</span>
+        Every investor evaluates a company through <strong>four lenses</strong>: Return, Risk, Growth (CAGR of revenue), and Sustainability. Profitability analysis is the systematic way of answering the <em>Return</em> question — and it starts with ROE.
+      </div>
+      <div class="analogy">
+        <span class="analogy-icon">🏭</span>
+        <strong>The Revenue Claimants Chain:</strong> When a company earns revenue, it has to pay people in this order: Suppliers → Employees → Banks (interest) → Tax Authority → Preference Shareholders → and finally, whatever's left goes to <strong>Equity Shareholders</strong>. ROE measures how well equity shareholders were rewarded after everyone else was paid.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Three Core Return Metrics</div>
+      <div class="def-grid">
+        <div class="def-card">
+          <div class="def-term">📈 ROE — Return on Equity</div>
+          <div class="def-meaning">How much profit was generated for every rupee the <em>shareholders</em> invested. The shareholder's scorecard.</div>
+          <div class="def-example">
+            <strong>ROE = PAT ÷ Equity</strong><br>
+            ITC: ₹20,751 ÷ ₹74,889 = <mark>27%</mark><br>
+            Shareholders earn ₹27 for every ₹100 they invested.
+          </div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">🏗️ ROA — Return on Assets</div>
+          <div class="def-meaning">How much profit was generated from every rupee of total assets — regardless of whether funded by debt or equity. Measures management efficiency.</div>
+          <div class="def-example">
+            <strong>ROA = Net Income ÷ Total Assets</strong><br>
+            ITC: ₹20,751 ÷ ₹91,826 = <mark>22.6%</mark><br>
+            Every ₹100 of assets generated ₹22.6 in profit.
+          </div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">🏦 ROCE — Return on Capital Employed</div>
+          <div class="def-meaning">Return generated on <em>all</em> the capital deployed — equity plus debt. Used by managers and bankers (not just shareholders).</div>
+          <div class="def-example">
+            <strong>ROCE = EBIT ÷ (Equity + Debt)</strong><br>
+            ITC: ₹27,147 ÷ ₹75,300 = <mark>36%</mark><br>
+            Use NOPAT (PAT + Interest × (1−tax)) for precision.
+          </div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">💡 ROE vs ROCE — Which to Use?</div>
+          <div class="def-meaning">Depends on whose eyes you're looking through.</div>
+          <div class="def-example">
+            <strong>Shareholder viewpoint</strong> → Use ROE<br>
+            <strong>Manager / Banker viewpoint</strong> → Use ROCE<br><br>
+            ROE only counts equity cost; ROCE counts all capital cost.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">EBITDA — The Cross-Company Comparator</div>
+      <div class="analogy">
+        <span class="analogy-icon">⚖️</span>
+        <strong>Why not just compare PAT?</strong> Two companies may have identical operations but different tax regimes, different debt levels, or different depreciation policies — making their PATs incomparable. <strong>EBITDA</strong> (Earnings Before Interest, Tax, Depreciation, Amortisation) strips all of that out, leaving only the core operational performance.
+      </div>
+      <div class="equation">
+        <div class="eq-label">EBITDA Breakdown</div>
+        <div class="eq-main">EBITDA = Revenue − Operating Expenses (excl. D&amp;A)</div>
+        <div class="eq-note">ITC: Revenue ₹76,840 − Op. Expenses ₹50,586 = EBITDA ≈ ₹26,254 Cr</div>
+      </div>
+      <div class="callout callout-blue">
+        <strong>Rule:</strong> When comparing two companies, use <em>EBITDA</em> (not PAT) because PAT is distorted by each company's tax rate, debt level, and accounting choices for depreciation. EBITDA shows the "true" operating engine.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">CAGR — Measuring Growth Rate</div>
+      <div class="analogy">
+        <span class="analogy-icon">📈</span>
+        <strong>CAGR (Compounded Annual Growth Rate)</strong> is the smoothed annual growth rate — as if the company grew at a steady pace each year. It removes year-to-year volatility and shows the underlying trend. Example from class (TCS): Revenue CAGR over 10 years = 10%, last 5 years = 12%, last year = 6% — the deceleration signals something worth investigating.
+      </div>
+      <div class="equation">
+        <div class="eq-label">CAGR Formula</div>
+        <div class="eq-main">CAGR = (Ending Value ÷ Beginning Value)^(1/n) − 1</div>
+        <div class="eq-note">n = number of years. Result expressed as a percentage.</div>
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════ 10 — DUPONT ANALYSIS ══════ -->
+  <section class="section" id="dupont">
+    <div class="section-header">
+      <div class="section-stripe stripe-red"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Session 2 · Section 10</div>
+        <div class="section-title">DuPont Analysis — Dissecting ROE</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Core Idea</div>
+      <div class="analogy">
+        <span class="analogy-icon">🔬</span>
+        Imagine your car's fuel efficiency dropped. You wouldn't just say "the car is bad" — you'd check: Is it the engine (profit margin)? The weight (assets)? The fuel type (leverage)? <strong>DuPont Analysis does exactly this for ROE</strong> — it breaks it into three parts so you can pinpoint <em>exactly why</em> ROE is high or low.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Step-by-Step DuPont Derivation</div>
+      <div class="stair-diagram">
+        <div class="stair-step">
+          <div class="stair-box highlight">
+            <span class="stair-label">Start: ROE = Net Income ÷ Equity</span>
+            <span class="stair-amount">ITC: 20,751 ÷ 74,889 = 27%</span>
+          </div>
+        </div>
+        <div class="stair-arrow">↓ Multiply by Assets/Assets (= 1, changes nothing)</div>
+        <div class="stair-step">
+          <div class="stair-indent" style="width:20px"></div>
+          <div class="stair-box">
+            <span class="stair-label">ROE = (Net Income ÷ Assets) × (Assets ÷ Equity)</span>
+            <span class="stair-amount">= ROA × Equity Multiplier</span>
+          </div>
+        </div>
+        <div class="stair-arrow" style="margin-left:20px">↓ Multiply by Sales/Sales (= 1, changes nothing)</div>
+        <div class="stair-step">
+          <div class="stair-indent" style="width:40px"></div>
+          <div class="stair-box highlight">
+            <span class="stair-label">ROE = (Sales ÷ Assets) × (Net Income ÷ Sales) × (Assets ÷ Equity)</span>
+            <span class="stair-amount">= TATO × PM × EM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The 3-Factor DuPont Formula</div>
+      <div class="equation">
+        <div class="eq-label">3-Factor DuPont (Classic)</div>
+        <div class="eq-main">ROE = TATO × Profit Margin × Equity Multiplier</div>
+        <div class="eq-note">ROE = (Sales÷Assets) × (Net Income÷Sales) × (Assets÷Equity)</div>
+      </div>
+      <div class="def-grid">
+        <div class="def-card">
+          <div class="def-term">⚙️ TATO — Total Asset Turnover</div>
+          <div class="def-meaning">Sales generated per rupee of assets. Measures how efficiently assets are being used to generate revenue.</div>
+          <div class="def-example">
+            TATO = Sales ÷ Assets<br>
+            ITC: ₹76,840 ÷ ₹91,826 = <strong>0.84×</strong><br>
+            Low TATO is normal for asset-heavy companies.
+          </div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">💰 PM — Profit Margin</div>
+          <div class="def-meaning">How much profit survives from each rupee of sales after all costs. Measures pricing power and cost control.</div>
+          <div class="def-example">
+            PM = Net Income ÷ Sales<br>
+            ITC: ₹20,751 ÷ ₹76,840 = <strong>27%</strong><br>
+            High PM means strong brand / pricing power.
+          </div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">🏦 EM — Equity Multiplier</div>
+          <div class="def-meaning">How much of the asset base is funded by equity. Higher EM = more leverage (debt used). Financial lever.</div>
+          <div class="def-example">
+            EM = Assets ÷ Equity<br>
+            ITC: ₹91,826 ÷ ₹74,889 = <strong>1.23×</strong><br>
+            ITC's EM is very low — almost no debt leverage.
+          </div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">🔢 ITC DuPont Check</div>
+          <div class="def-meaning">Multiply all three factors — should equal ROE.</div>
+          <div class="def-example">
+            TATO × PM × EM<br>
+            = 0.84 × 0.27 × 1.23<br>
+            = <strong>≈ 27% ✓</strong> (matches ROE)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">What to Do When ROE is Too Low?</div>
+      <table class="cmp-table">
+        <thead><tr><th>Factor Low?</th><th>Root Cause</th><th>Solutions</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>📉 TATO too low</td>
+            <td>Not getting enough revenue from assets — under-utilised capacity</td>
+            <td>Price discounts, better advertising, new products, expand distribution</td>
+          </tr>
+          <tr>
+            <td>📉 PM too low</td>
+            <td>Revenue comes in but leaks out as costs — poor cost control or weak pricing</td>
+            <td>Renegotiate with suppliers, reduce COGS, improve employee efficiency, premium pricing</td>
+          </tr>
+          <tr>
+            <td>📉 EM too low</td>
+            <td>Capital structure not optimised — company may be too equity-heavy and under-leveraged</td>
+            <td>Increase debt use, repurchase shares, reduce retained earnings (pay more dividends)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Business Model Matrix — PM vs. TATO Trade-off</div>
+      <div class="analogy">
+        <span class="analogy-icon">🗺️</span>
+        Across 238 industries studied over 30 years, a clear pattern emerges: <strong>High Margin companies tend to have Low Turnover</strong>, and vice versa. Both paths can lead to similar ROA — just via different routes. The key insight: you can't compare margins across industries in isolation.
+      </div>
+      <table class="cmp-table">
+        <thead><tr><th>Business Type</th><th>Profit Margin</th><th>Asset Turnover</th><th>Examples</th></tr></thead>
+        <tbody>
+          <tr><td>Unique / Service</td><td>🔴 HIGH</td><td>🔵 LOW</td><td>Hospitals, utilities, petroleum pipelines, ITC cigarettes</td></tr>
+          <tr><td>Competitive / FMCG</td><td>🔵 LOW</td><td>🔴 HIGH</td><td>Grocery stores, wholesale, food retail, FMCG</td></tr>
+          <tr><td>Luxury / Lifestyle</td><td>🔴 HIGH</td><td>🔴 HIGH</td><td>Apple iPhone, diamonds, luxury brands — rare &amp; powerful</td></tr>
+          <tr><td>Struggling</td><td>🔵 LOW</td><td>🔵 LOW</td><td>Commoditised businesses with no pricing power — avoid</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="block">
+      <div class="block-label">5-Factor DuPont — Going Deeper</div>
+      <div class="analogy">
+        <span class="analogy-icon">🔭</span>
+        The 3-factor model groups all profitability into "Profit Margin." The 5-factor model <em>splits</em> that margin into: Operating Efficiency + Non-Operating Items + Tax Efficiency. This is more useful when comparing companies with different tax rates or significant non-operating income.
+      </div>
+      <div class="equation">
+        <div class="eq-label">5-Factor DuPont</div>
+        <div class="eq-main">ROE = Leverage × TATO × Operating Margin × Non-Op Ratio × Tax Effect</div>
+        <div class="eq-note">(Assets÷Equity) × (Sales÷Assets) × (EBIT÷Sales) × (EBT÷EBIT) × (PAT÷EBT)</div>
+      </div>
+      <div class="def-grid">
+        <div class="def-card">
+          <div class="def-term">Operating Margin</div>
+          <div class="def-meaning">EBIT ÷ Revenue. Profit from pure operations before interest/tax. Captures core business efficiency.</div>
+          <div class="def-example">ITC: ₹27,147 ÷ ₹76,840 = 35.3% operating margin</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">Non-Operating Ratio</div>
+          <div class="def-meaning">EBT ÷ EBIT. Shows impact of interest expense. If &lt;1, the company is paying significant interest costs.</div>
+          <div class="def-example">ITC: ~₹27,140 ÷ ₹27,147 ≈ 1.0 — virtually no interest drag (almost no debt)</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">Tax Effect</div>
+          <div class="def-meaning">PAT ÷ EBT = (1 − effective tax rate). Shows how much of pre-tax profit survives taxation.</div>
+          <div class="def-example">ITC: PAT ₹20,751 ÷ PBT ₹27,140 = 76.5% retained → effective tax rate ≈ 23.5%</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">Why Use 5-Factor?</div>
+          <div class="def-meaning">When two companies look similar on 3-factor, the 5-factor reveals hidden differences in tax efficiency or interest burden.</div>
+          <div class="def-example">Comparing Infosys vs ITC: Infosys has minimal assets but high margins; ITC has high assets but also high margins — 5-factor makes this visible.</div>
+        </div>
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════ 11 — GROWTH RATES ══════ -->
+  <section class="section" id="growth">
+    <div class="section-header">
+      <div class="section-stripe stripe-grn"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Session 2 · Section 11</div>
+        <div class="section-title">Growth Rates — How Fast Can a Company Grow?</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Retention Ratio — Fuel for Growth</div>
+      <div class="analogy">
+        <span class="analogy-icon">🌱</span>
+        A company earns profit. It can either <strong>pay it out</strong> as dividends (shareholders take cash) or <strong>keep it</strong> (retained earnings reinvested into the business). The fraction kept is the <em>retention ratio</em> — it's the fuel that powers internal growth.
+      </div>
+      <div class="equation">
+        <div class="eq-label">Retention Ratio (b)</div>
+        <div class="eq-main">b = 1 − Payout Ratio = 1 − (DPS ÷ EPS)</div>
+        <div class="eq-note">DPS = Dividend Per Share · EPS = Earnings Per Share · b = fraction of profit kept</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Two Types of Growth Rate</div>
+      <div class="ratio-grid">
+        <div class="ratio-card">
+          <div class="ratio-name">🏠 Internal Growth Rate</div>
+          <div class="ratio-formula">= (ROA × b) ÷ (1 − ROA × b)</div>
+          <div class="ratio-example">
+            <strong>What it means:</strong> The maximum rate the company can grow using <em>only its own profits</em> — no new external debt or equity raised.<br><br>
+            <strong>Analogy:</strong> Like growing a business purely by reinvesting your own salary — no bank loans, no investors.<br><br>
+            Most restrictive growth estimate. Good baseline for conservative planning.
+          </div>
+        </div>
+        <div class="ratio-card">
+          <div class="ratio-name">🚀 Sustainable Growth Rate</div>
+          <div class="ratio-formula">= (ROE × b) ÷ (1 − ROE × b)</div>
+          <div class="ratio-example">
+            <strong>What it means:</strong> The maximum rate the company can grow while: (1) not issuing new equity, and (2) keeping the same debt-to-equity ratio.<br><br>
+            <strong>Analogy:</strong> You reinvest profits AND take on proportionally more bank debt — but keep the balance between your own money and borrowed money the same.<br><br>
+            Always <em>higher</em> than internal growth rate because ROE &gt; ROA for any leveraged firm.
+          </div>
+        </div>
+      </div>
+      <div class="callout callout-grn">
+        <strong>Key Difference:</strong> Internal Growth Rate uses ROA (all assets, no new funding). Sustainable Growth Rate uses ROE (equity base grows, debt grows proportionally alongside). The only formula difference is ROA vs ROE in the numerator — but the implication is significant.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Why Growth Rates Matter for Investors</div>
+      <div class="power-lines">
+        <div class="power-line pl-grn">
+          <em>Forecasting shareholder value</em> requires forecasting profitability (ROE) and growth (sustainable rate). These two together — not just current P/E — determine whether a stock is truly cheap or expensive.
+        </div>
+        <div class="power-line pl-blue">
+          <em>Sustainable growth rate is used in dividend discount models</em> to normalise long-term growth assumptions — especially for years beyond the 5-year detailed forecast period.
+        </div>
+        <div class="power-line pl-gld">
+          <em>A company growing faster than its sustainable rate</em> is either borrowing more (increasing leverage risk), diluting shareholders (issuing new shares), or both. Watch out.
+        </div>
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════ 12 — ANALYSIS TOOLS ══════ -->
+  <section class="section" id="analysis-tools">
+    <div class="section-header">
+      <div class="section-stripe stripe-blue"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Session 2 · Section 12</div>
+        <div class="section-title">Analysis Tools &amp; Building Blocks</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Six Building Blocks of Financial Analysis</div>
+      <div class="def-grid">
+        <div class="def-card">
+          <div class="def-term">1. 💧 Short-Term Liquidity</div>
+          <div class="def-meaning">Can the company pay its bills due within the year? Measured by current ratio, quick ratio.</div>
+          <div class="def-example">ITC: Current Assets ₹41,066 vs Current Liabilities ₹13,690 → ratio 3:1. Very liquid.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">2. 💸 Cash Flow Analysis</div>
+          <div class="def-meaning">Future availability of cash. Is profit converting to real cash? Is the company generating or consuming cash?</div>
+          <div class="def-example">Strong operating cash flow = healthy business. Negative = warning sign even if P&amp;L looks good.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">3. 🏗️ Capital Structure &amp; Solvency</div>
+          <div class="def-meaning">Long-term ability to meet debt obligations. How much debt vs equity? Can it sustain?</div>
+          <div class="def-example">ITC: Debt = ₹300 Cr vs Equity = ₹75,000 Cr. Debt-to-equity ≈ 0.004. Extremely safe.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">4. 📈 Return on Investment</div>
+          <div class="def-meaning">Financial rewards to providers of capital. ROE for shareholders, ROCE for all capital providers.</div>
+          <div class="def-example">ITC ROE = 27%, ROCE = 36%. Both strong — management is using capital productively.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">5. ⚙️ Asset Utilisation</div>
+          <div class="def-meaning">How intensively are assets deployed to generate revenue? Asset turnover ratios.</div>
+          <div class="def-example">ITC TATO = 0.84× — asset-heavy FMCG company. Compare with Infosys (IT = asset-light, high TATO).</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">6. 🎯 Operating Performance</div>
+          <div class="def-meaning">Maximising revenue, minimising expenses over the long term. Margin trends.</div>
+          <div class="def-example">ITC operating margin ~35%. Stable over years = well-managed, predictable business.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Analytical Dimensions — Four Ways to Compare</div>
+      <table class="cmp-table">
+        <thead><tr><th>Method</th><th>What it Compares</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td>Single Firm Over Time</td><td>Company vs. its own past. Are things improving or declining?</td><td>ITC FY24 ROE 27% vs FY23 ROE 25% — improving</td></tr>
+          <tr><td>vs. Predetermined Standard</td><td>Company vs. industry average or benchmark target</td><td>ITC ROE 27% vs FMCG industry average ROE ~20%</td></tr>
+          <tr><td>Inter-Firm (Cross-Sectional)</td><td>One firm vs. a specific competitor</td><td>ITC vs HUL vs Nestle on P/E, ROE, Operating Margin</td></tr>
+          <tr><td>Intra-Firm (Divisional)</td><td>One division of a company vs. another division</td><td>ITC cigarettes division ROE vs ITC hotels division ROE</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Analysis Tools Toolkit</div>
+      <div class="cf-row">
+        <div class="cf-circle cf-ops">
+          <span class="cf-emoji">📅</span>
+          <div class="cf-name">Year-to-Year Analysis</div>
+          <div class="cf-desc">Compare 2–3 years side by side. Show both absolute ₹ change and % change. Flag unusual spikes.</div>
+        </div>
+        <div class="cf-circle cf-inv">
+          <span class="cf-emoji">📊</span>
+          <div class="cf-name">Index Trend Analysis</div>
+          <div class="cf-desc">Set base year = 100. All other years are expressed as % of base. Reveals long-term directional trends over 5–10 years.</div>
+        </div>
+        <div class="cf-circle cf-fin">
+          <span class="cf-emoji">🔢</span>
+          <div class="cf-name">Common Size Analysis</div>
+          <div class="cf-desc">Express every P&amp;L line as % of Revenue, every Balance Sheet item as % of Total Assets. Makes companies of different sizes comparable.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Cautions When Using Ratios</div>
+      <div class="power-lines">
+        <div class="power-line pl-red">
+          <em>Same period, same accounting policies:</em> Only compare companies using the same depreciation method, inventory valuation, and reporting period. Different policies make ratios misleading.
+        </div>
+        <div class="power-line pl-blue">
+          <em>Always use a group of ratios, never just one:</em> A high P/E with low ROE tells a very different story than high P/E with high ROE. Need at least 3 years of data for trends.
+        </div>
+        <div class="power-line pl-gld">
+          <em>Ratios are backward-looking:</em> They reflect past performance. They are a starting point, not a crystal ball. Always read the MD&amp;A (Management Discussion &amp; Analysis) to understand forward intent.
+        </div>
+        <div class="power-line pl-grn">
+          <em>Look beyond the numbers:</em> Read footnotes, understand accounting policies, and consult the MD&amp;A. Ratios without context are dangerous — a company can manipulate earnings while ratios look fine.
+        </div>
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+
+
+  <!-- ══════ S3-13 — WACC & COST OF CAPITAL ══════ -->
+  <section class="section" id="wacc">
+    <div class="section-header">
+      <div class="section-stripe stripe-blue"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Session 3 · Section 13 · 10 May 2025</div>
+        <div class="section-title">WACC — The Hurdle Rate Every Project Must Clear</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Core Idea</div>
+      <div class="analogy">
+        <span class="analogy-icon">🏃</span>
+        Every business gets its money from two sources — owners (equity) and banks (debt). Both have a cost. <strong>WACC (Weighted Average Cost of Capital)</strong> is the blended cost of all the capital a company uses. Think of it as the minimum return a project must earn — otherwise it's destroying value rather than creating it.
+      </div>
+      <div class="callout callout-blue">
+        <strong>The Golden Rule:</strong> If <em>ROCE &gt; WACC</em>, the project creates value → Accept it. If <em>ROCE &lt; WACC</em>, the project destroys value → Reject it.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Why Debt is Cheaper Than Equity (After Tax)</div>
+      <div class="analogy">
+        <span class="analogy-icon">🧾</span>
+        <strong>Interest is tax-deductible.</strong> When a company pays interest on a loan, the government effectively subsidises part of it — because interest reduces taxable income, which reduces tax paid. This "tax shield" makes debt cheaper than its headline rate.<br><br>
+        <strong>After-Tax Cost of Debt = Interest Rate × (1 − Tax Rate)</strong><br>
+        Example: 10% loan with 30% tax rate → real cost = 10% × 0.70 = <strong>7%</strong>. The government pays the other 3%.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">WACC Calculation — Step by Step (Class Example)</div>
+      <div class="equation">
+        <div class="eq-label">WACC Formula</div>
+        <div class="eq-main">WACC = (Debt Weight × After-Tax Debt Cost) + (Equity Weight × Equity Cost)</div>
+        <div class="eq-note">Weights = proportion of each in total capital. After-tax debt cost = rate × (1 − tax rate).</div>
+      </div>
+      <div class="bs-visual">
+        <div class="bs-side">
+          <div class="bs-header assets">Project (₹100 Cr Total)</div>
+          <div class="bs-row"><span>Debt</span><span class="bs-value">₹40 Cr @ 10%</span></div>
+          <div class="bs-row"><span>Equity</span><span class="bs-value">₹60 Cr @ 15%</span></div>
+          <div class="bs-row"><span>Tax Rate</span><span class="bs-value">30%</span></div>
+          <div class="bs-row"><span>After-tax debt cost</span><span class="bs-value">10% × 0.70 = 7%</span></div>
+        </div>
+        <div class="bs-side">
+          <div class="bs-header equity">WACC Calculation</div>
+          <div class="bs-row"><span>Debt weight</span><span class="bs-value grn">40/100 = 0.40</span></div>
+          <div class="bs-row"><span>Equity weight</span><span class="bs-value grn">60/100 = 0.60</span></div>
+          <div class="bs-row"><span>Debt contribution</span><span class="bs-value">7% × 0.40 = 2.8%</span></div>
+          <div class="bs-row"><span>Equity contribution</span><span class="bs-value">15% × 0.60 = 9.0%</span></div>
+          <div class="bs-row total-row"><span>WACC</span><span class="bs-value">2.8% + 9.0% = <mark>11.8%</mark></span></div>
+        </div>
+      </div>
+      <div class="callout callout-grn">
+        <strong>Interpretation:</strong> This project must earn at least 11.8% (ROCE) to justify its funding cost. If ROCE = 15%, project adds value. If ROCE = 9%, it destroys value — the returns don't even cover what was promised to lenders and shareholders.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">NOPAT — The Right Numerator for ROCE</div>
+      <div class="analogy">
+        <span class="analogy-icon">⚙️</span>
+        <strong>NOPAT (Net Operating Profit After Tax)</strong> is the profit from operations only — stripping out the effect of how the company is financed. Since ROCE measures return on all capital (debt + equity), we need a profit figure that's neutral to financing decisions.
+      </div>
+      <div class="equation">
+        <div class="eq-label">Two Ways to Calculate NOPAT</div>
+        <div class="eq-main">NOPAT = PAT + Interest × (1 − Tax Rate)   OR   NOPAT = EBIT × (1 − Tax Rate)</div>
+        <div class="eq-note">ITC: NOPAT = ₹20,751 + ₹45.96 × (1−0.24) = ₹20,751 + ₹35 ≈ ₹20,786 Cr</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">EBITDA, EBIT, and the Debt Tax Shield — Class Numerical</div>
+      <table class="cmp-table">
+        <thead><tr><th>Line Item</th><th>With Debt (₹40 debt)</th><th>No Debt</th><th>Insight</th></tr></thead>
+        <tbody>
+          <tr><td>Revenue</td><td>100</td><td>100</td><td>Same business operations</td></tr>
+          <tr><td>Costs</td><td>50</td><td>50</td><td>Same operating costs</td></tr>
+          <tr><td>Depreciation</td><td>10</td><td>10</td><td>Non-cash, tax-deductible</td></tr>
+          <tr><td>EBIT</td><td>40</td><td>40</td><td>Same — financing doesn't affect operations</td></tr>
+          <tr><td>Interest</td><td>4</td><td>0</td><td>Debt has a cost; also reduces taxable income</td></tr>
+          <tr><td>EBT</td><td>36</td><td>40</td><td>Lower taxable income with debt</td></tr>
+          <tr><td>Tax (30%)</td><td>10.8</td><td>12</td><td><strong>Debt saved ₹1.2 in tax</strong> — the tax shield</td></tr>
+          <tr><td>PAT</td><td>25.2</td><td>28</td><td>Less PAT with debt (interest paid out)</td></tr>
+          <tr><td><strong>ROE</strong></td><td><strong>42%</strong></td><td><strong>28%</strong></td><td>Leverage boosted ROE (but also risk)</td></tr>
+          <tr><td><strong>ROCE (NOPAT basis)</strong></td><td><strong>28%</strong></td><td><strong>28%</strong></td><td>Same — ROCE is financing-neutral ✓</td></tr>
+          <tr><td>EBITDA</td><td>50</td><td>50</td><td>Identical — truly operations-only metric</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-gld">
+        <strong>Key Takeaway:</strong> EBITDA and ROCE (NOPAT-based) are the same regardless of debt level — they're pure operational measures. ROE is higher with debt (leverage effect) but so is risk. This is why ROCE is a better measure for comparing companies with different capital structures.
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════ S3-14 — OPERATING DUPONT ══════ -->
+  <section class="section" id="op-dupont">
+    <div class="section-header">
+      <div class="section-stripe stripe-red"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Session 3 · Section 14</div>
+        <div class="section-title">Operating DuPont — Separating Operations from Finance</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Problem with Traditional DuPont</div>
+      <div class="analogy">
+        <span class="analogy-icon">🔍</span>
+        The 3-factor DuPont (PM × TATO × EM) mixes two different things: <strong>how well the business operates</strong> (PM and TATO) and <strong>how the business is financed</strong> (EM). This is a problem when comparing two companies — one may look better simply because it borrowed more, not because it operates better. The solution: separate them cleanly.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Operating vs. Financial Split</div>
+      <div class="def-grid">
+        <div class="def-card">
+          <div class="def-term">⚙️ Operating Assets</div>
+          <div class="def-meaning">Assets directly used in running the business — inventory, receivables, plant, equipment. Exclude cash and investments held for financial reasons.</div>
+          <div class="def-example">ITC operating assets = Total Assets minus excess cash and short-term investments not needed for operations.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">💰 Non-Operating Assets</div>
+          <div class="def-meaning">Assets held for investment/treasury purposes — surplus cash, marketable securities, equity investments in other companies.</div>
+          <div class="def-example">ITC holds ₹12,944 Cr in short-term investments + ₹17,620 Cr in long-term investments — significant non-operating assets.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">📈 Operating Income</div>
+          <div class="def-meaning">Revenue and profit from core operations only. Excludes interest income, investment gains, and other non-core items.</div>
+          <div class="def-example">ITC Revenue from Operations = ₹76,840 Cr (core). Other Income = ₹2,728 Cr (non-operating — investment returns etc.).</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">📊 Operating PM &amp; ATR</div>
+          <div class="def-meaning">Calculated using only operating income and operating assets — removes financial noise for a pure view of operational efficiency.</div>
+          <div class="def-example">Op. PM = Operating Profit ÷ Operating Revenue<br>Op. ATR = Operating Revenue ÷ Operating Assets</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Modified (Operating) DuPont Formula</div>
+      <div class="equation">
+        <div class="eq-label">Operating DuPont</div>
+        <div class="eq-main">Op. ROE = Op. PM × Op. ATR × Op. EM</div>
+        <div class="eq-note">Where all three use operating figures only. Op. ROA = Op. PM × Op. ATR (pure operational engine, no financing effect)</div>
+      </div>
+      <div class="callout callout-red">
+        <strong>Why this matters:</strong> It is <em>Operating ROE</em> that creates long-term value for shareholders — not ROE inflated by financial leverage. A company that boosts ROE purely by taking on debt hasn't improved its business; it's just increased risk.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Ahold vs. Tesco — The Classic Case Study</div>
+      <div class="analogy">
+        <span class="analogy-icon">🛒</span>
+        Two European grocery retailers. Same ROE on the surface. But the stock market values Ahold significantly higher. Why? The Operating DuPont reveals the hidden truth.
+      </div>
+      <table class="cmp-table">
+        <thead><tr><th>Metric</th><th>Ahold</th><th>Tesco</th><th>What It Means</th></tr></thead>
+        <tbody>
+          <tr><td>ROE (3-year avg)</td><td>17.3%</td><td>17.8%</td><td>Nearly identical — traditional DuPont says "same performance"</td></tr>
+          <tr><td>Profit Margin (PM)</td><td>🔵 LOW</td><td>🔴 HIGH</td><td>Tesco keeps more per ₹ of sales</td></tr>
+          <tr><td>Asset Turnover (ATR)</td><td>🔴 HIGH</td><td>🔵 LOW</td><td>Ahold sweats its assets harder — more sales per ₹ of asset</td></tr>
+          <tr><td>Equity Multiplier (EM)</td><td>🔵 LOWER</td><td>🔴 HIGHER</td><td>Tesco uses more debt — higher ROE via leverage, not operations</td></tr>
+          <tr><td><strong>Operating ROA</strong></td><td><strong>Higher ✓</strong></td><td><strong>Lower</strong></td><td>Ahold's core business is genuinely more efficient</td></tr>
+          <tr><td>Operating Cycle</td><td>Shorter ✓</td><td>Longer</td><td>Ahold converts inventory to cash faster</td></tr>
+          <tr><td>Growth Rate</td><td>Higher ✓</td><td>Lower</td><td>Ahold growing faster</td></tr>
+          <tr><td>Debt Level</td><td>Lower ✓</td><td>Higher</td><td>Ahold is less risky</td></tr>
+          <tr><td><strong>Market Valuation</strong></td><td><strong>Higher ✓</strong></td><td><strong>Lower</strong></td><td>Market correctly sees Ahold as better despite same ROE</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-grn">
+        <strong>The Lesson:</strong> Tesco's higher EM (more debt) masked its weaker operations. Once you strip out financial strategy and look at Op. ROA only — Ahold wins clearly. <em>The stock market looked through the accounting and priced quality correctly.</em> Always dig beyond headline ROE.
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════ S3-15 — WORKING CYCLE ══════ -->
+  <section class="section" id="working-cycle">
+    <div class="section-header">
+      <div class="section-stripe stripe-grn"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Session 3 · Section 15</div>
+        <div class="section-title">The Working Cycle — Cash → Goods → Cash</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">What Is the Working Cycle?</div>
+      <div class="analogy">
+        <span class="analogy-icon">🔄</span>
+        Every business runs on a cycle. You <strong>spend cash</strong> to buy raw materials → convert to finished goods → sell them → collect cash back. The time it takes to complete this loop is the <em>Operating Cycle</em> or <em>Working Cycle</em>. <strong>Shorter = better</strong>. A shorter cycle means your cash comes back faster and you need less working capital locked in.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Working Cycle — Visualised</div>
+      <div class="flow-row" style="justify-content:center; flex-wrap:wrap; gap:8px; padding:16px; background:var(--paper2); border-radius:8px; border:1px solid var(--border);">
+        <div class="flow-pill pill-blue" style="text-align:center">💵<br>Cash</div>
+        <span class="flow-arr">→</span>
+        <div class="flow-pill pill-gld" style="text-align:center">📦<br>Raw Materials</div>
+        <span class="flow-arr">→</span>
+        <div class="flow-pill pill-grey" style="text-align:center">🏭<br>Work in Progress</div>
+        <span class="flow-arr">→</span>
+        <div class="flow-pill pill-grn" style="text-align:center">🛍️<br>Finished Goods</div>
+        <span class="flow-arr">→</span>
+        <div class="flow-pill pill-red" style="text-align:center">🧾<br>Sales / Debtors</div>
+        <span class="flow-arr">→</span>
+        <div class="flow-pill pill-blue" style="text-align:center">💵<br>Cash Collected</div>
+      </div>
+      <div style="margin-top:10px; font-size:12.5px; color:var(--muted); text-align:center;">
+        Cash sales → immediate. Credit sales → creates Debtors/Receivables → eventually collected back as Cash.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Net Current Assets — The Working Capital Lens</div>
+      <div class="analogy">
+        <span class="analogy-icon">⚖️</span>
+        Working capital is the money "stuck" in the cycle at any point. Too much = inefficient (cash locked in inventory or unpaid invoices). Too little = risky (can't pay suppliers). <strong>Net Current Assets = Current Assets − Current Liabilities</strong>. The goal is to keep this lean without starving operations.
+      </div>
+      <div class="def-grid">
+        <div class="def-card">
+          <div class="def-term">📦 Inventory Days</div>
+          <div class="def-meaning">How many days of stock is sitting in the warehouse. Lower = faster turnover = less cash locked.</div>
+          <div class="def-example">Grocery (Ahold/Tesco): aim for days. Manufacturing (ITC): can be weeks. Shorter = healthier.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">🧾 Receivable Days</div>
+          <div class="def-meaning">How many days before customers pay their invoices. B2B companies often have long receivable days (30–90 days).</div>
+          <div class="def-example">If receivable days = 30, customers take 30 days on average to pay. Cash is stuck for those 30 days.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">🏦 Payable Days</div>
+          <div class="def-meaning">How many days the company takes to pay its own suppliers. Longer payable days = free short-term financing from suppliers.</div>
+          <div class="def-example">If you can stretch paying suppliers to 45 days while collecting from customers in 30 days → net 15 days of "free" credit.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">🔄 Cash Conversion Cycle</div>
+          <div class="def-meaning">= Inventory Days + Receivable Days − Payable Days. The net days cash is tied up. Negative = company gets paid before it pays suppliers (e.g. Amazon).</div>
+          <div class="def-example">Ahold's shorter operating cycle vs Tesco was a key reason the market valued Ahold higher — less cash stuck in the cycle.</div>
+        </div>
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════ S3-16 — ROE STRATEGIES ══════ -->
+  <section class="section" id="strategies">
+    <div class="section-header">
+      <div class="section-stripe stripe-gld"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Session 3 · Section 16</div>
+        <div class="section-title">ROE Strategy Matrix — Three Paths to High ROE</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Framework</div>
+      <div class="analogy">
+        <span class="analogy-icon">🗺️</span>
+        ROE = PM × ATR × EM. Since EM is a financial decision (separate from how you run the business), what really matters for business strategy is how you combine PM and ATR. The class identified <strong>three valid strategies</strong> — and one outcome that is not a strategy at all.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Strategy Matrix</div>
+      <table class="cmp-table">
+        <thead><tr><th>Strategy</th><th>Profit Margin</th><th>Asset Turnover</th><th>Who Does This</th><th>How It Works</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Strategy 1 — Premium</strong></td>
+            <td>🔴 HIGH</td><td>🔵 LOW</td>
+            <td>Luxury goods, hospitals, utilities, ITC cigarettes</td>
+            <td>Charge a premium price. Fewer sales, but each sale is very profitable. High barriers to entry protect margins.</td>
+          </tr>
+          <tr>
+            <td><strong>Strategy 2 — Volume</strong></td>
+            <td>🔵 LOW</td><td>🔴 HIGH</td>
+            <td>Walmart, grocery retail, FMCG, Ahold/Tesco</td>
+            <td>Thin margin per item, but sell enormous volumes. Assets turn over very fast. Win through scale and efficiency.</td>
+          </tr>
+          <tr>
+            <td><strong>Strategy 3 — Dream</strong></td>
+            <td>🔴 HIGH</td><td>🔴 HIGH</td>
+            <td>Apple iPhone, luxury-tech, dominant platforms</td>
+            <td>Unique product with massive demand. Premium pricing AND fast turnover. Extremely rare — requires near-monopoly in a category.</td>
+          </tr>
+          <tr style="opacity:0.6">
+            <td><strong>❌ Not a Strategy</strong></td>
+            <td>🔵 LOW</td><td>🔵 LOW</td>
+            <td>Distressed / commodity-trap companies</td>
+            <td>Low margin AND slow turnover. No pricing power, no efficiency. This is an accident, not a choice. Exit or transform.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="block">
+      <div class="block-label">ITC's Strategy — Revealed by DuPont</div>
+      <div class="power-lines">
+        <div class="power-line pl-red">
+          <em>ITC follows Strategy 1 (Premium):</em> High PM (~27%), relatively low ATR (0.84×). This is typical for an FMCG company with dominant brands and significant capital invested in manufacturing and branding.
+        </div>
+        <div class="power-line pl-gld">
+          <em>ITC's ATR is falling</em> (class note). This signals the asset base is growing faster than revenue — either over-investment, or new businesses (hotels, agri) with long gestation periods before they generate revenue.
+        </div>
+        <div class="power-line pl-blue">
+          <em>Fix for falling ATR:</em> Either improve sales from existing assets (marketing, distribution, new products) OR reduce underperforming assets (divest, optimise net current assets). The first lever is preferred.
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Payout Ratio — The Retention vs. Dividend Decision</div>
+      <div class="analogy">
+        <span class="analogy-icon">💸</span>
+        When a company earns profit, the board decides: how much to <strong>return to shareholders</strong> (dividend) vs. how much to <strong>keep and reinvest</strong> (retained earnings). The payout ratio measures the dividend fraction.
+      </div>
+      <div class="equation">
+        <div class="eq-label">Payout Ratio</div>
+        <div class="eq-main">Payout Ratio = DPS ÷ EPS &nbsp;&nbsp;|&nbsp;&nbsp; Retention Ratio = 1 − Payout Ratio</div>
+        <div class="eq-note">DPS = Dividend Per Share · EPS = Earnings Per Share · Higher payout = more cash to shareholders now, less reinvestment</div>
+      </div>
+      <div class="callout callout-gld">
+        <strong>The tension:</strong> Investors who want current income prefer high payout. Growth investors prefer low payout (reinvest for future growth). A company with an ROE of 27% should reinvest — every rupee retained earns 27%, which is better than most alternatives shareholders have.
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════ S3-17 — ZOMATO CASE STUDY ══════ -->
+  <section class="section" id="zomato">
+    <div class="section-header">
+      <div class="section-stripe stripe-blue"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Session 3 · Section 17 · Case Study</div>
+        <div class="section-title">Zomato (Eternal Ltd.) — When DuPont Breaks Down</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Problem with Valuing Loss-Making Companies</div>
+      <div class="analogy">
+        <span class="analogy-icon">🍕</span>
+        <strong>Zomato (now Eternal Ltd.)</strong> was listed at a massive valuation despite making losses for years. Traditional metrics — P/E, ROE, DuPont — all fail when a company has negative earnings. Yet investors valued it highly. How?
+      </div>
+      <div class="callout callout-red">
+        <strong>The DuPont breakdown:</strong> When a company is loss-making, its Profit Margin is negative. A negative PM × positive ATR × positive EM = negative ROE. All three DuPont ratios become distorted or meaningless. Traditional analysis cannot be applied.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Zomato's DuPont — The Numbers Tell the Story</div>
+      <div class="analogy">
+        <span class="analogy-icon">📉</span>
+        The Zomato DuPont file (DR. SESHADEV SAHOO's model) tracks <strong>5-factor DuPont</strong> from FY2018–FY2020 and beyond under the columns: NP/PBT, PBT/EBIT, EBIT/Sales, Sales/Assets, Assets/Equity. Key observation from the data: values like <strong>−0.22, −1.71, −0.91, −1.68, −168%</strong> — all negative, confirming deep losses across the pre-IPO years.
+      </div>
+      <table class="cmp-table">
+        <thead><tr><th>DuPont Factor</th><th>What It Measures</th><th>Zomato (Loss Years)</th><th>What It Signals</th></tr></thead>
+        <tbody>
+          <tr><td>NP / PBT (Tax Effect)</td><td>PAT ÷ Pre-tax profit</td><td>Negative / distorted</td><td>No meaningful tax position — losses create deferred tax</td></tr>
+          <tr><td>PBT / EBIT (Non-op Ratio)</td><td>Effect of interest/other income</td><td>Negative</td><td>Interest costs amplify losses</td></tr>
+          <tr><td>EBIT / Sales (Op. Margin)</td><td>Operational profitability</td><td>Deeply negative</td><td>Core business spending more than earning — investing phase</td></tr>
+          <tr><td>Sales / Assets (TATO)</td><td>Asset efficiency</td><td>Very low</td><td>Massive asset base relative to early-stage revenues</td></tr>
+          <tr><td>Assets / Equity (Leverage)</td><td>Financial structure</td><td>High</td><td>VC/equity-funded initially; leverage amplifies losses</td></tr>
+          <tr><td><strong>ROE</strong></td><td>Shareholder return</td><td><strong>Massively negative</strong></td><td>Not useful for valuation at this stage</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="block">
+      <div class="block-label">So How Do You Value Zomato?</div>
+      <div class="def-grid">
+        <div class="def-card">
+          <div class="def-term">📊 GMV (Gross Merchandise Value)</div>
+          <div class="def-meaning">Total value of orders placed on the platform — not Zomato's revenue, but a measure of scale and market reach.</div>
+          <div class="def-example">High GMV growth signals network effects even when profits are negative. Investors pay for GMV trajectory.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">👤 Unit Economics (Per Order)</div>
+          <div class="def-meaning">Revenue per order vs. cost per order (delivery, customer acquisition). Is each order getting closer to profitability?</div>
+          <div class="def-example">Contribution margin per order improving year-on-year = path to profitability is visible. This is what investors track.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">📈 Revenue CAGR</div>
+          <div class="def-meaning">Even if losing money, fast revenue growth shows the business is capturing market share. Investors project future profitability on current growth.</div>
+          <div class="def-example">Zomato's revenue grew explosively even through losses — justifying the high IPO valuation on future potential.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">🔮 Price-to-Sales (P/S) Ratio</div>
+          <div class="def-meaning">When P/E doesn't work (no earnings), P/S = Market Cap ÷ Revenue. Used for high-growth loss-making companies.</div>
+          <div class="def-example">Zomato was valued at very high P/S multiples — investors pricing in future profitability, not current earnings.</div>
+        </div>
+      </div>
+      <div class="callout callout-blue">
+        <strong>The Big Lesson:</strong> Classical DuPont and ratio analysis work well for mature, profitable companies like ITC. For early-stage, high-growth, loss-making companies like Zomato, you need different tools: unit economics, GMV, CAGR, P/S, and path-to-profitability analysis. <em>Always match the analysis tool to the company's stage.</em>
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  
+  <!-- ────── S4-18 – COST OBJECTS & CLASSIFICATION ────── -->
+  <section class="section" id="s4-costs">
+    <div class="section-header">
+      <div class="section-stripe stripe-grn"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Session 4 &middot; Section 18 &middot; 17 May 2025</div>
+        <div class="section-title">Understanding Costs &mdash; Objects, Types &amp; Classification</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Why Management Needs Cost Information</div>
+      <div class="analogy">
+        <span class="analogy-icon">🎯</span>
+        <strong>Financial Accounting tells you the final score. Management Accounting tells you the play-by-play.</strong>
+        Published financial statements show total revenue and total profit &mdash; but they can&rsquo;t answer: <em>Which product line is profitable? Which department is wasteful? Which process is over budget?</em> That&rsquo;s the job of Cost Analysis.
+      </div>
+      <div class="analogy">
+        <span class="analogy-icon">🚗</span>
+        <strong>The GM Lesson (2009):</strong> General Motors filed for bankruptcy after nearly 80 years as the world&rsquo;s largest automaker. The culprit was <em>massive fixed costs</em> &mdash; union contracts locked GM into paying pensions and health benefits for retired workers even when car sales collapsed. Variable costs fell with volume; fixed costs did not. Revenue shrank; losses exploded. Understanding your cost structure is literally a survival skill.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">What Is a Cost Object?</div>
+      <div class="analogy">
+        <span class="analogy-icon">🔍</span>
+        A <strong>cost object</strong> is anything for which you want to measure cost separately. At Maruti Suzuki&rsquo;s Gurgaon plant making Baleno alongside other models, cost objects exist at many levels simultaneously.
+      </div>
+      <div class="def-grid">
+        <div class="def-card">
+          <div class="def-term">🚗 Product: Baleno</div>
+          <div class="def-meaning">How much does it cost to produce one Baleno? Includes all materials, direct labour, and allocated factory overhead.</div>
+          <div class="def-example">Steel, tires, glass, radio + proportionate share of plant supervision and rent.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">📞 Service: Dealer Hotline</div>
+          <div class="def-meaning">The telephone helpline for MSIL dealers. Monthly cost to run? Staff + telecom + IT.</div>
+          <div class="def-example">Useful for pricing the service to dealers or deciding whether to outsource it.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">🧪 Project: R&amp;D</div>
+          <div class="def-meaning">A specific R&amp;D project on enhancing the DVD system. Total project cost = engineer hours + prototypes + testing.</div>
+          <div class="def-example">Helps decide whether to continue or kill a project based on cost vs. expected value.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">🏢 Department: EHS</div>
+          <div class="def-meaning">The Environmental, Health &amp; Safety department. What does compliance cost the plant annually?</div>
+          <div class="def-example">Staff salaries + equipment + regulatory training + audit costs.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Cost Assignment: Tracing vs Allocating</div>
+      <div class="flow-row">
+        <div class="flow-pill pill-blue">Identify Cost Object</div>
+        <span class="flow-arr">&rarr;</span>
+        <div class="flow-pill pill-grn">Accumulate Costs</div>
+        <span class="flow-arr">&rarr;</span>
+        <div class="flow-pill pill-gld">Assign: Trace Direct / Allocate Indirect</div>
+        <span class="flow-arr">&rarr;</span>
+        <div class="flow-pill pill-red">Cost of Object</div>
+      </div>
+      <div class="callout callout-grn">
+        <strong>Tracing vs Allocating:</strong>
+        <em>Tracing</em> = direct, economically feasible link. The tire requisition form directly links tires to Baleno.
+        <em>Allocating</em> = indirect, shared cost split by a basis (workers per model, units produced). The plant lease covers all models &mdash; MSIL allocates it proportionally.
+        Inaccurate allocation misleads managers about which products are truly profitable.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Manufacturing vs Non-Manufacturing Costs</div>
+      <table class="cmp-table">
+        <thead><tr><th>Category</th><th>Sub-type</th><th>Examples at MSIL</th></tr></thead>
+        <tbody>
+          <tr><td>Direct Material</td><td>Manufacturing</td><td>Steel, tires, glass &mdash; physically part of the finished car, traceable to each unit</td></tr>
+          <tr><td>Direct Labour</td><td>Manufacturing</td><td>Assembly line workers (&ldquo;touch labour&rdquo;) &mdash; can be traced to specific units</td></tr>
+          <tr><td>Manufacturing Overhead</td><td>Manufacturing (Indirect)</td><td>Plant supervisor salaries, janitors, plant rent, machine depreciation, factory power</td></tr>
+          <tr><td>Selling Costs</td><td>Non-manufacturing</td><td>Advertising, sales rep salaries, showroom rent, delivery freight</td></tr>
+          <tr><td>Administrative Costs</td><td>Non-manufacturing</td><td>CEO salary, accounting, auditing, stationery, office equipment depreciation</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-blue">
+        <strong>Key rule:</strong> Income tax, dividends to shareholders, and partner commissions are <em>not product costs</em> &mdash; they are appropriations of profit. Never include them in cost-per-unit calculations.
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ────── S4-19 – VARIABLE VS FIXED COSTS ────── -->
+  <section class="section" id="s4-directvar">
+    <div class="section-header">
+      <div class="section-stripe stripe-red"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Session 4 &middot; Section 19</div>
+        <div class="section-title">Variable vs Fixed Costs &mdash; Behaviour Patterns</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Two Dimensions of Cost Classification</div>
+      <table class="cmp-table">
+        <thead><tr><th>Dimension</th><th>Type A</th><th>Type B</th><th>The Question</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Assignment</strong></td><td>Direct (traceable)</td><td>Indirect (shared / overhead)</td><td>Can I tie this cost to one product without guessing?</td></tr>
+          <tr><td><strong>Behaviour</strong></td><td>Variable (changes with volume)</td><td>Fixed (constant regardless of volume)</td><td>Does this cost rise or fall if I produce more units?</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-gld">
+        <strong>These dimensions are independent.</strong> Supervisor salary on the Baleno line is <em>Direct</em> (only Baleno) but <em>Fixed</em> (doesn&rsquo;t change with daily production). Plant-wide power is <em>Indirect</em> (shared) but <em>Variable</em> (more production = more electricity).
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Variable Cost &mdash; Constant Per Unit, Changes in Total</div>
+      <div class="analogy">
+        <span class="analogy-icon">📈</span>
+        Each Baleno needs 4 tires. Tires cost &rsquo;1,000 each. Make 10,000 Balenos &rarr; total tire cost = &rsquo;4 Cr. Make 20,000 &rarr; &rsquo;8 Cr. But cost <em>per Baleno</em> is always &rsquo;4,000. That&rsquo;s the nature of variable cost: <strong>total moves, per unit stays constant.</strong>
+      </div>
+      <div class="equation">
+        <div class="eq-label">Variable Cost Total</div>
+        <div class="eq-main">Total Variable Cost = VC per unit &times; Number of Units Produced</div>
+        <div class="eq-note">Class: VC = &rsquo;22/unit (Materials &rsquo;11 + Labour &rsquo;8 + Variable OH &rsquo;3). At 10,000 units: Total VC = &rsquo;2,20,000.</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Fixed Cost &mdash; Constant in Total, Falls Per Unit as Volume Rises</div>
+      <div class="analogy">
+        <span class="analogy-icon">🏢</span>
+        The Gurgaon plant pays &rsquo;60,000/year in fixed supervision. Whether MSIL makes 7,000 or 12,000 Balenos, the salary bill is &rsquo;60,000. But per car: at 7,000 = &rsquo;8.57; at 10,000 = &rsquo;6; at 12,000 = &rsquo;5. More production spreads the fixed cost thinner &mdash; that&rsquo;s <strong>scale economy</strong>.
+      </div>
+      <div class="def-grid">
+        <div class="def-card">
+          <div class="def-term">🔒 Committed Fixed Costs</div>
+          <div class="def-meaning">Long-term obligations that can&rsquo;t be escaped. Building depreciation, plant leases, insurance, senior management salaries.</div>
+          <div class="def-example">GM&rsquo;s pension commitments: couldn&rsquo;t cut them even in a crisis. Filed for bankruptcy 2009 because committed FC was unmovable while revenue collapsed.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">📝 Discretionary Fixed Costs</div>
+          <div class="def-meaning">Annual management decisions: advertising, R&amp;D, management training, internship programmes. Can be adjusted year to year.</div>
+          <div class="def-example">A construction company can cut its advertising in a slow year. Unlike rent, this is manageable. Management strategy determines the level.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">Mixed / Semi-Variable Costs</div>
+          <div class="def-meaning">Contain both a fixed floor and a variable portion. Apollo Hospital X-ray department: radiologist salary is fixed; X-ray film and power per scan are variable.</div>
+          <div class="def-example">Indian Airlines maintenance: mechanics on payroll (fixed) + replacement parts per flight hour (variable).</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">📊 Relevant Range</div>
+          <div class="def-meaning">The band of output levels within which cost assumptions hold. Outside this range, fixed costs may jump (need new factory) or variable cost rates change.</div>
+          <div class="def-example">If MSIL&rsquo;s Gurgaon plant capacity tops out at 15,000 Balenos/month, producing 16,000 means leasing more space &mdash; fixed costs jump to a new level.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Cost Drivers</div>
+      <div class="analogy">
+        <span class="analogy-icon">🔧</span>
+        A <strong>cost driver</strong> is the factor that <em>causally</em> makes a cost increase &mdash; not just correlated with it.
+      </div>
+      <table class="cmp-table">
+        <thead><tr><th>Cost</th><th>Cost Driver</th><th>Type</th></tr></thead>
+        <tbody>
+          <tr><td>Total steering wheel cost (Baleno)</td><td>Number of Balenos assembled</td><td>Variable &mdash; 1 car : 1 wheel</td></tr>
+          <tr><td>Distribution / logistics</td><td>Miles driven by delivery trucks</td><td>Variable &mdash; more miles = more cost</td></tr>
+          <tr><td>Set-up costs (hourly workers)</td><td>Number of set-up hours</td><td>Variable &mdash; more set-ups = more hours</td></tr>
+          <tr><td>Gurgaon plant rent (annual)</td><td>No short-run driver</td><td>Fixed in short run &mdash; but driven by capacity decision long-run</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Unit Costs Are Dangerous &mdash; Why Total Cost Thinking Wins</div>
+      <table class="cmp-table">
+        <thead><tr><th>Volume</th><th>SP</th><th>VC/unit</th><th>Total FC</th><th>FC/unit</th><th>Total Cost/unit</th><th>Profit/unit</th></tr></thead>
+        <tbody>
+          <tr><td>7,000</td><td>&rsquo;30</td><td>&rsquo;22</td><td>&rsquo;60,000</td><td>&rsquo;8.57</td><td>&rsquo;30.57</td><td style="color:var(--accent)">(&rsquo;0.57) LOSS</td></tr>
+          <tr><td>7,500 (BEP)</td><td>&rsquo;30</td><td>&rsquo;22</td><td>&rsquo;60,000</td><td>&rsquo;8.00</td><td>&rsquo;30.00</td><td>&rsquo;0 (break-even)</td></tr>
+          <tr><td>10,000 (normal)</td><td>&rsquo;30</td><td>&rsquo;22</td><td>&rsquo;60,000</td><td>&rsquo;6.00</td><td>&rsquo;28.00</td><td style="color:var(--accent3)">&rsquo;2 profit</td></tr>
+          <tr><td>12,000</td><td>&rsquo;30</td><td>&rsquo;22</td><td>&rsquo;60,000</td><td>&rsquo;5.00</td><td>&rsquo;27.00</td><td style="color:var(--accent3)">&rsquo;3 profit</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-red">
+        <strong>The Unit Cost Trap:</strong> At 7,000 units, profit per unit is negative &mdash; yet nothing about the business changed except volume. This is why decisions should be based on <em>Contribution Margin</em> (constant at &rsquo;8/unit regardless of volume), not profit per unit (which fluctuates with volume). Unit cost is context-dependent; CM is not.
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ────── S4-20 – CVP ANALYSIS & BEP ────── -->
+  <section class="section" id="s4-cvp">
+    <div class="section-header">
+      <div class="section-stripe stripe-blue"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Session 4 &middot; Section 20</div>
+        <div class="section-title">CVP Analysis &mdash; How Volume Drives Profit</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">The Core Idea</div>
+      <div class="analogy">
+        <span class="analogy-icon">📊</span>
+        <strong>CVP (Cost-Volume-Profit) analysis</strong> answers the manager&rsquo;s most important operational questions: &ldquo;If I sell 500 more units, how much more profit do I make? How many units must I sell just to break even? What if I cut my price by 10%?&rdquo;
+        CVP links selling price, volume, variable cost, and fixed cost into one unified picture. It&rsquo;s the financial model that separates <em>hope</em> from <em>calculation</em>.
+      </div>
+      <div class="def-grid">
+        <div class="def-card">
+          <div class="def-term">5 Profit Drivers in CVP</div>
+          <div class="def-meaning">Profit is changed by: (1) Selling price per unit, (2) Sales volume, (3) Variable cost per unit, (4) Total fixed costs, (5) Sales mix.</div>
+          <div class="def-example">Change any one of these five, and profits change. CVP tells you exactly how much.</div>
+        </div>
+        <div class="def-card">
+          <div class="def-term">CVP Key Assumptions</div>
+          <div class="def-meaning">Selling price is constant. VC per unit is constant. Total FC is constant. Sales mix is fixed. All units produced = units sold.</div>
+          <div class="def-example">These hold within the relevant range. Real-world analysis relaxes them for more complex decisions.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Contribution Margin &mdash; The Engine of Profit</div>
+      <div class="analogy">
+        <span class="analogy-icon">⛽</span>
+        <strong>Contribution Margin (CM)</strong> is what each unit <em>contributes</em> first to covering fixed costs and then to building profit. It is the fuel that runs the profit engine.
+      </div>
+      <div class="equation">
+        <div class="eq-label">Contribution Margin Per Unit</div>
+        <div class="eq-main">CM = Selling Price &minus; Variable Cost per unit</div>
+        <div class="eq-note">Class example: CM = &rsquo;30 &minus; &rsquo;22 = <strong>&rsquo;8 per unit</strong>. Every unit sold contributes &rsquo;8 toward fixed costs and profit.</div>
+      </div>
+      <div class="stair-diagram">
+        <div class="stair-step">
+          <div class="stair-box highlight">
+            <span class="stair-label">💰 Revenue (SP &times; Q)</span>
+            <span class="stair-amount">10,000 &times; &rsquo;30 = &rsquo;3,00,000</span>
+          </div>
+        </div>
+        <div class="stair-arrow">&minus; Variable Costs (&rsquo;22 &times; 10,000 = &rsquo;2,20,000)</div>
+        <div class="stair-step">
+          <div class="stair-indent" style="width:20px"></div>
+          <div class="stair-box">
+            <span class="stair-label">= Contribution Margin (CM)</span>
+            <span class="stair-amount">&rsquo;8 &times; 10,000 = &rsquo;80,000</span>
+          </div>
+        </div>
+        <div class="stair-arrow" style="margin-left:20px">&minus; Total Fixed Costs</div>
+        <div class="stair-step">
+          <div class="stair-indent" style="width:40px"></div>
+          <div class="stair-box highlight">
+            <span class="stair-label">= Profit (Net Operating Income)</span>
+            <span class="stair-amount">&rsquo;80,000 &minus; &rsquo;60,000 = &rsquo;20,000</span>
+          </div>
+        </div>
+      </div>
+      <div class="callout callout-blue">
+        <strong>Why CM (not profit per unit) is the correct decision basis:</strong> At 7,500 units (BEP), profit per unit = &rsquo;0. But CM per unit is still &rsquo;8. Every unit <em>above</em> BEP earns &rsquo;8 of pure profit &mdash; fixed costs are already fully covered. Decisions based on CM per unit are always correct; decisions based on profit per unit are volume-dependent and misleading.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Break Even Point (BEP)</div>
+      <div class="analogy">
+        <span class="analogy-icon">⚖️</span>
+        <strong>BEP is the exact volume at which profit = 0.</strong> Below BEP: every unit digs you deeper into loss (FC not yet covered). At BEP: FC exactly recovered, zero profit. Above BEP: every extra unit earns CM as pure profit.
+      </div>
+      <div class="ratio-grid">
+        <div class="ratio-card">
+          <div class="ratio-name">BEP in Units</div>
+          <div class="ratio-formula">BEP = Total Fixed Costs &divide; CM per unit</div>
+          <div class="ratio-example">
+            Class: BEP = &rsquo;60,000 &divide; &rsquo;8 = <mark>7,500 units</mark><br><br>
+            Sell 7,499 units = &rsquo;8 loss. Sell 7,501 = &rsquo;8 profit. One unit is the difference.
+          </div>
+        </div>
+        <div class="ratio-card">
+          <div class="ratio-name">BEP in Sales Value (&rsquo;)</div>
+          <div class="ratio-formula">BEP (&rsquo;) = Total Fixed Costs &divide; P/V Ratio (CMR)</div>
+          <div class="ratio-example">
+            Class: CMR = &rsquo;8 &divide; &rsquo;30 = 26.67%<br>
+            BEP (&rsquo;) = &rsquo;60,000 &divide; 0.267 = <mark>&rsquo;2,25,000</mark><br><br>
+            Useful when comparing products of different prices.
+          </div>
+        </div>
+      </div>
+      <div class="block">
+        <div class="block-label">Volume vs Profit Table (Class Data)</div>
+        <table class="cmp-table">
+          <thead><tr><th>Units</th><th>Revenue</th><th>Total VC</th><th>CM</th><th>Total FC</th><th>Profit / (Loss)</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>&rsquo;30</td><td>&rsquo;22</td><td>&rsquo;8</td><td>&rsquo;60,000</td><td style="color:var(--accent)">(&rsquo;59,992) &mdash; massive loss</td></tr>
+            <tr><td>7,500 (BEP)</td><td>&rsquo;2,25,000</td><td>&rsquo;1,65,000</td><td>&rsquo;60,000</td><td>&rsquo;60,000</td><td>&rsquo;0 &mdash; break-even</td></tr>
+            <tr><td>7,501</td><td>&rsquo;2,25,030</td><td>&rsquo;1,65,022</td><td>&rsquo;60,008</td><td>&rsquo;60,000</td><td style="color:var(--accent3)">&rsquo;8 &mdash; first profit!</td></tr>
+            <tr><td>8,000</td><td>&rsquo;2,40,000</td><td>&rsquo;1,76,000</td><td>&rsquo;64,000</td><td>&rsquo;60,000</td><td style="color:var(--accent3)">&rsquo;4,000</td></tr>
+            <tr><td>10,000</td><td>&rsquo;3,00,000</td><td>&rsquo;2,20,000</td><td>&rsquo;80,000</td><td>&rsquo;60,000</td><td style="color:var(--accent3)">&rsquo;20,000</td></tr>
+            <tr><td>12,000</td><td>&rsquo;3,60,000</td><td>&rsquo;2,64,000</td><td>&rsquo;96,000</td><td>&rsquo;60,000</td><td style="color:var(--accent3)">&rsquo;36,000</td></tr>
+          </tbody>
+        </table>
+        <div class="callout callout-grn">
+          <strong>5 Insights from Prof. Sahoo&rsquo;s Class Notes:</strong><br>
+          1. At BEP, Fixed Cost is exactly recovered &mdash; zero profit.<br>
+          2. After BEP, only Variable Cost needs to be recovered from each unit.<br>
+          3. &rsquo;2 profit per unit (at 10,000 units) is only valid at exactly 10,000 units &mdash; volume-specific.<br>
+          4. Scale economy: more units spread fixed cost, reducing cost per unit continuously.<br>
+          5. Before BEP: Fixed Cost is the challenge. After BEP: Variable Cost is the challenge.
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Contribution Margin Ratio (CMR) / P/V Ratio</div>
+      <div class="analogy">
+        <span class="analogy-icon">📐</span>
+        <strong>CMR (also called Profit/Volume Ratio or P/V ratio)</strong> tells you: &ldquo;Of every &rsquo;1 of revenue, how much contributes to fixed costs and profit?&rdquo; It&rsquo;s a rate (%), making it directly applicable to any sales level without recalculating from scratch.
+      </div>
+      <div class="equation">
+        <div class="eq-label">Contribution Margin Ratio (P/V Ratio)</div>
+        <div class="eq-main">CMR = CM per unit &divide; Selling Price = Total CM &divide; Total Sales</div>
+        <div class="eq-note">Class: CMR = &rsquo;8 &divide; &rsquo;30 = <strong>26.7%</strong>. Every &rsquo;100 of revenue generates &rsquo;26.7 of contribution margin.</div>
+      </div>
+      <div class="callout callout-blue">
+        <strong>Using CMR for instant profit calculations:</strong> If sales increase by &rsquo;50,000 and CMR = 26.7%, contribution increases by &rsquo;13,350 (and profit by the same amount, since FC doesn&rsquo;t change). High CMR = higher profit leverage on every extra rupee of sales. Prioritise products with highest P/V ratio.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Sales Mix &amp; Multi-Product BEP</div>
+      <div class="analogy">
+        <span class="analogy-icon">🧩</span>
+        When a company sells multiple products with different CM, the BEP depends on the <em>mix</em> of products sold. Think in terms of a <strong>batch</strong> (a bundle of the mix ratio): calculate CM for one batch, then find how many batches are needed to cover total fixed cost.
+      </div>
+      <table class="cmp-table">
+        <thead><tr><th>Item</th><th>Product A</th><th>Product B</th><th>Combined</th></tr></thead>
+        <tbody>
+          <tr><td>Selling Price</td><td>&rsquo;1,200</td><td>&rsquo;240</td><td>&mdash;</td></tr>
+          <tr><td>Variable Cost</td><td>&rsquo;480</td><td>&rsquo;160</td><td>&mdash;</td></tr>
+          <tr><td>CM per unit</td><td>&rsquo;720</td><td>&rsquo;80</td><td>&mdash;</td></tr>
+          <tr><td>CMR</td><td>60%</td><td>33.3%</td><td>A is more profitable per rupee of sales</td></tr>
+          <tr><td>Sales Mix</td><td>3 units</td><td>5 units</td><td>1 batch = 3A + 5B</td></tr>
+          <tr><td>CM per batch</td><td>3 &times; &rsquo;720 = &rsquo;2,160</td><td>5 &times; &rsquo;80 = &rsquo;400</td><td><strong>&rsquo;2,560 per batch</strong></td></tr>
+          <tr><td>Total Fixed Cost</td><td colspan="2" style="text-align:center">&rsquo;18,00,000</td><td>&mdash;</td></tr>
+          <tr><td><strong>BEP (batches)</strong></td><td colspan="3" style="text-align:center"><strong>&rsquo;18,00,000 &divide; &rsquo;2,560 = 703.1 &asymp; 704 batches</strong></td></tr>
+          <tr><td><strong>BEP units</strong></td><td><strong>704 &times; 3 = 2,112 units of A</strong></td><td><strong>704 &times; 5 = 3,520 units of B</strong></td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ────── S4-21 – MARGIN OF SAFETY, DOL & KEY FACTOR ────── -->
+  <section class="section" id="s4-tools">
+    <div class="section-header">
+      <div class="section-stripe stripe-gld"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Session 4 &middot; Section 21</div>
+        <div class="section-title">Margin of Safety, Operating Leverage &amp; Key Factor</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Margin of Safety (MOS)</div>
+      <div class="analogy">
+        <span class="analogy-icon">🛡️</span>
+        <strong>Margin of Safety</strong> is the cushion between your actual (or budgeted) sales and your Break Even Point. It answers: <em>&ldquo;How much can sales fall before we start losing money?&rdquo;</em>
+        A company operating 40% above BEP can survive a significant sales decline. A company operating only 5% above BEP is dangerously exposed.
+      </div>
+      <div class="ratio-grid">
+        <div class="ratio-card">
+          <div class="ratio-name">MOS Formula</div>
+          <div class="ratio-formula">MOS = Actual Sales &minus; BEP Sales</div>
+          <div class="ratio-example">
+            Class: Actual = 10,000 units. BEP = 7,500 units.<br>
+            MOS = <mark>2,500 units</mark> (or &rsquo;75,000 in value)<br>
+            MOS % = 2,500 &divide; 10,000 = <mark>25%</mark><br><br>
+            Sales can drop 25% before losses begin. Also: MOS = Profit &divide; P/V Ratio.
+          </div>
+        </div>
+        <div class="ratio-card">
+          <div class="ratio-name">How to Improve MOS</div>
+          <div class="ratio-formula">Push actual sales away from BEP</div>
+          <div class="ratio-example">
+            1. Lower fixed costs (reduce rent, cut admin overhead)<br>
+            2. Lower variable costs per unit (better supplier terms)<br>
+            3. Increase sales volume (marketing, new channels)<br>
+            4. Raise selling price if market allows<br>
+            5. Shift product mix toward higher CMR items
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Degree of Operating Leverage (DOL)</div>
+      <div class="analogy">
+        <span class="analogy-icon">⚙️</span>
+        <strong>DOL measures how sensitively profit responds to a change in sales.</strong>
+        A company with high fixed costs has high DOL &mdash; a 10% rise in sales might create a 40% rise in profit (because FC doesn&rsquo;t rise). The flip side: a 10% fall in sales causes a 40% fall in profit. High leverage amplifies <em>both</em> good times and bad.
+      </div>
+      <div class="equation">
+        <div class="eq-label">Degree of Operating Leverage</div>
+        <div class="eq-main">DOL = Contribution Margin &divide; Profit Before Tax</div>
+        <div class="eq-note">Also: DOL = 1 &divide; MOS%. Class: DOL = &rsquo;80,000 &divide; &rsquo;20,000 = 4. A 10% sales rise &rarr; 10% &times; 4 = 40% profit rise.</div>
+      </div>
+      <table class="cmp-table">
+        <thead><tr><th>Aspect</th><th>High Operating Leverage</th><th>Low Operating Leverage</th></tr></thead>
+        <tbody>
+          <tr><td>Variable costs</td><td>Low (small per unit)</td><td>High (large per unit)</td></tr>
+          <tr><td>Fixed costs</td><td>High</td><td>Low</td></tr>
+          <tr><td>Contribution margin</td><td>High per unit</td><td>Low per unit</td></tr>
+          <tr><td>Break Even Point</td><td>Higher (more units to cover FC)</td><td>Lower (FC is small)</td></tr>
+          <tr><td>Profit response to volume rise</td><td>Very large (amplified)</td><td>Moderate (proportional)</td></tr>
+          <tr><td>Examples</td><td>Airlines, utilities, manufacturing plants</td><td>Grocery retail, trading, services</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-gld">
+        <strong>DOL &amp; MOS are inverses:</strong> MOS% = 1/DOL. High safety = low leverage. Low safety (near BEP) = massive leverage = tiny volume drop destroys profits. Always read DOL alongside MOS to understand the <em>risk profile</em> of the business.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Key Factor / Limiting Factor Analysis</div>
+      <div class="analogy">
+        <span class="analogy-icon">🔑</span>
+        In theory, produce unlimited quantities of your highest-CM product. In practice, there&rsquo;s always a <strong>bottleneck</strong> &mdash; limited machine hours, scarce materials, limited skilled workers. When resources are constrained, rank products by <em>CM per unit of the limiting factor</em>.
+      </div>
+      <table class="cmp-table">
+        <thead><tr><th>Limiting Factor</th><th>Decision Basis</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td>Sales volume (market cap)</td><td>P/V ratio (CMR)</td><td>Highest CMR = most profit per rupee of sales</td></tr>
+          <tr><td>Raw material (kg limited)</td><td>CM per kg of material</td><td>Most CM extracted from scarce input</td></tr>
+          <tr><td>Machine hours (capacity limited)</td><td>CM per machine hour</td><td>Most CM from each hour of bottleneck capacity</td></tr>
+          <tr><td>Skilled labour hours</td><td>CM per labour hour</td><td>Most CM from scarce human resource</td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-blue">
+        <strong>Example:</strong> Product A earns CM &rsquo;720 but uses 3 machine hours (&rsquo;240/hr). Product B earns CM &rsquo;400 but uses only 1 machine hour (&rsquo;400/hr). If machine hours are limited, <em>prioritise Product B</em> &mdash; it earns more from the scarce resource.
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">4 Strategies to Improve Profitability (CVP Levers)</div>
+      <div class="power-lines">
+        <div class="power-line pl-red">
+          <em>1. Volume Maximisation:</em> After BEP, every additional unit earns CM as pure profit. Fixed costs are sunk &mdash; more volume means no additional FC, only additional VC. Push sales aggressively once you&rsquo;re past BEP.
+        </div>
+        <div class="power-line pl-blue">
+          <em>2. Reduce Fixed Costs:</em> Lowers BEP directly, widens MOS, and gives you a safer cushion. Outsource non-core work, share facilities, negotiate leases down, cut discretionary fixed costs in lean times.
+        </div>
+        <div class="power-line pl-grn">
+          <em>3. Reduce Variable Costs:</em> Every rupee saved on VC per unit directly lifts CM per unit and improves CMR. Better supplier contracts, process efficiency, waste reduction. More profit from the same revenue.
+        </div>
+        <div class="power-line pl-gld">
+          <em>4. Raise Selling Price:</em> Most powerful lever when market conditions allow. A &rsquo;1 price increase on 10,000 units = &rsquo;10,000 extra profit &mdash; pure, with no increase in VC. Requires strong brand or differentiation to avoid losing volume.
+        </div>
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+<div class="divider"></div>
+
+  
+    <div class="section-header">
+      <div class="section-stripe stripe-grn"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Sessions 1 &amp; 2 · 30-Second Recall</div>
+        <div class="section-title">Super Quick Revision</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Session 1 — Foundations</div>
+      <div class="qr-grid">
+        <div class="qr-item">📊 <strong>Balance Sheet</strong> = Snapshot at one point in time. ASSETS = LIABILITIES + EQUITY. Always balanced.</div>
+        <div class="qr-item">📈 <strong>Income Statement</strong> = Story over a period. Revenue → (minus costs) → Net Profit. Top Line → Bottom Line.</div>
+        <div class="qr-item">💸 <strong>Cash Flow</strong> = Actual cash movement. Profit ≠ Cash. Three buckets: Operations / Investing / Financing.</div>
+        <div class="qr-item">🔝 <strong>Top Line</strong> = Revenue. 🔻 <strong>Bottom Line</strong> = PAT. P/E = 420÷16.42 = 25.6×. P/B = 420÷60 = 7×.</div>
+        <div class="qr-item">📐 <strong>P/E Ratio</strong> = Price ÷ EPS. How much you pay per ₹1 of earnings. Compare within industry only.</div>
+        <div class="qr-item">📚 <strong>P/B Ratio</strong> = Price ÷ BVPS. Best for banks. Book Value = Assets − Liabilities.</div>
+        <div class="qr-item">💰 <strong>Working Capital</strong> = Current Assets − Current Liabilities. ITC: ₹41K − ₹14K = ₹27K Cr surplus.</div>
+        <div class="qr-item">📉 <strong>Depreciation</strong> = non-cash; added back in cash flow. Goodwill = acquisition premium. EPS = PAT÷shares.</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Session 2 — Profitability &amp; DuPont</div>
+      <div class="qr-grid">
+        <div class="qr-item">📈 <strong>ROE</strong> = PAT ÷ Equity = Shareholder return. ITC: 20,751÷74,889 = <strong>27%</strong>.</div>
+        <div class="qr-item">🏗️ <strong>ROA</strong> = Net Income ÷ Assets. All-capital efficiency. ITC ≈ 22.6%. ROCE = EBIT÷(E+D) ≈ 36%.</div>
+        <div class="qr-item">⚖️ <strong>EBITDA</strong> = use for cross-company comparisons (not PAT). Strips tax, interest, depreciation distortions.</div>
+        <div class="qr-item">📊 <strong>CAGR</strong> = smoothed annual growth rate. (End÷Start)^(1/n)−1. Use for revenue trend analysis.</div>
+        <div class="qr-item">🔬 <strong>DuPont 3-Factor</strong>: ROE = TATO × Profit Margin × Equity Multiplier. Each = one lever to fix.</div>
+        <div class="qr-item">⚙️ <strong>TATO low</strong> → asset inefficiency → advertise/discount/new products. <strong>PM low</strong> → cost problem → cut COGS.</div>
+        <div class="qr-item">🗺️ <strong>PM↑ + TATO↓</strong> = capital-heavy (utilities/ITC cigarettes). <strong>PM↓ + TATO↑</strong> = retail/FMCG. Both can work.</div>
+        <div class="qr-item">🌱 <strong>Retention ratio b</strong> = 1 − DPS÷EPS. Internal growth = (ROA×b)÷(1−ROA×b). Sustainable = ROE×b version.</div>
+        <div class="qr-item">🚀 <strong>Sustainable &gt; Internal</strong> growth rate always (ROE &gt; ROA for leveraged firms). Use SGR for LT valuation models.</div>
+        <div class="qr-item">📅 <strong>Index trend</strong>: base year = 100. All other years as %. Reveals multi-year direction without size distortion.</div>
+        <div class="qr-item">⚠️ <strong>Ratio rules</strong>: same period, same accounting basis, use groups of ratios, min 3 years. Never in isolation.</div>
+        <div class="qr-item">📖 <strong>Always read</strong>: Footnotes + MD&amp;A. Numbers without context mislead. Management's narrative matters.</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label">Session 3 — WACC, Operating DuPont &amp; Cases</div>
+      <div class="qr-grid">
+        <div class="qr-item">💰 <strong>WACC</strong> = (Debt weight × after-tax debt cost) + (Equity weight × equity cost). The minimum return a project must earn.</div>
+        <div class="qr-item">🧾 <strong>Debt tax shield</strong>: Interest is tax-deductible. After-tax cost of debt = rate × (1−tax). 10% loan @ 30% tax = real cost 7%.</div>
+        <div class="qr-item">✅ <strong>Project Rule</strong>: ROCE &gt; WACC → Accept (creates value). ROCE &lt; WACC → Reject (destroys value).</div>
+        <div class="qr-item">⚙️ <strong>NOPAT</strong> = PAT + Interest×(1−tax) = EBIT×(1−tax). Financing-neutral profit for ROCE calculation.</div>
+        <div class="qr-item">📊 <strong>EBITDA is financing-neutral</strong>: same whether company has debt or not. ROCE (NOPAT basis) is also the same. ROE is NOT.</div>
+        <div class="qr-item">🔍 <strong>Operating DuPont</strong>: Split assets/income into Operating vs Non-Operating. Op. ROE = Op.PM × Op.ATR × Op.EM.</div>
+        <div class="qr-item">🛒 <strong>Ahold vs Tesco</strong>: Same ROE, but Ahold wins — higher Op.ROA, shorter cycle, less debt, better growth. Market saw through the accounting.</div>
+        <div class="qr-item">🔄 <strong>Working cycle</strong>: Cash → Raw Materials → WIP → Finished Goods → Sales → Debtors → Cash. Shorter = better.</div>
+        <div class="qr-item">💳 <strong>Cash Conversion Cycle</strong> = Inventory days + Receivable days − Payable days. Negative = company funded by suppliers (like Amazon).</div>
+        <div class="qr-item">🏆 <strong>3 ROE strategies</strong>: (1) High PM + Low ATR = Premium. (2) Low PM + High ATR = Volume. (3) High+High = Dream (Apple). Low+Low = failure.</div>
+        <div class="qr-item">🍕 <strong>Zomato / loss-making firms</strong>: DuPont breaks down with negative earnings. Use P/S, GMV, unit economics, CAGR instead.</div>
+        <div class="qr-item">📐 <strong>Which metric, whose eyes</strong>: Shareholder → ROE. Manager/banker → ROCE (vs WACC). Cross-company → EBITDA margin. Growth → CAGR.</div>
+      </div>
+    </div>
+
+
+    <div class="block">
+      <div class="block-label">Session 4 &mdash; Cost Concepts &amp; CVP</div>
+      <div class="qr-grid">
+        <div class="qr-item">🎯 <strong>Cost Object</strong> = anything you want to measure cost for: product, service, department, project, activity. Choose carefully &mdash; wrong object = misleading decisions.</div>
+        <div class="qr-item">📏 <strong>Direct Cost</strong> = traceable to one product (steel in Baleno). <strong>Indirect</strong> = shared, must be allocated (plant rent spread across all models).</div>
+        <div class="qr-item">📈 <strong>Variable Cost</strong>: total changes with volume, per unit stays constant. Class: &rsquo;22/unit. 10,000 units &rarr; &rsquo;2,20,000; 8,000 units &rarr; &rsquo;1,76,000.</div>
+        <div class="qr-item">🏢 <strong>Fixed Cost</strong>: total constant regardless of volume, per unit falls as volume rises. Class FC = &rsquo;60,000. At 10,000 = &rsquo;6/unit; at 12,000 = &rsquo;5/unit.</div>
+        <div class="qr-item">🚗 <strong>GM Lesson</strong>: Committed fixed costs (pensions, leases) don&rsquo;t fall when revenue falls. High FC structure = high risk. GM went bankrupt in 2009 for this exact reason.</div>
+        <div class="qr-item">🧮 <strong>Contribution Margin</strong> = SP &minus; VC/unit = &rsquo;30 &minus; &rsquo;22 = <strong>&rsquo;8/unit</strong>. Covers FC first, then becomes pure profit after BEP.</div>
+        <div class="qr-item">⚖️ <strong>BEP</strong> = Total FC &divide; CM/unit = &rsquo;60,000 &divide; &rsquo;8 = <strong>7,500 units</strong>. Below = loss; above = profit. After BEP, each unit = &rsquo;8 pure profit.</div>
+        <div class="qr-item">📐 <strong>P/V Ratio (CMR)</strong> = CM &divide; SP = 8/30 = <strong>26.7%</strong>. Every &rsquo;100 of sales generates &rsquo;26.7 toward FC and profit.</div>
+        <div class="qr-item">🛡️ <strong>Margin of Safety</strong> = Actual &minus; BEP = 10,000 &minus; 7,500 = <strong>2,500 units (25%)</strong>. Cushion before losses begin.</div>
+        <div class="qr-item">⚙️ <strong>DOL</strong> = CM &divide; Profit = 80,000 &divide; 20,000 = <strong>4</strong>. 10% sales rise &rarr; 40% profit rise. MOS% = 1/DOL = 25%.</div>
+        <div class="qr-item">🔑 <strong>Key Factor rule</strong>: When a resource is limited, rank products by CM <em>per unit of limiting resource</em> (not just CM/unit). Maximise contribution from the bottleneck.</div>
+        <div class="qr-item">📝 <strong>Use CM, not profit/unit</strong> for decisions. Profit/unit is volume-dependent (changes with FC spreading); CM/unit is constant. Always the right lever for pricing and product mix decisions.</div>
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════ MEMORY HOOKS ══════ -->
+  <section class="section" id="hooks">
+    <div class="section-header">
+      <div class="section-stripe stripe-gld"></div>
+      <div class="section-meta">
+        <div class="section-eyebrow">Sessions 1, 2 &amp; 3 · Mnemonics</div>
+        <div class="section-title">Memory Hooks</div>
+      </div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">🏠 Balance Sheet — The House Analogy</div>
+      <div class="hook-text">Your <strong>house</strong> (Asset) = Bank Loan (Liability) + Your savings (Equity). The balance sheet is just that, scaled up to a company. <em>"What it owns = What it owes + What owners put in."</em></div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">🪜 Income Statement — The Staircase</div>
+      <div class="hook-text">Start at the <strong>top (Revenue)</strong>, walk down deducting costs at each step, reach the <strong>bottom (Net Profit)</strong>. <em>"Revenue is hope. Net profit is reality."</em></div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">📸 vs 🎬 — Balance Sheet vs Income Statement</div>
+      <div class="hook-text">Balance Sheet = <strong>Photograph</strong> (one moment). Income Statement = <strong>Video</strong> (a period). Cash Flow = the <strong>bank statement</strong> showing actual transactions.</div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">🧮 P/E — "How Many Years to Recover?"</div>
+      <div class="hook-text">P/E = 25 means: at current earnings, it takes <strong>25 years to recover your investment</strong>. Lower P/E = cheaper stock (but check why). Higher P/E = market expects strong future growth. <em>Always compare within the same industry.</em></div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">🏦 P/B for Banks — "What Are You Buying?"</div>
+      <div class="hook-text">For a bank, you're really buying its <strong>loan book and deposits</strong> — the balance sheet. So P/B (price vs. what the bank's books say it's worth) matters more than earnings (which fluctuate with NPAs and provisioning). <em>P/B + ROE = complete picture for banks.</em></div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">⚡ ITC in 5 Numbers</div>
+      <div class="hook-text">
+        Assets: <strong>₹92,000 Cr</strong> | Equity: <strong>₹75,000 Cr (83%)</strong> | Revenue: <strong>₹77,000 Cr</strong> | Profit: <strong>₹20,751 Cr</strong> | EPS: <strong>₹16.42</strong><br>
+        → P/E = 420÷16.42 = <strong>~25.6×</strong> | P/B = 420÷60 = <strong>~7×</strong>
+      </div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">🔑 The Three Analysis Lenses</div>
+      <div class="hook-text">
+        <strong>1. Time Series</strong> = Compare company to its own past (is it growing?)<br>
+        <strong>2. Cross-Section</strong> = Compare company to its peers (is it the best in class?)<br>
+        <strong>3. Ratio Analysis</strong> = P/E, P/B, D/E, Operating Margin — translate numbers to meaning.
+      </div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">🔬 DuPont — The Car Analogy</div>
+      <div class="hook-text">ROE dropped? Don't panic. Check three things like checking a car: <strong>Engine</strong> (Profit Margin — is fuel being converted efficiently?), <strong>Wheels</strong> (TATO — is the car actually moving, i.e. generating revenue?), <strong>Gear ratio</strong> (Equity Multiplier — how much leverage is amplifying performance?). Fix whichever one is broken.</div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">🗺️ PM vs TATO — The Two Roads to the Same Destination</div>
+      <div class="hook-text">
+        <strong>Road 1 (Premium highway):</strong> High margin, low volume — like a luxury hotel charging ₹20,000/night with few guests.<br>
+        <strong>Road 2 (Volume highway):</strong> Low margin, high volume — like a grocery store earning ₹2 per item but selling millions.<br>
+        Both roads lead to good ROA. <em>Apple iPhone = both roads simultaneously = the dream.</em>
+      </div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">🌱 Growth Rates — The Savings Account Analogy</div>
+      <div class="hook-text">
+        <strong>Internal Growth Rate</strong> = growing your savings account using <em>only your own salary</em>. No loans.<br>
+        <strong>Sustainable Growth Rate</strong> = growing using your salary + a credit card proportional to your income. Faster, but the debt-to-income ratio stays constant.<br>
+        Both are limited by ROA/ROE × how much you keep (retention ratio b).
+      </div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">⚡ The ITC Master Cheat Sheet</div>
+      <div class="hook-text">
+        Assets ₹92K · Equity ₹75K (83%) · Revenue ₹77K · EBITDA ₹26K · PAT ₹20,751 · EPS ₹16.42<br>
+        → <strong>P/E = 25.6×</strong> · <strong>P/B = 7.1×</strong> · <strong>ROE = 27%</strong> · <strong>ROCE = 36%</strong> · <strong>TATO = 0.84×</strong> · <strong>PM = 27%</strong> · <strong>EM = 1.23×</strong>
+      </div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">🧭 Which Metric for Which Audience?</div>
+      <div class="hook-text">
+        <strong>Shareholder?</strong> → ROE, EPS, P/E, P/B<br>
+        <strong>Manager / CEO?</strong> → ROCE, EBITDA, Operating Margin, TATO<br>
+        <strong>Banker?</strong> → D/E ratio, Interest Coverage, ROCE, Current Ratio<br>
+        <strong>Long-term investor?</strong> → CAGR of revenue, Sustainable Growth Rate, ROE trend over 5 years
+      </div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">💰 WACC — The Minimum Bar</div>
+      <div class="hook-text">
+        Imagine you borrow ₹40 from a bank at 7% (after tax) and use ₹60 of your own money expecting 15% return. Your blended cost = <strong>11.8%</strong>. Any investment must earn at least 11.8% — otherwise you'd have been better off not doing it. That's WACC. <em>"The bar every project must jump over."</em>
+      </div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">🔍 Operating DuPont — Peel the Onion</div>
+      <div class="hook-text">
+        ROE has three layers: <strong>Operations</strong> (PM × ATR) + <strong>Financing</strong> (EM). To judge a business fairly, peel off the financing layer. Two companies with the same ROE can have very different business quality — one earns it, one borrows it. <em>Ahold earned it. Tesco borrowed it.</em>
+      </div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">🔄 Working Cycle — The River Analogy</div>
+      <div class="hook-text">
+        Cash flows through a business like water in a river: <strong>Cash → Materials → Goods → Sales → Debtors → Cash again</strong>. A fast-flowing river (short cycle) is healthy. A slow, stagnant river (long cycle) means cash is trapped — you need more working capital just to stay alive.
+      </div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">🍕 Zomato — When the Ruler Doesn't Work</div>
+      <div class="hook-text">
+        Using DuPont on Zomato is like measuring temperature with a ruler — wrong tool. Loss-making companies need different instruments: <strong>GMV growth</strong> (how big is the market?), <strong>unit economics</strong> (is each order getting profitable?), <strong>P/S ratio</strong> (what revenue multiple does the market accept?). <em>Match the tool to the company's lifecycle stage.</em>
+      </div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">🏆 The Three ROE Strategies in One Line Each</div>
+      <div class="hook-text">
+        <strong>Strategy 1 (Premium):</strong> "Charge a lot, sell to few" — ITC cigarettes, hospitals, luxury.<br>
+        <strong>Strategy 2 (Volume):</strong> "Charge little, sell to millions" — Walmart, grocery retail, FMCG.<br>
+        <strong>Strategy 3 (Dream):</strong> "Charge a lot AND sell to millions" — Apple. Extremely rare.<br>
+        <strong>Not a Strategy:</strong> "Charge little, sell to few" — a dying business. Exit immediately.
+      </div>
+    </div>
+
+
+    <div class="hook-box">
+      <div class="hook-label">🏢 Fixed vs Variable &mdash; The Rent Analogy</div>
+      <div class="hook-text">
+        Your apartment rent is &rsquo;20,000/month whether you work 1 hour or 100 hours from home. Your grocery bill rises with every meal. <strong>Rent = Fixed. Groceries = Variable.</strong> A factory&rsquo;s lease = Fixed. Its raw materials = Variable. More production spreads the rent thinner &mdash; that&rsquo;s scale economy.
+      </div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">⚖️ Break Even &mdash; The &ldquo;Zero Hour&rdquo;</div>
+      <div class="hook-text">
+        BEP is the exact moment the business transitions from losing money to making money. Before BEP: every unit is digging out of the Fixed Cost hole. At BEP: hole is exactly filled. After BEP: every unit = pure &rsquo;8 profit (CM). <em>BEP = Total FC &divide; CM per unit. Simple. Powerful.</em>
+      </div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">🪣 Contribution Margin &mdash; The Bucket Analogy</div>
+      <div class="hook-text">
+        CM fills two buckets in order. First, the Fixed Cost bucket (&rsquo;60,000 &mdash; takes 7,500 units). Once that bucket is full, <em>every extra unit fills the Profit bucket</em>. Before BEP: all CM goes to FC. After BEP: all CM is profit. The bucket size (FC) determines your BEP.
+      </div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">🚗 The GM Cautionary Tale</div>
+      <div class="hook-text">
+        80 years of dominance. 2008 financial crisis hits. Car sales collapse. Variable costs (materials, hourly labour) fell with volume. But <em>committed fixed costs</em> &mdash; union pensions, retiree healthcare, plant leases &mdash; didn&rsquo;t fall. Revenue halved; losses exploded. Filed for bankruptcy 2009. <strong>High fixed cost structures are powerful in good times and lethal in bad times.</strong>
+      </div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">⚙️ DOL &mdash; The Profit Amplifier</div>
+      <div class="hook-text">
+        DOL = 4 means profit moves <em>4x faster</em> than sales. Sales up 10% &rarr; profit up 40%. But sales down 10% &rarr; profit down 40%. Operating leverage is a magnifying glass: it magnifies both good news and bad. <em>High FC = high DOL = high amplification &mdash; great on the way up, brutal on the way down.</em>
+      </div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">🛡️ Margin of Safety &mdash; &ldquo;How Wrong Can I Be?&rdquo;</div>
+      <div class="hook-text">
+        MOS answers: &ldquo;How much can my sales drop before I start losing money?&rdquo; MOS = 25% means sales can fall by a quarter before hitting BEP. Low MOS = fragile business, every decision must be precise. High MOS = comfortable cushion, room to experiment and grow. <em>MOS% = 1/DOL &mdash; always check both together.</em>
+      </div>
+    </div>
+
+    <div class="hook-box">
+      <div class="hook-label">🔑 Key Factor &mdash; Earn From the Bottleneck</div>
+      <div class="hook-text">
+        When you can&rsquo;t produce everything, the question is not &ldquo;which product has the highest CM?&rdquo; but &ldquo;which product earns the most CM <strong>per unit of the scarce resource</strong>?&rdquo; Product A: &rsquo;720 CM using 3 machine hours = &rsquo;240/hr. Product B: &rsquo;400 CM using 1 hour = &rsquo;400/hr. With limited machine hours, make Product B. The bottleneck dictates strategy.
+      </div>
+    </div>
+
+    <a href="#top" class="back-top">↑ Back to top</a>
+  </section>
+</div>
+
+<script>
+// Smooth scrolling
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const el = document.querySelector(a.getAttribute('href'));
+    if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+
+// Scroll spy
+const sections = document.querySelectorAll('.section');
+const sbLinks = document.querySelectorAll('.sb-link');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      sbLinks.forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`.sb-link[href="#${entry.target.id}"]`);
+      if (a) { a.classList.add('active'); a.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+sections.forEach(s => obs.observe(s));
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  const map = { '1': 'why-fs', '2': 'balance-sheet', '3': 'income-stmt', '4': 'cash-flow', '5': 'ratios', '6': 'itc', '7': 's4-costs', '8': 's4-cvp', '9': 'quickrev' };
+  if (map[e.key]) document.getElementById(map[e.key])?.scrollIntoView({ behavior: 'smooth' });
+  if (e.key === 'h') window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+</body>
+</html>

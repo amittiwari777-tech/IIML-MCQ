@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLP-08 Financial Statement Analysis — Finance Quiz</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:         #1a1c22;
+    --card:       #252830;
+    --card-hover: #2d3040;
+    --border:     #353845;
+    --text:       #e8e6e1;
+    --text-muted: #9895a0;
+    --text-dim:   #6b6878;
+    --correct:    #3ecf8e;
+    --correct-dim:rgba(62,207,142,0.15);
+    --wrong:      #e05252;
+    --wrong-dim:  rgba(224,82,82,0.15);
+    --gold:       #f0c040;
+    --radius:     12px;
+    --radius-sm:  8px;
+    --shadow:     0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 0 0 60px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ── Header ── */
+  .app-header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .app-title {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+  .app-title span.fin { color: #e08b20; }
+  .app-subtitle {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .score-display {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    white-space: nowrap;
+  }
+  .score-display .score-num { color: var(--gold); font-weight: 500; }
+
+  /* ── Filter Bar ── */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    padding: 20px 24px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .filter-btn {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.8rem;
+    padding: 7px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+    touch-action: manipulation;
+  }
+  .filter-btn:hover { background: var(--card-hover); color: var(--text); }
+  .filter-btn.active-all { background: rgba(255,255,255,0.08); color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+  /* ── Subject: FIN ── */
+  .subject-tag.fin { background: rgba(224,139,32,0.15); color: #e08b20; border: 1px solid rgba(224,139,32,0.3); }
+  .filter-btn.active-fin { background: rgba(224,139,32,0.15); color: #e08b20; border-color: #e08b20; }
+  .explanation-panel.fin-border { border-left-color: #e08b20; background: rgba(224,139,32,0.1); }
+  .btn-fin { background: rgba(224,139,32,0.15); color: #e08b20; border: 1px solid #e08b20; }
+  .btn-fin:hover { filter: brightness(1.15); }
+  .score-block-value.fin { color: #e08b20; }
+
+  /* ── Main layout ── */
+  .main-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 20px;
+  }
+
+  /* ── Progress ── */
+  .progress-area { margin-bottom: 24px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    margin-bottom: 8px;
+  }
+  .progress-bar-track {
+    background: var(--border);
+    border-radius: 4px;
+    height: 4px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: #e08b20;
+    border-radius: 4px;
+    transition: width 0.35s ease;
+  }
+
+  /* ── Question Card ── */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 28px 24px;
+    box-shadow: var(--shadow);
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .subject-tag {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.68rem;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .session-label {
+    font-family: Georgia, Cambria, serif;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+  .q-num {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-left: auto;
+  }
+  .question-text {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--text);
+    margin-bottom: 22px;
+  }
+
+  /* ── Options ── */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  @media (max-width: 520px) {
+    .options-grid { grid-template-columns: 1fr; }
+  }
+  .option-btn {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 13px 16px;
+    color: var(--text);
+    font-size: 0.9rem;
+    line-height: 1.45;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s, border-color 0.15s;
+    min-height: 52px;
+    touch-action: manipulation;
+  }
+  .option-btn:hover:not(:disabled) { background: var(--card-hover); border-color: #9895a0; }
+  .option-btn.correct  { background: var(--correct-dim); border-color: var(--correct); color: var(--correct); }
+  .option-btn.wrong    { background: var(--wrong-dim);   border-color: var(--wrong);   color: var(--wrong); }
+  .option-btn:disabled { cursor: default; opacity: 0.75; }
+  .option-letter {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-right: 8px;
+  }
+  .option-btn.correct .option-letter { color: var(--correct); }
+  .option-btn.wrong   .option-letter { color: var(--wrong); }
+
+  /* ── Explanation Panel ── */
+  .explanation-panel {
+    display: none;
+    border-left: 3px solid #e08b20;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--text-muted);
+  }
+  .explanation-panel.show { display: block; }
+  .exp-label {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #e08b20;
+    margin-bottom: 5px;
+  }
+
+  /* ── Next Button ── */
+  #nextBtn {
+    display: none;
+    background: rgba(224,139,32,0.15);
+    border: 1px solid #e08b20;
+    color: #e08b20;
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.85rem;
+    padding: 11px 28px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: filter 0.15s;
+    touch-action: manipulation;
+    width: 100%;
+  }
+  #nextBtn:hover { filter: brightness(1.15); }
+  @media (max-width: 640px) { #nextBtn { padding: 14px 28px; font-size: 0.92rem; } }
+
+  /* ── Keyboard Hint ── */
+  .keyboard-hint-bar {
+    margin-top: 14px;
+    text-align: center;
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+  }
+  .kbd {
+    background: var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 0.68rem;
+  }
+  @media (max-width: 640px) { .keyboard-hint-bar { display: none; } }
+
+  /* ── Empty State ── */
+  .empty-state {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+  }
+  .empty-state-icon { font-size: 2.5rem; margin-bottom: 12px; }
+  .empty-state-text { font-size: 0.95rem; }
+
+  /* ── Results Screen ── */
+  .results-screen { display: none; }
+  .results-heading {
+    font-family: Georgia, Cambria, serif;
+    font-size: 1.6rem;
+    text-align: center;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .results-tier {
+    text-align: center;
+    font-family: Georgia, Cambria, serif;
+    font-size: 1.05rem;
+    color: #e08b20;
+    font-style: italic;
+    margin-bottom: 6px;
+  }
+  .results-sub {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+  }
+  .score-blocks {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .score-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 22px;
+    text-align: center;
+    min-width: 100px;
+  }
+  .score-block-label {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+  .score-block-value {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--gold);
+  }
+  .score-block-sub {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .results-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.82rem;
+    padding: 10px 22px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: filter 0.15s;
+    touch-action: manipulation;
+  }
+  .btn-primary {
+    background: rgba(255,255,255,0.07);
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .btn-primary:hover { filter: brightness(1.15); }
+  @media (max-width: 640px) {
+    .results-actions { flex-direction: column; }
+    .btn { width: 100%; text-align: center; padding: 14px 22px; }
+  }
+  @media (max-width: 360px) {
+    .score-blocks { gap: 8px; }
+    .score-block { min-width: 80px; padding: 12px 14px; }
+    .score-block-value { font-size: 1.2rem; }
+  }
+
+  /* ── Mobile banner ── */
+  .mobile-banner {
+    display: none;
+    background: rgba(224,139,32,0.12);
+    border: 1px solid rgba(224,139,32,0.3);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  @media (max-width: 640px) { .mobile-banner { display: block; } }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="app-header">
+  <div>
+    <div class="app-title"><span class="fin">FIN</span> · SLP-08 Financial Statement Analysis</div>
+    <div class="app-subtitle">IIM Lucknow · Finance · 50 Questions · Prof. Sahoo</div>
+  </div>
+  <div class="score-display">
+    <span class="score-num" id="scoreNum">0</span>/<span id="scoreDen">0</span>
+    &nbsp;·&nbsp;<span class="score-num" id="scorePct">—</span>
+  </div>
+</header>
+
+<!-- ── FILTER BAR ── -->
+<div class="filter-bar">
+  <button class="filter-btn active-all" id="btnAll" onclick="setFilter('all')">All 50</button>
+  <button class="filter-btn" id="btnFin" onclick="setFilter('fin')">FIN (50)</button>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main-wrap">
+
+  <div class="mobile-banner">
+    📱 <strong>Android:</strong> Download → open with Chrome.&nbsp; <strong>iPhone:</strong> Tap file in WhatsApp → Share → Open in Safari.
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-area">
+    <div class="progress-label">
+      <span id="progressLabel">Question 1 of 50</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Quiz area -->
+  <div id="quizArea">
+    <div class="question-card" id="questionCard">
+      <div class="card-meta">
+        <span class="subject-tag fin" id="subjectTag">FIN</span>
+        <span class="session-label" id="sessionLabel"></span>
+        <span class="q-num" id="qNum"></span>
+      </div>
+      <div class="question-text" id="questionText"></div>
+      <div class="options-grid" id="optionsGrid"></div>
+      <div class="explanation-panel fin-border" id="explanationPanel">
+        <div class="exp-label">Explanation</div>
+        <div id="expText"></div>
+      </div>
+      <button id="nextBtn" onclick="nextQuestion()">Next Question →</button>
+      <div class="keyboard-hint-bar">
+        Press <span class="kbd">1</span><span class="kbd">2</span><span class="kbd">3</span><span class="kbd">4</span> to answer &nbsp;·&nbsp; <span class="kbd">Enter</span> to advance &nbsp;·&nbsp; <span class="kbd">R</span> to restart
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" id="emptyState">
+    <div class="empty-state-icon">🔍</div>
+    <div class="empty-state-text">No questions match this filter.</div>
+  </div>
+
+  <!-- Results screen -->
+  <div class="results-screen" id="resultsScreen">
+    <div class="results-heading" id="rHeading">Quiz Complete</div>
+    <div class="results-tier" id="rTier"></div>
+    <div class="results-sub" id="rSub"></div>
+    <div class="score-blocks">
+      <div class="score-block">
+        <div class="score-block-label">Total</div>
+        <div class="score-block-value all" id="rTotal">—</div>
+        <div class="score-block-sub" id="rTotalSub"></div>
+      </div>
+      <div class="score-block">
+        <div class="score-block-label">FIN</div>
+        <div class="score-block-value fin" id="rFin">—</div>
+        <div class="score-block-sub" id="rFinSub"></div>
+      </div>
+    </div>
+    <div class="results-actions">
+      <button class="btn btn-primary" onclick="startQuiz('all')">Restart All 50</button>
+      <button class="btn btn-fin" onclick="startQuiz('fin')">FIN Only (50)</button>
+    </div>
+  </div>
+
+</div><!-- /.main-wrap -->
+
+<script>
+const ALL_QUESTIONS = [
+  // ── SESSION 1: BALANCE SHEET ──────────────────────────────────────────────
+  {
+    id: 1, subject: "fin", session: "Session 1 · Balance Sheet",
+    q: "What is the fundamental accounting equation that forms the basis of every balance sheet?",
+    opts: [
+      "Revenue − Expenses = Net Profit",
+      "Assets = Liabilities + Shareholders' Equity",
+      "Cash Inflows − Cash Outflows = Net Cash",
+      "Gross Profit − Operating Expenses = EBIT"
+    ],
+    correct: 1,
+    exp: "The fundamental equation is Assets = Liabilities + Shareholders' Equity. Every balance sheet must balance: everything a company owns (assets) must have been funded either by borrowing (liabilities) or by owner money (equity)."
+  },
+  {
+    id: 2, subject: "fin", session: "Session 1 · Balance Sheet",
+    q: "Assets on a balance sheet are ordered in a specific way. What is the ordering principle?",
+    opts: [
+      "Alphabetical order by asset name",
+      "From most liquid (easiest to convert to cash) to least liquid",
+      "From largest value to smallest value",
+      "From oldest acquired to most recently acquired"
+    ],
+    correct: 1,
+    exp: "Assets are ordered from most liquid to least liquid — i.e., from cash (instantly available) down to long-term fixed assets like land and machinery that take much longer to convert to cash."
+  },
+  {
+    id: 3, subject: "fin", session: "Session 1 · Balance Sheet",
+    q: "Which of the following is classified as a CURRENT asset?",
+    opts: [
+      "Land and Buildings",
+      "Goodwill",
+      "Trade Receivables (debtors who will pay within the year)",
+      "Long-term Investment in another company"
+    ],
+    correct: 2,
+    exp: "Current assets convert to cash within 1 year — examples: inventory, trade receivables, short-term investments, and cash. Land, goodwill, and long-term investments are non-current assets."
+  },
+  {
+    id: 4, subject: "fin", session: "Session 1 · Balance Sheet",
+    q: "Shareholders' Equity is best described as:",
+    opts: [
+      "Total money the company owes to banks and lenders",
+      "The cash balance held in the company's bank account",
+      "The residual value left after all liabilities are subtracted from assets — belongs to owners",
+      "Revenue earned but not yet collected"
+    ],
+    correct: 2,
+    exp: "Shareholders' Equity = Assets − Liabilities. It is what belongs to the owners after all debts are paid. It's also called 'net worth' or 'book value'. Think of it as the owners' share of the business."
+  },
+  {
+    id: 5, subject: "fin", session: "Session 1 · Balance Sheet",
+    q: "ITC Ltd acquired another company (book value ₹100 Cr) for ₹150 Cr. What appears on ITC's balance sheet as a result of the premium paid?",
+    opts: [
+      "₹150 Cr as a Fixed Asset",
+      "₹50 Cr as Goodwill (an intangible non-current asset)",
+      "₹50 Cr as a Current Liability",
+      "₹100 Cr as a Long-term Investment"
+    ],
+    correct: 1,
+    exp: "Goodwill = Purchase Price − Book Value of acquired company = ₹150 Cr − ₹100 Cr = ₹50 Cr. Goodwill captures the value of brand, reputation, and customer base beyond tangible assets, and appears on the acquirer's balance sheet."
+  },
+  {
+    id: 6, subject: "fin", session: "Session 1 · Balance Sheet",
+    q: "According to ITC's FY2024 balance sheet, what is ITC's total asset base?",
+    opts: ["₹76,840 Cr", "₹74,890 Cr", "₹91,826 Cr", "₹41,066 Cr"],
+    correct: 2,
+    exp: "ITC's total assets in FY2024 were ₹91,826 Cr (Non-Current Assets ₹50,761 Cr + Current Assets ₹41,066 Cr). This is the total resource base of the company."
+  },
+  {
+    id: 7, subject: "fin", session: "Session 1 · Balance Sheet",
+    q: "In ITC's FY2024 balance sheet, equity constitutes what percentage of total funding?",
+    opts: ["56%", "72%", "83%", "91%"],
+    correct: 2,
+    exp: "ITC's equity is ₹74,890 Cr out of total assets of ₹91,826 Cr, which is ≈83%. This means ITC is overwhelmingly equity-financed with very low dependence on debt — indicating low financial risk."
+  },
+  {
+    id: 8, subject: "fin", session: "Session 1 · Balance Sheet",
+    q: "Working Capital is calculated as:",
+    opts: [
+      "Total Assets − Total Liabilities",
+      "Current Assets − Current Liabilities",
+      "Non-Current Assets − Non-Current Liabilities",
+      "Revenue − Operating Expenses"
+    ],
+    correct: 1,
+    exp: "Working Capital = Current Assets − Current Liabilities. It measures short-term liquidity. ITC's working capital = ₹41,066 Cr − ₹13,690 Cr = ₹27,376 Cr — a very healthy surplus indicating ITC can comfortably meet short-term obligations."
+  },
+  {
+    id: 9, subject: "fin", session: "Session 1 · Balance Sheet",
+    q: "The Balance Sheet is best described as a 'Resource Statement'. What two things does it tell you?",
+    opts: [
+      "How much profit was made and how much tax was paid",
+      "How much resources the company has, and who provided them (equity vs. debt)",
+      "How much cash was generated and where it was spent",
+      "What the company's market value is and how it compares to book value"
+    ],
+    correct: 1,
+    exp: "The Balance Sheet shows (1) how much resources (assets) the company controls, and (2) who provided them — either equity shareholders or lenders (liabilities). The P&L then shows how those resources performed to generate revenue and profit."
+  },
+  {
+    id: 10, subject: "fin", session: "Session 1 · Balance Sheet",
+    q: "ITC's goodwill on its FY2024 balance sheet is approximately ₹779.73 Cr. What does this indicate?",
+    opts: [
+      "ITC earned ₹779.73 Cr in brand royalty fees",
+      "ITC paid a premium when acquiring businesses — the gap between acquisition price and book value of those firms",
+      "ITC's brand value was independently appraised at ₹779.73 Cr",
+      "ITC has ₹779.73 Cr in pending litigation reserves"
+    ],
+    correct: 1,
+    exp: "Goodwill on a balance sheet tells you the acquisition history of a company. It represents the amount paid above book value when acquiring other companies — reflecting the brand, customer base, and reputation of those acquired entities."
+  },
+
+  // ── SESSION 1: INCOME STATEMENT ───────────────────────────────────────────
+  {
+    id: 11, subject: "fin", session: "Session 1 · Income Statement (P&L)",
+    q: "The Income Statement is often described as a staircase. What is at the very top of this staircase?",
+    opts: [
+      "Net Profit / PAT (bottom line)",
+      "EBIT (Operating Profit)",
+      "Revenue from Operations (Top Line)",
+      "Gross Profit"
+    ],
+    correct: 2,
+    exp: "Revenue from Operations (also called 'Top Line') sits at the top of the P&L staircase. At each step downward, various costs are subtracted — materials, operating expenses, interest, taxes — until you reach Net Profit at the bottom."
+  },
+  {
+    id: 12, subject: "fin", session: "Session 1 · Income Statement (P&L)",
+    q: "Gross Profit is calculated as:",
+    opts: [
+      "Revenue − All Operating Expenses",
+      "Revenue − Cost of Goods Sold (COGS)",
+      "Revenue − Interest and Tax",
+      "Operating Profit − Depreciation"
+    ],
+    correct: 1,
+    exp: "Gross Profit = Revenue − COGS (Cost of Goods Sold). COGS includes only direct costs of production: raw materials, manufacturing labour, factory costs. Operating expenses like salaries, rent, and marketing are subtracted in the next step."
+  },
+  {
+    id: 13, subject: "fin", session: "Session 1 · Income Statement (P&L)",
+    q: "PAT stands for 'Profit After Tax'. It is the final 'bottom line'. What is another common name for PAT?",
+    opts: ["EBIT", "Gross Profit", "Net Profit", "EBITDA"],
+    correct: 2,
+    exp: "PAT (Profit After Tax) = Net Profit = Bottom Line. It is the final profit figure after all expenses — COGS, operating expenses, depreciation, interest, and taxes — have been subtracted from revenue. This is what belongs to shareholders."
+  },
+  {
+    id: 14, subject: "fin", session: "Session 1 · Income Statement (P&L)",
+    q: "EBIT stands for 'Earnings Before Interest and Tax'. It represents:",
+    opts: [
+      "Cash generated from operations",
+      "Profit from core operations before financing costs and taxes",
+      "Total revenue minus cost of goods sold only",
+      "Gross profit minus non-cash items"
+    ],
+    correct: 1,
+    exp: "EBIT (Operating Profit) measures profit from the core business operations, before deducting interest (financing cost) and tax (government's share). It lets you evaluate the business's operating performance independently of its capital structure or tax regime."
+  },
+  {
+    id: 15, subject: "fin", session: "Session 1 · Income Statement (P&L)",
+    q: "ITC's revenue from operations in FY2024 was ₹76,840 Cr, and its Net Profit (PAT) was ₹20,751 Cr. What is ITC's Net Profit Margin?",
+    opts: ["~15%", "~27%", "~36%", "~45%"],
+    correct: 1,
+    exp: "Net Profit Margin = PAT ÷ Revenue = ₹20,751 ÷ ₹76,840 ≈ 27%. This means ITC keeps ₹27 as profit out of every ₹100 in revenue — a very high margin indicating strong brand power and pricing ability."
+  },
+  {
+    id: 16, subject: "fin", session: "Session 1 · Income Statement (P&L)",
+    q: "EPS (Earnings Per Share) for ITC is ₹16.42 (Basic). How is EPS calculated?",
+    opts: [
+      "PAT × Total Shares Outstanding",
+      "Stock Price ÷ PAT",
+      "PAT ÷ Total Shares Outstanding",
+      "Revenue ÷ Total Shares Outstanding"
+    ],
+    correct: 2,
+    exp: "EPS = PAT ÷ Total Shares Outstanding. ITC: ₹20,751 Cr PAT ÷ 1,248 Cr shares ≈ ₹16.42 per share. EPS tells you how much of the company's profit 'belongs to' each share you hold."
+  },
+  {
+    id: 17, subject: "fin", session: "Session 1 · Income Statement (P&L)",
+    q: "A machine costing ₹10 Cr has a useful life of 10 years. How much depreciation is charged each year, and why?",
+    opts: [
+      "₹10 Cr every year — because the machine was bought in that year",
+      "₹1 Cr every year — because depreciation spreads the asset cost over its useful life",
+      "₹0 Cr — because depreciation is not a real cash expense",
+      "₹5 Cr every year — to conservatively account for wear"
+    ],
+    correct: 1,
+    exp: "Depreciation = Asset Cost ÷ Useful Life = ₹10 Cr ÷ 10 years = ₹1 Cr/year. Depreciation matches the asset's cost with the revenue it helps generate over time. Importantly, it reduces profit on the P&L but involves NO cash outflow in the depreciation year."
+  },
+  {
+    id: 18, subject: "fin", session: "Session 1 · Income Statement (P&L)",
+    q: "What is 'Other Comprehensive Income' (OCI), and why does it matter?",
+    opts: [
+      "Dividends paid out to shareholders",
+      "Gains/losses that bypass the main P&L (e.g. investment revaluations) but still affect equity",
+      "Revenue earned from non-core activities like asset sales",
+      "Government grants and subsidies received"
+    ],
+    correct: 1,
+    exp: "OCI includes gains/losses that don't flow through the main P&L — such as revaluation of equity investments or foreign exchange translation. ITC had ₹2,957 Cr of equity investment gains in OCI. These are real value changes that affect total equity even if not in 'normal' profit."
+  },
+
+  // ── SESSION 1: CASH FLOW ──────────────────────────────────────────────────
+  {
+    id: 19, subject: "fin", session: "Session 1 · Cash Flow Statement",
+    q: "Why is a separate Cash Flow Statement needed if we already have the Income Statement?",
+    opts: [
+      "Because companies are required by law to file it separately",
+      "Because profit (accrual) ≠ cash received — a company can show profit but have no cash if sales are on credit",
+      "Because the Income Statement only covers one year at a time",
+      "Because the Cash Flow Statement shows tax liability more accurately"
+    ],
+    correct: 1,
+    exp: "Profit is recognised when earned (accrual basis), not when cash is received. A shop selling ₹10L on credit shows ₹10L profit on the P&L — but ₹0 in cash. The Cash Flow Statement shows whether real cash came in, which is what pays employees and creditors."
+  },
+  {
+    id: 20, subject: "fin", session: "Session 1 · Cash Flow Statement",
+    q: "Operating Activities in the Cash Flow Statement represent:",
+    opts: [
+      "Cash spent on buying factories and equipment",
+      "Cash raised by issuing new shares or taking loans",
+      "Cash from running the day-to-day business — selling products, collecting from customers, paying suppliers",
+      "Cash from selling long-term investments"
+    ],
+    correct: 2,
+    exp: "Operating Activities capture cash flows from the core business operations: collecting from customers, paying suppliers, employees, and taxes. A healthy company should consistently show positive operating cash flow — this is the engine of the business."
+  },
+  {
+    id: 21, subject: "fin", session: "Session 1 · Cash Flow Statement",
+    q: "Investing Activities in the Cash Flow Statement typically show a NEGATIVE number for growing companies. Why?",
+    opts: [
+      "Because growing companies pay more dividends, reducing cash",
+      "Because growing companies spend cash buying long-term assets (factories, equipment, investments) to expand",
+      "Because depreciation reduces investing cash flow",
+      "Because taxes are higher for growing companies"
+    ],
+    correct: 1,
+    exp: "Investing Activities include cash spent on buying/selling long-term assets: factories, equipment, long-term investments. Growing companies invest heavily (cash outflow), so this is typically negative — which is actually a good sign if operating cash flow is strong."
+  },
+  {
+    id: 22, subject: "fin", session: "Session 1 · Cash Flow Statement",
+    q: "Depreciation is added back when preparing the Cash Flow Statement (starting from net profit). Why?",
+    opts: [
+      "Because depreciation is a tax deduction and must be reclaimed",
+      "Because depreciation is a non-cash expense — it reduced profit on the P&L but no cash actually left the company",
+      "Because depreciation increases the asset value on the balance sheet",
+      "Because RBI guidelines require depreciation to be reported separately"
+    ],
+    correct: 1,
+    exp: "Depreciation reduces profit on the P&L, but NO cash leaves the company when depreciation is charged. When we start with net profit to calculate cash flow, we add back depreciation to arrive at the true cash generated. ITC added back ₹1,816 Cr this way."
+  },
+  {
+    id: 23, subject: "fin", session: "Session 1 · Cash Flow Statement",
+    q: "Which combination best describes a financially healthy, growing company's cash flow pattern?",
+    opts: [
+      "Operating: Negative, Investing: Positive, Financing: Negative",
+      "Operating: Positive, Investing: Negative, Financing: Variable",
+      "Operating: Negative, Investing: Negative, Financing: Positive",
+      "Operating: Positive, Investing: Positive, Financing: Positive"
+    ],
+    correct: 1,
+    exp: "A healthy, growing company generates cash from operations (positive Operating CF), invests in assets for growth (negative Investing CF), and Financing CF varies — it may raise debt or repay it, issue shares or pay dividends depending on strategy."
+  },
+  {
+    id: 24, subject: "fin", session: "Session 1 · Cash Flow Statement",
+    q: "Financing Activities in the Cash Flow Statement include:",
+    opts: [
+      "Cash received from selling goods to customers",
+      "Cash paid to buy machinery and equipment",
+      "Cash raised by issuing shares, taking/repaying loans, or paying dividends to shareholders",
+      "Cash paid for raw materials and salaries"
+    ],
+    correct: 2,
+    exp: "Financing Activities capture how the company raises and returns capital: issuing new shares (cash in), repaying loans (cash out), borrowing new loans (cash in), or paying dividends (cash out). These reflect the company's capital structure decisions."
+  },
+
+  // ── SESSION 1: VALUATION RATIOS ───────────────────────────────────────────
+  {
+    id: 25, subject: "fin", session: "Session 1 · Valuation Ratios",
+    q: "The P/E Ratio is calculated as:",
+    opts: [
+      "Earnings Per Share ÷ Market Price",
+      "Market Price Per Share ÷ Earnings Per Share (EPS)",
+      "Total Profit ÷ Number of Shares",
+      "Market Cap ÷ Total Revenue"
+    ],
+    correct: 1,
+    exp: "P/E = Market Price Per Share ÷ EPS. A P/E of 25 means you pay ₹25 for every ₹1 the company earns annually. Higher P/E generally means investors expect higher growth — they're willing to pay a premium for future earnings potential."
+  },
+  {
+    id: 26, subject: "fin", session: "Session 1 · Valuation Ratios",
+    q: "The P/B Ratio (Price-to-Book) is calculated as:",
+    opts: [
+      "Net Profit ÷ Book Value of Assets",
+      "Market Price Per Share ÷ Book Value Per Share (BVPS)",
+      "Revenue ÷ Shareholders' Equity",
+      "Market Cap ÷ Total Liabilities"
+    ],
+    correct: 1,
+    exp: "P/B = Market Price Per Share ÷ Book Value Per Share (BVPS). Where BVPS = Total Shareholders' Equity ÷ Shares Outstanding. P/B tells you how many rupees investors are paying for each rupee of the company's net assets. P/B < 1 may indicate undervaluation."
+  },
+  {
+    id: 27, subject: "fin", session: "Session 1 · Valuation Ratios",
+    q: "ITC's stock price is ₹420, EPS is ₹16.42, and BVPS is ₹60. What is ITC's calculated P/E ratio?",
+    opts: ["7.0×", "25.6×", "16.4×", "22.0×"],
+    correct: 1,
+    exp: "P/E = Stock Price ÷ EPS = ₹420 ÷ ₹16.42 ≈ 25.6×. This means investors pay ₹25.60 for every ₹1 of ITC's annual earnings. The market P/E is ~22×, so ITC trades at a modest premium — reflecting growth expectations and brand quality."
+  },
+  {
+    id: 28, subject: "fin", session: "Session 1 · Valuation Ratios",
+    q: "ITC's stock price is ₹420 and Book Value Per Share is ₹60. What is ITC's calculated P/B ratio?",
+    opts: ["25.6×", "4.0×", "7.0×", "1.23×"],
+    correct: 2,
+    exp: "P/B = Stock Price ÷ BVPS = ₹420 ÷ ₹60 = 7.0×. The market P/B is ~4×. ITC's 7× means investors pay ₹7 for every ₹1 of ITC's net assets — reflecting confidence that management will generate strong returns on those assets."
+  },
+  {
+    id: 29, subject: "fin", session: "Session 1 · Valuation Ratios",
+    q: "For which type of company is P/B ratio PREFERRED over P/E ratio for valuation?",
+    opts: [
+      "Consumer goods (FMCG) companies",
+      "Banks and financial companies",
+      "Technology companies with high growth",
+      "Pharmaceutical companies"
+    ],
+    correct: 1,
+    exp: "P/B is preferred for banks because: (1) it works even when banks are unprofitable (P/E needs positive earnings), (2) bad loans (NPAs) directly reduce book value making P/B more transparent, and (3) P/B is consistent across banking cycles due to Basel capital requirements."
+  },
+  {
+    id: 30, subject: "fin", session: "Session 1 · Valuation Ratios",
+    q: "Book Value Per Share (BVPS) is calculated as:",
+    opts: [
+      "Total Assets ÷ Number of Shares",
+      "Net Profit ÷ Number of Shares",
+      "Total Shareholders' Equity ÷ Total Shares Outstanding",
+      "Market Cap ÷ Total Shares Outstanding"
+    ],
+    correct: 2,
+    exp: "BVPS = Total Shareholders' Equity ÷ Total Shares Outstanding. ITC: ₹74,890 Cr ÷ 1,248 Cr shares ≈ ₹60 per share. This represents the accounting net worth per share — what each share would be 'worth' if the company liquidated at book values."
+  },
+  {
+    id: 31, subject: "fin", session: "Session 1 · Valuation Ratios",
+    q: "A stock with P/B < 1 generally indicates:",
+    opts: [
+      "The company is paying high dividends",
+      "The stock may be undervalued — market prices it below its net asset value",
+      "The company has strong earnings growth",
+      "The company has high debt levels"
+    ],
+    correct: 1,
+    exp: "P/B < 1 means the market values the company below its book (accounting) value. This may suggest undervaluation — you're buying assets for less than they're worth on paper. However, it can also signal the market expects future losses or asset write-downs."
+  },
+  {
+    id: 32, subject: "fin", session: "Session 1 · Valuation Ratios",
+    q: "Why is P/B + ROE considered the most effective valuation combination for banks?",
+    opts: [
+      "Because both metrics are required by RBI regulations",
+      "Because a rising ROE alongside high P/B confirms the bank is genuinely creating value — justifying the premium",
+      "Because P/E is unreliable for all companies",
+      "Because book value is always more accurate than market price for banks"
+    ],
+    correct: 1,
+    exp: "P/B tells you what premium investors pay over assets; ROE tells you how efficiently those assets generate returns. A high P/B with rising ROE = genuinely valuable bank. A high P/B with low ROE = potentially overvalued — investors pay premium without corresponding returns."
+  },
+
+  // ── SESSION 1: ITC CASE STUDY ─────────────────────────────────────────────
+  {
+    id: 33, subject: "fin", session: "Session 1 · ITC Case Study",
+    q: "ITC's FY2024 financials show Current Assets of ₹41,066 Cr and Current Liabilities of ₹13,690 Cr. What key insight does this reveal?",
+    opts: [
+      "ITC is struggling to meet short-term obligations",
+      "ITC has a working capital deficit and needs emergency funding",
+      "ITC holds excess liquidity — current assets are nearly 3× current liabilities",
+      "ITC's current ratio is below the industry average of 2"
+    ],
+    correct: 2,
+    exp: "ITC's Current Ratio = ₹41,066 ÷ ₹13,690 ≈ 3:1. This indicates ITC holds significant excess liquidity. Cash + Short-term investments of ~₹20,000 Cr vs Long-term debt of ~₹3,200 Cr further confirms ITC is cash-rich with very low financial risk."
+  },
+  {
+    id: 34, subject: "fin", session: "Session 1 · ITC Case Study",
+    q: "Time Series Analysis in financial statement analysis means:",
+    opts: [
+      "Comparing ITC against HUL and Nestle at the same point in time",
+      "Comparing ITC's financials across different years to identify growth or decline trends",
+      "Analysing cash flows over a 5-year period for valuation",
+      "Using multiple valuation ratios simultaneously for a single company"
+    ],
+    correct: 1,
+    exp: "Time Series Analysis = comparing the same company across multiple time periods. Example: ITC's total assets grew from ₹85,883 Cr (FY23) to ₹91,826 Cr (FY24) — 7% growth. This reveals trends, consistency, and acceleration/deceleration in performance."
+  },
+  {
+    id: 35, subject: "fin", session: "Session 1 · ITC Case Study",
+    q: "Cross-Section Analysis in financial statement analysis means:",
+    opts: [
+      "Analysing one company's data across multiple years",
+      "Comparing the company against its peers or industry benchmarks at the same point in time",
+      "Reviewing multiple sections of the annual report simultaneously",
+      "Comparing revenue against profit for a single financial year"
+    ],
+    correct: 1,
+    exp: "Cross-Section Analysis = comparing the company against peers at the same point in time. Example: comparing ITC's P/E of 25.6× against Hindustan Unilever, Nestle, and other FMCG peers. This reveals relative attractiveness and competitive positioning."
+  },
+  {
+    id: 36, subject: "fin", session: "Session 1 · ITC Case Study",
+    q: "ITC's Debt-to-Equity ratio is described as 'near zero'. What does this mean for investors?",
+    opts: [
+      "ITC cannot raise more capital in the future",
+      "ITC is at high risk of default because it has no debt cushion",
+      "ITC has almost no financial leverage risk — it funds itself almost entirely with equity",
+      "ITC's stock will underperform because it avoids growth through debt"
+    ],
+    correct: 2,
+    exp: "D/E near zero means ITC has minimal debt relative to equity (₹17.6 Cr long-term borrowings vs ₹74,890 Cr equity). This is very low financial risk — even in bad economic times, ITC has no significant debt obligation. The tradeoff is it doesn't benefit from financial leverage."
+  },
+
+  // ── SESSION 2: ROE & PROFITABILITY ────────────────────────────────────────
+  {
+    id: 37, subject: "fin", session: "Session 2 · Profitability Analysis",
+    q: "ROE (Return on Equity) measures:",
+    opts: [
+      "How much profit was generated for every rupee of total assets",
+      "How much profit was generated for every rupee invested by shareholders",
+      "How much revenue was generated per employee",
+      "How efficiently the company uses its physical assets"
+    ],
+    correct: 1,
+    exp: "ROE = PAT ÷ Shareholders' Equity. It is the shareholder's scorecard — how much profit the company earned on every ₹100 of owner capital. ITC's ROE = ₹20,751 ÷ ₹74,889 ≈ 27%, meaning shareholders earn ₹27 for every ₹100 invested."
+  },
+  {
+    id: 38, subject: "fin", session: "Session 2 · Profitability Analysis",
+    q: "ROA (Return on Assets) is calculated as:",
+    opts: [
+      "PAT ÷ Shareholders' Equity",
+      "EBIT ÷ (Equity + Debt)",
+      "Net Income ÷ Total Assets",
+      "Revenue ÷ Total Assets"
+    ],
+    correct: 2,
+    exp: "ROA = Net Income ÷ Total Assets. It measures how efficiently management uses ALL the company's assets (regardless of how funded) to generate profit. ITC's ROA = ₹20,751 ÷ ₹91,826 ≈ 22.6% — every ₹100 of assets generated ₹22.6 in profit."
+  },
+  {
+    id: 39, subject: "fin", session: "Session 2 · Profitability Analysis",
+    q: "When should you use ROCE (Return on Capital Employed) rather than ROE?",
+    opts: [
+      "When you want the shareholder's view only",
+      "When comparing companies with zero debt",
+      "When you want a manager's or banker's view — evaluating returns on ALL capital (equity + debt) deployed",
+      "When analysing a company's tax efficiency"
+    ],
+    correct: 2,
+    exp: "ROCE = EBIT ÷ (Equity + Debt). While ROE is for shareholders only, ROCE is used by managers and bankers who care about all capital deployed. ITC's ROCE ≈ 36%. Use ROE for shareholder perspective, ROCE for total capital perspective."
+  },
+  {
+    id: 40, subject: "fin", session: "Session 2 · Profitability Analysis",
+    q: "EBITDA is preferred over PAT when comparing two companies in different industries because:",
+    opts: [
+      "EBITDA is always a higher number, making comparisons look better",
+      "EBITDA strips out differences in tax regimes, debt levels, and depreciation policies — showing pure operational performance",
+      "EBITDA is easier to calculate from public filings",
+      "EBITDA includes other comprehensive income unlike PAT"
+    ],
+    correct: 1,
+    exp: "EBITDA = Revenue − Operating Expenses (excl. D&A). By excluding Interest (debt-dependent), Tax (policy-dependent), and Depreciation (accounting-dependent), EBITDA lets you compare two companies' core operational engines — apples to apples. ITC: ₹76,840 − ₹50,586 ≈ ₹26,254 Cr EBITDA."
+  },
+  {
+    id: 41, subject: "fin", session: "Session 2 · Profitability Analysis",
+    q: "CAGR (Compounded Annual Growth Rate) is used to:",
+    opts: [
+      "Measure profit margin for a single year",
+      "Calculate the current ratio of a company",
+      "Show a smoothed annual growth rate — removing year-to-year volatility to reveal the underlying trend",
+      "Compare two companies' P/E ratios across time"
+    ],
+    correct: 2,
+    exp: "CAGR = (Ending Value ÷ Beginning Value)^(1/n) − 1. It smooths out volatile annual figures to show the consistent underlying growth rate. For TCS: 10-year CAGR of 10%, 5-year of 12%, last year 6% — the deceleration to 6% signals something worth investigating."
+  },
+  {
+    id: 42, subject: "fin", session: "Session 2 · Profitability Analysis",
+    q: "In the Revenue Claimants Chain, who gets paid LAST after a company earns revenue?",
+    opts: [
+      "Banks (interest on loans)",
+      "The Government (taxes)",
+      "Preference Shareholders (fixed dividend)",
+      "Equity Shareholders — they receive whatever is left after all others are paid"
+    ],
+    correct: 3,
+    exp: "The revenue claimants order is: Suppliers → Employees → Banks (interest) → Tax Authority → Preference Shareholders → Equity Shareholders. Equity holders are residual claimants — they get the upside if business does well, but bear the most risk as they're paid last."
+  },
+  {
+    id: 43, subject: "fin", session: "Session 2 · Profitability Analysis",
+    q: "Investors evaluate a company through four lenses — Return, Risk, Growth, and Sustainability. What metric directly answers the 'Growth' question?",
+    opts: ["ROE", "P/E Ratio", "CAGR of Revenue/Profit", "Working Capital Ratio"],
+    correct: 2,
+    exp: "CAGR (Compounded Annual Growth Rate) answers the Growth question — how fast is revenue or profit compounding year-on-year? ROE answers Return, Debt/Equity answers Risk, and sustainability is measured through consistency of margins and cash flow."
+  },
+  {
+    id: 44, subject: "fin", session: "Session 2 · Profitability Analysis",
+    q: "ITC's ROA is approximately 22.6% while its ROE is approximately 27%. Why is ROE higher than ROA?",
+    opts: [
+      "Because ROE uses a different profit figure",
+      "Because equity (denominator of ROE) is less than total assets (denominator of ROA), amplifying the ratio",
+      "Because ITC's revenue is higher than its total assets",
+      "Because tax is excluded from ROE calculation"
+    ],
+    correct: 1,
+    exp: "ROA = PAT ÷ Total Assets (₹91,826 Cr). ROE = PAT ÷ Equity (₹74,889 Cr). Since Equity < Total Assets, dividing the same PAT by a smaller number gives a higher ratio. The gap between ROA and ROE reflects the effect of liabilities — ITC's gap is small because its D/E is nearly zero."
+  },
+
+  // ── SESSION 2: DUPONT ANALYSIS ────────────────────────────────────────────
+  {
+    id: 45, subject: "fin", session: "Session 2 · DuPont Analysis",
+    q: "The 3-Factor DuPont formula decomposes ROE into which three components?",
+    opts: [
+      "Gross Margin × Operating Margin × Tax Rate",
+      "TATO (Total Asset Turnover) × Profit Margin × Equity Multiplier",
+      "Revenue Growth × Profit Margin × Dividend Payout",
+      "ROA × ROE × ROCE"
+    ],
+    correct: 1,
+    exp: "DuPont (3-Factor): ROE = TATO × Profit Margin × Equity Multiplier. Where: TATO = Sales ÷ Assets (efficiency), PM = Net Income ÷ Sales (profitability), EM = Assets ÷ Equity (leverage). This lets you pinpoint EXACTLY why ROE is high or low."
+  },
+  {
+    id: 46, subject: "fin", session: "Session 2 · DuPont Analysis",
+    q: "TATO (Total Asset Turnover) measures:",
+    opts: [
+      "How much net profit is generated per rupee of equity",
+      "How many rupees of sales are generated per rupee of assets",
+      "How efficiently short-term assets are converted to cash",
+      "How much interest is paid per rupee of assets"
+    ],
+    correct: 1,
+    exp: "TATO = Sales ÷ Total Assets. ITC: ₹76,840 ÷ ₹91,826 ≈ 0.84×. A low TATO means relatively low revenue per rupee of asset — common for asset-heavy companies. Increasing TATO (same assets, more sales) directly boosts ROE."
+  },
+  {
+    id: 47, subject: "fin", session: "Session 2 · DuPont Analysis",
+    q: "The Equity Multiplier (EM) in DuPont Analysis measures:",
+    opts: [
+      "How much equity the company has raised through IPOs",
+      "The ratio of Assets to Equity — reflecting how much of the asset base is funded by debt (financial leverage)",
+      "The ratio of Net Profit to Equity",
+      "How much premium investors pay over book value"
+    ],
+    correct: 1,
+    exp: "Equity Multiplier = Total Assets ÷ Shareholders' Equity. ITC: ₹91,826 ÷ ₹74,889 ≈ 1.23×. A higher EM means more debt is used to fund assets — more financial leverage. ITC's low EM of 1.23× confirms it uses almost no debt, which limits ROE amplification through leverage."
+  },
+  {
+    id: 48, subject: "fin", session: "Session 2 · DuPont Analysis",
+    q: "When the DuPont analysis reveals that a company's ROE is low because of LOW PROFIT MARGIN, what is the correct diagnosis and remedy?",
+    opts: [
+      "Under-utilised assets — fix by discounting prices or expanding distribution",
+      "Under-leveraged capital — fix by taking more debt or repurchasing shares",
+      "Revenue leaks out as costs (poor cost control or weak pricing) — fix by renegotiating with suppliers, reducing COGS, or premium pricing",
+      "Poor asset base — fix by buying more assets"
+    ],
+    correct: 2,
+    exp: "Low Profit Margin = revenue comes in but leaks out as costs. Root cause: poor cost control or weak pricing power. Solutions: renegotiate supplier contracts, improve employee productivity, reduce COGS, shift toward premium pricing. Contrast with low TATO (asset under-utilisation) or low EM (under-leveraged)."
+  },
+  {
+    id: 49, subject: "fin", session: "Session 2 · DuPont Analysis",
+    q: "The DuPont calculation for ITC gives: TATO 0.84 × PM 0.27 × EM 1.23. What should this equal?",
+    opts: ["22.6% (ROA)", "27% (ROE)", "36% (ROCE)", "7% (P/B based return)"],
+    correct: 1,
+    exp: "DuPont check: 0.84 × 0.27 × 1.23 ≈ 0.27 = 27% ✓. This equals ITC's ROE. If the three factors multiply to the ROE, the DuPont decomposition is correct. This confirms that ITC's high ROE is driven primarily by its high Profit Margin (27%), not by leverage or asset efficiency."
+  },
+  {
+    id: 50, subject: "fin", session: "Session 2 · DuPont Analysis",
+    q: "According to the Business Model Matrix (PM vs. TATO trade-off), which quadrant represents Apple iPhone and luxury brands?",
+    opts: [
+      "High Margin + Low Turnover (Unique/Service businesses)",
+      "Low Margin + High Turnover (Competitive/FMCG businesses)",
+      "High Margin + High Turnover (Luxury/Lifestyle — rare and powerful)",
+      "Low Margin + Low Turnover (Struggling businesses)"
+    ],
+    correct: 2,
+    exp: "Apple/luxury brands sit in the High Margin + High Turnover quadrant — they charge premium prices (high PM) AND sell in large volumes (high TATO). This is the most powerful and rare combination. Most businesses trade off between high margin OR high turnover, not both."
+  }
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PERFORMANCE TIERS
+// ─────────────────────────────────────────────────────────────────────────────
+function getTier(p) {
+  if (p >= 90) return { tier: "IIM-Level — Distinction", sub: "Exceptional command of Financial Statement Analysis." };
+  if (p >= 75) return { tier: "Strong Command — Pass with Merit", sub: "Solid understanding with minor gaps worth revisiting." };
+  if (p >= 60) return { tier: "Adequate — Revise Key Frameworks", sub: "Core concepts present; reinforce the weaker sessions." };
+  return { tier: "Needs Work — Return to Notes", sub: "Systematic revision recommended before the exam." };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────────────────────
+const state = {
+  deck: [],
+  current: 0,
+  answered: false,
+  filter: 'all',
+  correct: 0,
+  finCorrect: 0,
+  finTotal: 0,
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// UTILITIES
+// ─────────────────────────────────────────────────────────────────────────────
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pct(n, d) {
+  if (!d) return 0;
+  return Math.round((n / d) * 100);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FILTER
+// ─────────────────────────────────────────────────────────────────────────────
+function setFilter(f) {
+  state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.className = 'filter-btn';
+  });
+  if (f === 'all') {
+    document.getElementById('btnAll').classList.add('active-all');
+  } else {
+    const btn = document.getElementById('btn' + f.charAt(0).toUpperCase() + f.slice(1));
+    if (btn) btn.classList.add('active-' + f);
+  }
+  startQuiz(f);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// START / RESTART
+// ─────────────────────────────────────────────────────────────────────────────
+function startQuiz(filter) {
+  state.filter = filter || state.filter;
+  state.correct = 0;
+  state.finCorrect = 0;
+  state.finTotal = 0;
+
+  const pool = state.filter === 'all'
+    ? ALL_QUESTIONS
+    : ALL_QUESTIONS.filter(q => q.subject === state.filter);
+
+  state.deck = shuffle(pool);
+  state.current = 0;
+  state.answered = false;
+
+  // Pre-count totals
+  state.deck.forEach(q => {
+    if (q.subject === 'fin') state.finTotal++;
+  });
+
+  document.getElementById('resultsScreen').style.display = 'none';
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('quizArea').style.display = '';
+
+  if (state.deck.length === 0) {
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+
+  updateScore();
+  renderQuestion();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RENDER QUESTION
+// ─────────────────────────────────────────────────────────────────────────────
+function renderQuestion() {
+  state.answered = false;
+  const q = state.deck[state.current];
+  const total = state.deck.length;
+  const idx = state.current + 1;
+
+  document.getElementById('sessionLabel').textContent = q.session;
+  document.getElementById('qNum').textContent = `Q ${idx} / ${total}`;
+  document.getElementById('questionText').textContent = q.q;
+
+  // Progress
+  const prog = Math.round(((idx - 1) / total) * 100);
+  document.getElementById('progressLabel').textContent = `Question ${idx} of ${total}`;
+  document.getElementById('progressPct').textContent = prog + '%';
+  document.getElementById('progressFill').style.width = prog + '%';
+
+  // Options
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="option-letter">${letters[i]}.</span>${opt}`;
+    btn.onclick = () => selectAnswer(i);
+    grid.appendChild(btn);
+  });
+
+  // Hide explanation and next button
+  const expPanel = document.getElementById('explanationPanel');
+  expPanel.className = 'explanation-panel fin-border';
+  expPanel.style.display = 'none';
+  document.getElementById('expText').textContent = '';
+  document.getElementById('nextBtn').style.display = 'none';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SELECT ANSWER
+// ─────────────────────────────────────────────────────────────────────────────
+function selectAnswer(chosen) {
+  if (state.answered) return;
+  state.answered = true;
+
+  const q = state.deck[state.current];
+  const btns = document.querySelectorAll('.option-btn');
+
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.correct) btn.classList.add('correct');
+    else if (i === chosen) btn.classList.add('wrong');
+  });
+
+  if (chosen === q.correct) {
+    state.correct++;
+    if (q.subject === 'fin') state.finCorrect++;
+  }
+
+  // Show explanation
+  const expPanel = document.getElementById('explanationPanel');
+  expPanel.style.display = 'block';
+  expPanel.classList.add('show');
+  document.getElementById('expText').textContent = q.exp;
+
+  document.getElementById('nextBtn').style.display = 'block';
+  updateScore();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// NEXT QUESTION
+// ─────────────────────────────────────────────────────────────────────────────
+function nextQuestion() {
+  state.current++;
+  if (state.current >= state.deck.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// UPDATE SCORE HEADER
+// ─────────────────────────────────────────────────────────────────────────────
+function updateScore() {
+  const answered = state.current + (state.answered ? 1 : 0);
+  document.getElementById('scoreNum').textContent = state.correct;
+  document.getElementById('scoreDen').textContent = answered || state.deck.length;
+  document.getElementById('scorePct').textContent =
+    answered ? pct(state.correct, answered) + '%' : '—';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SHOW RESULTS
+// ─────────────────────────────────────────────────────────────────────────────
+function showResults() {
+  document.getElementById('quizArea').style.display = 'none';
+  const screen = document.getElementById('resultsScreen');
+  screen.style.display = 'block';
+
+  const total = state.deck.length;
+  const percentage = pct(state.correct, total);
+  const t = getTier(percentage);
+
+  document.getElementById('rHeading').textContent = `${state.correct} / ${total} — ${percentage}%`;
+  document.getElementById('rTier').textContent = t.tier;
+  document.getElementById('rSub').textContent = t.sub;
+
+  document.getElementById('rTotal').textContent = state.correct + '/' + total;
+  document.getElementById('rTotalSub').textContent = percentage + '%';
+
+  document.getElementById('rFin').textContent = state.finCorrect + '/' + state.finTotal;
+  document.getElementById('rFinSub').textContent = pct(state.finCorrect, state.finTotal) + '%';
+
+  // Progress bar to 100%
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressLabel').textContent = 'Complete';
+  document.getElementById('progressPct').textContent = '100%';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// KEYBOARD SHORTCUTS
+// ─────────────────────────────────────────────────────────────────────────────
+document.addEventListener('keydown', (e) => {
+  if (['1','2','3','4'].includes(e.key) && !state.answered) {
+    const btns = document.querySelectorAll('.option-btn');
+    const idx = parseInt(e.key) - 1;
+    if (btns[idx] && !btns[idx].disabled) selectAnswer(idx);
+  }
+  if ((e.key === 'Enter' || e.key === ' ') && state.answered) {
+    e.preventDefault();
+    nextQuestion();
+  }
+  if (e.key.toLowerCase() === 'r') {
+    startQuiz(state.filter);
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────────────────
+startQuiz('all');
+</script>
+</body>
+</html>

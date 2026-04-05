@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLP8 — Managing Change & Innovation Quiz</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:         #1a1c22;
+    --card:       #252830;
+    --card-hover: #2d3040;
+    --border:     #353845;
+    --text:       #e8e6e1;
+    --text-muted: #9895a0;
+    --text-dim:   #6b6878;
+    --correct:    #3ecf8e;
+    --correct-dim:rgba(62,207,142,0.15);
+    --wrong:      #e05252;
+    --wrong-dim:  rgba(224,82,82,0.15);
+    --gold:       #f0c040;
+    --radius:     12px;
+    --radius-sm:  8px;
+    --shadow:     0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ── Header ── */
+  .app-header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .app-title {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+  .app-subtitle {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .score-display {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    white-space: nowrap;
+  }
+  .score-display .score-num { color: var(--gold); font-weight: 500; }
+
+  /* ── Filter Bar ── */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    padding: 20px 24px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .filter-btn {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.8rem;
+    padding: 7px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+  }
+  .filter-btn:hover { background: var(--card-hover); color: var(--text); }
+  .filter-btn.active-all { background: rgba(255,255,255,0.08); color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+  /* ── Subject-specific CSS (generated) ── */
+
+  /* ── Subject: CRM ── */
+  .subject-tag.crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid rgba(139,127,240,0.3); }
+  .filter-btn.active-crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border-color:#8b7ff0; }
+  .explanation-panel.crm-border { border-left-color:#8b7ff0; background:rgba(139,127,240,0.15); }
+  .btn-crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid #8b7ff0; }
+  .btn-crm:hover { filter:brightness(1.15); }
+  .score-block-value.crm { color:#8b7ff0; }
+
+  /* ── Subject: PM ── */
+  .subject-tag.pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border:1px solid rgba(139,63,224,0.3); }
+  .filter-btn.active-pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border-color:#8b3fe0; }
+  .explanation-panel.pm-border { border-left-color:#8b3fe0; background:rgba(139,63,224,0.15); }
+  .btn-pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border:1px solid #8b3fe0; }
+  .btn-pm:hover { filter:brightness(1.15); }
+  .score-block-value.pm { color:#8b3fe0; }
+
+  /* ── Subject: SCM ── */
+  .subject-tag.scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border:1px solid rgba(46,196,165,0.3); }
+  .filter-btn.active-scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border-color:#2ec4a5; }
+  .explanation-panel.scm-border { border-left-color:#2ec4a5; background:rgba(46,196,165,0.15); }
+  .btn-scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border:1px solid #2ec4a5; }
+  .btn-scm:hover { filter:brightness(1.15); }
+  .score-block-value.scm { color:#2ec4a5; }
+
+  /* ── Subject: FIN ── */
+  .subject-tag.fin { background:rgba(224,139,32,0.15); color:#e08b20; border:1px solid rgba(224,139,32,0.3); }
+  .filter-btn.active-fin { background:rgba(224,139,32,0.15); color:#e08b20; border-color:#e08b20; }
+  .explanation-panel.fin-border { border-left-color:#e08b20; background:rgba(224,139,32,0.15); }
+  .btn-fin { background:rgba(224,139,32,0.15); color:#e08b20; border:1px solid #e08b20; }
+  .btn-fin:hover { filter:brightness(1.15); }
+  .score-block-value.fin { color:#e08b20; }
+
+  /* ── Subject: ECON ── */
+  .subject-tag.econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border:1px solid rgba(62,207,142,0.3); }
+  .filter-btn.active-econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border-color:#3ecf8e; }
+  .explanation-panel.econ-border { border-left-color:#3ecf8e; background:rgba(62,207,142,0.15); }
+  .btn-econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border:1px solid #3ecf8e; }
+  .btn-econ:hover { filter:brightness(1.15); }
+  .score-block-value.econ { color:#3ecf8e; }
+
+  /* ── Subject: OPS ── */
+  .subject-tag.ops { background:rgba(77,157,224,0.15); color:#4d9de0; border:1px solid rgba(77,157,224,0.3); }
+  .filter-btn.active-ops { background:rgba(77,157,224,0.15); color:#4d9de0; border-color:#4d9de0; }
+  .explanation-panel.ops-border { border-left-color:#4d9de0; background:rgba(77,157,224,0.15); }
+  .btn-ops { background:rgba(77,157,224,0.15); color:#4d9de0; border:1px solid #4d9de0; }
+  .btn-ops:hover { filter:brightness(1.15); }
+  .score-block-value.ops { color:#4d9de0; }
+
+  /* ── Subject: HR ── */
+  .subject-tag.hr { background:rgba(224,92,92,0.15); color:#e05c5c; border:1px solid rgba(224,92,92,0.3); }
+  .filter-btn.active-hr { background:rgba(224,92,92,0.15); color:#e05c5c; border-color:#e05c5c; }
+  .explanation-panel.hr-border { border-left-color:#e05c5c; background:rgba(224,92,92,0.15); }
+  .btn-hr { background:rgba(224,92,92,0.15); color:#e05c5c; border:1px solid #e05c5c; }
+  .btn-hr:hover { filter:brightness(1.15); }
+  .score-block-value.hr { color:#e05c5c; }
+
+  /* ── Subject: MCI ── */
+  .subject-tag.mci { background:rgba(201,146,42,0.15); color:#c9922a; border:1px solid rgba(201,146,42,0.3); }
+  .filter-btn.active-mci { background:rgba(201,146,42,0.15); color:#c9922a; border-color:#c9922a; }
+  .explanation-panel.mci-border { border-left-color:#c9922a; background:rgba(201,146,42,0.15); }
+  .btn-mci { background:rgba(201,146,42,0.15); color:#c9922a; border:1px solid #c9922a; }
+  .btn-mci:hover { filter:brightness(1.15); }
+  .score-block-value.mci { color:#c9922a; }
+
+  /* ── Subject: DT ── */
+  .subject-tag.dt { background:rgba(77,157,224,0.15); color:#4d9de0; border:1px solid rgba(77,157,224,0.3); }
+  .filter-btn.active-dt { background:rgba(77,157,224,0.15); color:#4d9de0; border-color:#4d9de0; }
+  .explanation-panel.dt-border { border-left-color:#4d9de0; background:rgba(77,157,224,0.15); }
+  .btn-dt { background:rgba(77,157,224,0.15); color:#4d9de0; border:1px solid #4d9de0; }
+  .btn-dt:hover { filter:brightness(1.15); }
+  .score-block-value.dt { color:#4d9de0; }
+
+  /* ── Subject: BIE ── */
+  .subject-tag.bie { background:rgba(46,196,165,0.15); color:#2ec4a5; border:1px solid rgba(46,196,165,0.3); }
+  .filter-btn.active-bie { background:rgba(46,196,165,0.15); color:#2ec4a5; border-color:#2ec4a5; }
+  .explanation-panel.bie-border { border-left-color:#2ec4a5; background:rgba(46,196,165,0.15); }
+  .btn-bie { background:rgba(46,196,165,0.15); color:#2ec4a5; border:1px solid #2ec4a5; }
+  .btn-bie:hover { filter:brightness(1.15); }
+  .score-block-value.bie { color:#2ec4a5; }
+
+  /* ── Subject: DEA ── */
+  .subject-tag.dea { background:rgba(224,92,92,0.15); color:#e05c5c; border:1px solid rgba(224,92,92,0.3); }
+  .filter-btn.active-dea { background:rgba(224,92,92,0.15); color:#e05c5c; border-color:#e05c5c; }
+  .explanation-panel.dea-border { border-left-color:#e05c5c; background:rgba(224,92,92,0.15); }
+  .btn-dea { background:rgba(224,92,92,0.15); color:#e05c5c; border:1px solid #e05c5c; }
+  .btn-dea:hover { filter:brightness(1.15); }
+  .score-block-value.dea { color:#e05c5c; }
+
+  /* ── Subject: ESA ── */
+  .subject-tag.esa { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid rgba(139,127,240,0.3); }
+  .filter-btn.active-esa { background:rgba(139,127,240,0.15); color:#8b7ff0; border-color:#8b7ff0; }
+  .explanation-panel.esa-border { border-left-color:#8b7ff0; background:rgba(139,127,240,0.15); }
+  .btn-esa { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid #8b7ff0; }
+  .btn-esa:hover { filter:brightness(1.15); }
+  .score-block-value.esa { color:#8b7ff0; }
+
+  /* ── Main layout ── */
+  .main-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 20px;
+  }
+
+  /* ── Progress ── */
+  .progress-area { margin-bottom: 24px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    margin-bottom: 8px;
+  }
+  .progress-track { height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    background: linear-gradient(90deg, #8b7ff0, #8b3fe0);
+  }
+
+  /* ── Question Card ── */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .subject-tag {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .session-label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-style: italic;
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+  }
+  .question-num {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-left: auto;
+  }
+  .question-text {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  /* ── Answer Options ── */
+  .options-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .option-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-align: left;
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    transition: all 0.15s ease;
+    width: 100%;
+    position: relative;
+  }
+  .option-btn:hover:not(.disabled) { background: var(--card-hover); border-color: rgba(255,255,255,0.18); }
+  .option-btn.disabled { cursor: default; color: var(--text-muted); }
+  .option-btn.correct {
+    background: var(--correct-dim) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+  }
+  .option-btn.wrong {
+    background: var(--wrong-dim) !important;
+    border-color: var(--wrong) !important;
+    color: var(--wrong) !important;
+  }
+  .option-letter {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px 8px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.15s;
+  }
+  .option-btn.correct .option-letter { background: rgba(62,207,142,0.2); border-color: var(--correct); color: var(--correct); }
+  .option-btn.wrong   .option-letter { background: rgba(224,82,82,0.2);  border-color: var(--wrong);   color: var(--wrong);   }
+  .option-text { flex: 1; }
+  .key-hint {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    flex-shrink: 0;
+    align-self: center;
+  }
+  .option-btn.disabled .key-hint { display: none; }
+
+  /* ── Explanation Panel ── */
+  .explanation-panel {
+    border-left: 3px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+    display: none;
+    animation: slideUp 0.25s ease;
+  }
+  .explanation-panel.show { display: block; }
+  .explanation-label {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 9px 22px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { background: var(--card-hover); }
+  .btn-primary { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+  .btn-primary:hover { background: rgba(255,255,255,0.13); }
+  #nextBtn { display: none; margin-top: 4px; }
+
+  /* ── Results Screen ── */
+  .results-screen { display: none; animation: slideUp 0.4s ease; }
+  .results-screen.show { display: block; }
+  .results-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 32px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .results-trophy { font-size: 2.5rem; margin-bottom: 12px; }
+  .results-tier {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, #8b7ff0, #8b3fe0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .results-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    font-style: italic;
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+  }
+  .results-scores {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .score-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 12px;
+  }
+  .score-block-label {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .score-block-value {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+  .score-block-value.all { color: var(--gold); }
+  .score-block-sub {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+  }
+  .results-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 0.95rem;
+    display: none;
+  }
+
+  /* ── Keyboard hints ── */
+  .keyboard-hint-bar {
+    text-align: center;
+    margin-top: 20px;
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+  .kh-item { display: flex; align-items: center; gap: 6px; }
+  .kh-key { border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; color: var(--text-muted); }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+
+  /* ── Touch UX: kill 300ms delay, remove tap highlight ── */
+  * { -webkit-tap-highlight-color: transparent; }
+  button, .option-btn, .filter-btn { touch-action: manipulation; }
+  .option-btn:active:not(.disabled) { opacity: 0.72; transform: scale(0.983); }
+  .btn:active        { opacity: 0.78; transform: scale(0.972); }
+  .filter-btn:active { opacity: 0.72; }
+
+  /* ── Mobile: max 640px ── */
+  @media (max-width: 640px) {
+
+    .app-header { padding: 10px 14px; flex-wrap: wrap; gap: 6px; }
+    .app-title { font-size: 0.9rem; }
+    .app-subtitle { display: none; }
+    .score-display { font-size: 0.78rem; padding: 4px 12px; }
+
+    .filter-bar {
+      padding: 12px 14px 0;
+      gap: 7px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-btn { flex-shrink: 0; min-height: 40px; padding: 8px 18px; font-size: 0.78rem; }
+
+    .main-wrap { padding: 14px 12px; }
+    .progress-area { margin-bottom: 16px; }
+    .progress-label { font-size: 0.7rem; }
+    .progress-track { height: 5px; }
+
+    .question-card { padding: 18px 14px; border-radius: 10px; }
+    .card-meta { gap: 7px; margin-bottom: 14px; }
+    .subject-tag { font-size: 0.65rem; }
+    .session-label { font-size: 0.68rem; }
+    .question-num { font-size: 0.65rem; }
+
+    /* 16px minimum stops iOS zooming the page on focus */
+    .question-text { font-size: 1rem; line-height: 1.65; margin-bottom: 18px; }
+
+    /* Option buttons: 52px min tap target */
+    .options-grid { gap: 9px; margin-bottom: 16px; }
+    .option-btn {
+      min-height: 52px;
+      padding: 14px 13px;
+      gap: 11px;
+      font-size: 0.88rem;
+      border-radius: 8px;
+      align-items: center;
+    }
+    .option-letter { min-width: 26px; text-align: center; padding: 2px 6px; font-size: 0.75rem; }
+    .key-hint { display: none; }
+
+    .explanation-panel { font-size: 0.83rem; padding: 12px 13px; }
+    .explanation-label { font-size: 0.62rem; }
+
+    /* Next: full-width large button */
+    #nextBtn {
+      width: 100%;
+      justify-content: center;
+      padding: 15px;
+      min-height: 50px;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      margin-top: 6px;
+    }
+
+    .results-card { padding: 22px 14px; }
+    .results-trophy { font-size: 2rem; margin-bottom: 8px; }
+    .results-tier { font-size: 1.25rem; }
+    .results-subtitle { font-size: 0.78rem; margin-bottom: 20px; }
+    .results-scores { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .score-block { padding: 12px 10px; }
+    .score-block-label { font-size: 0.62rem; }
+    .score-block-value { font-size: 1.5rem; }
+    .score-block-sub { font-size: 0.68rem; }
+
+    /* Results buttons: stacked, full width */
+    .results-actions { flex-direction: column; }
+    .results-actions .btn { width: 100%; justify-content: center; min-height: 48px; font-size: 0.9rem; }
+
+    .keyboard-hint-bar { display: none; }
+  }
+
+  /* Very small phones < 360px */
+  @media (max-width: 360px) {
+    .question-text { font-size: 0.94rem; }
+    .option-btn { font-size: 0.83rem; padding: 13px 11px; }
+    .results-scores { grid-template-columns: 1fr; }
+    .score-block-value { font-size: 1.35rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="app-header">
+  <div>
+    <div class="app-title"><span class="bie">BIE</span> &amp; <span class="dea">DEA</span> &amp; <span class="dt">DT</span> &amp; <span class="esa">ESA</span> &amp; <span class="mci">MCI</span> Quiz</div>
+    <div class="app-subtitle">IIM Lucknow · Strategic Leadership Programme · Balancing Innovation & Efficiency · Diversity, Empowerment & Ambidexterity · Why Design Thinking Works · Emergent Strategy & Organisational Ambidexterity · Managing Change & Innovation · 50 Questions · April 2026</div>
+  </div>
+  <div class="score-display">
+    Score: <span class="score-num" id="scoreNum">0</span>
+    / <span id="scoreDen">0</span>
+  </div>
+</header>
+
+<!-- ── FILTER BAR ── -->
+<div class="filter-bar">
+  <button class="filter-btn active-all" id="btnAll" onclick="setFilter('all')">All 50</button>
+      <button class="filter-btn" id="btnBie" onclick="setFilter('bie')">BIE (10)</button>
+      <button class="filter-btn" id="btnDea" onclick="setFilter('dea')">DEA (10)</button>
+      <button class="filter-btn" id="btnDt" onclick="setFilter('dt')">DT (10)</button>
+      <button class="filter-btn" id="btnEsa" onclick="setFilter('esa')">ESA (10)</button>
+      <button class="filter-btn" id="btnMci" onclick="setFilter('mci')">MCI (10)</button>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main-wrap">
+
+  <!-- Progress -->
+  <div class="progress-area" id="progressArea">
+    <div class="progress-label">
+      <span id="progressText">Question 1 of 50</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Quiz Area -->
+  <div id="quizArea">
+    <div class="question-card" id="questionCard">
+
+      <div class="card-meta">
+        <span class="subject-tag" id="subjectTag">—</span>
+        <span class="session-label" id="sessionLabel">—</span>
+        <span class="question-num" id="questionNum">#1</span>
+      </div>
+
+      <div class="question-text" id="questionText">Loading...</div>
+
+      <div class="options-grid" id="optionsGrid"></div>
+
+      <div class="explanation-panel" id="explanationPanel">
+        <div class="explanation-label">Explanation</div>
+        <div id="explanationText"></div>
+      </div>
+
+      <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">
+        Next &rarr;
+      </button>
+    </div>
+
+    <div class="keyboard-hint-bar">
+      <div class="kh-item"><span class="kh-key">1–4</span> Select answer</div>
+      <div class="kh-item"><span class="kh-key">Enter</span> Next question</div>
+      <div class="kh-item"><span class="kh-key">R</span> Restart</div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" id="emptyState">No questions match this filter.</div>
+
+  <!-- Results Screen -->
+  <div class="results-screen" id="resultsScreen">
+    <div class="results-card">
+      <div class="results-trophy">🎓</div>
+      <div class="results-tier" id="resultsTier"></div>
+      <div class="results-subtitle" id="resultsSubtitle"></div>
+
+      <div class="results-scores">
+        
+        <div class="score-block">
+          <div class="score-block-label">Total</div>
+          <div class="score-block-value all" id="rTotal">—</div>
+          <div class="score-block-sub" id="rTotalSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">BIE</div>
+          <div class="score-block-value bie" id="rBie">—</div>
+          <div class="score-block-sub" id="rBieSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">DEA</div>
+          <div class="score-block-value dea" id="rDea">—</div>
+          <div class="score-block-sub" id="rDeaSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">DT</div>
+          <div class="score-block-value dt" id="rDt">—</div>
+          <div class="score-block-sub" id="rDtSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">ESA</div>
+          <div class="score-block-value esa" id="rEsa">—</div>
+          <div class="score-block-sub" id="rEsaSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">MCI</div>
+          <div class="score-block-value mci" id="rMci">—</div>
+          <div class="score-block-sub" id="rMciSub"></div>
+        </div>
+      </div>
+
+      <div class="results-actions">
+        <button class="btn btn-primary" onclick="startQuiz('all')">Restart All 50</button>
+        <button class="btn btn-bie" onclick="startQuiz('bie')">BIE Only (10)</button>
+        <button class="btn btn-dea" onclick="startQuiz('dea')">DEA Only (10)</button>
+        <button class="btn btn-dt" onclick="startQuiz('dt')">DT Only (10)</button>
+        <button class="btn btn-esa" onclick="startQuiz('esa')">ESA Only (10)</button>
+        <button class="btn btn-mci" onclick="startQuiz('mci')">MCI Only (10)</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main-wrap -->
+
+<script>
+/* ═══════════════════════════════════
+   QUESTION DATA
+═══════════════════════════════════ */
+const ALL_QUESTIONS = [
+  {
+    "id": 1,
+    "subject": "mci",
+    "session": "S8 · Managing Change & Innovation",
+    "q": "According to Professor Sinha's framework, strategy is best described as:",
+    "opts": [
+      "A fixed long-term plan endorsed by the Board",
+      "A bundle of interrelated choices framed as a testable hypothesis about how to win",
+      "A set of operational guidelines for managers",
+      "A financial forecast for the next five years"
+    ],
+    "correct": 1,
+    "exp": "Strategy as Hypothesis: strategy is not a plan but a set of interrelated choices treated as a testable bet. If evidence disproves it, you re-bias and revise — just like a scientist."
+  },
+  {
+    "id": 2,
+    "subject": "mci",
+    "session": "S8 · Managing Change & Innovation",
+    "q": "The Strategy Win Condition states that a strategy FAILS if which of the following is absent?",
+    "opts": [
+      "Board approval and shareholder endorsement",
+      "All three conditions — Well-Aligned, Consistent, and Relevant — must be simultaneously present",
+      "A detailed competitor analysis",
+      "A five-year financial projection"
+    ],
+    "correct": 1,
+    "exp": "WIN = Well-Aligned AND Consistent AND Relevant. Fail if any one is missing. IKEA example: flat-pack (aligned) + self-assembly = lower cost = lower price (consistent) + young buyers want affordable design (relevant) = WIN."
+  },
+  {
+    "id": 3,
+    "subject": "mci",
+    "session": "S8 · Managing Change & Innovation",
+    "q": "In the Innovation Lifecycle framework, what does BAU explicitly represent?",
+    "opts": [
+      "Best Available Utility — a target performance level",
+      "Balanced Allocation of Units — a resource model",
+      "Business As Usual — the path to organisational death",
+      "Business Adoption Uncertainty — a risk category"
+    ],
+    "correct": 2,
+    "exp": "BAU (Business As Usual) is explicitly crossed out in the professor's notes. It is the comfortable path — and the path to death. Blockbuster stayed BAU while Netflix innovated. Resting on success is the beginning of decline."
+  },
+  {
+    "id": 4,
+    "subject": "mci",
+    "session": "S8 · Managing Change & Innovation",
+    "q": "The 'Bias Box' concept in the Managing Change & Innovation session primarily limits which of the following?",
+    "opts": [
+      "The innovation budget available to the organisation",
+      "The organisation's choice set — the range of options it can actually perceive",
+      "The number of customer segments the organisation can serve",
+      "The speed of new product development"
+    ],
+    "correct": 1,
+    "exp": "The Bias Box is built from mental models, assumptions, and prior experiences. It defines the choice set. Unilever couldn't see 'soap = beauty care' until it unlearned 'soap = cleaning.' Breaking open the Bias Box is what innovation requires."
+  },
+  {
+    "id": 5,
+    "subject": "mci",
+    "session": "S8 · Managing Change & Innovation",
+    "q": "Which statement best distinguishes Innovation from Invention?",
+    "opts": [
+      "Invention requires a patent; innovation does not",
+      "Innovation = Invention + Commercialisation + Adoption",
+      "Invention is always preceded by a successful innovation",
+      "Innovation applies only to digital products"
+    ],
+    "correct": 1,
+    "exp": "A patent in a drawer is not an innovation. The critical leap is commercialisation — making something people will actually pay for AND adopt. Many organisations get stuck at Invention and never reach Innovation."
+  },
+  {
+    "id": 6,
+    "subject": "mci",
+    "session": "S8 · Managing Change & Innovation",
+    "q": "In the Hindu Deity Innovation Model, which deity is circled as the most important because it sustains the system while allowing transformation?",
+    "opts": [
+      "Brahma — the Creator (Srishti), generator of new ideas",
+      "Shiva — the Destroyer (Pralaya), who neutralises the bad",
+      "Vishnu — the Sustainer (Sthiti), who maintains and enables evolution",
+      "Durga — the Protector, representing empathy"
+    ],
+    "correct": 2,
+    "exp": "Vishnu is circled in the professor's notes as the CORE. The Sustainer keeps the system alive while allowing transformation — without Vishnu, creation (Brahma) and destruction (Shiva) produce chaos, not innovation."
+  },
+  {
+    "id": 7,
+    "subject": "mci",
+    "session": "S8 · Managing Change & Innovation",
+    "q": "The IBM Grossman case study is primarily used to illustrate which concept?",
+    "opts": [
+      "How CEOs formulate corporate strategy from the top down",
+      "What an intrepreneur — an innovator inside a large organisation — looks like in practice",
+      "How mergers and acquisitions drive corporate innovation",
+      "The importance of Product-Market Fit before scaling"
+    ],
+    "correct": 1,
+    "exp": "Grossman was a mid-level IBM manager — not the CEO. His profile (ownership, foresight, evidence-based decisions, courage, 'Why not me?') is the archetype of an intrepreneur. Innovation does not require being the CEO — it requires behaving like an owner."
+  },
+  {
+    "id": 8,
+    "subject": "mci",
+    "session": "S8 · Managing Change & Innovation",
+    "q": "According to the Scale Readiness Formula, which condition must be confirmed BEFORE an organisation scales?",
+    "opts": [
+      "High investor confidence and funding secured",
+      "Strong brand recognition in target markets",
+      "Product-Market Fit (P-M Fit) — the market wants exactly what is being offered",
+      "Regulatory approval across all geographies"
+    ],
+    "correct": 2,
+    "exp": "Scale = P-M Fit (High) × Repeatable Results × Consistency × Low People-Dependency. Do NOT scale before P-M Fit is confirmed. Scaling before P-M Fit = burning money at speed. Uber had perfect P-M Fit in cities before it scaled."
+  },
+  {
+    "id": 9,
+    "subject": "mci",
+    "session": "S8 · Managing Change & Innovation",
+    "q": "The Innovation Culture Equation identifies which factor as the single most critical enabling condition — without which all others fail?",
+    "opts": [
+      "Sufficient budget allocation for R&D activities",
+      "People diversity across functions and backgrounds",
+      "Top Management Support",
+      "Advanced Design Thinking capability in the team"
+    ],
+    "correct": 2,
+    "exp": "Innovation = Culture + People + Skills + Incentives + Top Management Support. The last term is explicitly called CRITICAL — without it, every hackathon is theatre. Google's innovation engine (Gmail, Maps, Android) required all elements, but top management support (20% time policy) was the non-negotiable enabler."
+  },
+  {
+    "id": 10,
+    "subject": "mci",
+    "session": "S8 · Managing Change & Innovation",
+    "q": "When a new technology S-curve (Curve B) begins and appears 'hazy and risky,' what does the framework recommend?",
+    "opts": [
+      "Wait for Curve B to become clear and validated before investing",
+      "Immediately shut down all Curve A investments to redirect resources",
+      "Acquire companies already on Curve B rather than waiting for clarity",
+      "Commission a detailed market analysis spanning 12–18 months"
+    ],
+    "correct": 2,
+    "exp": "Curve B is unstructured and ambiguous — waiting for clarity means arriving late. The recommended response: Acquire or Start-up / New Tech. Netflix saw streaming start a new S-curve and jumped early. Blockbuster stayed on the DVD curve. The gap between two S-curves is where companies die — or get disrupted."
+  },
+  {
+    "id": 11,
+    "subject": "dt",
+    "session": "S9 · Why Design Thinking Works",
+    "q": "Liedtka (HBR 2018) defines Design Thinking as a 'social technology.' This means:",
+    "opts": [
+      "A set of creative exercises using digital collaboration tools",
+      "A combination of practical tools AND insights into human nature, applied to a work process — similar to what TQM did for manufacturing",
+      "A project management methodology for digital transformation",
+      "A technology platform for crowdsourcing innovation ideas"
+    ],
+    "correct": 1,
+    "exp": "Design Thinking is a social technology — just as TQM transformed manufacturing in the 1980s, DT transforms innovation processes. The tools (sticky notes, prototypes) are just the UI; the real power is the OS underneath that rewires how teams collaborate and counteracts human biases."
+  },
+  {
+    "id": 12,
+    "subject": "dt",
+    "session": "S9 · Why Design Thinking Works",
+    "q": "Which is the FIRST of the seven activities in Design Thinking, according to Liedtka?",
+    "opts": [
+      "Emergence — structured co-creation of ideas",
+      "Articulation — surfacing hidden assumptions",
+      "Alignment — agreeing on design criteria",
+      "Immersion — living the customer's experience directly"
+    ],
+    "correct": 3,
+    "exp": "The 7 activities flow: Immersion → Sense-Making → Alignment → Emergence → Articulation → Pre-Experience → Learning in Action. Immersion comes first because everything else is grounded in the real, lived experience of the user — not reports or assumptions about them."
+  },
+  {
+    "id": 13,
+    "subject": "dt",
+    "session": "S9 · Why Design Thinking Works",
+    "q": "What is the primary purpose of the Gallery Walk in the Sense-Making stage of Design Thinking?",
+    "opts": [
+      "To present the team's proposed solutions to senior management for approval",
+      "To collectively find patterns in interview data while preventing HiPPO (Highest Paid Person's Opinion) bias",
+      "To evaluate competitors' design choices across the market",
+      "To showcase finished prototype options for user testing"
+    ],
+    "correct": 1,
+    "exp": "The Gallery Walk: interview data displayed as large posters with real faces and real quotes. Stakeholders walk the gallery, write observations on Post-its, form teams, and find themes collectively. Real human faces on a wall are harder to dismiss than data in a spreadsheet — and it prevents one person's bias from dominating."
+  },
+  {
+    "id": 14,
+    "subject": "dt",
+    "session": "S9 · Why Design Thinking Works",
+    "q": "What was the measurable outcome of the Design Thinking intervention at Monash Health, Melbourne?",
+    "opts": [
+      "A 50% reduction in treatment costs across the hospital",
+      "Recruitment of 13 new case managers to reduce handoffs",
+      "A 60% reduction in patient relapses",
+      "Complete elimination of all 18 handoffs in the care pathway"
+    ],
+    "correct": 2,
+    "exp": "Patient Tom had 3 face-to-face visits, 70 touchpoints, 13 case managers, and 18 handoffs before relapse. The DT intervention — centred on one human question ('Does Tom's care exemplify why you became a doctor?') — created emotional alignment and produced a 60% drop in patient relapses. Not a new drug — a new question."
+  },
+  {
+    "id": 15,
+    "subject": "dt",
+    "session": "S9 · Why Design Thinking Works",
+    "q": "What is the primary function of the Articulation step in Design Thinking?",
+    "opts": [
+      "Creating polished prototypes for investor presentations",
+      "Surfacing and challenging hidden assumptions before anything is built",
+      "Assigning team roles and responsibilities for the prototype phase",
+      "Writing the final design brief for engineering handover"
+    ],
+    "correct": 1,
+    "exp": "Articulation is where teams surface the implicit beliefs about what will or won't work. These unchallenged assumptions are where most innovations die. DT's Articulation step does in 10 minutes what the market would do in 10 months: surface the hidden assumption that will kill your idea — before you spend money building it."
+  },
+  {
+    "id": 16,
+    "subject": "dt",
+    "session": "S9 · Why Design Thinking Works",
+    "q": "Why are Design Thinking pre-experience prototypes intentionally rough and incomplete?",
+    "opts": [
+      "Because the team lacks time and sufficient resources to build polished versions",
+      "Because roughness signals to investors that the concept is still in development",
+      "Because incompleteness invites users to say what is missing — generating far better feedback than polished prototypes, which shut down suggestions",
+      "Because rough prototypes are easier and cheaper to patent"
+    ],
+    "correct": 2,
+    "exp": "Pre-experience prototypes are intentionally rough because roughness is a feature, not a bug. Kaiser Permanente tested a medical office layout using bedsheets as walls. Bedsheets are cheaper than demolition. Incompleteness says 'this is not finished — help us finish it.' Polished prototypes say 'this is done — do you like it?' The first generates insight; the second generates approval."
+  },
+  {
+    "id": 17,
+    "subject": "dt",
+    "session": "S9 · Why Design Thinking Works",
+    "q": "The Whiteriver Indian Hospital case demonstrates which key value of the Articulation step?",
+    "opts": [
+      "That digital technology always improves hospital efficiency regardless of context",
+      "Surfacing a flawed assumption in a workshop workshop is far cheaper than discovering it after 10 months of development",
+      "That rural hospitals fundamentally cannot use solutions designed for urban settings",
+      "That community consultation always changes the original design beyond recognition"
+    ],
+    "correct": 1,
+    "exp": "The team wanted to install a digital kiosk (copied from Johns Hopkins) to reduce 6-hour ER wait times. Articulation revealed the hidden assumption: 'our patients are comfortable with computers.' Reality: many were elderly Apache speakers. The idea was safely discarded before a single dollar was spent — in a workshop, not in production."
+  },
+  {
+    "id": 18,
+    "subject": "dt",
+    "session": "S9 · Why Design Thinking Works",
+    "q": "Which human bias does the Immersion step in Design Thinking primarily counteract?",
+    "opts": [
+      "Confirmation bias — the tendency to seek information that confirms existing beliefs",
+      "Availability heuristic — over-weighting recent or vivid examples",
+      "Status quo bias — the tendency to stay trapped in familiar assumptions rather than engaging with the user's actual reality",
+      "Anchoring bias — over-relying on the first piece of information encountered"
+    ],
+    "correct": 2,
+    "exp": "Immersion directly counteracts the human bias of being 'trapped in one's own expertise.' By living the customer's experience — not reading reports about it — innovators replace their own assumptions with the user's reality. This is why Katie Gaudion's visit to Pete completely redefined the problem from 'prevent harm' to 'enable a fuller life.'"
+  },
+  {
+    "id": 19,
+    "subject": "dt",
+    "session": "S9 · Why Design Thinking Works",
+    "q": "What was the fundamental reframing that Katie Gaudion's immersion with Pete (Kingwood Trust) produced?",
+    "opts": [
+      "That Pete needed more medication and clinical intervention",
+      "The problem reframed from 'how to prevent destructive behaviour' to 'how to enable a fuller, more pleasurable life' based on Pete's actual strengths",
+      "That physical restraint was the most effective safety measure for Pete",
+      "That digital therapy tools should be introduced to engage Pete"
+    ],
+    "correct": 1,
+    "exp": "Gaudion mirrored Pete's behaviours (picking at sofas, rubbing walls) and discovered they were pleasurable, not destructive. The bias flip: from 'design for disability and safety' to 'design for strengths and pleasures.' Immersion didn't just give new data — it replaced the entire problem definition."
+  },
+  {
+    "id": 20,
+    "subject": "dt",
+    "session": "S9 · Why Design Thinking Works",
+    "q": "According to Liedtka, Design Thinking is designed to deliver three outcomes simultaneously. Which combination is correct?",
+    "opts": [
+      "Faster execution, lower headcount costs, and higher quarterly profits",
+      "Superior solutions, lower risk & cost of innovation, and employee buy-in",
+      "Better technology, wider market reach, and stronger brand recognition",
+      "Standardised processes, a faster innovation pipeline, and regulatory compliance"
+    ],
+    "correct": 1,
+    "exp": "The three outcomes: Superior Solutions (immersion reveals hidden needs, reframes questions), Lower Risk & Cost (prototyping tests assumptions cheaply before full commitment), and Employee Buy-In (co-creation in Emergence means people own what they helped build). DT's genius is addressing all three simultaneously, not sequentially."
+  },
+  {
+    "id": 21,
+    "subject": "bie",
+    "session": "S10 · Balancing Innovation & Efficiency",
+    "q": "Organisational Ambidexterity is best defined as:",
+    "opts": [
+      "The ability to operate profitably in multiple countries simultaneously",
+      "A leadership style that balances autocratic and democratic decision-making",
+      "The ability to simultaneously exploit existing strengths (Efficiency) AND explore new opportunities (Innovation)",
+      "A corporate structure that uses two different business models in parallel"
+    ],
+    "correct": 2,
+    "exp": "Organisational Ambidexterity = Exploit (Efficiency, short-term) + Explore (Innovation, long-term) simultaneously. Like being ambidextrous with your hands — writing with the right and catching a ball with the left. Most organisations can only use one hand at a time."
+  },
+  {
+    "id": 22,
+    "subject": "bie",
+    "session": "S10 · Balancing Innovation & Efficiency",
+    "q": "What does the acronym VUCA stand for?",
+    "opts": [
+      "Variable, Uncertain, Controllable, Adaptive",
+      "Volatile, Uncertain, Complex, Ambiguous",
+      "Variable, Unstructured, Competitive, Analytical",
+      "Volatile, Unified, Consistent, Agile"
+    ],
+    "correct": 1,
+    "exp": "VUCA = Volatile, Uncertain, Complex, Ambiguous — the conditions facing most modern organisations. In a VUCA environment, pure exploitation (efficiency only) is a death trap because the environment changes faster than exploitation can adapt. COVID proved this: companies with only efficiency muscles were devastated."
+  },
+  {
+    "id": 23,
+    "subject": "bie",
+    "session": "S10 · Balancing Innovation & Efficiency",
+    "q": "Which scenario best describes the 'Efficiency Only' failure mode?",
+    "opts": [
+      "The organisation burns through cash on failed innovations before revenue arrives",
+      "The organisation consistently hits quarterly targets but becomes obsolete when the market is disrupted",
+      "The organisation loses key talent to competitors who offer better innovation culture",
+      "The organisation fails to achieve regulatory approval for new products"
+    ],
+    "correct": 1,
+    "exp": "Efficiency Only → High margin, hit targets → Obsolete when market shifts. Kodak: best-run photographic film company in a market that no longer exists. The most dangerous trap is being the best at what the world no longer needs."
+  },
+  {
+    "id": 24,
+    "subject": "bie",
+    "session": "S10 · Balancing Innovation & Efficiency",
+    "q": "The concept of 'Smell of the Place' in the context of organisational ambidexterity was coined by which scholar?",
+    "opts": [
+      "Michael Porter",
+      "Clayton Christensen",
+      "Sumantra Ghoshal",
+      "Jeanne Liedtka"
+    ],
+    "correct": 2,
+    "exp": "Sumantra Ghoshal coined 'Smell of the Place' — the context, culture, and unspoken norms of an organisation. Walk into a tired bureaucracy and you feel it: slow, political, risk-averse. Walk into a startup: fast, curious, unafraid. Leaders create the smell through daily choices, not annual speeches."
+  },
+  {
+    "id": 25,
+    "subject": "bie",
+    "session": "S10 · Balancing Innovation & Efficiency",
+    "q": "Which of the following is NOT one of the five mechanisms for building Organisational Ambidexterity?",
+    "opts": [
+      "Ambidextrous Top Management Team",
+      "Portfolio Approach (balance of activities)",
+      "Centralised Command Structure with unified KPIs",
+      "Divergent-Convergent Decision-Making"
+    ],
+    "correct": 2,
+    "exp": "The 5 Mechanisms: (1) Ambidextrous TMT, (2) Ambidextrous Posturing, (3) Divergent-Convergent Decision-Making, (4) Supportive 'Smell of the Place,' (5) Portfolio Approach. A Centralised Command Structure with unified KPIs is the opposite of what ambidexterity requires — it merges two cultures that must be kept separate."
+  },
+  {
+    "id": 26,
+    "subject": "bie",
+    "session": "S10 · Balancing Innovation & Efficiency",
+    "q": "In the Portfolio Balance Rule (70-20-10 model), what does the '70%' allocation represent?",
+    "opts": [
+      "New moonshot bets with high risk and long-term horizon",
+      "Adjacent innovations in known areas with medium risk",
+      "Core Business — exploitation, efficiency, and short-term cash generation",
+      "A balanced split between efficiency and innovation activities"
+    ],
+    "correct": 2,
+    "exp": "70% → Core Business (exploitation, efficiency, short-term). 20% → Adjacent Growth. 10% → New Horizons (exploration, long-term bets). The principle: always maintain allocation in all three buckets — never go 100% into any one. 3M: 70% established products (Post-it, Scotch tape), 20% adjacent, 10% moonshots."
+  },
+  {
+    "id": 27,
+    "subject": "bie",
+    "session": "S10 · Balancing Innovation & Efficiency",
+    "q": "Why is Structural Separation recommended for large organisations pursuing ambidexterity?",
+    "opts": [
+      "To reduce total employee headcount by eliminating redundant roles",
+      "Because efficiency culture will stifle and kill innovation if both are managed under the same KPIs, culture, and leadership style",
+      "To enable simultaneous geographic expansion into new markets",
+      "To comply with regulatory requirements on corporate governance structures"
+    ],
+    "correct": 1,
+    "exp": "The drivers of Efficiency (standardised, frugal, consistent) directly contradict the drivers of Innovation (experimental, tolerant of failure, unstructured). You cannot manage both with the same KPIs. Amazon runs AWS (exploration) completely separately from Amazon Fulfilment (exploitation) — different buildings, different KPIs, different cultures."
+  },
+  {
+    "id": 28,
+    "subject": "bie",
+    "session": "S10 · Balancing Innovation & Efficiency",
+    "q": "Innovation Champions must exist at which levels of the organisation to be effective?",
+    "opts": [
+      "Only at the Top Management Team level — they set the tone",
+      "Only at frontline and middle management — where innovation happens",
+      "At TMT, mid-management, AND frontline levels simultaneously",
+      "Only within the dedicated R&D function"
+    ],
+    "correct": 2,
+    "exp": "Innovation Champions at ALL levels: TMT (set ambidextrous tone, protect innovation budgets), Mid-Management (translate agenda, shield innovators from operational pressure), Frontline (generate ideas from customer contact, run small experiments). A CEO with no mid-manager champion is like a general with no lieutenants — the orders never reach the soldiers."
+  },
+  {
+    "id": 29,
+    "subject": "bie",
+    "session": "S10 · Balancing Innovation & Efficiency",
+    "q": "In the Divergent-Convergent Decision-Making process, what is the specific purpose of the Convergent sub-process?",
+    "opts": [
+      "To generate as many ideas as possible without any constraints",
+      "To evaluate and select (or blend) from the full menu of efficiency and innovation options raised during Divergence",
+      "To delegate strategic decisions to functional department heads",
+      "To eliminate all innovation options from the strategic budget"
+    ],
+    "correct": 1,
+    "exp": "Divergence raises both efficiency and innovation options — the full menu of choices is on the table. Convergence then evaluates, selects, or blends. The power: even when one agenda wins a particular decision, the other is never invisible for long — it re-emerges in the next cycle. Neither agenda permanently disappears."
+  },
+  {
+    "id": 30,
+    "subject": "bie",
+    "session": "S10 · Balancing Innovation & Efficiency",
+    "q": "Which metrics are most appropriate for measuring Exploitation (Efficiency) performance according to the ambidexterity framework?",
+    "opts": [
+      "Number of experiments run and hypotheses tested",
+      "R&D intensity and digital maturity score",
+      "Revenue, margin, and efficiency ratios",
+      "Customer satisfaction index and Net Promoter Score"
+    ],
+    "correct": 2,
+    "exp": "Metrics must match the mode: Efficiency (Exploitation) → Revenue, margin, efficiency ratios. Innovation (Exploration) → Learning, experiments run, new capabilities acquired. If you only measure output KPIs for innovation (revenue), you will get BAU — because experiments that haven't yet produced revenue will be killed."
+  },
+  {
+    "id": 31,
+    "subject": "dea",
+    "session": "S11 · Diversity, Empowerment & Ambidexterity",
+    "q": "The Singh & Sinha (2023) study on diversity and ambidexterity was based on data from:",
+    "opts": [
+      "50 Fortune 500 companies over 5 years",
+      "98 UK FTSE 100 firms over a 10-year period (2010–2021)",
+      "200 global startups across 3 years",
+      "30 Indian conglomerates tracked over 7 years"
+    ],
+    "correct": 1,
+    "exp": "98 of the UK's top 100 listed companies studied over 2010–2021. OLS regression used to establish causal relationships after controlling for firm size, industry type, capital structure, and profitability. This 10-year dataset is what gives the findings their statistical robustness."
+  },
+  {
+    "id": 32,
+    "subject": "dea",
+    "session": "S11 · Diversity, Empowerment & Ambidexterity",
+    "q": "Which level of gender diversity showed the strongest direct impact on exploitation capability (ROA, ROE) in the study?",
+    "opts": [
+      "Overall workforce diversity across all levels",
+      "Middle management diversity",
+      "Senior management gender diversity specifically",
+      "Board-level diversity only, excluding executive management"
+    ],
+    "correct": 2,
+    "exp": "Only senior management diversity significantly predicted exploitation capability. Overall workforce diversity was not significant. Representation at the decision-making table is the lever — not headcount across the organisation. p-value: 0.013** for ROA · 0.003*** for ROE."
+  },
+  {
+    "id": 33,
+    "subject": "dea",
+    "session": "S11 · Diversity, Empowerment & Ambidexterity",
+    "q": "In the Singh & Sinha study, female empowerment is measured using which proxy variable?",
+    "opts": [
+      "Number of women holding C-suite positions",
+      "Percentage of female representation in R&D teams",
+      "The Gender Pay Gap — a smaller gap indicates higher female empowerment",
+      "Number of women-led innovation projects in the organisation"
+    ],
+    "correct": 2,
+    "exp": "The Gender Pay Gap is used as a measurable proxy for empowerment. When women are paid equally, it signals the organisation values their contribution equally. Unequal pay is both symptom and cause of disempowerment — it signals 'your voice counts less.' Pay equity says 'your unconventional idea is worth voicing.'"
+  },
+  {
+    "id": 34,
+    "subject": "dea",
+    "session": "S11 · Diversity, Empowerment & Ambidexterity",
+    "q": "How is Exploration Capability measured in the Singh & Sinha (2023) study?",
+    "opts": [
+      "Return on Assets (ROA) and Return on Equity (ROE)",
+      "R&D intensity (R&D spend as % of revenue) and Digital Maturity Score",
+      "Market share growth and total revenue",
+      "Employee engagement scores and innovation pipeline count"
+    ],
+    "correct": 1,
+    "exp": "Exploration = R&D intensity + Digital Maturity Score. Exploitation = ROA + ROE. The two scoreboards measure different capabilities: ROA/ROE tell you how efficiently you use what you have; R&D intensity and digital maturity tell you how actively you're building tomorrow's advantage."
+  },
+  {
+    "id": 35,
+    "subject": "dea",
+    "session": "S11 · Diversity, Empowerment & Ambidexterity",
+    "q": "Why does female empowerment amplify Exploration capability more than Exploitation capability in the short term?",
+    "opts": [
+      "Because women are biologically predisposed toward innovation and creativity",
+      "Because exploration requires the courage to challenge the status quo — which pay parity directly provides by signalling equal value",
+      "Because efficiency gains depend primarily on technology, not on people empowerment",
+      "Because empowerment first reduces absenteeism, which then improves efficiency output"
+    ],
+    "correct": 1,
+    "exp": "Innovation requires courage to challenge the dominant opinion — empowerment provides that directly. Pay parity signals 'I am as valued here as my male colleague, therefore my unconventional idea is worth voicing.' Efficiency gains from empowerment take longer (Expectancy Theory: motivation → performance → reward builds slowly over time)."
+  },
+  {
+    "id": 36,
+    "subject": "dea",
+    "session": "S11 · Diversity, Empowerment & Ambidexterity",
+    "q": "In the study's statistical model, female empowerment is described as having a 'moderating effect' on gender diversity → exploration. What does this mean?",
+    "opts": [
+      "Empowerment causes gender diversity to decline over time",
+      "Empowerment completely replaces gender diversity as the key driver of exploration",
+      "Empowerment changes the strength of the positive relationship between gender diversity and exploration — it amplifies the effect",
+      "Empowerment is negatively correlated with exploration in the short term"
+    ],
+    "correct": 2,
+    "exp": "Moderating effect: the interaction term (Diversity × Pay Gap) is statistically significant for Digital Maturity (p=0.039). Two firms with identical gender diversity ratios: the one with the smaller pay gap (higher empowerment) shows significantly higher digital maturity. Diverse voices × microphone (empowerment) = loud, clear, impactful signal."
+  },
+  {
+    "id": 37,
+    "subject": "dea",
+    "session": "S11 · Diversity, Empowerment & Ambidexterity",
+    "q": "The study found that female empowerment did NOT significantly improve exploitation capability (ROA/ROE) in the short term (H3 not supported). Which theoretical framework best explains this finding?",
+    "opts": [
+      "Social Identity Theory — diverse groups need time to build sufficient trust",
+      "Expectancy Theory — motivation from empowerment builds slowly into operational efficiency gains over a longer time horizon",
+      "Transaction Cost Economics — process change requires structural restructuring first",
+      "Agency Theory — principal-agent problems delay the efficiency improvements"
+    ],
+    "correct": 1,
+    "exp": "Expectancy Theory: people are motivated when effort → performance → valued reward. Efficiency gains require this chain to be established through experience — it builds like compound interest. The study uses cross-sectional data; a longitudinal study would likely show the exploitation effect emerging over 3–5 years."
+  },
+  {
+    "id": 38,
+    "subject": "dea",
+    "session": "S11 · Diversity, Empowerment & Ambidexterity",
+    "q": "What is the 'Cascade Effect' described in the Singh & Sinha study?",
+    "opts": [
+      "The spread of gender pay gap disclosure policies across FTSE 100 industries",
+      "How senior management diversity signals to the talent pipeline, attracting and retaining diverse talent at every lower level over time",
+      "How innovation budget cuts cascade through the organisation during downturns",
+      "How regulatory diversity requirements flow from board level down to operational levels"
+    ],
+    "correct": 1,
+    "exp": "When women hold senior roles visibly, it signals to the pipeline that advancement is possible — attracting and retaining more diverse talent at middle and frontline levels. The short-term statistical effects of senior diversity are an underestimate of the full long-term benefit. Direct ROA/ROE effect: 1–2 years. Full diversity dividend: 5–10 years."
+  },
+  {
+    "id": 39,
+    "subject": "dea",
+    "session": "S11 · Diversity, Empowerment & Ambidexterity",
+    "q": "Which statement best captures the study's central finding about diversity WITHOUT empowerment?",
+    "opts": [
+      "Diversity without empowerment still moderately improves exploitation (efficiency) metrics",
+      "Diversity without empowerment is decoration — an unempowered diverse voice is not incorporated into strategic choices and produces no measurable innovation impact",
+      "Diversity without empowerment is only harmful in exploration-focused contexts",
+      "Diversity without empowerment mainly affects employee morale without measurable performance implications"
+    ],
+    "correct": 1,
+    "exp": "Gender diversity without empowerment is silent. An organisation that includes women but does not empower them through pay parity, voice, and decision-making authority gets none of the innovation benefit. Only an empowered diverse voice gets incorporated into strategic choices. The gender pay gap is not just a fairness metric — it is a real-time measure of how much innovation potential is being suppressed."
+  },
+  {
+    "id": 40,
+    "subject": "dea",
+    "session": "S11 · Diversity, Empowerment & Ambidexterity",
+    "q": "According to the practical recommendations in Singh & Sinha (2023), what should organisations prioritise to unlock the full ambidexterity benefit of gender diversity?",
+    "opts": [
+      "Increasing total female headcount across the entire organisation",
+      "Specifically placing women at the senior management table AND closing the gender pay gap — both conditions together",
+      "Creating women-only innovation teams to channel diverse thinking",
+      "Establishing a women's leadership development programme before any structural changes"
+    ],
+    "correct": 1,
+    "exp": "The headline finding: it is not enough to hire more women broadly. You must specifically place women at the senior management table AND pay them equally. Both conditions together produce measurable ambidexterity gains. Treating diversity as a strategic capability — not a compliance checkbox — is the mindset shift required."
+  },
+  {
+    "id": 41,
+    "subject": "esa",
+    "session": "S12 · Emergent Strategy & Organisational Ambidexterity",
+    "q": "How does 'Emergent Strategy' differ from 'Deliberate Strategy'?",
+    "opts": [
+      "Emergent strategy is always cheaper to implement than deliberate strategy",
+      "Emergent strategy evolves through actual patterns of action without a formally declared plan; deliberate strategy is a top-down, pre-designed roadmap",
+      "Emergent strategy is only applicable to startups and early-stage ventures",
+      "Emergent strategy relies primarily on AI and data analytics to identify patterns"
+    ],
+    "correct": 1,
+    "exp": "Coined by Mintzberg (1985): emergent strategy is what organisations actually DO, not just what they plan. Amazon's AWS and 3M's Post-it were emergent — not planned. Jazz vs classical music: jazz is emergent (musicians respond to each other, rules exist but the outcome is not pre-planned)."
+  },
+  {
+    "id": 42,
+    "subject": "esa",
+    "session": "S12 · Emergent Strategy & Organisational Ambidexterity",
+    "q": "What is 'TMT Complementarity' in the Sinha (2019) study?",
+    "opts": [
+      "When all Top Management Team members share the same functional background and expertise",
+      "When the TMT contains both exploration-oriented AND exploitation-oriented individuals with mutually reinforcing orientations",
+      "When the TMT uses a balanced scorecard to formally manage both strategic agendas",
+      "When the CEO combines both CFO and CTO roles into a single position"
+    ],
+    "correct": 1,
+    "exp": "TMT Complementarity: some members naturally push for exploration (visionary, experimental, big bets), others for exploitation (systematic, process-focused, revenue-driven). In Betainfo: 'He is much more focused on what we have today; what we will do next week.' / 'I am more focused on slightly more strategic issues.' Neither planned this role separation — it emerged from their natural orientations."
+  },
+  {
+    "id": 43,
+    "subject": "esa",
+    "session": "S12 · Emergent Strategy & Organisational Ambidexterity",
+    "q": "Which three factors constitute 'Team Hygiene' in the emergent ambidexterity model?",
+    "opts": [
+      "Skill diversity, age diversity, and functional background diversity",
+      "Low egocentricity, mutual trust and respect, and balanced power sharing",
+      "Clear KPIs, regular performance reviews, and structured decision-making meetings",
+      "Innovation champions at every level, strategic planning processes, and open communication channels"
+    ],
+    "correct": 1,
+    "exp": "Team Hygiene = (1) Low Egocentricity — idea quality > idea ownership; (2) Mutual Trust & Respect — believing the other's orientation is legitimate; (3) Balanced Power Sharing — no single person unilaterally overrides all others. Without these, complementarity produces conflict, not balance — as seen in Global Power."
+  },
+  {
+    "id": 44,
+    "subject": "esa",
+    "session": "S12 · Emergent Strategy & Organisational Ambidexterity",
+    "q": "What is the primary lesson from the Global Power cautionary tale in the Sinha (2019) study?",
+    "opts": [
+      "Solar energy startups require substantially higher capital investment than other sectors",
+      "A brilliant exploration-oriented founder without an exploitation counterpart with equal authority — and without team hygiene — creates an imbalanced, crisis-prone organisation",
+      "High mid-management turnover is the primary cause of startup failure in fast-growing sectors",
+      "Acquisition is the only sustainable path for innovation in capital-intensive industries"
+    ],
+    "correct": 1,
+    "exp": "Global Power: founder-CEO with high exploration orientation, no exploitation counterpart with equal power, high senior management turnover, ego conflicts. Brilliant product innovation (solar inverters, batteries) but no exploitation engine — no standardised processes, poor cash management. The company went into deep financial crisis TWICE. Passion for innovation without exploitation is like driving an accelerating car with no brakes."
+  },
+  {
+    "id": 45,
+    "subject": "esa",
+    "session": "S12 · Emergent Strategy & Organisational Ambidexterity",
+    "q": "What distinguishes Contextual Ambidexterity from Structural Ambidexterity?",
+    "opts": [
+      "Contextual ambidexterity requires far more dedicated resources than structural ambidexterity",
+      "Structural ambidexterity uses separate dedicated units for exploration and exploitation; contextual ambidexterity creates a shared organisational context where individuals judge when to explore and when to exploit",
+      "Contextual ambidexterity is only achievable in large corporations with mature cultures",
+      "Structural ambidexterity eliminates managerial tension; contextual ambidexterity amplifies it"
+    ],
+    "correct": 1,
+    "exp": "Structural: separate R&D lab (exploration) + manufacturing plant (exploitation). Contextual: one team that knows when to innovate and when to execute — because culture, trust, and leadership signals enable that judgement. Contextual is cheaper but harder to build. It relies on the same people being able to switch modes appropriately."
+  },
+  {
+    "id": 46,
+    "subject": "esa",
+    "session": "S12 · Emergent Strategy & Organisational Ambidexterity",
+    "q": "In the Three-Stage Emergent Ambidexterity Model (Figure 1), what is the second stage — between 'Ambidextrous TMT' and 'Emergent Ambidexterity'?",
+    "opts": [
+      "Structural Separation — creating distinct innovation and operational units",
+      "Emergent Ambidexterity itself — it follows directly from the right TMT composition",
+      "Context Creation — TMT actions and signals build an enabling organisational environment at all levels",
+      "Divergent-Convergent Decision-Making — formalising the balance between agendas"
+    ],
+    "correct": 2,
+    "exp": "Three stages: BOX1 Ambidextrous TMT → BOX2 Context Creation (TMT actions produce Pro-exploration AND Pro-exploitation signals that build an enabling environment) → BOX3 Emergent Ambidexterity (people at multiple levels sense and respond, linkages self-reinforce). The context is the transmission mechanism between TMT composition and organisational outcomes."
+  },
+  {
+    "id": 47,
+    "subject": "esa",
+    "session": "S12 · Emergent Strategy & Organisational Ambidexterity",
+    "q": "AlphaIndia's growth from equity research into broking, life insurance, investment banking, credit, and wealth management is cited in the study as evidence of:",
+    "opts": [
+      "Deliberate ambidexterity achieved through formal strategic planning and M&A",
+      "Emergent ambidexterity — achieved without a formal ambidexterity strategy, through a complementary TMT with high team hygiene",
+      "Acquisition-driven diversification funded by private equity",
+      "Contextual switching — the same individuals alternating between exploration and exploitation modes quarterly"
+    ],
+    "correct": 1,
+    "exp": "AlphaIndia grew into multiple new business areas while maintaining operational profitability — never declaring an 'ambidexterity strategy.' The TMT's complementary orientations (one handling operations, one maintaining the long-term vision) prevented both the efficiency trap and the innovation trap. This is the definition of emergent ambidexterity."
+  },
+  {
+    "id": 48,
+    "subject": "esa",
+    "session": "S12 · Emergent Strategy & Organisational Ambidexterity",
+    "q": "The Exploration-Exploitation Flywheel describes a self-sustaining loop. Which option best illustrates how this flywheel works?",
+    "opts": [
+      "Innovation budgets are ring-fenced each year to prevent efficiency pressures from consuming them",
+      "A separate innovation lab generates ideas that are independently commercialised by a separate venture team",
+      "Exploitation revenue funds exploration; exploration outputs create new exploitation platforms; operational feedback generates new exploration opportunities — all reinforcing each other",
+      "The TMT formally alternates its collective attention between exploration and exploitation on a quarterly basis"
+    ],
+    "correct": 2,
+    "exp": "The flywheel: sales teams (exploitation) give customer feedback → product team (exploration) designs new features → new features increase sales → increased revenue funds more R&D → R&D generates new products → cycle repeats. When these linkages are organic and self-reinforcing, ambidexterity sustains itself without active management — like a flywheel that needs only occasional energy once spinning."
+  },
+  {
+    "id": 49,
+    "subject": "esa",
+    "session": "S12 · Emergent Strategy & Organisational Ambidexterity",
+    "q": "The Sinha (2019) study argues that TMT 'diversity' should be measured by what, rather than by functional background?",
+    "opts": [
+      "Age and gender demographics of the management team",
+      "Educational qualifications and years of industry experience",
+      "Mindset orientation — a cognitive and behavioural inclination toward either exploration or exploitation",
+      "Years of service within the organisation and seniority level"
+    ],
+    "correct": 2,
+    "exp": "Functional labels are poor proxies. A CFO can be exploration-oriented (bold bets, R&D investment, acquisitions) and a CMO can be exploitation-oriented (optimising existing campaigns, cost control). The study recommends direct measurement of orientation as a mindset — how a person naturally thinks and behaves when facing ambiguity vs. when optimising known systems."
+  },
+  {
+    "id": 50,
+    "subject": "esa",
+    "session": "S12 · Emergent Strategy & Organisational Ambidexterity",
+    "q": "The jazz improvisation analogy is used in the Sinha (2019) study to describe emergent ambidexterity. What does it specifically mean in this context?",
+    "opts": [
+      "Organisations should allow complete anarchy and remove all structure from strategy-making",
+      "Organisations need highly detailed pre-planned scores for both exploration and exploitation activities",
+      "Ambidexterity can be coherent, responsive, and self-organising without a pre-decided script — when the right people and context are in place",
+      "Jazz musicians have been shown to make better senior leaders because of their improvisation capabilities"
+    ],
+    "correct": 2,
+    "exp": "Jazz: musicians respond to each other, rules exist, but the outcome is not pre-planned — yet it is coherent and purposeful. Emergent ambidexterity works the same way: the right TMT composition + team hygiene + enabling context produces balanced, self-organising strategic behaviour without anyone ever declaring 'we will be ambidextrous.' The absence of a declared strategy is a feature, not a flaw."
+  }
+];
+
+/* ═══════════════════════════════════
+   STATE
+═══════════════════════════════════ */
+let state = {
+  filter: 'all',
+  deck: [],
+  idx: 0,
+  answered: false,
+  score: 0,
+  bieCorrect: 0, bieTotal: 0,
+  deaCorrect: 0, deaTotal: 0,
+  dtCorrect: 0, dtTotal: 0,
+  esaCorrect: 0, esaTotal: 0,
+  mciCorrect: 0, mciTotal: 0,
+};
+
+/* ═══════════════════════════════════
+   UTILITIES
+═══════════════════════════════════ */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pct(n, d) { return d === 0 ? 0 : Math.round((n / d) * 100); }
+
+function getTier(p) {
+  if (p >= 90) return { tier: "IIM-Level \u2014 Distinction", sub: "Exceptional command of the frameworks across all five sessions." };
+  if (p >= 75) return { tier: "Strong Command \u2014 Pass with Merit", sub: "Solid understanding; minor gaps worth revisiting." };
+  if (p >= 60) return { tier: "Adequate \u2014 Revise Key Frameworks", sub: "Core concepts present; reinforce the weaker sessions." };
+  return { tier: "Needs Work \u2014 Return to Notes", sub: "Systematic revision recommended before the exam." };
+}
+
+/* ═══════════════════════════════════
+   FILTER
+═══════════════════════════════════ */
+function setFilter(f) {
+  state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  document.getElementById('btnAll').classList.add('active-all');
+  if (f !== 'all') {
+    const key = f.charAt(0).toUpperCase() + f.slice(1);
+    const el = document.getElementById('btn' + key);
+    if (el) el.classList.add('active-' + f);
+    document.getElementById('btnAll').classList.remove('active-all');
+  }
+  startQuiz(f);
+}
+
+/* ═══════════════════════════════════
+   QUIZ FLOW
+═══════════════════════════════════ */
+function startQuiz(f) {
+  if (f) state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  document.getElementById('btnAll').classList.add('active-all');
+  if (state.filter !== 'all') {
+    const key = state.filter.charAt(0).toUpperCase() + state.filter.slice(1);
+    const el = document.getElementById('btn' + key);
+    if (el) { el.classList.add('active-' + state.filter); document.getElementById('btnAll').classList.remove('active-all'); }
+  }
+
+  const pool = ALL_QUESTIONS.filter(q => state.filter === 'all' || q.subject === state.filter);
+  state.deck = shuffle(pool);
+  state.idx = 0;
+  state.score = 0;
+  state.bieCorrect = 0; state.bieTotal = 0;
+  state.deaCorrect = 0; state.deaTotal = 0;
+  state.dtCorrect = 0; state.dtTotal = 0;
+  state.esaCorrect = 0; state.esaTotal = 0;
+  state.mciCorrect = 0; state.mciTotal = 0;
+
+  state.deck.forEach(q => {
+    if (q.subject === 'bie') state.bieTotal++;
+    if (q.subject === 'dea') state.deaTotal++;
+    if (q.subject === 'dt') state.dtTotal++;
+    if (q.subject === 'esa') state.esaTotal++;
+    if (q.subject === 'mci') state.mciTotal++;
+  });
+
+  updateScore();
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizArea').style.display = 'block';
+  document.getElementById('progressArea').style.display = 'block';
+  document.getElementById('emptyState').style.display = 'none';
+
+  if (state.deck.length === 0) {
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = state.deck[state.idx];
+  const total = state.deck.length;
+  const num = state.idx + 1;
+  state.answered = false;
+
+  const fillPct = ((num - 1) / total) * 100;
+  document.getElementById('progressFill').style.width = fillPct + '%';
+  document.getElementById('progressText').textContent = 'Question ' + num + ' of ' + total;
+  document.getElementById('progressPct').textContent = Math.round(fillPct) + '%';
+
+  const tag = document.getElementById('subjectTag');
+  tag.textContent = q.subject.toUpperCase();
+  tag.className = 'subject-tag ' + q.subject;
+
+  document.getElementById('sessionLabel').textContent = q.session;
+  document.getElementById('questionNum').textContent = '#' + q.id;
+  document.getElementById('questionText').textContent = q.q;
+
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = '<span class="option-letter">' + letters[i] + '</span>'
+                  + '<span class="option-text">' + opt + '</span>'
+                  + '<span class="key-hint">' + (i + 1) + '</span>';
+    btn.addEventListener('click', () => selectAnswer(i));
+    grid.appendChild(btn);
+  });
+
+  const ep = document.getElementById('explanationPanel');
+  ep.className = 'explanation-panel';
+  document.getElementById('explanationText').textContent = '';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'slideUp 0.3s ease';
+}
+
+function selectAnswer(chosen) {
+  if (state.answered) return;
+  state.answered = true;
+
+  const q = state.deck[state.idx];
+  const btns = document.querySelectorAll('.option-btn');
+  const correct = q.correct;
+
+  btns.forEach((btn, i) => {
+    btn.classList.add('disabled');
+    if (i === correct) btn.classList.add('correct');
+    else if (i === chosen) btn.classList.add('wrong');
+  });
+
+  if (chosen === correct) {
+    state.score++;
+    if (q.subject === 'bie') state.bieCorrect++;
+    else if (q.subject === 'dea') state.deaCorrect++;
+    else if (q.subject === 'dt') state.dtCorrect++;
+    else if (q.subject === 'esa') state.esaCorrect++;
+    else if (q.subject === 'mci') state.mciCorrect++;
+  }
+
+  updateScore();
+
+  const ep = document.getElementById('explanationPanel');
+  document.getElementById('explanationText').textContent = q.exp;
+  ep.classList.add('show', q.subject + '-border');
+
+  document.getElementById('nextBtn').style.display = 'flex';
+  setTimeout(() => ep.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+}
+
+function nextQuestion() {
+  if (!state.answered) return;
+  state.idx++;
+  if (state.idx >= state.deck.length) {
+    showResults();
+  } else {
+    renderQuestion();
+    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function updateScore() {
+  const answeredSoFar = state.idx + (state.answered ? 1 : 0);
+  document.getElementById('scoreNum').textContent = state.score;
+  document.getElementById('scoreDen').textContent = Math.max(answeredSoFar, state.score);
+}
+
+/* ═══════════════════════════════════
+   RESULTS
+═══════════════════════════════════ */
+function showResults() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('progressArea').style.display = 'none';
+  document.getElementById('resultsScreen').classList.add('show');
+
+  const total = state.deck.length;
+  const p = pct(state.score, total);
+  const { tier, sub } = getTier(p);
+
+  document.getElementById('resultsTier').textContent = tier;
+  document.getElementById('resultsSubtitle').textContent = sub;
+  document.getElementById('rTotal').textContent = state.score + '/' + total;
+  document.getElementById('rTotalSub').textContent = p + '%';
+  document.getElementById('rBie').textContent = state.bieCorrect + '/' + state.bieTotal;
+  document.getElementById('rBieSub').textContent = pct(state.bieCorrect, state.bieTotal) + '%';
+  document.getElementById('rDea').textContent = state.deaCorrect + '/' + state.deaTotal;
+  document.getElementById('rDeaSub').textContent = pct(state.deaCorrect, state.deaTotal) + '%';
+  document.getElementById('rDt').textContent = state.dtCorrect + '/' + state.dtTotal;
+  document.getElementById('rDtSub').textContent = pct(state.dtCorrect, state.dtTotal) + '%';
+  document.getElementById('rEsa').textContent = state.esaCorrect + '/' + state.esaTotal;
+  document.getElementById('rEsaSub').textContent = pct(state.esaCorrect, state.esaTotal) + '%';
+  document.getElementById('rMci').textContent = state.mciCorrect + '/' + state.mciTotal;
+  document.getElementById('rMciSub').textContent = pct(state.mciCorrect, state.mciTotal) + '%';
+
+  document.getElementById('resultsScreen').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ═══════════════════════════════════
+   KEYBOARD SHORTCUTS
+═══════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (['1','2','3','4'].includes(e.key)) {
+    const btns = document.querySelectorAll('.option-btn:not(.disabled)');
+    const idx = parseInt(e.key) - 1;
+    if (btns[idx]) btns[idx].click();
+  }
+  if ((e.key === 'Enter' || e.key === ' ') && state.answered) {
+    e.preventDefault();
+    nextQuestion();
+  }
+  if (e.key === 'r' || e.key === 'R') startQuiz(state.filter);
+});
+
+/* ═══════════════════════════════════
+   INIT
+═══════════════════════════════════ */
+startQuiz('all');
+</script>
+</body>
+</html>

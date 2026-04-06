@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategic Marketing Mindset Quiz</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:         #1a1c22;
+    --card:       #252830;
+    --card-hover: #2d3040;
+    --border:     #353845;
+    --text:       #e8e6e1;
+    --text-muted: #9895a0;
+    --text-dim:   #6b6878;
+    --correct:    #3ecf8e;
+    --correct-dim:rgba(62,207,142,0.15);
+    --wrong:      #e05252;
+    --wrong-dim:  rgba(224,82,82,0.15);
+    --gold:       #f0c040;
+    --radius:     12px;
+    --radius-sm:  8px;
+    --shadow:     0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ── Header ── */
+  .app-header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .app-title {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+  .app-subtitle {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .score-display {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    white-space: nowrap;
+  }
+  .score-display .score-num { color: var(--gold); font-weight: 500; }
+
+  /* ── Filter Bar ── */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    padding: 20px 24px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .filter-btn {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.8rem;
+    padding: 7px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+  }
+  .filter-btn:hover { background: var(--card-hover); color: var(--text); }
+  .filter-btn.active-all { background: rgba(255,255,255,0.08); color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+  /* ── Subject-specific CSS (generated) ── */
+
+  /* ── Subject: CRM ── */
+  .subject-tag.crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid rgba(139,127,240,0.3); }
+  .filter-btn.active-crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border-color:#8b7ff0; }
+  .explanation-panel.crm-border { border-left-color:#8b7ff0; background:rgba(139,127,240,0.15); }
+  .btn-crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid #8b7ff0; }
+  .btn-crm:hover { filter:brightness(1.15); }
+  .score-block-value.crm { color:#8b7ff0; }
+
+  /* ── Subject: PM ── */
+  .subject-tag.pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border:1px solid rgba(139,63,224,0.3); }
+  .filter-btn.active-pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border-color:#8b3fe0; }
+  .explanation-panel.pm-border { border-left-color:#8b3fe0; background:rgba(139,63,224,0.15); }
+  .btn-pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border:1px solid #8b3fe0; }
+  .btn-pm:hover { filter:brightness(1.15); }
+  .score-block-value.pm { color:#8b3fe0; }
+
+  /* ── Subject: SCM ── */
+  .subject-tag.scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border:1px solid rgba(46,196,165,0.3); }
+  .filter-btn.active-scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border-color:#2ec4a5; }
+  .explanation-panel.scm-border { border-left-color:#2ec4a5; background:rgba(46,196,165,0.15); }
+  .btn-scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border:1px solid #2ec4a5; }
+  .btn-scm:hover { filter:brightness(1.15); }
+  .score-block-value.scm { color:#2ec4a5; }
+
+  /* ── Subject: FIN ── */
+  .subject-tag.fin { background:rgba(224,139,32,0.15); color:#e08b20; border:1px solid rgba(224,139,32,0.3); }
+  .filter-btn.active-fin { background:rgba(224,139,32,0.15); color:#e08b20; border-color:#e08b20; }
+  .explanation-panel.fin-border { border-left-color:#e08b20; background:rgba(224,139,32,0.15); }
+  .btn-fin { background:rgba(224,139,32,0.15); color:#e08b20; border:1px solid #e08b20; }
+  .btn-fin:hover { filter:brightness(1.15); }
+  .score-block-value.fin { color:#e08b20; }
+
+  /* ── Subject: ECON ── */
+  .subject-tag.econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border:1px solid rgba(62,207,142,0.3); }
+  .filter-btn.active-econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border-color:#3ecf8e; }
+  .explanation-panel.econ-border { border-left-color:#3ecf8e; background:rgba(62,207,142,0.15); }
+  .btn-econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border:1px solid #3ecf8e; }
+  .btn-econ:hover { filter:brightness(1.15); }
+  .score-block-value.econ { color:#3ecf8e; }
+
+  /* ── Subject: OPS ── */
+  .subject-tag.ops { background:rgba(77,157,224,0.15); color:#4d9de0; border:1px solid rgba(77,157,224,0.3); }
+  .filter-btn.active-ops { background:rgba(77,157,224,0.15); color:#4d9de0; border-color:#4d9de0; }
+  .explanation-panel.ops-border { border-left-color:#4d9de0; background:rgba(77,157,224,0.15); }
+  .btn-ops { background:rgba(77,157,224,0.15); color:#4d9de0; border:1px solid #4d9de0; }
+  .btn-ops:hover { filter:brightness(1.15); }
+  .score-block-value.ops { color:#4d9de0; }
+
+  /* ── Subject: HR ── */
+  .subject-tag.hr { background:rgba(224,92,92,0.15); color:#e05c5c; border:1px solid rgba(224,92,92,0.3); }
+  .filter-btn.active-hr { background:rgba(224,92,92,0.15); color:#e05c5c; border-color:#e05c5c; }
+  .explanation-panel.hr-border { border-left-color:#e05c5c; background:rgba(224,92,92,0.15); }
+  .btn-hr { background:rgba(224,92,92,0.15); color:#e05c5c; border:1px solid #e05c5c; }
+  .btn-hr:hover { filter:brightness(1.15); }
+  .score-block-value.hr { color:#e05c5c; }
+
+  /* ── Subject: LOYALTY ── */
+  .subject-tag.loyalty { background:rgba(26,127,142,0.15); color:#1a7f8e; border:1px solid rgba(26,127,142,0.3); }
+  .filter-btn.active-loyalty { background:rgba(26,127,142,0.15); color:#1a7f8e; border-color:#1a7f8e; }
+  .explanation-panel.loyalty-border { border-left-color:#1a7f8e; background:rgba(26,127,142,0.15); }
+  .btn-loyalty { background:rgba(26,127,142,0.15); color:#1a7f8e; border:1px solid #1a7f8e; }
+  .btn-loyalty:hover { filter:brightness(1.15); }
+  .score-block-value.loyalty { color:#1a7f8e; }
+
+  /* ── Subject: BARRIERS ── */
+  .subject-tag.barriers { background:rgba(200,137,42,0.15); color:#c8892a; border:1px solid rgba(200,137,42,0.3); }
+  .filter-btn.active-barriers { background:rgba(200,137,42,0.15); color:#c8892a; border-color:#c8892a; }
+  .explanation-panel.barriers-border { border-left-color:#c8892a; background:rgba(200,137,42,0.15); }
+  .btn-barriers { background:rgba(200,137,42,0.15); color:#c8892a; border:1px solid #c8892a; }
+  .btn-barriers:hover { filter:brightness(1.15); }
+  .score-block-value.barriers { color:#c8892a; }
+
+  /* ── Subject: RESEARCH ── */
+  .subject-tag.research { background:rgba(33,122,60,0.15); color:#217a3c; border:1px solid rgba(33,122,60,0.3); }
+  .filter-btn.active-research { background:rgba(33,122,60,0.15); color:#217a3c; border-color:#217a3c; }
+  .explanation-panel.research-border { border-left-color:#217a3c; background:rgba(33,122,60,0.15); }
+  .btn-research { background:rgba(33,122,60,0.15); color:#217a3c; border:1px solid #217a3c; }
+  .btn-research:hover { filter:brightness(1.15); }
+  .score-block-value.research { color:#217a3c; }
+
+  /* ── Subject: IDEATION ── */
+  .subject-tag.ideation { background:rgba(192,57,43,0.15); color:#c0392b; border:1px solid rgba(192,57,43,0.3); }
+  .filter-btn.active-ideation { background:rgba(192,57,43,0.15); color:#c0392b; border-color:#c0392b; }
+  .explanation-panel.ideation-border { border-left-color:#c0392b; background:rgba(192,57,43,0.15); }
+  .btn-ideation { background:rgba(192,57,43,0.15); color:#c0392b; border:1px solid #c0392b; }
+  .btn-ideation:hover { filter:brightness(1.15); }
+  .score-block-value.ideation { color:#c0392b; }
+
+  /* ── Main layout ── */
+  .main-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 20px;
+  }
+
+  /* ── Progress ── */
+  .progress-area { margin-bottom: 24px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    margin-bottom: 8px;
+  }
+  .progress-track { height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    background: linear-gradient(90deg, #8b7ff0, #8b3fe0);
+  }
+
+  /* ── Question Card ── */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .subject-tag {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .session-label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-style: italic;
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+  }
+  .question-num {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-left: auto;
+  }
+  .question-text {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  /* ── Answer Options ── */
+  .options-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .option-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-align: left;
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    transition: all 0.15s ease;
+    width: 100%;
+    position: relative;
+  }
+  .option-btn:hover:not(.disabled) { background: var(--card-hover); border-color: rgba(255,255,255,0.18); }
+  .option-btn.disabled { cursor: default; color: var(--text-muted); }
+  .option-btn.correct {
+    background: var(--correct-dim) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+  }
+  .option-btn.wrong {
+    background: var(--wrong-dim) !important;
+    border-color: var(--wrong) !important;
+    color: var(--wrong) !important;
+  }
+  .option-letter {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px 8px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.15s;
+  }
+  .option-btn.correct .option-letter { background: rgba(62,207,142,0.2); border-color: var(--correct); color: var(--correct); }
+  .option-btn.wrong   .option-letter { background: rgba(224,82,82,0.2);  border-color: var(--wrong);   color: var(--wrong);   }
+  .option-text { flex: 1; }
+  .key-hint {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    flex-shrink: 0;
+    align-self: center;
+  }
+  .option-btn.disabled .key-hint { display: none; }
+
+  /* ── Explanation Panel ── */
+  .explanation-panel {
+    border-left: 3px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+    display: none;
+    animation: slideUp 0.25s ease;
+  }
+  .explanation-panel.show { display: block; }
+  .explanation-label {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 9px 22px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { background: var(--card-hover); }
+  .btn-primary { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+  .btn-primary:hover { background: rgba(255,255,255,0.13); }
+  #nextBtn { display: none; margin-top: 4px; }
+
+  /* ── Results Screen ── */
+  .results-screen { display: none; animation: slideUp 0.4s ease; }
+  .results-screen.show { display: block; }
+  .results-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 32px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .results-trophy { font-size: 2.5rem; margin-bottom: 12px; }
+  .results-tier {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, #8b7ff0, #8b3fe0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .results-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    font-style: italic;
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+  }
+  .results-scores {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .score-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 12px;
+  }
+  .score-block-label {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .score-block-value {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+  .score-block-value.all { color: var(--gold); }
+  .score-block-sub {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+  }
+  .results-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 0.95rem;
+    display: none;
+  }
+
+  /* ── Keyboard hints ── */
+  .keyboard-hint-bar {
+    text-align: center;
+    margin-top: 20px;
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+  .kh-item { display: flex; align-items: center; gap: 6px; }
+  .kh-key { border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; color: var(--text-muted); }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+
+  /* ── Touch UX: kill 300ms delay, remove tap highlight ── */
+  * { -webkit-tap-highlight-color: transparent; }
+  button, .option-btn, .filter-btn { touch-action: manipulation; }
+  .option-btn:active:not(.disabled) { opacity: 0.72; transform: scale(0.983); }
+  .btn:active        { opacity: 0.78; transform: scale(0.972); }
+  .filter-btn:active { opacity: 0.72; }
+
+  /* ── Mobile: max 640px ── */
+  @media (max-width: 640px) {
+
+    .app-header { padding: 10px 14px; flex-wrap: wrap; gap: 6px; }
+    .app-title { font-size: 0.9rem; }
+    .app-subtitle { display: none; }
+    .score-display { font-size: 0.78rem; padding: 4px 12px; }
+
+    .filter-bar {
+      padding: 12px 14px 0;
+      gap: 7px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-btn { flex-shrink: 0; min-height: 40px; padding: 8px 18px; font-size: 0.78rem; }
+
+    .main-wrap { padding: 14px 12px; }
+    .progress-area { margin-bottom: 16px; }
+    .progress-label { font-size: 0.7rem; }
+    .progress-track { height: 5px; }
+
+    .question-card { padding: 18px 14px; border-radius: 10px; }
+    .card-meta { gap: 7px; margin-bottom: 14px; }
+    .subject-tag { font-size: 0.65rem; }
+    .session-label { font-size: 0.68rem; }
+    .question-num { font-size: 0.65rem; }
+
+    /* 16px minimum stops iOS zooming the page on focus */
+    .question-text { font-size: 1rem; line-height: 1.65; margin-bottom: 18px; }
+
+    /* Option buttons: 52px min tap target */
+    .options-grid { gap: 9px; margin-bottom: 16px; }
+    .option-btn {
+      min-height: 52px;
+      padding: 14px 13px;
+      gap: 11px;
+      font-size: 0.88rem;
+      border-radius: 8px;
+      align-items: center;
+    }
+    .option-letter { min-width: 26px; text-align: center; padding: 2px 6px; font-size: 0.75rem; }
+    .key-hint { display: none; }
+
+    .explanation-panel { font-size: 0.83rem; padding: 12px 13px; }
+    .explanation-label { font-size: 0.62rem; }
+
+    /* Next: full-width large button */
+    #nextBtn {
+      width: 100%;
+      justify-content: center;
+      padding: 15px;
+      min-height: 50px;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      margin-top: 6px;
+    }
+
+    .results-card { padding: 22px 14px; }
+    .results-trophy { font-size: 2rem; margin-bottom: 8px; }
+    .results-tier { font-size: 1.25rem; }
+    .results-subtitle { font-size: 0.78rem; margin-bottom: 20px; }
+    .results-scores { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .score-block { padding: 12px 10px; }
+    .score-block-label { font-size: 0.62rem; }
+    .score-block-value { font-size: 1.5rem; }
+    .score-block-sub { font-size: 0.68rem; }
+
+    /* Results buttons: stacked, full width */
+    .results-actions { flex-direction: column; }
+    .results-actions .btn { width: 100%; justify-content: center; min-height: 48px; font-size: 0.9rem; }
+
+    .keyboard-hint-bar { display: none; }
+  }
+
+  /* Very small phones < 360px */
+  @media (max-width: 360px) {
+    .question-text { font-size: 0.94rem; }
+    .option-btn { font-size: 0.83rem; padding: 13px 11px; }
+    .results-scores { grid-template-columns: 1fr; }
+    .score-block-value { font-size: 1.35rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="app-header">
+  <div>
+    <div class="app-title"><span class="barriers">Barriers</span> &amp; <span class="ideation">Ideation</span> &amp; <span class="loyalty">Loyalty</span> &amp; <span class="research">Research</span> Quiz</div>
+    <div class="app-subtitle">IIM Lucknow · Strategic Leadership Programme · Barriers to Customer Centrism · Ideation & Creative Problem Solving · Service Profit Chain & Customer Loyalty · Customer Understanding & Research Tools · 30 Questions · April 2026</div>
+  </div>
+  <div class="score-display">
+    Score: <span class="score-num" id="scoreNum">0</span>
+    / <span id="scoreDen">0</span>
+  </div>
+</header>
+
+<!-- ── FILTER BAR ── -->
+<div class="filter-bar">
+  <button class="filter-btn active-all" id="btnAll" onclick="setFilter('all')">All 30</button>
+      <button class="filter-btn" id="btnBarriers" onclick="setFilter('barriers')">Barriers (8)</button>
+      <button class="filter-btn" id="btnIdeation" onclick="setFilter('ideation')">Ideation (4)</button>
+      <button class="filter-btn" id="btnLoyalty" onclick="setFilter('loyalty')">Loyalty (8)</button>
+      <button class="filter-btn" id="btnResearch" onclick="setFilter('research')">Research (10)</button>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main-wrap">
+
+  <!-- Progress -->
+  <div class="progress-area" id="progressArea">
+    <div class="progress-label">
+      <span id="progressText">Question 1 of 30</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Quiz Area -->
+  <div id="quizArea">
+    <div class="question-card" id="questionCard">
+
+      <div class="card-meta">
+        <span class="subject-tag" id="subjectTag">—</span>
+        <span class="session-label" id="sessionLabel">—</span>
+        <span class="question-num" id="questionNum">#1</span>
+      </div>
+
+      <div class="question-text" id="questionText">Loading...</div>
+
+      <div class="options-grid" id="optionsGrid"></div>
+
+      <div class="explanation-panel" id="explanationPanel">
+        <div class="explanation-label">Explanation</div>
+        <div id="explanationText"></div>
+      </div>
+
+      <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">
+        Next &rarr;
+      </button>
+    </div>
+
+    <div class="keyboard-hint-bar">
+      <div class="kh-item"><span class="kh-key">1–4</span> Select answer</div>
+      <div class="kh-item"><span class="kh-key">Enter</span> Next question</div>
+      <div class="kh-item"><span class="kh-key">R</span> Restart</div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" id="emptyState">No questions match this filter.</div>
+
+  <!-- Results Screen -->
+  <div class="results-screen" id="resultsScreen">
+    <div class="results-card">
+      <div class="results-trophy">🎓</div>
+      <div class="results-tier" id="resultsTier"></div>
+      <div class="results-subtitle" id="resultsSubtitle"></div>
+
+      <div class="results-scores">
+        
+        <div class="score-block">
+          <div class="score-block-label">Total</div>
+          <div class="score-block-value all" id="rTotal">—</div>
+          <div class="score-block-sub" id="rTotalSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">Barriers</div>
+          <div class="score-block-value barriers" id="rBarriers">—</div>
+          <div class="score-block-sub" id="rBarriersSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">Ideation</div>
+          <div class="score-block-value ideation" id="rIdeation">—</div>
+          <div class="score-block-sub" id="rIdeationSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">Loyalty</div>
+          <div class="score-block-value loyalty" id="rLoyalty">—</div>
+          <div class="score-block-sub" id="rLoyaltySub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">Research</div>
+          <div class="score-block-value research" id="rResearch">—</div>
+          <div class="score-block-sub" id="rResearchSub"></div>
+        </div>
+      </div>
+
+      <div class="results-actions">
+        <button class="btn btn-primary" onclick="startQuiz('all')">Restart All 30</button>
+        <button class="btn btn-barriers" onclick="startQuiz('barriers')">Barriers Only (8)</button>
+        <button class="btn btn-ideation" onclick="startQuiz('ideation')">Ideation Only (4)</button>
+        <button class="btn btn-loyalty" onclick="startQuiz('loyalty')">Loyalty Only (8)</button>
+        <button class="btn btn-research" onclick="startQuiz('research')">Research Only (10)</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main-wrap -->
+
+<script>
+/* ═══════════════════════════════════
+   QUESTION DATA
+═══════════════════════════════════ */
+const ALL_QUESTIONS = [
+  {
+    "id": 1,
+    "subject": "loyalty",
+    "session": "Slide 1 · Strategic Marketing Mindset",
+    "q": "What does a Strategic Marketing Mindset fundamentally require a company to do?",
+    "opts": [
+      "Invest heavily in advertising and build a strong brand identity",
+      "Look at the world from the customer's point of view — not the producer's",
+      "Focus on competitive pricing to win market share",
+      "Develop proprietary technology to stay ahead of competitors"
+    ],
+    "correct": 1,
+    "exp": "A strategic marketing mindset means starting with the customer's world — what they crave, need, and feel — rather than asking 'what do we love to make?' A restaurant asking 'what do our customers crave on a rainy Tuesday night?' has this mindset. One asking 'what do our chefs love to cook?' does not."
+  },
+  {
+    "id": 2,
+    "subject": "loyalty",
+    "session": "Slide 2 · Service Profit Chain",
+    "q": "According to the Service Profit Chain, where does sustained profit ultimately begin?",
+    "opts": [
+      "With aggressive pricing strategies and cost reduction",
+      "With employee investment — which cascades into satisfaction, better service, customer loyalty, and revenue",
+      "With marketing campaigns that attract large numbers of new customers",
+      "With product innovation and technological superiority over competitors"
+    ],
+    "correct": 1,
+    "exp": "The chain: Internal Service Quality → Employee Satisfaction → Retention + Productivity → External Service Value → Customer Satisfaction → Customer Loyalty → Revenue + Profitability. Profit starts with your employees, not your customers. Invest in people first — the chain reaction does the rest."
+  },
+  {
+    "id": 3,
+    "subject": "loyalty",
+    "session": "Slide 2 · Service Profit Chain",
+    "q": "The Starbucks example in the Service Profit Chain illustrates which specific mechanism?",
+    "opts": [
+      "Premium pricing creates a perception of quality that drives customer loyalty",
+      "Happy baristas — from good pay, benefits, and stock options — deliver better service, creating loyal customers who generate recurring revenue",
+      "Product innovation (seasonal menu items) creates loyal customers who return for novelty",
+      "Starbucks' store density creates convenience-driven loyalty"
+    ],
+    "correct": 1,
+    "exp": "Starbucks invests in baristas (good pay, benefits, stock options) → happy baristas remember names and make drinks correctly → customers feel valued and return daily → that loyalty = billions in recurring revenue. The chain: employee investment → customer loyalty → profit."
+  },
+  {
+    "id": 4,
+    "subject": "loyalty",
+    "session": "Slide 3 · 4 Types of Customer Loyalty",
+    "q": "The Dick & Basu Loyalty Framework maps customers on which two axes to define four types of loyalty?",
+    "opts": [
+      "Customer age and income level",
+      "Purchase frequency and average basket size",
+      "Relative Attitude (genuine liking for the brand) and Repeat Patronage (actual buying frequency)",
+      "Brand awareness scores and product satisfaction ratings"
+    ],
+    "correct": 2,
+    "exp": "Dick & Basu's 2x2 matrix: Relative Attitude (how much they genuinely like you) vs Repeat Patronage (how often they actually buy). This distinction matters because high repeat alone does NOT mean loyal — a customer can buy from you regularly without liking you at all."
+  },
+  {
+    "id": 5,
+    "subject": "loyalty",
+    "session": "Slide 3 · 4 Types of Customer Loyalty",
+    "q": "In the Dick & Basu framework, 'True Loyalty' describes customers who have:",
+    "opts": [
+      "High attitude but low repeat — they love the brand but rarely buy",
+      "Low attitude but high repeat — they buy regularly from habit, not preference",
+      "High attitude AND high repeat — they genuinely love the brand AND keep coming back",
+      "Low attitude and low repeat — they neither like nor regularly buy the brand"
+    ],
+    "correct": 2,
+    "exp": "True Loyalty = High Relative Attitude + High Repeat Patronage. These customers both love you AND keep returning. They are your most valuable asset — advocates who spread the word and are resistant to competitive offers."
+  },
+  {
+    "id": 6,
+    "subject": "loyalty",
+    "session": "Slide 3 · 4 Types of Customer Loyalty",
+    "q": "A customer buys from the same supermarket every week — but only because it is the only one near their home, and they would switch immediately if a competitor opened nearby. This best represents which loyalty type?",
+    "opts": [
+      "True Loyalty — consistent repeat behaviour signals genuine preference",
+      "Latent Loyalty — they like the brand but buy infrequently due to barriers",
+      "No Loyalty — they neither like nor consistently buy",
+      "Spurious Loyalty — high repeat patronage but low relative attitude (habit, not preference)"
+    ],
+    "correct": 3,
+    "exp": "Spurious Loyalty = High Repeat Patronage + Low Relative Attitude. The customer buys regularly but for situational reasons (location, no alternative), not genuine preference. This loyalty is fragile — any change in circumstances breaks it. Companies that confuse high purchase frequency with true loyalty are in danger."
+  },
+  {
+    "id": 7,
+    "subject": "loyalty",
+    "session": "Slide 4 · Net Promoter Score (NPS)",
+    "q": "How is Net Promoter Score (NPS) calculated?",
+    "opts": [
+      "(% Promoters + % Passives) divided by total respondents surveyed",
+      "% Promoters minus % Detractors",
+      "Total satisfied customers divided by total customers surveyed",
+      "% Promoters multiplied by average purchase frequency"
+    ],
+    "correct": 1,
+    "exp": "NPS = % Promoters (score 9–10) minus % Detractors (score 0–6). Passives (7–8) are excluded from the formula. The result ranges from -100 to +100. Apple consistently scores above 70; a bank with many unhappy customers might score -20."
+  },
+  {
+    "id": 8,
+    "subject": "loyalty",
+    "session": "Slide 4 · Net Promoter Score (NPS)",
+    "q": "In the NPS framework, a customer who gives a score of 7 or 8 out of 10 is classified as:",
+    "opts": [
+      "A Promoter — they will actively recommend the brand to others",
+      "A Detractor — they are dissatisfied and may warn others away",
+      "A Passive — satisfied but not enthusiastic enough to actively recommend",
+      "A Loyalist — they will return but are unlikely to refer new customers"
+    ],
+    "correct": 2,
+    "exp": "NPS Categories: Promoters (9–10), Passives (7–8), Detractors (0–6). Passives are the 'lukewarm middle' — satisfied but not passionate enough to advocate. They contribute neither to NPS growth nor to NPS decline. Converting them to Promoters is where the real loyalty value lies."
+  },
+  {
+    "id": 9,
+    "subject": "barriers",
+    "session": "Slide 6 · Barrier #1: Conditioning",
+    "q": "In Strategic Marketing, 'Conditioning' as a barrier to customer centrism means:",
+    "opts": [
+      "Customers are trained by advertising to expect certain quality standards",
+      "Past experiences, training, and prior successes create mental grooves — making us see what we expect rather than what is actually happening",
+      "Employees are conditioned through corporate training to follow standard procedures",
+      "Classical conditioning is used in advertising to build Pavlovian brand associations"
+    ],
+    "correct": 1,
+    "exp": "Conditioning shapes our perception involuntarily. A doctor conditioned to look for common diseases may miss a rare condition. A seasoned marketer 'conditioned' by years of TV ad success may not notice customers have migrated to Instagram. Our past experience can blind us to new realities — always question your assumptions."
+  },
+  {
+    "id": 10,
+    "subject": "barriers",
+    "session": "Slide 6–7 · Conditioning",
+    "q": "A seasoned marketer who keeps investing in TV advertising because 'that's always worked' — despite data showing customers have moved to Instagram — is exhibiting which barrier?",
+    "opts": [
+      "Positivism — seeking one correct answer from historical data",
+      "Deductive Logic — applying a general rule to a specific situation",
+      "Marketing Myopia — defining the business too narrowly",
+      "Conditioning — past successes creating mental grooves that block new realities"
+    ],
+    "correct": 3,
+    "exp": "Conditioning is the 'always worked before' trap. When experience builds expertise, it also builds blind spots. The marketer sees TV ads as the answer because every previous experience reinforced that view. The antidote: deliberately question your own assumptions — approach every market situation with a beginner's mindset."
+  },
+  {
+    "id": 11,
+    "subject": "barriers",
+    "session": "Slide 8 · Marketing Myopia",
+    "q": "Theodore Levitt's concept of Marketing Myopia (1960) argues that companies should define their business by:",
+    "opts": [
+      "The products they manufacture and the technologies they currently use",
+      "The markets they serve and their competitive advantages over rivals",
+      "The customer need they fulfil — not the product they make",
+      "The size of their existing customer base and current market share"
+    ],
+    "correct": 2,
+    "exp": "Marketing Myopia = defining your business too narrowly around the product rather than the need. American railways thought they were in the 'railroad business' — they should have said 'transportation business.' When cars and planes arrived, they failed to adapt. Define your business by the customer need you serve, not the product you make."
+  },
+  {
+    "id": 12,
+    "subject": "barriers",
+    "session": "Slide 8 · Marketing Myopia",
+    "q": "Kodak's bankruptcy is presented as an example of Marketing Myopia because:",
+    "opts": [
+      "Kodak's products were too expensive for mainstream consumer adoption",
+      "Kodak's manufacturing quality was inferior to Japanese competitors",
+      "Kodak defined itself as the 'film and camera business' instead of the 'memory-capturing business' — missing the digital photography revolution entirely",
+      "Kodak's marketing campaigns failed to build adequate brand awareness among younger consumers"
+    ],
+    "correct": 2,
+    "exp": "Kodak = film and camera business (myopic). They should have been in the 'memory-capturing business.' When digital cameras arrived, they couldn't pivot — and went bankrupt. Instagram was also in the 'memory-capturing business' and thrived. The product is not the business; the need it fulfils is."
+  },
+  {
+    "id": 13,
+    "subject": "barriers",
+    "session": "Slide 9 · Barrier #2: Positivism",
+    "q": "'Positivism' as a barrier to customer understanding refers to:",
+    "opts": [
+      "Companies focusing exclusively on positive customer feedback",
+      "The belief that there is always one objectively correct answer — causing marketers to miss the complex, context-dependent reality of human behaviour",
+      "Maintaining an optimistic view of market opportunities despite negative data",
+      "Using positive reinforcement in customer service interactions"
+    ],
+    "correct": 1,
+    "exp": "Positivism assumes the world has fixed, discoverable truths. In marketing, this becomes dangerous because human behaviour is messy, emotional, and context-dependent. 'There are no one correct answer — it depends on the lens through which you look at it.' Seeking the single correct answer blinds you to the multiple truths in any market."
+  },
+  {
+    "id": 14,
+    "subject": "barriers",
+    "session": "Slide 9 · Barrier #2: Positivism",
+    "q": "Survey data showing '60% of customers prefer online shopping' is cited as a Positivism trap because:",
+    "opts": [
+      "The 60% figure has too small a sample size to be statistically reliable",
+      "It hides vastly different realities — elderly rural customers prefer stores, young urban mothers prefer apps, teenagers prefer social commerce — one number masks many truths",
+      "Online shopping preference data doesn't correlate with actual in-store conversion rates",
+      "A 60% majority is insufficient to justify changing strategy"
+    ],
+    "correct": 1,
+    "exp": "The same data point contains many different truths depending on who you're looking at. Positivism makes you treat '60% prefer online' as a single, universal truth — and design for it uniformly. Reality: 60-year-olds in rural areas, young mothers in metros, and teenagers in cities all have completely different relationships with that number."
+  },
+  {
+    "id": 15,
+    "subject": "barriers",
+    "session": "Slide 10 · Barrier #3: Deductive Logic",
+    "q": "Why is applying pure Deductive Logic a barrier to customer-centric marketing?",
+    "opts": [
+      "Deductive reasoning is too mathematically complex for practical marketing use",
+      "Starting from general rules and applying them to specific customers breaks down because human behaviour is emotional, irrational, and often violates general rules",
+      "Deductive logic leads to overly expensive and unfocused marketing campaigns",
+      "It relies on qualitative data that cannot be verified quantitatively"
+    ],
+    "correct": 1,
+    "exp": "Deductive Logic: 'All customers want low prices → this customer wants a low price.' But customers are not logical machines. Apple sold record iPhones during the 2008 recession, contradicting the 'recession = demand for cheap products' rule. Logic tells you what SHOULD happen — observation tells you what ACTUALLY happens."
+  },
+  {
+    "id": 16,
+    "subject": "barriers",
+    "session": "Slide 10 · Barrier #3: Deductive Logic",
+    "q": "Apple selling record iPhones during the 2008 financial crisis — despite the logical rule that 'recessions drive demand for cheaper products' — best illustrates the danger of:",
+    "opts": [
+      "Positivism — assuming one data source holds universal truth",
+      "Marketing Myopia — defining the product too narrowly",
+      "Conditioning — relying on past advertising spend habits",
+      "Deductive Logic — blindly applying a general rule to specific customers who don't follow the rulebook"
+    ],
+    "correct": 3,
+    "exp": "Deductive logic trap: 'Recession → customers buy cheap products → we should cut our price.' Apple defied this general rule entirely. Customers are not logical, and their actual behaviour often contradicts what the general principle predicts. The antidote: observe what actually happens, don't just reason from rules."
+  },
+  {
+    "id": 17,
+    "subject": "research",
+    "session": "Slide 11 · Power of 'I Don't Know'",
+    "q": "Why is saying 'I don't know' described as a powerful starting point for customer research?",
+    "opts": [
+      "It builds trust with customers by demonstrating humility",
+      "It forces genuine curiosity — driving the researcher to observe, ask, and listen rather than assuming the answer is already known",
+      "It triggers a formal research protocol with clearly defined steps",
+      "It protects the marketer from being held accountable for incorrect predictions"
+    ],
+    "correct": 1,
+    "exp": "'I don't know' is an invitation to discover. A senior manager who says 'I know what millennials want' makes assumptions and stops learning. A researcher who says 'I don't know — let me go talk to 20 millennials' discovers actionable truths the manager never imagined. Curiosity, not expertise, is the starting point of genuine understanding."
+  },
+  {
+    "id": 18,
+    "subject": "research",
+    "session": "Slide 12 · From 'I Don't Know' to Understanding",
+    "q": "Airbnb's founders personally visiting hosts in New York, staying in their homes, and photographing listings themselves is cited as an example of:",
+    "opts": [
+      "Traditional segmentation research applied at a micro level",
+      "Projective techniques used to understand host motivations indirectly",
+      "Actively 'trying to understand' — moving from passive uncertainty to direct, hands-on discovery",
+      "Extreme user research identifying hosts with unusually high listing quality"
+    ],
+    "correct": 2,
+    "exp": "When Airbnb's founders couldn't understand why bookings were low, they didn't just study data — they went and lived the experience. That direct effort to understand (the 'Trying to Understand' mindset after saying 'I Don't Know') revealed that poor photos were killing listings — a discovery that transformed their business. Understanding is an active effort, not a desk exercise."
+  },
+  {
+    "id": 19,
+    "subject": "research",
+    "session": "Slide 13 · Segmentation vs. User Persona",
+    "q": "What is the fundamental difference between traditional Segmentation and a User Persona?",
+    "opts": [
+      "Segmentation is used for B2C markets; User Personas are used for B2B contexts",
+      "Segmentation groups customers by statistical data categories (age, income, geography); User Personas create a vivid, realistic human character with goals, frustrations, and emotions",
+      "Segmentation uses qualitative data; User Personas are always quantitative",
+      "Segmentation applies to product design; User Personas are only used for advertising campaigns"
+    ],
+    "correct": 1,
+    "exp": "Segmentation: 'Women, 25–35, urban, SEC A, working professional.' Cold and statistical. Persona: 'Sarah, 34, software engineer in Kochi, mother of a 13-month-old, shops online, frustrated by fake products, wants international brands at her doorstep.' One tells you demographics; the other tells you the human being."
+  },
+  {
+    "id": 20,
+    "subject": "research",
+    "session": "Slide 14–15 · User Persona",
+    "q": "A well-constructed User Persona is formally defined as:",
+    "opts": [
+      "A statistical average of all customers in a target demographic segment",
+      "An archetypical user whose goals and characteristics represent the needs of a larger group",
+      "A fictional customer created purely for advertising creative briefs",
+      "A behavioural profile derived from A/B testing results"
+    ],
+    "correct": 1,
+    "exp": "Formal definition: 'Archetypical users whose goals and characteristics represent the needs of a larger group of users.' A persona is made-up but deeply realistic — a character from a novel who stands for thousands of real customers. Sarah Mathew's persona ('it would be nice if I get everything at my doorstep') validated Amazon Prime's entire value proposition."
+  },
+  {
+    "id": 21,
+    "subject": "research",
+    "session": "Slide 16–17 · LOOK — Observational Research",
+    "q": "In the Look · Ask · Try framework, the LOOK method is best described as:",
+    "opts": [
+      "Conducting structured surveys to ask customers about their preferences",
+      "Physically experiencing the customer's journey yourself, using props to simulate reality",
+      "Silent, curious observation of what customers actually do — using all five senses, assuming nothing",
+      "Reviewing secondary data and published market research reports"
+    ],
+    "correct": 2,
+    "exp": "LOOK = observational research. Watch what people actually do — not what they say they do. Beginner's mindset, no assumptions, use all five senses, document without judgment first. IDEO designed a better hospital trolley by spending days watching nurses use it — no survey would have uncovered the same insights."
+  },
+  {
+    "id": 22,
+    "subject": "research",
+    "session": "Slide 18 · AEIOU Framework",
+    "q": "The AEIOU framework is used during the LOOK (Observation) phase to:",
+    "opts": [
+      "Generate new ideas using five structured creative prompts",
+      "Structure what a researcher systematically notices while observing — separating raw observation from immediate judgment",
+      "Define marketing campaign objectives across five strategic dimensions",
+      "Analyse customer feedback gathered from focus groups and depth interviews"
+    ],
+    "correct": 1,
+    "exp": "AEIOU is a checklist for observation: Activities, Environments, Interactions, Objects, Users. It prevents the observer from missing categories of information during fieldwork. Crucially, it separates observation ('she is looking at her phone') from judgment ('she looks bored') — observation comes first, interpretation comes later."
+  },
+  {
+    "id": 23,
+    "subject": "research",
+    "session": "Slide 19 · Extreme Users",
+    "q": "Why does the framework recommend studying 'Extreme Users' rather than just average customers?",
+    "opts": [
+      "Extreme users spend significantly more money and are therefore more profitable to study",
+      "Extreme users are easier to recruit for research panels and interviews",
+      "Their amplified needs expose problems and solutions that average users cannot articulate — and solutions designed for extreme users often delight everyone",
+      "Extreme users provide more statistically representative data for market sizing models"
+    ],
+    "correct": 2,
+    "exp": "Extreme users feel needs that average users only vaguely sense. OXO kitchen tools: designed for extreme users (people with arthritis who struggled with peelers) → the larger, softer grip turned out to be preferred by EVERYONE. By solving the extreme need, OXO created a mainstream bestseller. Average users expose average problems; extreme users expose fundamental problems."
+  },
+  {
+    "id": 24,
+    "subject": "research",
+    "session": "Slide 20 · ASK — Inquiry Research",
+    "q": "The 'Five Whys' technique in the ASK phase is specifically designed to:",
+    "opts": [
+      "Generate five alternative product concepts for user testing",
+      "Assess five dimensions of customer satisfaction simultaneously",
+      "Keep asking 'why?' repeatedly to move past surface answers and reach the deep, underlying real reason",
+      "Identify the top five barriers preventing a customer from making a purchase"
+    ],
+    "correct": 2,
+    "exp": "Five Whys example: 'Why don't you save regularly?' → 'I forget.' → 'Why?' → 'No reminder.' → 'Why?' → 'Bank app has none.' → 'Why?' → 'Nobody asked us.' A simple conversation that started with one 'why' revealed a product fix no survey had ever surfaced. Surface answers are rarely the real answer — keep asking why."
+  },
+  {
+    "id": 25,
+    "subject": "research",
+    "session": "Slide 22 · Projective Techniques",
+    "q": "Projective Techniques in customer research are most valuable when:",
+    "opts": [
+      "Large volumes of data need to be analysed quickly and efficiently",
+      "People cannot or will not tell you what they really think — indirect methods reveal the hidden feelings and motivations they cannot express directly",
+      "A company wants to project its brand values into a customer's perception of a product",
+      "Quantitative data is unavailable and only qualitative methods remain as an option"
+    ],
+    "correct": 1,
+    "exp": "Projective Techniques (word association, sentence completion, collage-making, role-play) bypass conscious censorship. People 'project' true inner thoughts onto external objects without realising it. Nescafé: direct question gave 'tastes bad.' Projective technique revealed the real reason — fear of being judged as a lazy wife. The brand then changed its advertising and sales soared."
+  },
+  {
+    "id": 26,
+    "subject": "research",
+    "session": "Slide 23 · What is an Insight?",
+    "q": "What distinguishes a genuine marketing 'Insight' from a data point or an observation?",
+    "opts": [
+      "An insight requires validation through large-scale quantitative surveys",
+      "An insight is any systematically collected fact from customer research",
+      "An insight is a deep, non-obvious truth about human behaviour — when seen, it feels both surprising and immediately obvious at the same time",
+      "An insight is a formal customer complaint that has been logged and categorised"
+    ],
+    "correct": 2,
+    "exp": "Data: '40% of gym members don't come after January.' That is an observation. Insight: 'People join gyms not to exercise, but to feel like the kind of person who exercises — and once that feeling fades, so does their motivation.' The insight reveals the WHY behind the behaviour. Dove's 'Real Beauty' insight — 'women don't see themselves as beautiful but wish someone would' — launched one of history's most successful campaigns."
+  },
+  {
+    "id": 27,
+    "subject": "ideation",
+    "session": "Slide 24–25 · The Empathy Map",
+    "q": "The Empathy Map tool captures which four dimensions of a customer's inner world?",
+    "opts": [
+      "What they Buy, Where they Buy, When they Buy, and Why they Buy",
+      "What they Say, Think, Do, and Feel — revealing the gap between stated behaviour and true emotion",
+      "What they See, Hear, Speak, and Experience in their digital environment",
+      "What they Need, Want, Expect, and Demand from a product or service"
+    ],
+    "correct": 1,
+    "exp": "Empathy Map: SAY (what people tell you), THINK (what they actually believe, often hidden), DO (actual behaviour — may differ from what they say), FEEL (emotional state beneath the surface). Example: employees SAY 'I don't have time for the survey'; THINK 'they'll never act on this anyway'; DO ignore it or give dishonest safe answers; FEEL neglected and not valued. Four quadrants, one complete human picture."
+  },
+  {
+    "id": 28,
+    "subject": "ideation",
+    "session": "Slide 26 · Ideation Phase",
+    "q": "What is the key rule of the Ideation phase in the Strategic Marketing process?",
+    "opts": [
+      "Quality over quantity — focus only on the single best idea from the start",
+      "Ideas must be validated with customers before any development begins",
+      "Quantity before quality — generate wildly first, judge later; many ideas are needed to find the right one",
+      "Ideation must be led by senior management to ensure strategic alignment"
+    ],
+    "correct": 2,
+    "exp": "Ideation = generating lots of ideas based on customer insights gathered through Look, Ask, Try. The key rule: quantity before quality. When Swiggy solved 'late delivery anxiety,' they ideated 30+ solutions before landing on real-time tracking. Most ideas were discarded after testing. You need volume to find the one idea that works."
+  },
+  {
+    "id": 29,
+    "subject": "ideation",
+    "session": "Slide 27 · SCAMPER Framework",
+    "q": "What does the SCAMPER ideation framework stand for?",
+    "opts": [
+      "Simulate, Create, Analyse, Map, Plan, Evaluate, Review",
+      "Substitute, Combine, Adapt, Modify, Put to Another Use, Eliminate, Reverse",
+      "Segment, Customise, Amplify, Market, Position, Execute, Revisit",
+      "Study, Conceptualise, Analyse, Model, Produce, Experiment, Release"
+    ],
+    "correct": 1,
+    "exp": "SCAMPER = Substitute, Combine, Adapt, Modify, Put to Another Use, Eliminate, Reverse. It is a 7-question checklist that forces you to look at an existing product or service in completely different ways. Each letter is a prompt that unlocks a different type of creative thinking — from 'what if we replaced this?' to 'what if we flipped who does what?'"
+  },
+  {
+    "id": 30,
+    "subject": "ideation",
+    "session": "Slide 27 · SCAMPER Framework",
+    "q": "The SCAMPER 'Reverse' technique asks 'What if you reversed the order or flipped who does what?' Which example best illustrates this?",
+    "opts": [
+      "Replace plastic packaging with biodegradable edible packaging to reduce waste",
+      "Combine a fitness tracker with a meditation app into a holistic wellness product",
+      "Adapt airline boarding processes and apply them to hospital patient queue management",
+      "Instead of customers going to the doctor, a house calls app sends the doctor to customers"
+    ],
+    "correct": 3,
+    "exp": "SCAMPER Reverse = flip the process. Traditional model: patient travels to doctor. Reversed model: doctor travels to patient (house calls app). This simple reversal created a new service category. Other examples: instead of a restaurant serving customers, a pop-up brings the restaurant to the customer's home. Reversing assumptions often reveals genuinely new ideas."
+  }
+];
+
+/* ═══════════════════════════════════
+   STATE
+═══════════════════════════════════ */
+let state = {
+  filter: 'all',
+  deck: [],
+  idx: 0,
+  answered: false,
+  score: 0,
+  barriersCorrect: 0, barriersTotal: 0,
+  ideationCorrect: 0, ideationTotal: 0,
+  loyaltyCorrect: 0, loyaltyTotal: 0,
+  researchCorrect: 0, researchTotal: 0,
+};
+
+/* ═══════════════════════════════════
+   UTILITIES
+═══════════════════════════════════ */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pct(n, d) { return d === 0 ? 0 : Math.round((n / d) * 100); }
+
+function getTier(p) {
+  if (p >= 90) return { tier: "IIM-Level \u2014 Distinction", sub: "Exceptional grasp of strategic marketing frameworks." };
+  if (p >= 75) return { tier: "Strong Command \u2014 Pass with Merit", sub: "Solid understanding; minor gaps worth revisiting." };
+  if (p >= 60) return { tier: "Adequate \u2014 Revise Key Frameworks", sub: "Core concepts present; reinforce the weaker sections." };
+  return { tier: "Needs Work \u2014 Return to Notes", sub: "Systematic revision recommended before the exam." };
+}
+
+/* ═══════════════════════════════════
+   FILTER
+═══════════════════════════════════ */
+function setFilter(f) {
+  state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  document.getElementById('btnAll').classList.add('active-all');
+  if (f !== 'all') {
+    const key = f.charAt(0).toUpperCase() + f.slice(1);
+    const el = document.getElementById('btn' + key);
+    if (el) el.classList.add('active-' + f);
+    document.getElementById('btnAll').classList.remove('active-all');
+  }
+  startQuiz(f);
+}
+
+/* ═══════════════════════════════════
+   QUIZ FLOW
+═══════════════════════════════════ */
+function startQuiz(f) {
+  if (f) state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  document.getElementById('btnAll').classList.add('active-all');
+  if (state.filter !== 'all') {
+    const key = state.filter.charAt(0).toUpperCase() + state.filter.slice(1);
+    const el = document.getElementById('btn' + key);
+    if (el) { el.classList.add('active-' + state.filter); document.getElementById('btnAll').classList.remove('active-all'); }
+  }
+
+  const pool = ALL_QUESTIONS.filter(q => state.filter === 'all' || q.subject === state.filter);
+  state.deck = shuffle(pool);
+  state.idx = 0;
+  state.score = 0;
+  state.barriersCorrect = 0; state.barriersTotal = 0;
+  state.ideationCorrect = 0; state.ideationTotal = 0;
+  state.loyaltyCorrect = 0; state.loyaltyTotal = 0;
+  state.researchCorrect = 0; state.researchTotal = 0;
+
+  state.deck.forEach(q => {
+    if (q.subject === 'barriers') state.barriersTotal++;
+    if (q.subject === 'ideation') state.ideationTotal++;
+    if (q.subject === 'loyalty') state.loyaltyTotal++;
+    if (q.subject === 'research') state.researchTotal++;
+  });
+
+  updateScore();
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizArea').style.display = 'block';
+  document.getElementById('progressArea').style.display = 'block';
+  document.getElementById('emptyState').style.display = 'none';
+
+  if (state.deck.length === 0) {
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = state.deck[state.idx];
+  const total = state.deck.length;
+  const num = state.idx + 1;
+  state.answered = false;
+
+  const fillPct = ((num - 1) / total) * 100;
+  document.getElementById('progressFill').style.width = fillPct + '%';
+  document.getElementById('progressText').textContent = 'Question ' + num + ' of ' + total;
+  document.getElementById('progressPct').textContent = Math.round(fillPct) + '%';
+
+  const tag = document.getElementById('subjectTag');
+  tag.textContent = q.subject.toUpperCase();
+  tag.className = 'subject-tag ' + q.subject;
+
+  document.getElementById('sessionLabel').textContent = q.session;
+  document.getElementById('questionNum').textContent = '#' + q.id;
+  document.getElementById('questionText').textContent = q.q;
+
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = '<span class="option-letter">' + letters[i] + '</span>'
+                  + '<span class="option-text">' + opt + '</span>'
+                  + '<span class="key-hint">' + (i + 1) + '</span>';
+    btn.addEventListener('click', () => selectAnswer(i));
+    grid.appendChild(btn);
+  });
+
+  const ep = document.getElementById('explanationPanel');
+  ep.className = 'explanation-panel';
+  document.getElementById('explanationText').textContent = '';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'slideUp 0.3s ease';
+}
+
+function selectAnswer(chosen) {
+  if (state.answered) return;
+  state.answered = true;
+
+  const q = state.deck[state.idx];
+  const btns = document.querySelectorAll('.option-btn');
+  const correct = q.correct;
+
+  btns.forEach((btn, i) => {
+    btn.classList.add('disabled');
+    if (i === correct) btn.classList.add('correct');
+    else if (i === chosen) btn.classList.add('wrong');
+  });
+
+  if (chosen === correct) {
+    state.score++;
+    if (q.subject === 'barriers') state.barriersCorrect++;
+    else if (q.subject === 'ideation') state.ideationCorrect++;
+    else if (q.subject === 'loyalty') state.loyaltyCorrect++;
+    else if (q.subject === 'research') state.researchCorrect++;
+  }
+
+  updateScore();
+
+  const ep = document.getElementById('explanationPanel');
+  document.getElementById('explanationText').textContent = q.exp;
+  ep.classList.add('show', q.subject + '-border');
+
+  document.getElementById('nextBtn').style.display = 'flex';
+  setTimeout(() => ep.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+}
+
+function nextQuestion() {
+  if (!state.answered) return;
+  state.idx++;
+  if (state.idx >= state.deck.length) {
+    showResults();
+  } else {
+    renderQuestion();
+    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function updateScore() {
+  const answeredSoFar = state.idx + (state.answered ? 1 : 0);
+  document.getElementById('scoreNum').textContent = state.score;
+  document.getElementById('scoreDen').textContent = Math.max(answeredSoFar, state.score);
+}
+
+/* ═══════════════════════════════════
+   RESULTS
+═══════════════════════════════════ */
+function showResults() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('progressArea').style.display = 'none';
+  document.getElementById('resultsScreen').classList.add('show');
+
+  const total = state.deck.length;
+  const p = pct(state.score, total);
+  const { tier, sub } = getTier(p);
+
+  document.getElementById('resultsTier').textContent = tier;
+  document.getElementById('resultsSubtitle').textContent = sub;
+  document.getElementById('rTotal').textContent = state.score + '/' + total;
+  document.getElementById('rTotalSub').textContent = p + '%';
+  document.getElementById('rBarriers').textContent = state.barriersCorrect + '/' + state.barriersTotal;
+  document.getElementById('rBarriersSub').textContent = pct(state.barriersCorrect, state.barriersTotal) + '%';
+  document.getElementById('rIdeation').textContent = state.ideationCorrect + '/' + state.ideationTotal;
+  document.getElementById('rIdeationSub').textContent = pct(state.ideationCorrect, state.ideationTotal) + '%';
+  document.getElementById('rLoyalty').textContent = state.loyaltyCorrect + '/' + state.loyaltyTotal;
+  document.getElementById('rLoyaltySub').textContent = pct(state.loyaltyCorrect, state.loyaltyTotal) + '%';
+  document.getElementById('rResearch').textContent = state.researchCorrect + '/' + state.researchTotal;
+  document.getElementById('rResearchSub').textContent = pct(state.researchCorrect, state.researchTotal) + '%';
+
+  document.getElementById('resultsScreen').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ═══════════════════════════════════
+   KEYBOARD SHORTCUTS
+═══════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (['1','2','3','4'].includes(e.key)) {
+    const btns = document.querySelectorAll('.option-btn:not(.disabled)');
+    const idx = parseInt(e.key) - 1;
+    if (btns[idx]) btns[idx].click();
+  }
+  if ((e.key === 'Enter' || e.key === ' ') && state.answered) {
+    e.preventDefault();
+    nextQuestion();
+  }
+  if (e.key === 'r' || e.key === 'R') startQuiz(state.filter);
+});
+
+/* ═══════════════════════════════════
+   INIT
+═══════════════════════════════════ */
+startQuiz('all');
+</script>
+</body>
+</html>

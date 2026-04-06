@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finance Quiz - Tranche 2</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:         #1a1c22;
+    --card:       #252830;
+    --card-hover: #2d3040;
+    --border:     #353845;
+    --text:       #e8e6e1;
+    --text-muted: #9895a0;
+    --text-dim:   #6b6878;
+    --correct:    #3ecf8e;
+    --correct-dim:rgba(62,207,142,0.15);
+    --wrong:      #e05252;
+    --wrong-dim:  rgba(224,82,82,0.15);
+    --gold:       #f0c040;
+    --radius:     12px;
+    --radius-sm:  8px;
+    --shadow:     0 4px 24px rgba(0,0,0,0.4);
+    --fin:        #e08b20;
+    --fin-dim:    rgba(224,139,32,0.15);
+    --fin-glow:   rgba(224,139,32,0.3);
+    --fin-border: rgba(224,139,32,0.3);
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  .app-header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .app-title {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  .score-display {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+  }
+  .score-num { color: var(--gold); font-weight: 500; }
+
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    padding: 20px 24px 0;
+    justify-content: center;
+  }
+  .filter-btn {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.8rem;
+    padding: 7px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .filter-btn:hover { background: var(--card-hover); color: var(--text); }
+  .filter-btn.active-all { background: rgba(255,255,255,0.08); color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+  .subject-tag.fin { background: var(--fin-dim); color: var(--fin); border: 1px solid var(--fin-border); }
+
+  .main-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 20px;
+  }
+
+  .progress-area { margin-bottom: 24px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    margin-bottom: 8px;
+  }
+  .progress-track { height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    background: linear-gradient(90deg, #e08b20, #d67000);
+  }
+
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .subject-tag {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 12px;
+  }
+
+  .question-text {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .options-grid { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+    margin-bottom: 20px;
+  }
+  .options-grid.tf-mode {
+    flex-direction: row;
+    gap: 12px;
+  }
+  .options-grid.tf-mode .option-btn {
+    flex: 1;
+  }
+  
+  .option-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-align: left;
+    color: var(--text);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    transition: all 0.15s ease;
+    width: 100%;
+  }
+  .option-btn.tf {
+    justify-content: center;
+    font-weight: 500;
+  }
+  .option-btn:hover:not(.disabled) { background: var(--card-hover); }
+  .option-btn.disabled { cursor: default; color: var(--text-muted); }
+  .option-btn.correct { background: var(--correct-dim) !important; border-color: var(--correct) !important; color: var(--correct) !important; }
+  .option-btn.wrong { background: var(--wrong-dim) !important; border-color: var(--wrong) !important; color: var(--wrong) !important; }
+
+  .option-letter {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-weight: 600;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px 8px;
+    flex-shrink: 0;
+  }
+
+  .explanation-panel {
+    border-left: 3px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+    display: none;
+  }
+  .explanation-panel.show { display: block; }
+  .explanation-label {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+
+  .btn {
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 9px 22px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn:hover { background: var(--card-hover); }
+  #nextBtn { display: none; margin-top: 4px; }
+
+  .results-screen { display: none; animation: slideUp 0.4s ease; }
+  .results-screen.show { display: block; }
+  .results-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 32px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .results-tier {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--fin);
+  }
+
+  @media (max-width: 640px) {
+    .app-header { padding: 10px 14px; flex-wrap: wrap; gap: 6px; }
+    .app-title { font-size: 0.9rem; }
+    .question-card { padding: 18px 14px; }
+    .question-text { font-size: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="app-title">📊 Finance Quiz - Tranche 2</div>
+  <div class="score-display">
+    Score: <span class="score-num" id="scoreNum">0</span> / <span id="scoreDen">0</span>
+  </div>
+</header>
+
+<div class="filter-bar">
+  <button class="filter-btn active-all" id="btnAll" onclick="setFilter('all')">All 46</button>
+</div>
+
+<div class="main-wrap">
+  <div class="progress-area" id="progressArea">
+    <div class="progress-label">
+      <span id="progressText">Question 1 of 46</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div id="quizArea">
+    <div class="question-card" id="questionCard">
+      <div class="card-meta">
+        <span class="subject-tag fin" id="subjectTag">FIN</span>
+        <span class="question-num" id="questionNum">#1</span>
+      </div>
+      <div class="question-text" id="questionText">Loading...</div>
+      <div class="options-grid" id="optionsGrid"></div>
+      <div class="explanation-panel" id="explanationPanel">
+        <div class="explanation-label">Explanation</div>
+        <div id="explanationText"></div>
+      </div>
+      <button class="btn" id="nextBtn" onclick="nextQuestion()">Next →</button>
+    </div>
+  </div>
+
+  <div class="results-screen" id="resultsScreen">
+    <div class="results-card">
+      <div style="font-size: 2.5rem; margin-bottom: 12px;">🎓</div>
+      <div class="results-tier" id="resultsTier"></div>
+      <div style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 32px;">
+        <div>Total: <span id="rTotal">—</span> <span id="rTotalSub"></span></div>
+      </div>
+      <button class="btn" onclick="startQuiz('all')">Restart Quiz</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ALL_QUESTIONS = [
+  {
+    "id": 1,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Which of the following represents an investing activity in the statement of cash flows",
+    "opts": [
+      "depreciation of plant assets",
+      "sale of plant assets at a loss",
+      "stock dividend",
+      "purchase of inventory"
+    ],
+    "correct": 1,
+    "exp": "An investing activity involves the purchase or sale of long-term assets. Depreciation (A) and stock dividends (C) are not cash flows. Purchase of inventory (D) is an operating activity. Sale of plant assets at a loss (B) is an investing activity as it involves the disposal of a long-term asset."
+  },
+  {
+    "id": 2,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Which of the following is not a financing activity in the statement of cash flows?",
+    "opts": [
+      "cash dividend",
+      "repurchase of common stock",
+      "payment of interest on debt",
+      "issuance of new debt"
+    ],
+    "correct": 2,
+    "exp": "The payment of interest on debt is a financing activity according to U.S. GAAP when presented as part of financing cash flows or sometimes operating. However, dividend payments (A), stock repurchases (B), and debt issuance (D) are all financing activities. Interest payments are typically classified as operating activities or financing depending on the approach, but option C (payment of interest) is the most commonly classified as operating activity, making it the correct 'not financing' activity."
+  },
+  {
+    "id": 3,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "On a statement of cash flows that uses the indirect approach, calculation of cash flow from operations treats depreciation as an adjustment to reported net income because:",
+    "opts": [
+      "depreciation is a direct source of cash",
+      "depreciation is an outflow of cash to a reserve account for the replacement of assets",
+      "depreciation reduces net income and involves an outflow of cash",
+      "depreciation reduces net income but does not involve an outflow of cash"
+    ],
+    "correct": 3,
+    "exp": "Depreciation is added back to net income in the indirect method because it reduces net income but does not involve a cash outflow. Depreciation is a non-cash expense, so we must eliminate its effect on net income to arrive at actual cash flows."
+  },
+  {
+    "id": 4,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Which of the following statements are correct? I. A company's choice of accounting principles for financial reporting purposes does not affect net cash flow for the accounting period II. A company's choice of accounting principles for financial reporting purposes does not affect operating cash flow III. If a company sells its receivables this will increase operating cash flow IV. If a company sells its receivables this will increase financing cash flow",
+    "opts": [
+      "I and III",
+      "I, II and III",
+      "II and IV",
+      "I and IV"
+    ],
+    "correct": 0,
+    "exp": "Statement I is correct: Accounting principles don't affect actual cash flows, only what is reported as net income. Statement II is false: Accounting choices can affect which items are operating vs non-operating. Statement III is correct: Selling receivables increases operating cash flow. Statement IV is false: It increases operating cash flow, not financing. Therefore, I and III are correct."
+  },
+  {
+    "id": 5,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "An increase in accounts payable would be considered:",
+    "opts": [
+      "a source of cash",
+      "a use of cash",
+      "an adjusting entry",
+      "a noncash charge to income"
+    ],
+    "correct": 0,
+    "exp": "An increase in accounts payable indicates the company owes more money to suppliers but hasn't paid it yet. This increases cash (we're delaying payment), making it a source of cash for the company."
+  },
+  {
+    "id": 6,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Cash paid to suppliers for year ended December 31, 2005 is:",
+    "opts": [
+      "$6,480",
+      "$6,440",
+      "$5,520",
+      "$6,560"
+    ],
+    "correct": 1,
+    "exp": "Cash paid to suppliers = COGS + Ending Inventory - Beginning Inventory + Beginning Accounts Payable - Ending Accounts Payable. Using the given data for Hupta Corporation: $6,500 + $750 - $610 + $180 - $380 = $6,440"
+  },
+  {
+    "id": 7,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Cash collected from customers for the year ended December 31, 2005 is:",
+    "opts": [
+      "$9,480",
+      "$9,430",
+      "$8,930",
+      "$8,980"
+    ],
+    "correct": 0,
+    "exp": "Cash collected from customers = Sales + Beginning Accounts Receivable - Ending Accounts Receivable. For Hupta: $9,430 + $280 - $230 = $9,480"
+  },
+  {
+    "id": 8,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "The management of a company wishes to window-dress its cash flow from operations. Which of the following will improve cash flow from operations? I. factoring accounts receivable II. paying suppliers more quickly III. selling of some excess marketable securities IV. deferring payment of taxes",
+    "opts": [
+      "IV only",
+      "III and IV",
+      "II, III and IV",
+      "I and IV"
+    ],
+    "correct": 3,
+    "exp": "Window-dressing cash flow means manipulating it to look better. I. Factoring receivables converts receivables to cash (source of cash). II. Paying suppliers quickly reduces cash. III. Selling securities is an investing activity, not operating. IV. Deferring tax payments keeps cash in the company. So I and IV improve operating cash flow through manipulation."
+  },
+  {
+    "id": 9,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "If Tracy shows cost of goods sold of $2,050 on its income statement, cash paid to suppliers is:",
+    "opts": [
+      "$1,550",
+      "$1,950",
+      "$2,150",
+      "$2,650"
+    ],
+    "correct": 2,
+    "exp": "Cash paid to suppliers = COGS + Ending Inventory - Beginning Inventory. For Tracy: $2,050 + $260 - $160 = $2,150"
+  },
+  {
+    "id": 10,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "If Tracy shows depreciation expense of $ 275 in its income statement, cash paid for amortization is:",
+    "opts": [
+      "$0",
+      "$75",
+      "$525",
+      "not determinable"
+    ],
+    "correct": 3,
+    "exp": "Depreciation is a non-cash expense, so it doesn't represent actual cash paid for amortization. The cash paid for amortization is not determinable from the depreciation expense alone without additional information."
+  },
+  {
+    "id": 11,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Tracy used the indirect method of determining cash flow from operations (CFO), had they used the direct method:",
+    "opts": [
+      "CFO would have been higher as gains are not deducted in arriving at CFO",
+      "CFO would have been lower as losses and depreciation are not added back in arriving at",
+      "CFO would have been the same",
+      "it is not possible to determine what CFO would have been without more information"
+    ],
+    "correct": 2,
+    "exp": "The direct and indirect methods both arrive at the same cash flow from operations figure. The difference is only in how the calculation is presented - the indirect method adjusts net income, while the direct method presents operating cash flows directly. The final CFO amount is identical."
+  },
+  {
+    "id": 12,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Which of the following items is deducted from net income to arrive at cash flow from operations when using the indirect method?",
+    "opts": [
+      "depreciation expense",
+      "amortization expense",
+      "decrease in accounts receivable",
+      "decrease in accounts payable"
+    ],
+    "correct": 2,
+    "exp": "When using the indirect method, depreciation and amortization are added back (not deducted) to net income because they're non-cash expenses. A decrease in accounts receivable is added (means more cash was collected). A decrease in accounts payable is deducted (means more cash was paid out). So the answer is C."
+  },
+  {
+    "id": 13,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Firms report payments for capital leases in the cash flow statement:",
+    "opts": [
+      "only as financing cash flows",
+      "only as investing cash flows",
+      "partly as operating cash flows and partly as investing cash flows",
+      "partly as operating cash flows and partly as financing cash flows"
+    ],
+    "correct": 3,
+    "exp": "Capital lease payments include both financing (principal portion) and operating (interest portion) components. The principal part is a financing activity while the interest portion relates to operations, so the answer is D - partly operating and partly financing."
+  },
+  {
+    "id": 14,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Compared with firms with capital leases, firms with operating leases generally report:",
+    "opts": [
+      "higher cash flow from operations",
+      "lower cash flow from operations",
+      "identical cash flow from operations",
+      "lower or higher cash flow from operations depending upon market interest rates"
+    ],
+    "correct": 0,
+    "exp": "Firms with operating leases typically report higher cash flow from operations because the entire lease payment is classified as operating, whereas for capital leases, only the interest portion is operating activity and the principal is financing."
+  },
+  {
+    "id": 15,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Which of the following would affect cash flow from operations?",
+    "opts": [
+      "Sale of land for a gain",
+      "Payment of dividends",
+      "Depreciation of fixed assets",
+      "Capitalizing costs that were previously expensed"
+    ],
+    "correct": 3,
+    "exp": "Sale of land for a gain (A) is an investing activity. Payment of dividends (B) is a financing activity. Depreciation of fixed assets (C) is non-cash. Capitalizing costs (D) that were previously expensed would affect cash flow from operations because it changes what is expensed in the current period."
+  },
+  {
+    "id": 16,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Which of the following is true? Depreciation:",
+    "opts": [
+      "is recorded so that net book value represents fair value of assets",
+      "does not affect the amount of cash realized from operations as it is a non-cash flow",
+      "is added back to net income to calculate cash from operations under the direct method",
+      "represents a fund from which to purchase future assets"
+    ],
+    "correct": 1,
+    "exp": "B is correct: Depreciation does not affect cash flows from operations because it's a non-cash expense. The correct answer is B. Option C is wrong because depreciation is subtracted (not added) under the direct method. Option D is incorrect because depreciation is not a cash fund."
+  },
+  {
+    "id": 17,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Which of the following would be considered a use of cash?",
+    "opts": [
+      "depreciation",
+      "an increase in working capital",
+      "sale of bonds",
+      "an increase in wages payable"
+    ],
+    "correct": 1,
+    "exp": "A use of cash is a decrease in assets or an increase in liabilities (uses cash). Depreciation (A) is non-cash. An increase in working capital (B) means more cash is tied up in current assets, a use of cash. Sale of bonds (C) provides cash. Increase in wages payable (D) is a source of cash. Answer is B."
+  },
+  {
+    "id": 18,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "The cash flow adequacy ratio",
+    "opts": [
+      "Measures a company's ability to generate sufficient cash flow from investing to cover debt",
+      "Measures a company's ability to generate sufficient cash flows from operations to cover",
+      "Measures a company's ability to generate sufficient cash flows from operations to cover",
+      "Measures a company's ability to generate sufficient cash flows from operations to cover"
+    ],
+    "correct": 3,
+    "exp": "The cash flow adequacy ratio measures whether operating cash flows are sufficient to cover capital expenditures, debt repayment, and dividend payments - the key cash outflows that a company must support to maintain and grow the business."
+  },
+  {
+    "id": 19,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "A cash flow adequacy ratio, when measured over the last several years, of less than one:",
+    "opts": [
+      "Indicates that a company's net income is too low relative to its sales level",
+      "Indicates that a company should decrease its dividend payout ratio",
+      "Indicates that a company needs to pay down its debt to decrease interest costs",
+      "Indicates that a company's internally generated cash flows have not been sufficient to"
+    ],
+    "correct": 3,
+    "exp": "A cash flow adequacy ratio less than 1 means the company's operating cash flows are insufficient to cover its capital expenditures, debt repayments, and dividends. This indicates the company has needed to use external financing or reserves to fund growth and shareholder returns."
+  },
+  {
+    "id": 20,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Cash flow from operations is usually less volatile than net income.",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 1,
+    "exp": "FALSE: Net income can be manipulated through accounting choices and timing differences, while cash flows are more objective. In reality, cash flows from operations can be more volatile than net income."
+  },
+  {
+    "id": 21,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "The only time a company experiences a negative cash flow from operations is when they are in trouble.",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 1,
+    "exp": "FALSE: Negative CFO can occur for many reasons: growing companies investing in inventory, seasonal businesses in off-season, companies making large advance payments, etc. It's not automatically a sign of trouble."
+  },
+  {
+    "id": 22,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Cash flow from operations will often be negative for companies experiencing tremendous growth.",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 0,
+    "exp": "TRUE: High-growth companies often have negative or low operating cash flow because they must invest heavily in inventory, receivables, and fixed assets to support growth, even while reporting profits."
+  },
+  {
+    "id": 23,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Cash flow from investing when averaged over an extended period of time would normally be expected to be negative (i.e. net outflow). TRUE 7-5",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 0,
+    "exp": "TRUE: Over the long term, companies must invest in fixed assets, so cash flow from investing is typically negative. Capital expenditures usually exceed proceeds from asset sales."
+  },
+  {
+    "id": 24,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Cash flow from financing is normally negative during the start-up phase for a company.",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 1,
+    "exp": "FALSE: During the start-up phase, companies typically need financing cash inflows (not outflows) to fund operations and investments. Financing cash flows would be positive (inflows) at start-up."
+  },
+  {
+    "id": 25,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Over an extended period of time average cash flow from operations would be expected to be higher than average net income.",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 0,
+    "exp": "TRUE: Over extended periods, net income is reduced by non-cash charges like depreciation, amortization, and deferred taxes. Operating cash flows exclude these, so they're typically higher than net income long-term."
+  },
+  {
+    "id": 26,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "A decrease in liabilities would usually show as an outflow in the statement of cash flows.",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 0,
+    "exp": "TRUE: A decrease in liabilities (paying off debt/payables) means cash goes out, making it a use of cash. This appears as an outflow when reconciling to cash flow."
+  },
+  {
+    "id": 27,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Practice requires separate disclosure of cash flows in the statement of cash flows.",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 1,
+    "exp": "FALSE: This statement seems backward. Separate disclosure of cash flows in the statement of cash flows is already a practice requirement under GAAP, not something still pending."
+  },
+  {
+    "id": 28,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Many financial analysts subtract interest paid from cash from operations, and reclassify it as part of cash from financing activities.",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 0,
+    "exp": "TRUE: Many analysts view interest payments as a financing cost rather than an operating cost, so they reclassify it from operating to financing activities for analysis purposes."
+  },
+  {
+    "id": 29,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Depreciation expense decreases net income but is not a use of cash.",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 0,
+    "exp": "TRUE: Depreciation reduces reported net income but is not a cash payment. Cash was spent when the asset was purchased, not when it's depreciated."
+  },
+  {
+    "id": 30,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Cash flows from operations is better measure of profitability than net income as it is less susceptible to manipulation by management. FALSE 7-6",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 1,
+    "exp": "FALSE: Both net income and CFO have merits. Net income shows profitability over time, while CFO shows liquidity. Net income isn't inherently better or worse - they measure different things."
+  },
+  {
+    "id": 31,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Which of the following expresses DuPont analysis? a. Net profit margin = total asset turnover times return on assets b. Total asset turnover = operating asset turnover times financial leverage c. Return on assets = net profit margin times total asset turnover d. Return on investment = return on equity (1  tax rate) e. Dividend yield = dividend payout times earnings per share ANS: C",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 1,
+    "exp": "FALSE: Net income can be manipulated through accounting choices and timing differences, while cash flows are more objective. In reality, cash flows from operations can be more volatile than net income."
+  },
+  {
+    "id": 32,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Operating assets equals: a. cash, accounts receivable, and equipment. b. current assets plus tangible assets. c. total assets minus intangible assets. d. only long-term assets. e. only current assets. ANS: B",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 1,
+    "exp": "FALSE: Negative CFO can occur for many reasons: growing companies investing in inventory, seasonal businesses in off-season, companies making large advance payments, etc. It's not automatically a sign of trouble."
+  },
+  {
+    "id": 33,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Return on investment measures: a. return to all suppliers of funds. b. return to all long-term creditors. c. return to all long-term suppliers of funds. d. return to stockholders. e. return to all short-term suppliers of funds. ANS: C",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 0,
+    "exp": "TRUE: High-growth companies often have negative or low operating cash flow because they must invest heavily in inventory, receivables, and fixed assets to support growth, even while reporting profits."
+  },
+  {
+    "id": 34,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "In the formula for return on investment, interest expense is multiplied by (1  tax rate). Why is this adjustment made? a. Interest is not tax deductible b. Debt is excluded from the denominator c. Net income in the formula is after tax d. Dividends are not deductible for tax purposes e. None of the answers are correct. ANS: C TRUE/",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 0,
+    "exp": "TRUE: Over the long term, companies must invest in fixed assets, so cash flow from investing is typically negative. Capital expenditures usually exceed proceeds from asset sales."
+  },
+  {
+    "id": 35,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Smith reported the following for 2012. Beginning market price $20.00 Average market price 24.00 Ending market price 26.00 Earnings per share: Basic 1.80 Diluted 1.60 Cash dividends per share 1.00 The price earnings ratio and dividend payout were: a. 16.25 and 62.50%. b. 16.25 and 65.00%. c. 17.00 and 62.50%. d. 15.00 and 62.50%. e. 15.00 and 60.00%. ANS: A",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 1,
+    "exp": "FALSE: Net income can be manipulated through accounting choices and timing differences, while cash flows are more objective. In reality, cash flows from operations can be more volatile than net income."
+  },
+  {
+    "id": 36,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Refer to Figure 12-2. Assume BG Industries could avoid $15,000 of fixed manufacturing overhead if it purchases the component from an outside supplier. If BG purchases the component from a supplier for $4.25 per unit instead of manufacturing it, the effect on income would be a a. $5,000 increase b. $15,000 increase c. $25,000 decrease d. $35,000 increase ANS: A SUPPORTING CALCULATIONS: Make: Direct materials $ 50,000 Direct labor 80,000 Variable overhead 30,000 Avoidable fixed overhead 15,000 Total cost to make $175,000 Buy: Purchase price (40,000 components  $4.25) $170,000 $170,000 - $175,000 = $5,000 increase in income DIF: 3 REF: p. 526 OBJ: 3 NAT: AACSB Analytic | IMA Decision analysis Figure 12-3 JED Industries manufactures 10,000 components per year. The manufacturing cost per component was determined to be as follows: Direct materials $240,000 Direct labor 360,000 Variable manufacturing overhead 80,000 Fixed manufacturing overhead 280,000 Total $960,000 An outside supplier has offered to sell the component for $84. Chapter 12/Tactical Decision Making F 671",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 1,
+    "exp": "FALSE: Net income can be manipulated through accounting choices and timing differences, while cash flows are more objective. In reality, cash flows from operations can be more volatile than net income."
+  },
+  {
+    "id": 37,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Refer to Figure 12-3. If JED Industries purchases the component from the outside supplier, the effect on income would be a a. $120,000 decrease b. $120,000 increase c. $280,000 increase d. $160,000 decrease ANS: D SUPPORTING CALCULATIONS: Make: Direct materials $240,000 Direct labor 360,000 Variable overhead 80,000 Total cost to make $680,000 Buy: Purchase price (10,000 components  $84) $840,000 $840,000 - $680,000 = $160,000 decrease in income DIF: 3 REF: p. 526 OBJ: 3 NAT: AACSB Analytic | IMA Decision analysis",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 1,
+    "exp": "FALSE: Negative CFO can occur for many reasons: growing companies investing in inventory, seasonal businesses in off-season, companies making large advance payments, etc. It's not automatically a sign of trouble."
+  },
+  {
+    "id": 38,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Refer to Figure 12-3. Assume JED Industries could avoid $40,000 of fixed manufacturing overhead if it purchases the component from the outside supplier. If JED purchases the component from the supplier instead of manufacturing it, the effect on income would be a a. $320,000 increase b. $160,000 increase c. $120,000 decrease d. $80,000 decrease ANS: C SUPPORTING CALCULATIONS: Make: Direct materials $240,000 Direct labor 360,000 Variable overhead 80,000 Avoidable fixed overhead 40,000 Total cost to make $720,000 Buy: Purchase price (10,000 components  $84) $840,000 $840,000 - $720,000 = $120,000 decrease in income DIF: 3 REF: p. 526 OBJ: 3 NAT: AACSB Analytic | IMA Decision analysis",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 0,
+    "exp": "TRUE: High-growth companies often have negative or low operating cash flow because they must invest heavily in inventory, receivables, and fixed assets to support growth, even while reporting profits."
+  },
+  {
+    "id": 39,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Refer to Figure 12-4. If RED Industries purchases the component from the outside supplier, the effect on income would be a a. $15,000 decrease b. $20,000 decrease c. $15,000 increase d. $35,000 increase ANS: B SUPPORTING CALCULATIONS: Make: Direct materials $30,000 Direct labor 45,000 Variable overhead 10,000 Total cost to make $85,000 Buy: Purchase price (20,000 components  $5.25) $105,000 $105,000 - $85,000 = $20,000 decrease in income DIF: 3 REF: p. 526 OBJ: 3 NAT: AACSB Analytic | IMA Decision analysis Chapter 12/Tactical Decision Making F 673",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 0,
+    "exp": "TRUE: Over the long term, companies must invest in fixed assets, so cash flow from investing is typically negative. Capital expenditures usually exceed proceeds from asset sales."
+  },
+  {
+    "id": 40,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Refer to Figure 12-4. Assume RED Industries could avoid $5,000 of fixed manufacturing overhead if it purchases the component from the outside supplier. If RED purchases the component from the supplier instead of manufacturing it, the effect on income would be a a. $40,000 increase b. $10,000 decrease c. $20,000 increase d. $15,000 decrease ANS: D SUPPORTING CALCULATIONS: Make: Direct materials $30,000 Direct labor 45,000 Variable overhead 10,000 Avoidable fixed overhead 5,000 Total cost to make $90,000 Buy: Purchase price (20,000 components  $5.25) $105,000 $105,000 - $90,000 = $15,000 decrease in income DIF: 3 REF: p. 526 OBJ: 3 NAT: AACSB Analytic | IMA Decision analysis",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 1,
+    "exp": "FALSE: During the start-up phase, companies typically need financing cash inflows (not outflows) to fund operations and investments. Financing cash flows would be positive (inflows) at start-up."
+  },
+  {
+    "id": 41,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "White Motor Company manufactures 7,500 units of a particular part. The unit cost to manufacture this part is as follows: Direct materials $ 3 Direct labor 4 Variable manufacturing overhead 2 Fixed manufacturing overhead 8 Total $17 Diya Company offered to sell 7,500 units of the part to the White Motor Company for $14 per unit. White has determined that 75 percent of the fixed manufacturing overhead will continue even if the part is purchased from Diya and now must decide whether to accept Diya's offer. White has calculated the relevant costs of manufacturing the part internally to be a. $127,500 b. $112,500 c. $82,500 d. $67,500 ANS: C SUPPORTING CALCULATIONS: $3 + $4 + $2 + ($8  .25) = $11  7,500 units = $82,500 DIF: 3 REF: p. 526 OBJ: 3 NAT: AACSB Analytic | IMA Decision analysis",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 0,
+    "exp": "TRUE: Over extended periods, net income is reduced by non-cash charges like depreciation, amortization, and deferred taxes. Operating cash flows exclude these, so they're typically higher than net income long-term."
+  },
+  {
+    "id": 42,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "A segment should be kept if a. segment revenues exceed segment variable costs b. segment revenues exceed segment variable costs and fixed costs c. segment revenues exceed avoidable costs associated with the segment d. segment operating profit is positive ANS: C DIF: 2 REF: p. 527 OBJ: 3 NAT: AACSB Analytic | IMA Decision analysis Chapter 12/Tactical Decision Making F 675",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 0,
+    "exp": "TRUE: A decrease in liabilities (paying off debt/payables) means cash goes out, making it a use of cash. This appears as an outflow when reconciling to cash flow."
+  },
+  {
+    "id": 43,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "The operations of Hart Corporation are divided into the Will Division and the Aloy Division. Projections for the next year are as follows: Will Aloy Division Division Total Sales $560,000 $336,000 $896,000 Less: Variable costs 196,000 154,000 350,000 Contribution margin $364,000 $182,000 $546,000 Less: Direct fixed costs 168,000 140,000 308,000 Segment margin $196,000 $ 42,000 $238,000 Less: Allocated common cost 84,000 63,000 147,000 Operating income (loss) $112,000 $(21,000) $ 91,000 Operating income for Hart Corporation, as a whole, if the Aloy Division were dropped would be a. $133,000 b. $112,000 c. $91,000 d. $49,000 ANS: D SUPPORTING CALCULATIONS: Current operating income $91,000 Less: Aloy's segment margin 42,000 New operating income $49,000 DIF: 3 REF: p. 528 OBJ: 3 NAT: AACSB Analytic | IMA Decision analysis",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 1,
+    "exp": "FALSE: This statement seems backward. Separate disclosure of cash flows in the statement of cash flows is already a practice requirement under GAAP, not something still pending."
+  },
+  {
+    "id": 44,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Zandy Beverage Company plans to eliminate a branch that has a contribution margin of $50,000 and fixed costs of $75,000. Of the fixed costs, $55,000 cannot be eliminated. The effect of eliminating this branch on net income would be a(n) a. decrease of $25,000 b. increase of $25,000 c. decrease of $30,000 d. increase of $30,000 ANS: C SUPPORTING CALCULATIONS: Contribution Margin $50,000 Avoidable fixed costs ($75,000 - $55,000) 20,000 Segment margin $30,000 DIF: 3 REF: p. 528 OBJ: 3 NAT: AACSB Analytic | IMA Decision analysis",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 0,
+    "exp": "TRUE: Many analysts view interest payments as a financing cost rather than an operating cost, so they reclassify it from operating to financing activities for analysis purposes."
+  },
+  {
+    "id": 45,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "The operations of Cunningham Corporation are divided into the Davis Division and the Rockford Division. Projections for the next year are as follows: Davis Rockford Division Division Total Sales $500,000 $360,000 $860,000 Less: Variable costs 180,000 200,000 380,000 Contribution margin $320,000 $160,000 $480,000 Less: Direct fixed costs 150,00 125,000 275,000 Segment margin $170,000 $ 35,000 $205,000 Less: Allocated common costs 70,000 55,000 125,000 Operating income (loss) $100,000 $(20,000) $ 80,000 Operating income for Cunningham Corporation, as a whole, if the Rockford Division were dropped would be a. $45,000 b. $80,000 c. $100,000 d. $120,000 ANS: A SUPPORTING CALCULATIONS: Current operating income $80,000 Less: Rockford's segment margin 35,000 New operating income $45,000 DIF: 3 REF: p. 528 OBJ: 3 NAT: AACSB Analytic | IMA Decision analysis",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 0,
+    "exp": "TRUE: Depreciation reduces reported net income but is not a cash payment. Cash was spent when the asset was purchased, not when it's depreciated."
+  },
+  {
+    "id": 46,
+    "subject": "fin",
+    "session": "Tranche 2 · Finance",
+    "q": "Which of the following costs is NOT relevant to a special-order decision? a. the direct labor costs to manufacture the special-order units b. the variable manufacturing overhead incurred to manufacture the special-order units c. the portion of the cost of leasing the factory that is allocated to the special order d. All of the above costs are relevant costs. ANS: C DIF: 2 REF: p. 530 OBJ: 3 NAT: AACSB Analytic | IMA Decision analysis",
+    "opts": [
+      "True",
+      "False",
+      "",
+      ""
+    ],
+    "correct": 1,
+    "exp": "FALSE: Both net income and CFO have merits. Net income shows profitability over time, while CFO shows liquidity. Net income isn't inherently better or worse - they measure different things."
+  }
+];
+
+let state = {
+  filter: 'all',
+  deck: [],
+  idx: 0,
+  answered: false,
+  score: 0,
+};
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pct(n, d) { return d === 0 ? 0 : Math.round((n / d) * 100); }
+
+function getTier(p) {
+  if (p >= 90) return { tier: "IIM-Level — Distinction", sub: "Exceptional command." };
+  if (p >= 75) return { tier: "Strong Command — Pass with Merit", sub: "Solid understanding." };
+  if (p >= 60) return { tier: "Adequate — Revise Key Frameworks", sub: "Reinforce weak areas." };
+  return { tier: "Needs Work — Return to Notes", sub: "Systematic revision needed." };
+}
+
+function startQuiz(f) {
+  state.filter = f;
+  const pool = ALL_QUESTIONS.filter(q => state.filter === 'all' || q.subject === state.filter);
+  state.deck = shuffle(pool);
+  state.idx = 0;
+  state.score = 0;
+
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizArea').style.display = 'block';
+  document.getElementById('progressArea').style.display = 'block';
+
+  if (state.deck.length === 0) {
+    document.getElementById('quizArea').innerHTML = '<div style="text-align:center; padding: 60px 20px; color: var(--text-dim);">No questions available.</div>';
+    return;
+  }
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = state.deck[state.idx];
+  const total = state.deck.length;
+  const num = state.idx + 1;
+  state.answered = false;
+
+  const fillPct = ((num - 1) / total) * 100;
+  document.getElementById('progressFill').style.width = fillPct + '%';
+  document.getElementById('progressText').textContent = 'Question ' + num + ' of ' + total;
+  document.getElementById('progressPct').textContent = Math.round(fillPct) + '%';
+
+  document.getElementById('questionNum').textContent = '#' + q.id;
+  document.getElementById('questionText').textContent = q.q;
+
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  
+  // Check if True/False question (opts[2] and opts[3] are empty)
+  const isTrueOrFalse = q.opts[2] === '' && q.opts[3] === '';
+  const numOptions = isTrueOrFalse ? 2 : 4;
+  
+  // Set grid mode
+  grid.className = '';
+  if (isTrueOrFalse) {
+    grid.classList.add('tf-mode');
+  }
+  
+  for (let i = 0; i < numOptions; i++) {
+    const opt = q.opts[i];
+    if (!opt) continue;
+    
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    if (isTrueOrFalse) btn.classList.add('tf');
+    
+    if (isTrueOrFalse) {
+      // True/False: show only text without letter
+      btn.innerHTML = '<span>' + opt + '</span>';
+    } else {
+      // Multiple Choice: show letter + text
+      btn.innerHTML = '<span class="option-letter">' + letters[i] + '</span><span>' + opt + '</span>';
+    }
+    
+    btn.addEventListener('click', () => selectAnswer(i));
+    grid.appendChild(btn);
+  }
+
+  const ep = document.getElementById('explanationPanel');
+  ep.className = 'explanation-panel';
+  document.getElementById('explanationText').textContent = '';
+  document.getElementById('nextBtn').style.display = 'none';
+}
+
+function selectAnswer(chosen) {
+  if (state.answered) return;
+  state.answered = true;
+
+  const q = state.deck[state.idx];
+  const btns = document.querySelectorAll('.option-btn');
+  const correct = q.correct;
+
+  btns.forEach((btn, i) => {
+    btn.classList.add('disabled');
+    if (i === correct) btn.classList.add('correct');
+    else if (i === chosen) btn.classList.add('wrong');
+  });
+
+  if (chosen === correct) {
+    state.score++;
+  }
+
+  const ep = document.getElementById('explanationPanel');
+  document.getElementById('explanationText').textContent = q.exp;
+  ep.classList.add('show');
+
+  document.getElementById('nextBtn').style.display = 'block';
+  document.getElementById('scoreNum').textContent = state.score;
+}
+
+function nextQuestion() {
+  if (!state.answered) return;
+  state.idx++;
+  if (state.idx >= state.deck.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('progressArea').style.display = 'none';
+  document.getElementById('resultsScreen').classList.add('show');
+
+  const total = state.deck.length;
+  const p = pct(state.score, total);
+  const { tier, sub } = getTier(p);
+
+  document.getElementById('resultsTier').textContent = tier;
+  document.getElementById('rTotal').textContent = state.score + '/' + total;
+  document.getElementById('rTotalSub').textContent = p + '%';
+}
+
+startQuiz('all');
+</script>
+</body>
+</html>

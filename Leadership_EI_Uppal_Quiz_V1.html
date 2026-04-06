@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leadership &amp; Emotional Intelligence Quiz</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:         #1a1c22;
+    --card:       #252830;
+    --card-hover: #2d3040;
+    --border:     #353845;
+    --text:       #e8e6e1;
+    --text-muted: #9895a0;
+    --text-dim:   #6b6878;
+    --correct:    #3ecf8e;
+    --correct-dim:rgba(62,207,142,0.15);
+    --wrong:      #e05252;
+    --wrong-dim:  rgba(224,82,82,0.15);
+    --gold:       #f0c040;
+    --radius:     12px;
+    --radius-sm:  8px;
+    --shadow:     0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ── Header ── */
+  .app-header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .app-title {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+  .app-subtitle {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .score-display {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    white-space: nowrap;
+  }
+  .score-display .score-num { color: var(--gold); font-weight: 500; }
+
+  /* ── Filter Bar ── */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    padding: 20px 24px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .filter-btn {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.8rem;
+    padding: 7px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+  }
+  .filter-btn:hover { background: var(--card-hover); color: var(--text); }
+  .filter-btn.active-all { background: rgba(255,255,255,0.08); color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+  /* ── Subject-specific CSS ── */
+
+  /* ── Subject: LEAD ── */
+  .subject-tag.lead { background: rgba(200,169,110,0.15); color: #c8a96e; border: 1px solid rgba(200,169,110,0.3); }
+  .filter-btn.active-lead { background: rgba(200,169,110,0.15); color: #c8a96e; border-color: #c8a96e; }
+  .explanation-panel.lead-border { border-left-color: #c8a96e; background: rgba(200,169,110,0.15); }
+  .btn-lead { background: rgba(200,169,110,0.15); color: #c8a96e; border: 1px solid #c8a96e; }
+  .btn-lead:hover { filter: brightness(1.15); }
+  .score-block-value.lead { color: #c8a96e; }
+
+  /* ── Subject: EI ── */
+  .subject-tag.ei { background: rgba(155,142,196,0.15); color: #9b8ec4; border: 1px solid rgba(155,142,196,0.3); }
+  .filter-btn.active-ei { background: rgba(155,142,196,0.15); color: #9b8ec4; border-color: #9b8ec4; }
+  .explanation-panel.ei-border { border-left-color: #9b8ec4; background: rgba(155,142,196,0.15); }
+  .btn-ei { background: rgba(155,142,196,0.15); color: #9b8ec4; border: 1px solid #9b8ec4; }
+  .btn-ei:hover { filter: brightness(1.15); }
+  .score-block-value.ei { color: #9b8ec4; }
+
+  /* ── Subject: MOTIV ── */
+  .subject-tag.motiv { background: rgba(62,207,142,0.15); color: #3ecf8e; border: 1px solid rgba(62,207,142,0.3); }
+  .filter-btn.active-motiv { background: rgba(62,207,142,0.15); color: #3ecf8e; border-color: #3ecf8e; }
+  .explanation-panel.motiv-border { border-left-color: #3ecf8e; background: rgba(62,207,142,0.15); }
+  .btn-motiv { background: rgba(62,207,142,0.15); color: #3ecf8e; border: 1px solid #3ecf8e; }
+  .btn-motiv:hover { filter: brightness(1.15); }
+  .score-block-value.motiv { color: #3ecf8e; }
+
+  /* ── Subject: ORG ── */
+  .subject-tag.org { background: rgba(120,184,212,0.15); color: #78b8d4; border: 1px solid rgba(120,184,212,0.3); }
+  .filter-btn.active-org { background: rgba(120,184,212,0.15); color: #78b8d4; border-color: #78b8d4; }
+  .explanation-panel.org-border { border-left-color: #78b8d4; background: rgba(120,184,212,0.15); }
+  .btn-org { background: rgba(120,184,212,0.15); color: #78b8d4; border: 1px solid #78b8d4; }
+  .btn-org:hover { filter: brightness(1.15); }
+  .score-block-value.org { color: #78b8d4; }
+
+  /* ── Main layout ── */
+  .main-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 20px;
+  }
+
+  /* ── Progress ── */
+  .progress-area { margin-bottom: 24px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    margin-bottom: 8px;
+  }
+  .progress-track { height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    background: linear-gradient(90deg, #c8a96e, #9b8ec4, #3ecf8e, #78b8d4);
+  }
+
+  /* ── Question Card ── */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .subject-tag {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .session-label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-style: italic;
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+  }
+  .question-num {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-left: auto;
+  }
+  .question-text {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  /* ── Answer Options ── */
+  .options-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .option-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-align: left;
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    transition: all 0.15s ease;
+    width: 100%;
+    position: relative;
+  }
+  .option-btn:hover:not(.disabled) { background: var(--card-hover); border-color: rgba(255,255,255,0.18); }
+  .option-btn.disabled { cursor: default; color: var(--text-muted); }
+  .option-btn.correct {
+    background: var(--correct-dim) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+  }
+  .option-btn.wrong {
+    background: var(--wrong-dim) !important;
+    border-color: var(--wrong) !important;
+    color: var(--wrong) !important;
+  }
+  .option-letter {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px 8px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.15s;
+  }
+  .option-btn.correct .option-letter { background: rgba(62,207,142,0.2); border-color: var(--correct); color: var(--correct); }
+  .option-btn.wrong   .option-letter { background: rgba(224,82,82,0.2);  border-color: var(--wrong);   color: var(--wrong);   }
+  .option-text { flex: 1; }
+  .key-hint {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    flex-shrink: 0;
+    align-self: center;
+  }
+  .option-btn.disabled .key-hint { display: none; }
+
+  /* ── Explanation Panel ── */
+  .explanation-panel {
+    border-left: 3px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+    display: none;
+    animation: slideUp 0.25s ease;
+  }
+  .explanation-panel.show { display: block; }
+  .explanation-label {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 9px 22px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { background: var(--card-hover); }
+  .btn-primary { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+  .btn-primary:hover { background: rgba(255,255,255,0.13); }
+  #nextBtn { display: none; margin-top: 4px; }
+
+  /* ── Results Screen ── */
+  .results-screen { display: none; animation: slideUp 0.4s ease; }
+  .results-screen.show { display: block; }
+  .results-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 32px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .results-trophy { font-size: 2.5rem; margin-bottom: 12px; }
+  .results-tier {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, #c8a96e, #9b8ec4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .results-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    font-style: italic;
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+  }
+  .results-scores {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .score-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 12px;
+  }
+  .score-block-label {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .score-block-value {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+  .score-block-value.all { color: var(--gold); }
+  .score-block-sub {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+  }
+  .results-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 0.95rem;
+    display: none;
+  }
+
+  /* ── Keyboard hints ── */
+  .keyboard-hint-bar {
+    text-align: center;
+    margin-top: 20px;
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+  .kh-item { display: flex; align-items: center; gap: 6px; }
+  .kh-key { border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; color: var(--text-muted); }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ── Touch UX ── */
+  * { -webkit-tap-highlight-color: transparent; }
+  button, .option-btn, .filter-btn { touch-action: manipulation; }
+  .option-btn:active:not(.disabled) { opacity: 0.72; transform: scale(0.983); }
+  .btn:active        { opacity: 0.78; transform: scale(0.972); }
+  .filter-btn:active { opacity: 0.72; }
+
+  /* ── Mobile: max 640px ── */
+  @media (max-width: 640px) {
+    .app-header { padding: 10px 14px; flex-wrap: wrap; gap: 6px; }
+    .app-title { font-size: 0.9rem; }
+    .app-subtitle { display: none; }
+    .score-display { font-size: 0.78rem; padding: 4px 12px; }
+
+    .filter-bar {
+      padding: 12px 14px 0;
+      gap: 7px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-btn { flex-shrink: 0; min-height: 40px; padding: 8px 18px; font-size: 0.78rem; }
+
+    .main-wrap { padding: 14px 12px; }
+    .progress-area { margin-bottom: 16px; }
+    .progress-label { font-size: 0.7rem; }
+    .progress-track { height: 5px; }
+
+    .question-card { padding: 18px 14px; border-radius: 10px; }
+    .card-meta { gap: 7px; margin-bottom: 14px; }
+    .subject-tag { font-size: 0.65rem; }
+    .session-label { font-size: 0.68rem; }
+    .question-num { font-size: 0.65rem; }
+
+    .question-text { font-size: 1rem; line-height: 1.65; margin-bottom: 18px; }
+
+    .options-grid { gap: 9px; margin-bottom: 16px; }
+    .option-btn {
+      min-height: 52px;
+      padding: 14px 13px;
+      gap: 11px;
+      font-size: 0.88rem;
+      border-radius: 8px;
+      align-items: center;
+    }
+    .option-letter { min-width: 26px; text-align: center; padding: 2px 6px; font-size: 0.75rem; }
+    .key-hint { display: none; }
+
+    .explanation-panel { font-size: 0.83rem; padding: 12px 13px; }
+    .explanation-label { font-size: 0.62rem; }
+
+    #nextBtn {
+      width: 100%;
+      justify-content: center;
+      padding: 15px;
+      min-height: 50px;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      margin-top: 6px;
+    }
+
+    .results-card { padding: 22px 14px; }
+    .results-trophy { font-size: 2rem; margin-bottom: 8px; }
+    .results-tier { font-size: 1.25rem; }
+    .results-subtitle { font-size: 0.78rem; margin-bottom: 20px; }
+    .results-scores { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .score-block { padding: 12px 10px; }
+    .score-block-label { font-size: 0.62rem; }
+    .score-block-value { font-size: 1.5rem; }
+    .score-block-sub { font-size: 0.68rem; }
+
+    .results-actions { flex-direction: column; }
+    .results-actions .btn { width: 100%; justify-content: center; min-height: 48px; font-size: 0.9rem; }
+
+    .keyboard-hint-bar { display: none; }
+  }
+
+  @media (max-width: 360px) {
+    .question-text { font-size: 0.94rem; }
+    .option-btn { font-size: 0.83rem; padding: 13px 11px; }
+    .results-scores { grid-template-columns: 1fr; }
+    .score-block-value { font-size: 1.35rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="app-header">
+  <div>
+    <div class="app-title"><span style="color:#c8a96e">Leadership</span> &amp; <span style="color:#9b8ec4">EI</span> Quiz</div>
+    <div class="app-subtitle">IIM Lucknow · Leadership &amp; Emotional Intelligence · 50 Questions · April 2026</div>
+  </div>
+  <div class="score-display">
+    Score: <span class="score-num" id="scoreNum">0</span>
+    / <span id="scoreDen">0</span>
+  </div>
+</header>
+
+<!-- ── FILTER BAR ── -->
+<div class="filter-bar">
+  <button class="filter-btn active-all" id="btnAll" onclick="setFilter('all')">All 50</button>
+  <button class="filter-btn" id="btnLead" onclick="setFilter('lead')">LEAD (13)</button>
+  <button class="filter-btn" id="btnEi" onclick="setFilter('ei')">EI (13)</button>
+  <button class="filter-btn" id="btnMotiv" onclick="setFilter('motiv')">MOTIV (12)</button>
+  <button class="filter-btn" id="btnOrg" onclick="setFilter('org')">ORG (12)</button>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main-wrap">
+
+  <!-- Progress -->
+  <div class="progress-area" id="progressArea">
+    <div class="progress-label">
+      <span id="progressText">Question 1 of 50</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Quiz Area -->
+  <div id="quizArea">
+    <div class="question-card" id="questionCard">
+
+      <div class="card-meta">
+        <span class="subject-tag" id="subjectTag">—</span>
+        <span class="session-label" id="sessionLabel">—</span>
+        <span class="question-num" id="questionNum">#1</span>
+      </div>
+
+      <div class="question-text" id="questionText">Loading...</div>
+
+      <div class="options-grid" id="optionsGrid"></div>
+
+      <div class="explanation-panel" id="explanationPanel">
+        <div class="explanation-label">Explanation</div>
+        <div id="explanationText"></div>
+      </div>
+
+      <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">
+        Next &rarr;
+      </button>
+    </div>
+
+    <div class="keyboard-hint-bar">
+      <div class="kh-item"><span class="kh-key">1–4</span> Select answer</div>
+      <div class="kh-item"><span class="kh-key">Enter</span> Next question</div>
+      <div class="kh-item"><span class="kh-key">R</span> Restart</div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" id="emptyState">No questions match this filter.</div>
+
+  <!-- Results Screen -->
+  <div class="results-screen" id="resultsScreen">
+    <div class="results-card">
+      <div class="results-trophy">🎓</div>
+      <div class="results-tier" id="resultsTier"></div>
+      <div class="results-subtitle" id="resultsSubtitle"></div>
+
+      <div class="results-scores">
+        <div class="score-block">
+          <div class="score-block-label">Total</div>
+          <div class="score-block-value all" id="rTotal">—</div>
+          <div class="score-block-sub" id="rTotalSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">LEAD</div>
+          <div class="score-block-value lead" id="rLead">—</div>
+          <div class="score-block-sub" id="rLeadSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">EI</div>
+          <div class="score-block-value ei" id="rEi">—</div>
+          <div class="score-block-sub" id="rEiSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">MOTIV</div>
+          <div class="score-block-value motiv" id="rMotiv">—</div>
+          <div class="score-block-sub" id="rMotivSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">ORG</div>
+          <div class="score-block-value org" id="rOrg">—</div>
+          <div class="score-block-sub" id="rOrgSub"></div>
+        </div>
+      </div>
+
+      <div class="results-actions">
+        <button class="btn btn-primary" onclick="startQuiz('all')">Restart All 50</button>
+        <button class="btn btn-lead" onclick="startQuiz('lead')">LEAD Only (13)</button>
+        <button class="btn btn-ei" onclick="startQuiz('ei')">EI Only (13)</button>
+        <button class="btn btn-motiv" onclick="startQuiz('motiv')">MOTIV Only (12)</button>
+        <button class="btn btn-org" onclick="startQuiz('org')">ORG Only (12)</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main-wrap -->
+
+<script>
+/* ═══════════════════════════════════
+   QUESTION DATA
+═══════════════════════════════════ */
+const ALL_QUESTIONS = [
+  {
+    "id": 1,
+    "subject": "lead",
+    "session": "Ch 1 · What is Leadership",
+    "q": "Leadership has two essential components. Which combination is correct?",
+    "opts": [
+      "Vision-setting and people management",
+      "Creating followers and leading them in the right direction",
+      "Communication skills and strategic planning",
+      "Positional authority and emotional intelligence"
+    ],
+    "correct": 1,
+    "exp": "Leadership = (1) creating followers + (2) leading them in the right direction. Having one without the other is incomplete — a manager without followers isn't a leader; a popular person who leads people the wrong way is also not a true leader."
+  },
+  {
+    "id": 2,
+    "subject": "lead",
+    "session": "Ch 1 · What is Leadership",
+    "q": "According to the notes, what is the primary function of a leader with respect to problems?",
+    "opts": [
+      "To solve every organisational problem personally",
+      "To delegate problems to specialist teams",
+      "To identify a real, felt problem and offer a coherent ideology as its solution",
+      "To prevent problems from reaching the team"
+    ],
+    "correct": 2,
+    "exp": "A leader's primary function is to identify a real, felt problem and offer a coherent ideology as its solution. Startups fail for one of two reasons: solving a problem that doesn't exist, or offering a solution that doesn't solve the real problem."
+  },
+  {
+    "id": 3,
+    "subject": "lead",
+    "session": "Ch 1 · Leadership as Ideology",
+    "q": "\"Followers aren't following a human being; they are following an ideology.\" What does this imply about leadership?",
+    "opts": [
+      "Leaders must be charismatic performers",
+      "True leadership lives in the idea a leader represents, not the individual",
+      "A leader's personal brand matters more than their team's output",
+      "Followers always lose motivation when a leader departs"
+    ],
+    "correct": 1,
+    "exp": "True leadership doesn't live in a person — it lives in the idea they represent. Gandhi's philosophy of non-violent resistance outlived Gandhi himself because the ideology had been deposited into millions of thought banks, and no longer needed the person to survive."
+  },
+  {
+    "id": 4,
+    "subject": "lead",
+    "session": "Ch 1 · Three Stages of Leadership",
+    "q": "In the three stages of leadership, what does Stage 3 — becoming 'redundant' — actually mean?",
+    "opts": [
+      "Losing relevance in the organisation",
+      "Being replaced by a more capable leader",
+      "Successfully growing enough successors that the system runs without you",
+      "Stepping down from a leadership position voluntarily"
+    ],
+    "correct": 2,
+    "exp": "Stage 3 — 'Become Redundant' — is the highest achievement. It means you have grown enough successors that the system runs without you. Redundancy here equals successful succession planning — completion, not failure. Warren Buffett building Berkshire Hathaway's culture to run without him is the example."
+  },
+  {
+    "id": 5,
+    "subject": "lead",
+    "session": "Ch 1 · Three Stages of Leadership",
+    "q": "The correct sequence of the three stages a leader must pass through is:",
+    "opts": [
+      "Build consensus → Challenge the norm → Become redundant",
+      "Become redundant → Challenge the norm → Build consensus",
+      "Challenge the norm → Become redundant → Build consensus",
+      "Challenge the norm → Build consensus → Become redundant"
+    ],
+    "correct": 3,
+    "exp": "Stage 1 — Challenge the prevailing norm (go against the current). Stage 2 — Build consensus among those not in the original movement. Stage 3 — Become redundant. Each stage must be completed in order before the next can begin."
+  },
+  {
+    "id": 6,
+    "subject": "lead",
+    "session": "Ch 1 · Leaders Are Made",
+    "q": "Why is the concept of Emotional Intelligence significant evidence that 'leaders are made, not born'?",
+    "opts": [
+      "EI is a natural talent visible from birth",
+      "EI took over 70 years to be formally named, proving our understanding of leadership evolves — and so can the leader",
+      "EI is the primary predictor of academic performance, not leadership",
+      "EI can only be developed in structured, accredited training programmes"
+    ],
+    "correct": 1,
+    "exp": "EI took over 70 years to be formally named and studied. This proves our understanding of what makes a leader evolves — and so can the leader themselves. Leadership is built through experience, self-reflection, and deliberate development, not inherited from genetics."
+  },
+  {
+    "id": 7,
+    "subject": "lead",
+    "session": "Ch 6 · Leadership in Practice",
+    "q": "Which of the following best describes the 'carrot and stick' principle as applied to leadership?",
+    "opts": [
+      "Using only rewards is always more effective than using punishments",
+      "Leaders must use both rewards and punishments simultaneously for maximum effect",
+      "The skill lies in reading the person and situation, then making a deliberate, intentional choice",
+      "Consequences (stick) are always more effective than rewards for sustained performance"
+    ],
+    "correct": 2,
+    "exp": "Neither carrot nor stick is universally superior. The skill is reading the person and the situation — then making a deliberate, intentional choice rather than defaulting to habit or personality. Using either reactively, without reading the context, is not leadership."
+  },
+  {
+    "id": 8,
+    "subject": "lead",
+    "session": "Ch 6 · Span of Control",
+    "q": "What does research consistently say about the maximum effective span of control?",
+    "opts": [
+      "5 direct reports",
+      "7 direct reports (Miller's Magic Number)",
+      "10 direct reports",
+      "15 direct reports"
+    ],
+    "correct": 2,
+    "exp": "Research consistently shows one person can effectively manage a maximum of 10 direct reports. Beyond this, coordination quality and personal attention both collapse. Amazon's 'two-pizza rule' reflects a similar principle — cap teams before the ceiling, not after problems emerge."
+  },
+  {
+    "id": 9,
+    "subject": "lead",
+    "session": "Ch 6 · Leadership Identity",
+    "q": "In the context of leadership, a 'uniform' refers to:",
+    "opts": [
+      "Standardised dress code policies in organisations",
+      "A public declaration of identity and purpose communicated before a word is spoken",
+      "The importance of visual conformity in team culture",
+      "Visual hierarchy signals in an organisational chart"
+    ],
+    "correct": 1,
+    "exp": "A uniform is a public announcement of identity and purpose. Steve Jobs' black turtleneck was a daily declaration of his ideology of simplicity and focus — not fashion. It announced his values before he ever opened his mouth. The uniform is the ideology, made visible."
+  },
+  {
+    "id": 10,
+    "subject": "lead",
+    "session": "Ch 6 · Leadership Styles",
+    "q": "Which leadership style specifically adapts to the context and the follower's readiness level?",
+    "opts": [
+      "Transformational",
+      "Inspirational",
+      "Servant",
+      "Situational"
+    ],
+    "correct": 3,
+    "exp": "Situational leadership adapts style to context and follower readiness. Transformational drives deep systemic change. Inspirational motivates through vision. Servant prioritises others' growth. Great leaders move fluidly between all four styles — never locked into one."
+  },
+  {
+    "id": 11,
+    "subject": "lead",
+    "session": "Ch 6 · CEO Compensation",
+    "q": "Based on Emotional Labour theory, why is CEO compensation justified as the highest in an organisation?",
+    "opts": [
+      "CEOs have the highest formal qualifications and broadest accountability",
+      "CEOs carry the greatest reputational and legal risk",
+      "CEOs sustain the largest gap between personal values and organisational expectations, with no fixed off-hours",
+      "CEOs make the most high-stakes decisions per unit of time"
+    ],
+    "correct": 2,
+    "exp": "The logical basis for maximum CEO pay is maximum emotional labour — they sustain the largest gap between personal values and organisational expectations, with no fixed 'off' hours. Compensation should be redesigned to reflect emotional, not just physical, labour."
+  },
+  {
+    "id": 12,
+    "subject": "lead",
+    "session": "Ch 6 · Ethics of Leadership",
+    "q": "The ethical complexity of leadership arises primarily because:",
+    "opts": [
+      "Leaders must constantly make decisions with incomplete information",
+      "Leadership unavoidably involves influencing and shaping other people's emotional states",
+      "Leaders are held to a higher moral standard by society than non-leaders",
+      "Organisational goals often conflict directly with individual employee wellbeing"
+    ],
+    "correct": 1,
+    "exp": "Leadership unavoidably involves influencing — and to some degree shaping — other people's emotional states. A leader who cannot come to terms with this reality cannot lead effectively. Refusing to face this dissonance doesn't eliminate it; it just makes the leader less honest about their own role."
+  },
+  {
+    "id": 13,
+    "subject": "lead",
+    "session": "Ch 5 · Goleman's EI Definition",
+    "q": "In what specific sense does Goleman define Emotional Intelligence?",
+    "opts": [
+      "The ability to feel empathy for all people regardless of background",
+      "A person's capacity to conduct emotional labour — handling the gap between surface and deep acting without breaking down",
+      "The mastery of reading body language and non-verbal social cues",
+      "Emotional memory and the ability to recall past emotional experiences accurately"
+    ],
+    "correct": 1,
+    "exp": "Daniel Goleman defines EI as a person's capacity to conduct emotional labour — specifically, the mental stamina to handle the gap between surface and deep acting without breaking down. The greater your EI, the greater your capacity to absorb emotional pressure while remaining effective and composed."
+  },
+  {
+    "id": 14,
+    "subject": "ei",
+    "session": "Ch 3 · Festinger's Experiment",
+    "q": "In Festinger's cognitive dissonance experiment, which group changed their beliefs MORE strongly?",
+    "opts": [
+      "The group paid $20 (large reward)",
+      "The group paid $1 (small reward)",
+      "Both groups changed beliefs equally",
+      "Neither group changed their beliefs — only their behaviour"
+    ],
+    "correct": 1,
+    "exp": "Small rewards produce deeper belief change. With a $1 reward, the reward alone isn't sufficient justification for acting against one's values — so the person unconsciously changes their belief to justify the act. With $20, 'I'm doing it for the money' fully explains the act — beliefs stay intact. Counterintuitively, smaller incentives produce deeper inner transformation."
+  },
+  {
+    "id": 15,
+    "subject": "ei",
+    "session": "Ch 3 · Cognitive Dissonance",
+    "q": "'Difficult entry makes groups feel more valuable.' This is an application of which concept?",
+    "opts": [
+      "Operant conditioning (Skinner)",
+      "Social influence theory",
+      "Cognitive dissonance at the group level",
+      "Equifinality"
+    ],
+    "correct": 2,
+    "exp": "When membership requires real effort or sacrifice, the brain must justify that investment — and does so by elevating the perceived value of what was earned. IIM graduates identify intensely with their institution partly because the difficulty of entry is inseparable from the pride of membership. This is cognitive dissonance at the group level."
+  },
+  {
+    "id": 16,
+    "subject": "ei",
+    "session": "Ch 3 · Falsification",
+    "q": "What does 'falsification' mean in the context of knowledge and leadership?",
+    "opts": [
+      "The tendency to fabricate data to support a predetermined conclusion",
+      "Knowledge advances by disproving what we thought we knew, not by accumulating confirming facts",
+      "The ethical risk of using partial information to manipulate decisions",
+      "A logical fallacy where correlation is mistaken for causation"
+    ],
+    "correct": 1,
+    "exp": "A belief is only scientifically meaningful if it can be tested and potentially proven wrong. Galileo falsified the 'flat Earth' belief with three independent observations. Leaders who understand falsification stay genuinely open to being wrong — not as weakness, but as the foundation of real learning. Knowledge is the progressive realisation of one's own ignorance."
+  },
+  {
+    "id": 17,
+    "subject": "ei",
+    "session": "Ch 3 · Multi-finality & Equifinality",
+    "q": "'The same action can lead to completely different outcomes depending on context.' This describes which concept?",
+    "opts": [
+      "Equifinality",
+      "Multi-finality",
+      "Cognitive dissonance",
+      "Situational leadership"
+    ],
+    "correct": 1,
+    "exp": "Multi-finality: the same action can lead to completely different outcomes (a discount campaign boosts sales in one market, damages premium perception in another). Equifinality is the opposite — multiple different paths leading to the same destination. Both undermine the idea of 'the only right way.'"
+  },
+  {
+    "id": 18,
+    "subject": "ei",
+    "session": "Ch 4 · Emotional Labour",
+    "q": "What is the correct distinction between surface acting and deep acting?",
+    "opts": [
+      "Exaggerating emotions vs. minimising them for professional effect",
+      "Managing outward expression without changing inner state vs. genuinely internalising the expressed emotion",
+      "Acting professionally in public vs. expressing emotions privately",
+      "High-effort emotional performance vs. low-effort emotional performance"
+    ],
+    "correct": 1,
+    "exp": "Surface acting = performing an emotion you don't actually feel (nodding in a meeting while not understanding). Deep acting = genuine internalisation — you truly feel or believe what you are expressing. The gap between these two is exactly where emotional strain, burnout, and dissonance accumulate."
+  },
+  {
+    "id": 19,
+    "subject": "ei",
+    "session": "Ch 4 · Emotional Dissonance",
+    "q": "What is 'Emotional Dissonance' and what does it primarily cause?",
+    "opts": [
+      "The conflict between two competing emotional responses — causes decision paralysis",
+      "The mental strain from a sustained gap between what you show and what you feel — the primary mechanism behind professional burnout",
+      "The inability to accurately identify one's own emotional state — causes poor self-regulation",
+      "Feeling multiple emotions simultaneously — causes interpersonal communication breakdown"
+    ],
+    "correct": 1,
+    "exp": "Emotional Dissonance is the mental strain that builds when there is a sustained gap between surface and deep acting. The greater and more prolonged this gap, the more energy it drains. This is the primary mechanism behind professional burnout — particularly in roles requiring constant emotional performance."
+  },
+  {
+    "id": 20,
+    "subject": "ei",
+    "session": "Ch 4 · Emotions & Society",
+    "q": "The principle that 'emotions are not private' means:",
+    "opts": [
+      "Leaders should always share their emotions openly with their team",
+      "Emotional reactions should be documented for HR performance purposes",
+      "Emotions are heavily shaped by culture, class, and upbringing — unspoken 'feeling rules' dictate appropriate emotional display",
+      "Social media has fundamentally made all emotional responses public and observable"
+    ],
+    "correct": 2,
+    "exp": "We tend to think of emotions as purely personal and internal. They are not. Emotions are heavily shaped by culture, class, and unspoken 'feeling rules' that dictate which emotions are appropriate to display and when. An introvert at a hyper-social startup must constantly perform extroversion — invisible emotional labour that often goes unrecognised and uncompensated."
+  },
+  {
+    "id": 21,
+    "subject": "ei",
+    "session": "Ch 5 · EI 2×2 Matrix",
+    "q": "In the EI 2×2 matrix, 'understanding your own emotions' corresponds to which quadrant?",
+    "opts": [
+      "Self-Regulation",
+      "Empathy",
+      "Social Influence",
+      "Self-Awareness"
+    ],
+    "correct": 3,
+    "exp": "EI has two dimensions (Self vs. Others) and two actions (Understand vs. Channelise). Understanding yourself = Self-Awareness. Channelising yourself = Self-Regulation. Understanding others = Empathy. Channelising others = Social Influence. Genuine EI requires all four quadrants — weakness in any one undermines the rest."
+  },
+  {
+    "id": 22,
+    "subject": "ei",
+    "session": "Ch 5 · EI 2×2 Matrix",
+    "q": "'Channelising others' in the EI 2×2 matrix refers to which capability?",
+    "opts": [
+      "Empathy",
+      "Self-regulation",
+      "Social influence",
+      "Self-awareness"
+    ],
+    "correct": 2,
+    "exp": "The four EI quadrants: Self-Understand = Self-Awareness; Self-Channelise = Self-Regulation; Others-Understand = Empathy; Others-Channelise = Social Influence. 'Channelising others' is the ability to direct or guide others' emotional states and actions — the highest-level EI skill in leadership."
+  },
+  {
+    "id": 23,
+    "subject": "ei",
+    "session": "Ch 5 · Mood vs Emotion",
+    "q": "The key difference between a mood and an emotion is:",
+    "opts": [
+      "Moods are more intense and longer-lasting than emotions",
+      "Emotions last longer than moods and are harder to shift",
+      "Moods have no identifiable cause; emotions have a known, addressable source",
+      "Moods are physical (physiological); emotions are purely mental states"
+    ],
+    "correct": 2,
+    "exp": "Mood = feeling a certain way with no identifiable cause. Emotion = feeling a certain way AND knowing why. Emotions have addressable sources; moods require a different approach entirely. A leader who treats a mood as if it has a specific external cause misreads the situation — and often the people involved."
+  },
+  {
+    "id": 24,
+    "subject": "ei",
+    "session": "Ch 5 · Humour as EI Tool",
+    "q": "How does humour function specifically as a precision EI tool in leadership?",
+    "opts": [
+      "It reduces conflict by making serious topics seem less consequential",
+      "It brings a diverse audience onto the same emotional platform simultaneously",
+      "It creates an informal atmosphere that reduces accountability pressure",
+      "It is primarily useful for personal relationship-building, not organisational team dynamics"
+    ],
+    "correct": 1,
+    "exp": "Humour is a precision EI tool: it offers a shared stimulus to provoke a similar emotional reaction across different people. Laughter lowers psychological defences, builds trust rapidly, and creates the safety needed for honest engagement. Obama's self-deprecating humour at the Correspondents' Dinner was social intelligence at work — humanising immense power, aligning a diverse room emotionally."
+  },
+  {
+    "id": 25,
+    "subject": "ei",
+    "session": "Ch 2 · EQ vs IQ",
+    "q": "What makes EI a more actionable investment than IQ for leadership development?",
+    "opts": [
+      "EI tests are more reliable and consistent than IQ assessments",
+      "EI is learnable and can be consciously built and improved at any age; IQ is largely fixed by genetics and brain structure",
+      "EI is more extensively studied in academic leadership literature",
+      "EI can be measured more accurately and objectively in real-time work situations"
+    ],
+    "correct": 1,
+    "exp": "IQ is largely determined by genetics and brain structure — largely fixed throughout life. EQ can be consciously built, practised, and improved at any age. IQ sets your floor; EQ determines how far above that floor you can rise. This makes EI the high-leverage investment for anyone serious about leadership development."
+  },
+  {
+    "id": 26,
+    "subject": "ei",
+    "session": "Ch 2 · EI & Leadership Emergence",
+    "q": "The highest-leverage reason to deliberately invest in EI development is:",
+    "opts": [
+      "It significantly improves technical problem-solving and analytical abilities",
+      "High EI is significantly correlated with leadership emergence — more so than IQ alone",
+      "It reduces personal conflict in all types of relationships",
+      "It is formally required for senior executive appointment in most large organisations"
+    ],
+    "correct": 1,
+    "exp": "People with high EI are significantly more likely to emerge as leaders — more so than those with high IQ alone. Because EI is learnable, deliberately investing in emotional skill-building is among the highest-leverage actions a person can take to expand their leadership potential. Sustained leadership effectiveness runs on emotional intelligence."
+  },
+  {
+    "id": 27,
+    "subject": "motiv",
+    "session": "Ch 7 · McClelland's Three Needs",
+    "q": "McClelland's three core needs that drive all human motivation are:",
+    "opts": [
+      "Safety, Esteem, Self-Actualisation",
+      "Achievement, Power, Affiliation",
+      "Physiological, Social, Achievement",
+      "ID, Ego, SuperEgo"
+    ],
+    "correct": 1,
+    "exp": "McClelland proposed all human motivation flows from three fundamental needs: Achievement (drive to excel and set progressively harder goals), Power (drive to influence, lead, and control outcomes), and Affiliation (drive to belong, connect, and maintain harmonious relationships). Every person carries all three, but one typically dominates."
+  },
+  {
+    "id": 28,
+    "subject": "motiv",
+    "session": "Ch 7 · McClelland's Three Needs",
+    "q": "A startup founder obsessed with breaking their own sales records each quarter is most likely motivated by which dominant need?",
+    "opts": [
+      "Affiliation need",
+      "Power need",
+      "Achievement need",
+      "Safety need (Maslow)"
+    ],
+    "correct": 2,
+    "exp": "Achievement-dominant individuals are driven by excelling, accomplishing, and setting progressively harder goals. Power-dominant individuals crave control over policy outcomes and leading others. Affiliation-dominant individuals prioritise group harmony. Each requires a fundamentally different motivational approach from a leader."
+  },
+  {
+    "id": 29,
+    "subject": "motiv",
+    "session": "Ch 9 · Freud's ID-Ego-SuperEgo",
+    "q": "Freud proposed that at the most primitive level, human motivation is driven by:",
+    "opts": [
+      "The desire for meaning and transcendent purpose",
+      "The need for safety and belonging within a community",
+      "Food and sex — the animal instinct, which he termed the ID",
+      "The need for social recognition and status among peers"
+    ],
+    "correct": 2,
+    "exp": "Freud (1940) proposed human motivation at its most primitive level is driven by two forces: food and sex — the animal instinct he called the ID. The Ego (self-control, conscious mediator) and the SuperEgo (society's internalised moral code) develop on top. ID → Ego → SuperEgo: animal need → personal restraint → social conformity."
+  },
+  {
+    "id": 30,
+    "subject": "motiv",
+    "session": "Ch 9 · Pavlov's Conditioning",
+    "q": "In Pavlov's classical conditioning experiment, what triggers salivation in the final conditioned stage?",
+    "opts": [
+      "The presence of food alone",
+      "A bell paired simultaneously with food on each trial",
+      "The bell alone, without any food being present",
+      "The absence of both bell and food — conditioned withdrawal"
+    ],
+    "correct": 2,
+    "exp": "Stage 3 (conditioned): The bell alone — with no food — causes salivation. This is pre-conditioning: an involuntary response to a neutral stimulus through consistent pairing. For leadership: employees can carry pre-conditioned responses into workplaces. A certain tone of voice, a meeting room, a particular phrase may trigger emotional reactions with nothing to do with the current situation."
+  },
+  {
+    "id": 31,
+    "subject": "motiv",
+    "session": "Ch 9 · Skinner's Operant Conditioning",
+    "q": "Skinner's operant conditioning differs from Pavlov's classical conditioning primarily in that:",
+    "opts": [
+      "Skinner used human subjects; Pavlov only used animals in laboratory settings",
+      "Pavlov focused on voluntary behaviour; Skinner studied involuntary reflexes",
+      "Skinner studied voluntary behaviour shaped by its consequences; Pavlov studied involuntary conditioned reflexes",
+      "Skinner's findings directly contradict and disprove Pavlov's central claims"
+    ],
+    "correct": 2,
+    "exp": "Pavlov studied involuntary reflexes — passive conditioning. Skinner studied voluntary behaviour shaped by consequences — reinforced actions repeat; punished actions fade. This is the scientific foundation behind every reward and incentive system in management. Every time a leader responds to behaviour with a consequence, they are applying operant conditioning — deliberately or not."
+  },
+  {
+    "id": 32,
+    "subject": "motiv",
+    "session": "Ch 9 · Maslow's Hierarchy",
+    "q": "Maslow's Hierarchy mnemonic 'PSLES' stands for which sequence of needs?",
+    "opts": [
+      "Performance, Safety, Love, Esteem, Sacrifice",
+      "Physiological, Safety, Love & Belonging, Esteem, Self-Actualisation",
+      "Purpose, Social connection, Leadership readiness, Experience, Status",
+      "Power, Security, Loyalty, Engagement, Satisfaction"
+    ],
+    "correct": 1,
+    "exp": "PSLES = Physiological (food, water, sleep) → Safety (security, financial stability) → Love & Belonging (social connection, family) → Esteem (recognition, self-respect, status) → Self-Actualisation (full potential, creative growth). Lower needs must be reasonably satisfied before higher needs emerge as motivators."
+  },
+  {
+    "id": 33,
+    "subject": "motiv",
+    "session": "Ch 9 · Maslow's Hierarchy",
+    "q": "A leader offers 'opportunities for creative growth' to an employee who hasn't received their salary. What does Maslow's hierarchy predict?",
+    "opts": [
+      "The creative opportunity will be highly motivating — purpose transcends money",
+      "The employee will respond better to creative work than monetary incentives at any level",
+      "The creative opportunity will fail to motivate because lower-level physiological and safety needs are unmet",
+      "No amount of creative opportunity compensates for a lack of deeper purpose"
+    ],
+    "correct": 2,
+    "exp": "A person who fears losing their job or hasn't been paid cannot be motivated by opportunities for creative growth. No amount of 'purpose' motivates someone whose lower-level needs are unmet. Lower needs must be reasonably satisfied before higher needs become effective motivators."
+  },
+  {
+    "id": 34,
+    "subject": "motiv",
+    "session": "Ch 9 · McGregor's Theory X & Y",
+    "q": "Theory X and Theory Y are described as self-fulfilling prophecies because:",
+    "opts": [
+      "Employees behave in ways that match the manager's implicit belief, which then reinforces that belief",
+      "Both theories predict identical performance outcomes when applied consistently in practice",
+      "They are based entirely on observable, objective behaviour rather than managerial assumptions",
+      "Theory X always produces better task performance outcomes than Theory Y in high-pressure environments"
+    ],
+    "correct": 0,
+    "exp": "A Theory X manager (assumes people dislike work) micromanages → team stops taking initiative → confirms Theory X belief. A Theory Y manager (assumes people enjoy meaningful work) grants autonomy → team becomes self-motivated → confirms Theory Y belief. The belief creates the reality — a perfect self-fulfilling loop."
+  },
+  {
+    "id": 35,
+    "subject": "motiv",
+    "session": "Ch 9 · Frankl & Logotherapy",
+    "q": "Victor Frankl's central insight from Logotherapy, derived from surviving Nazi concentration camps, is:",
+    "opts": [
+      "Pleasure and comfort are the deepest human drives",
+      "Power and social status are the primary human motivators in extreme conditions",
+      "The deepest human drive is meaning — people can endure virtually any condition if they have a reason to",
+      "Self-actualisation can only be achieved through structured, systematic goal-setting processes"
+    ],
+    "correct": 2,
+    "exp": "Frankl argued the deepest human drive is not pleasure or power but meaning. Prisoners in concentration camps who had a clear reason to live — a child to return to, a book to finish — survived longer than those without purpose, even under identical physical conditions. For organisations: a person without meaning in their work will never be retained by salary alone."
+  },
+  {
+    "id": 36,
+    "subject": "motiv",
+    "session": "Ch 9 · Motivation Lineage",
+    "q": "What is the correct chronological order of the motivation theory lineage?",
+    "opts": [
+      "Maslow → Freud → Pavlov → Skinner → McGregor → McClelland → Frankl",
+      "Freud → Pavlov → Skinner → Maslow → McGregor → McClelland → Frankl",
+      "Pavlov → Freud → Maslow → Skinner → McClelland → McGregor → Frankl",
+      "Freud → Maslow → Pavlov → Skinner → McGregor → McClelland → Frankl"
+    ],
+    "correct": 1,
+    "exp": "The intellectual lineage: Freud (instinct — ID) → Pavlov (classical conditioning) → Skinner (operant conditioning) → Maslow (hierarchy of needs) → McGregor (X & Y assumptions) → McClelland (3 dominant needs) → Frankl (meaning as ultimate motivator). Each thinker responded to limitations of the previous framework."
+  },
+  {
+    "id": 37,
+    "subject": "motiv",
+    "session": "Ch 7 · Identifying Dominant Needs",
+    "q": "A high-performing analyst resigns despite receiving competitive market pay. McClelland's framework suggests the most likely root cause is:",
+    "opts": [
+      "Affiliation need unmet — insufficient team social activities and belonging rituals",
+      "Safety need unmet — underlying job security concerns not addressed",
+      "Achievement need chronically unmet — never given independent ownership of projects",
+      "Power need unmet — absence of formal managerial responsibility over others"
+    ],
+    "correct": 2,
+    "exp": "A manager who assumed 'more money = more motivation' fundamentally misread what was driving their best person. The high-performing analyst resigns not because of pay, but because they were never given independent ownership of projects — their Achievement need was chronically unmet. Knowing the dominant need makes motivation precise rather than generic."
+  },
+  {
+    "id": 38,
+    "subject": "motiv",
+    "session": "Ch 9 · Etymology of Motivation",
+    "q": "The word 'motivation' originates from the Latin word 'movere' which means:",
+    "opts": [
+      "To inspire others",
+      "To achieve a goal",
+      "To move",
+      "To need something"
+    ],
+    "correct": 2,
+    "exp": "Motivation comes from the Latin movere — to move. The entire lineage of motivation theory from Freud through Frankl is essentially an evolving answer to one question: what actually moves people? Each theorist offered a progressively more nuanced answer."
+  },
+  {
+    "id": 39,
+    "subject": "org",
+    "session": "Ch 8 · Jarrett's Four Terrains",
+    "q": "Jarrett's 'Weeds' terrain in an organisation operates through:",
+    "opts": [
+      "Formal authority and individual managerial control",
+      "Systems and structures at the organisational policy level",
+      "Culture and norms operating through implicit, hidden rules",
+      "Informal networks operating through personal influence and relationships"
+    ],
+    "correct": 3,
+    "exp": "The four terrains: Weeds = informal networks operating through personal influence (lobbying, friendship). Rocks = formal authority at the individual level (managerial veto). High Ground = systems and structures (policy-driven decisions). Woods = culture and norms operating through implicit, hidden rules (unspoken promotion criteria)."
+  },
+  {
+    "id": 40,
+    "subject": "org",
+    "session": "Ch 8 · Jarrett's Four Terrains",
+    "q": "Which of Jarrett's four political terrains would 'unspoken promotion criteria' fall under?",
+    "opts": [
+      "Weeds",
+      "Rocks",
+      "High Ground",
+      "Woods"
+    ],
+    "correct": 3,
+    "exp": "The Woods = culture and norms, operating through implicit, hidden rules. Unspoken promotion criteria are a perfect example — not written anywhere, but powerfully enforced by cultural expectation. A new formal policy is High Ground; the informal cultural norm that persists despite the policy is the Woods."
+  },
+  {
+    "id": 41,
+    "subject": "org",
+    "session": "Ch 8 · Three Kinds of Performance",
+    "q": "'Citizenship Performance' is best defined as:",
+    "opts": [
+      "Formally assigned KRAs that appear on official performance reviews",
+      "Behaviour that actively sabotages a colleague's performance",
+      "Discretionary behaviour of helping colleagues achieve their KRAs — going beyond one's own formal role",
+      "Compliance with legal, regulatory, and governance obligations"
+    ],
+    "correct": 2,
+    "exp": "Task Performance = officially measured KRAs. Citizenship Performance = helping colleagues achieve their KRAs (going beyond your role to lift the organisation). Counterproductive Performance = actively sabotaging someone else's performance. Research consistently shows organisations perform better when employees display citizenship behaviour."
+  },
+  {
+    "id": 42,
+    "subject": "org",
+    "session": "Ch 8 · Citizenship vs Counterproductive",
+    "q": "Who defines whether behaviour is 'counterproductive' — the manager, the person performing it, or the person subjected to it?",
+    "opts": [
+      "The manager, based on formal appraisal criteria and documented evidence",
+      "The person performing the behaviour, based on their stated intent",
+      "The person subjected to the behaviour — regardless of intent",
+      "An independent HR panel assessing organisational impact"
+    ],
+    "correct": 2,
+    "exp": "Both Citizenship and Counterproductive performance are defined and judged by the people who are subjected to the behaviour — not by management and not by intent. This makes self-awareness essential for every leader. A manager who 'forgets' to include a rival in emails may intend to be efficient; the rival experiences deliberate exclusion — counterproductive behaviour, by definition."
+  },
+  {
+    "id": 43,
+    "subject": "org",
+    "session": "Ch 8 · Greiner Growth Model",
+    "q": "The Greiner Growth Model predicts that each growth phase in an organisation:",
+    "opts": [
+      "Brings increasing stability and progressively reduced internal conflict",
+      "Ends in a crisis that forces the organisation into the next evolutionary stage",
+      "Requires a change of CEO or senior leadership to be successfully navigated",
+      "Leads naturally and smoothly into the next stage without significant disruption"
+    ],
+    "correct": 1,
+    "exp": "Organisations don't grow smoothly — they grow in phases, and each phase ends in a crisis that forces the next evolution. Creativity → Leadership crisis → Direction → Autonomy crisis → Delegation → Control crisis, and so on. The pain is the catalyst. Organisations that resist the pain stall; those that navigate it evolve."
+  },
+  {
+    "id": 44,
+    "subject": "org",
+    "session": "Ch 8 · Greiner Growth Model",
+    "q": "In the Greiner Growth Model, the correct order of the first three phases is:",
+    "opts": [
+      "Direction → Creativity → Delegation",
+      "Delegation → Coordination → Creativity",
+      "Creativity → Direction → Delegation",
+      "Collaboration → Alliance → Creativity"
+    ],
+    "correct": 2,
+    "exp": "Greiner's six stages: Creativity → Direction → Delegation → Coordination → Collaboration → Alliance. Each generates a new crisis (Leadership, Autonomy, Control, Red Tape, Growth respectively). Netflix's shift from DVD-by-mail to streaming was a Greiner-style crisis that forced full organisational reinvention."
+  },
+  {
+    "id": 45,
+    "subject": "org",
+    "session": "Ch 10 · Culture vs Climate",
+    "q": "The key distinction between Organisational Culture and Organisational Climate is:",
+    "opts": [
+      "Culture is measured annually; climate is assessed daily through pulse surveys",
+      "Culture operates at the macro/collective level; climate is the individual's felt experience of that culture",
+      "Culture is formal and documented in policy; climate is informal and unwritten",
+      "Culture only exists in large organisations; climate is a concept applicable to all team sizes"
+    ],
+    "correct": 1,
+    "exp": "Organisational Culture = the deep, collective layer — shared values, beliefs, and unwritten rules, accessed at the organisational and macro level. Organisational Climate = the individual's personal experience of that culture day-to-day. Culture is the weather pattern of a region; climate is what any individual feels standing outside on a given Tuesday."
+  },
+  {
+    "id": 46,
+    "subject": "org",
+    "session": "Ch 10 · Social Loafing",
+    "q": "Social Loafing differs from Counterproductive Performance in that:",
+    "opts": [
+      "Social Loafing is always intentional and deliberate; Counterproductive Performance is often accidental",
+      "Social Loafing is implicit — individuals reduce their own effort; Counterproductive Performance actively sabotages others",
+      "Social Loafing is formally recognised and punished; Counterproductive Performance is culturally tolerated",
+      "They are identical concepts described by different management theorists"
+    ],
+    "correct": 1,
+    "exp": "Social Loafing is implicit — never officially declared. It happens when individuals reduce effort in a group assuming others will cover the slack. Citizenship Performance is promoted (rewarded, celebrated); Social Loafing is controlled (monitored, penalised). Both describe discretionary behaviour beyond the formal role. The culture determines which one dominates."
+  },
+  {
+    "id": 47,
+    "subject": "org",
+    "session": "Ch 10 · Lobbying",
+    "q": "How does lobbying operate differently in India versus the USA, mapped to Jarrett's framework?",
+    "opts": [
+      "India uses formal public disclosure systems; USA uses informal relationship-based access",
+      "India uses informal 'Woods' approach (relationship-based, implicit); USA uses formal 'High Ground' approach (declared, structurally embedded)",
+      "India is more sophisticated at lobbying; USA has heavily restricted lobbying post-2008",
+      "They use identical mechanisms, simply channelled through different industry sectors"
+    ],
+    "correct": 1,
+    "exp": "India's lobbying operates through The Woods — informal, hidden, relationship-based access. The USA's lobbying operates through The High Ground — formal, declared, mandatory disclosure to Congress, with registered lobbyists as a formal profession. One cited reason for the 2008 sub-prime crisis was aggressive financial sector lobbying that weakened regulatory oversight."
+  },
+  {
+    "id": 48,
+    "subject": "org",
+    "session": "Ch 8 · Societal Evolution",
+    "q": "Almon Service's four-stage model of societal evolution (directly relevant to how organisations evolve) is:",
+    "opts": [
+      "Band → Chiefdom → Tribe → Civilisation",
+      "Tribe → Band → Chiefdom → Civilisation",
+      "Band → Tribe → Chiefdom → Civilisation",
+      "Band → Civilisation → Tribe → Chiefdom"
+    ],
+    "correct": 2,
+    "exp": "Almon Service extended Marx's 3-stage model (Savagery → Barbarism → Civilisation) with 4 stages: Band → Tribe → Chiefdom → Civilisation. Complexity increases as the group grows. A 5-person startup operates like a Band (informal, personal). At 500 people it's a Chiefdom. At 50,000 it's a Civilisation — with its own laws, culture wars, and political factions."
+  },
+  {
+    "id": 49,
+    "subject": "org",
+    "session": "Ch 8 · Why Orgs Are Political",
+    "q": "A junior employee gets her proposal approved despite formal opposition from senior stakeholders. The notes suggest this succeeded because she:",
+    "opts": [
+      "Presented the most rigorous financial business case",
+      "Had the longest tenure and institutional memory in the organisation",
+      "Successfully navigated all four political terrains — Weeds, Rocks, High Ground, and Woods",
+      "Had direct personal sponsorship from the CEO bypassing normal channels"
+    ],
+    "correct": 2,
+    "exp": "She built relationships (Weeds), respected formal hierarchy (Rocks), aligned with organisational systems (High Ground), and operated within unspoken cultural norms (Woods). All four terrains were navigated simultaneously. Power literacy requires reading the full political landscape — not just the org chart. Leaders who ignore informal channels navigate with half a map."
+  },
+  {
+    "id": 50,
+    "subject": "org",
+    "session": "Ch 10 · Lobbying & Regulation",
+    "q": "Research on lobbying shows a striking correlation: when lobbying expenditure increases in a sector, product recall rates:",
+    "opts": [
+      "Increase — stronger advocacy draws greater regulatory and public attention to quality issues",
+      "Remain unchanged — lobbying only affects broader regulatory frameworks, not product safety specifically",
+      "Decrease — suggesting political influence directly shapes regulatory enforcement outcomes",
+      "Fluctuate with no statistically significant or reproducible pattern"
+    ],
+    "correct": 2,
+    "exp": "Research shows a striking correlation: when lobbying expenditure increases in a sector, product recall rates decrease — suggesting that political influence shapes regulatory outcomes. Lobbying is not corruption; it is a formal, strategic activity. Organisations that lobby effectively shape the environment they operate in; those that don't are shaped by it."
+  }
+];
+
+/* ═══════════════════════════════════
+   STATE
+═══════════════════════════════════ */
+let state = {
+  filter: 'all',
+  deck: [],
+  idx: 0,
+  answered: false,
+  score: 0,
+  leadCorrect: 0, leadTotal: 0,
+  eiCorrect: 0, eiTotal: 0,
+  motivCorrect: 0, motivTotal: 0,
+  orgCorrect: 0, orgTotal: 0,
+};
+
+/* ═══════════════════════════════════
+   UTILITIES
+═══════════════════════════════════ */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pct(n, d) { return d === 0 ? 0 : Math.round((n / d) * 100); }
+
+function getTier(p) {
+  if (p >= 90) return { tier: "IIM-Level — Distinction",         sub: "Exceptional command of the subject frameworks." };
+  if (p >= 75) return { tier: "Strong Command — Pass with Merit", sub: "Solid understanding with minor gaps worth revisiting." };
+  if (p >= 60) return { tier: "Adequate — Revise Key Frameworks", sub: "Core concepts present; reinforce the weaker chapters." };
+  return         { tier: "Needs Work — Return to Notes",          sub: "Systematic revision recommended before the exam." };
+}
+
+/* ═══════════════════════════════════
+   FILTER
+═══════════════════════════════════ */
+function setFilter(f) {
+  state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  document.getElementById('btnAll').classList.add('active-all');
+  if (f !== 'all') {
+    const key = f.charAt(0).toUpperCase() + f.slice(1);
+    const el = document.getElementById('btn' + key);
+    if (el) el.classList.add('active-' + f);
+    document.getElementById('btnAll').classList.remove('active-all');
+  }
+  startQuiz(f);
+}
+
+/* ═══════════════════════════════════
+   QUIZ FLOW
+═══════════════════════════════════ */
+function startQuiz(f) {
+  if (f) state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  document.getElementById('btnAll').classList.add('active-all');
+  if (state.filter !== 'all') {
+    const key = state.filter.charAt(0).toUpperCase() + state.filter.slice(1);
+    const el = document.getElementById('btn' + key);
+    if (el) { el.classList.add('active-' + state.filter); document.getElementById('btnAll').classList.remove('active-all'); }
+  }
+
+  const pool = ALL_QUESTIONS.filter(q => state.filter === 'all' || q.subject === state.filter);
+  state.deck = shuffle(pool);
+  state.idx = 0;
+  state.score = 0;
+  state.leadCorrect = 0; state.leadTotal = 0;
+  state.eiCorrect = 0; state.eiTotal = 0;
+  state.motivCorrect = 0; state.motivTotal = 0;
+  state.orgCorrect = 0; state.orgTotal = 0;
+
+  state.deck.forEach(q => {
+    if (q.subject === 'lead') state.leadTotal++;
+    if (q.subject === 'ei') state.eiTotal++;
+    if (q.subject === 'motiv') state.motivTotal++;
+    if (q.subject === 'org') state.orgTotal++;
+  });
+
+  updateScore();
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizArea').style.display = 'block';
+  document.getElementById('progressArea').style.display = 'block';
+  document.getElementById('emptyState').style.display = 'none';
+
+  if (state.deck.length === 0) {
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = state.deck[state.idx];
+  const total = state.deck.length;
+  const num = state.idx + 1;
+  state.answered = false;
+
+  const fillPct = ((num - 1) / total) * 100;
+  document.getElementById('progressFill').style.width = fillPct + '%';
+  document.getElementById('progressText').textContent = 'Question ' + num + ' of ' + total;
+  document.getElementById('progressPct').textContent = Math.round(fillPct) + '%';
+
+  const tag = document.getElementById('subjectTag');
+  tag.textContent = q.subject.toUpperCase();
+  tag.className = 'subject-tag ' + q.subject;
+
+  document.getElementById('sessionLabel').textContent = q.session;
+  document.getElementById('questionNum').textContent = '#' + q.id;
+  document.getElementById('questionText').textContent = q.q;
+
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = '<span class="option-letter">' + letters[i] + '</span>'
+                  + '<span class="option-text">' + opt + '</span>'
+                  + '<span class="key-hint">' + (i + 1) + '</span>';
+    btn.addEventListener('click', () => selectAnswer(i));
+    grid.appendChild(btn);
+  });
+
+  const ep = document.getElementById('explanationPanel');
+  ep.className = 'explanation-panel';
+  document.getElementById('explanationText').textContent = '';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'slideUp 0.3s ease';
+}
+
+function selectAnswer(chosen) {
+  if (state.answered) return;
+  state.answered = true;
+
+  const q = state.deck[state.idx];
+  const btns = document.querySelectorAll('.option-btn');
+  const correct = q.correct;
+
+  btns.forEach((btn, i) => {
+    btn.classList.add('disabled');
+    if (i === correct) btn.classList.add('correct');
+    else if (i === chosen) btn.classList.add('wrong');
+  });
+
+  if (chosen === correct) {
+    state.score++;
+    if (q.subject === 'lead') state.leadCorrect++;
+    else if (q.subject === 'ei') state.eiCorrect++;
+    else if (q.subject === 'motiv') state.motivCorrect++;
+    else if (q.subject === 'org') state.orgCorrect++;
+  }
+
+  updateScore();
+
+  const ep = document.getElementById('explanationPanel');
+  document.getElementById('explanationText').textContent = q.exp;
+  ep.classList.add('show', q.subject + '-border');
+
+  document.getElementById('nextBtn').style.display = 'flex';
+  setTimeout(() => ep.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+}
+
+function nextQuestion() {
+  if (!state.answered) return;
+  state.idx++;
+  if (state.idx >= state.deck.length) {
+    showResults();
+  } else {
+    renderQuestion();
+    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function updateScore() {
+  const answeredSoFar = state.idx + (state.answered ? 1 : 0);
+  document.getElementById('scoreNum').textContent = state.score;
+  document.getElementById('scoreDen').textContent = Math.max(answeredSoFar, state.score);
+}
+
+/* ═══════════════════════════════════
+   RESULTS
+═══════════════════════════════════ */
+function showResults() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('progressArea').style.display = 'none';
+  document.getElementById('resultsScreen').classList.add('show');
+
+  const total = state.deck.length;
+  const p = pct(state.score, total);
+  const { tier, sub } = getTier(p);
+
+  document.getElementById('resultsTier').textContent = tier;
+  document.getElementById('resultsSubtitle').textContent = sub;
+  document.getElementById('rTotal').textContent = state.score + '/' + total;
+  document.getElementById('rTotalSub').textContent = p + '%';
+
+  document.getElementById('rLead').textContent = state.leadCorrect + '/' + state.leadTotal;
+  document.getElementById('rLeadSub').textContent = pct(state.leadCorrect, state.leadTotal) + '%';
+  document.getElementById('rEi').textContent = state.eiCorrect + '/' + state.eiTotal;
+  document.getElementById('rEiSub').textContent = pct(state.eiCorrect, state.eiTotal) + '%';
+  document.getElementById('rMotiv').textContent = state.motivCorrect + '/' + state.motivTotal;
+  document.getElementById('rMotivSub').textContent = pct(state.motivCorrect, state.motivTotal) + '%';
+  document.getElementById('rOrg').textContent = state.orgCorrect + '/' + state.orgTotal;
+  document.getElementById('rOrgSub').textContent = pct(state.orgCorrect, state.orgTotal) + '%';
+
+  document.getElementById('resultsScreen').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ═══════════════════════════════════
+   KEYBOARD SHORTCUTS
+═══════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (['1','2','3','4'].includes(e.key)) {
+    const btns = document.querySelectorAll('.option-btn:not(.disabled)');
+    const idx = parseInt(e.key) - 1;
+    if (btns[idx]) btns[idx].click();
+  }
+  if ((e.key === 'Enter' || e.key === ' ') && state.answered) {
+    e.preventDefault();
+    nextQuestion();
+  }
+  if (e.key === 'r' || e.key === 'R') startQuiz(state.filter);
+});
+
+/* ═══════════════════════════════════
+   INIT
+═══════════════════════════════════ */
+startQuiz('all');
+</script>
+</body>
+</html>

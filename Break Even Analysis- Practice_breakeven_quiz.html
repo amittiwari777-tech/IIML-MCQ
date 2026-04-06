@@ -1,0 +1,1864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Break-Even & CVP Analysis Quiz</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:         #1a1c22;
+    --card:       #252830;
+    --card-hover: #2d3040;
+    --border:     #353845;
+    --text:       #e8e6e1;
+    --text-muted: #9895a0;
+    --text-dim:   #6b6878;
+    --correct:    #3ecf8e;
+    --correct-dim:rgba(62,207,142,0.15);
+    --wrong:      #e05252;
+    --wrong-dim:  rgba(224,82,82,0.15);
+    --gold:       #f0c040;
+    --radius:     12px;
+    --radius-sm:  8px;
+    --shadow:     0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ── Header ── */
+  .app-header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .app-title {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+  .app-subtitle {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .score-display {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    white-space: nowrap;
+  }
+  .score-display .score-num { color: var(--gold); font-weight: 500; }
+
+  /* ── Filter Bar ── */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    padding: 20px 24px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .filter-btn {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.8rem;
+    padding: 7px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+  }
+  .filter-btn:hover { background: var(--card-hover); color: var(--text); }
+  .filter-btn.active-all { background: rgba(255,255,255,0.08); color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+  /* ── Subject-specific CSS (generated) ── */
+
+  /* ── Subject: CRM ── */
+  .subject-tag.crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid rgba(139,127,240,0.3); }
+  .filter-btn.active-crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border-color:#8b7ff0; }
+  .explanation-panel.crm-border { border-left-color:#8b7ff0; background:rgba(139,127,240,0.15); }
+  .btn-crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid #8b7ff0; }
+  .btn-crm:hover { filter:brightness(1.15); }
+  .score-block-value.crm { color:#8b7ff0; }
+
+  /* ── Subject: PM ── */
+  .subject-tag.pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border:1px solid rgba(139,63,224,0.3); }
+  .filter-btn.active-pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border-color:#8b3fe0; }
+  .explanation-panel.pm-border { border-left-color:#8b3fe0; background:rgba(139,63,224,0.15); }
+  .btn-pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border:1px solid #8b3fe0; }
+  .btn-pm:hover { filter:brightness(1.15); }
+  .score-block-value.pm { color:#8b3fe0; }
+
+  /* ── Subject: SCM ── */
+  .subject-tag.scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border:1px solid rgba(46,196,165,0.3); }
+  .filter-btn.active-scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border-color:#2ec4a5; }
+  .explanation-panel.scm-border { border-left-color:#2ec4a5; background:rgba(46,196,165,0.15); }
+  .btn-scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border:1px solid #2ec4a5; }
+  .btn-scm:hover { filter:brightness(1.15); }
+  .score-block-value.scm { color:#2ec4a5; }
+
+  /* ── Subject: FIN ── */
+  .subject-tag.fin { background:rgba(224,139,32,0.15); color:#e08b20; border:1px solid rgba(224,139,32,0.3); }
+  .filter-btn.active-fin { background:rgba(224,139,32,0.15); color:#e08b20; border-color:#e08b20; }
+  .explanation-panel.fin-border { border-left-color:#e08b20; background:rgba(224,139,32,0.15); }
+  .btn-fin { background:rgba(224,139,32,0.15); color:#e08b20; border:1px solid #e08b20; }
+  .btn-fin:hover { filter:brightness(1.15); }
+  .score-block-value.fin { color:#e08b20; }
+
+  /* ── Subject: ECON ── */
+  .subject-tag.econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border:1px solid rgba(62,207,142,0.3); }
+  .filter-btn.active-econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border-color:#3ecf8e; }
+  .explanation-panel.econ-border { border-left-color:#3ecf8e; background:rgba(62,207,142,0.15); }
+  .btn-econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border:1px solid #3ecf8e; }
+  .btn-econ:hover { filter:brightness(1.15); }
+  .score-block-value.econ { color:#3ecf8e; }
+
+  /* ── Subject: OPS ── */
+  .subject-tag.ops { background:rgba(77,157,224,0.15); color:#4d9de0; border:1px solid rgba(77,157,224,0.3); }
+  .filter-btn.active-ops { background:rgba(77,157,224,0.15); color:#4d9de0; border-color:#4d9de0; }
+  .explanation-panel.ops-border { border-left-color:#4d9de0; background:rgba(77,157,224,0.15); }
+  .btn-ops { background:rgba(77,157,224,0.15); color:#4d9de0; border:1px solid #4d9de0; }
+  .btn-ops:hover { filter:brightness(1.15); }
+  .score-block-value.ops { color:#4d9de0; }
+
+  /* ── Subject: HR ── */
+  .subject-tag.hr { background:rgba(224,92,92,0.15); color:#e05c5c; border:1px solid rgba(224,92,92,0.3); }
+  .filter-btn.active-hr { background:rgba(224,92,92,0.15); color:#e05c5c; border-color:#e05c5c; }
+  .explanation-panel.hr-border { border-left-color:#e05c5c; background:rgba(224,92,92,0.15); }
+  .btn-hr { background:rgba(224,92,92,0.15); color:#e05c5c; border:1px solid #e05c5c; }
+  .btn-hr:hover { filter:brightness(1.15); }
+  .score-block-value.hr { color:#e05c5c; }
+
+  /* ── Main layout ── */
+  .main-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 20px;
+  }
+
+  /* ── Progress ── */
+  .progress-area { margin-bottom: 24px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    margin-bottom: 8px;
+  }
+  .progress-track { height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    background: linear-gradient(90deg, #8b7ff0, #8b3fe0);
+  }
+
+  /* ── Question Card ── */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .subject-tag {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .session-label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-style: italic;
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+  }
+  .question-num {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-left: auto;
+  }
+  .question-text {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  /* ── Answer Options ── */
+  .options-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .option-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-align: left;
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    transition: all 0.15s ease;
+    width: 100%;
+    position: relative;
+  }
+  .option-btn:hover:not(.disabled) { background: var(--card-hover); border-color: rgba(255,255,255,0.18); }
+  .option-btn.disabled { cursor: default; color: var(--text-muted); }
+  .option-btn.correct {
+    background: var(--correct-dim) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+  }
+  .option-btn.wrong {
+    background: var(--wrong-dim) !important;
+    border-color: var(--wrong) !important;
+    color: var(--wrong) !important;
+  }
+  .option-letter {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px 8px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.15s;
+  }
+  .option-btn.correct .option-letter { background: rgba(62,207,142,0.2); border-color: var(--correct); color: var(--correct); }
+  .option-btn.wrong   .option-letter { background: rgba(224,82,82,0.2);  border-color: var(--wrong);   color: var(--wrong);   }
+  .option-text { flex: 1; }
+  .key-hint {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    flex-shrink: 0;
+    align-self: center;
+  }
+  .option-btn.disabled .key-hint { display: none; }
+
+  /* ── Explanation Panel ── */
+  .explanation-panel {
+    border-left: 3px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+    display: none;
+    animation: slideUp 0.25s ease;
+  }
+  .explanation-panel.show { display: block; }
+  .explanation-label {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 9px 22px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { background: var(--card-hover); }
+  .btn-primary { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+  .btn-primary:hover { background: rgba(255,255,255,0.13); }
+  #nextBtn { display: none; margin-top: 4px; }
+
+  /* ── Results Screen ── */
+  .results-screen { display: none; animation: slideUp 0.4s ease; }
+  .results-screen.show { display: block; }
+  .results-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 32px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .results-trophy { font-size: 2.5rem; margin-bottom: 12px; }
+  .results-tier {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, #8b7ff0, #8b3fe0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .results-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    font-style: italic;
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+  }
+  .results-scores {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .score-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 12px;
+  }
+  .score-block-label {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .score-block-value {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+  .score-block-value.all { color: var(--gold); }
+  .score-block-sub {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+  }
+  .results-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 0.95rem;
+    display: none;
+  }
+
+  /* ── Keyboard hints ── */
+  .keyboard-hint-bar {
+    text-align: center;
+    margin-top: 20px;
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+  .kh-item { display: flex; align-items: center; gap: 6px; }
+  .kh-key { border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; color: var(--text-muted); }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+
+  /* ── Touch UX: kill 300ms delay, remove tap highlight ── */
+  * { -webkit-tap-highlight-color: transparent; }
+  button, .option-btn, .filter-btn { touch-action: manipulation; }
+  .option-btn:active:not(.disabled) { opacity: 0.72; transform: scale(0.983); }
+  .btn:active        { opacity: 0.78; transform: scale(0.972); }
+  .filter-btn:active { opacity: 0.72; }
+
+  /* ── Mobile: max 640px ── */
+  @media (max-width: 640px) {
+
+    .app-header { padding: 10px 14px; flex-wrap: wrap; gap: 6px; }
+    .app-title { font-size: 0.9rem; }
+    .app-subtitle { display: none; }
+    .score-display { font-size: 0.78rem; padding: 4px 12px; }
+
+    .filter-bar {
+      padding: 12px 14px 0;
+      gap: 7px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-btn { flex-shrink: 0; min-height: 40px; padding: 8px 18px; font-size: 0.78rem; }
+
+    .main-wrap { padding: 14px 12px; }
+    .progress-area { margin-bottom: 16px; }
+    .progress-label { font-size: 0.7rem; }
+    .progress-track { height: 5px; }
+
+    .question-card { padding: 18px 14px; border-radius: 10px; }
+    .card-meta { gap: 7px; margin-bottom: 14px; }
+    .subject-tag { font-size: 0.65rem; }
+    .session-label { font-size: 0.68rem; }
+    .question-num { font-size: 0.65rem; }
+
+    /* 16px minimum stops iOS zooming the page on focus */
+    .question-text { font-size: 1rem; line-height: 1.65; margin-bottom: 18px; }
+
+    /* Option buttons: 52px min tap target */
+    .options-grid { gap: 9px; margin-bottom: 16px; }
+    .option-btn {
+      min-height: 52px;
+      padding: 14px 13px;
+      gap: 11px;
+      font-size: 0.88rem;
+      border-radius: 8px;
+      align-items: center;
+    }
+    .option-letter { min-width: 26px; text-align: center; padding: 2px 6px; font-size: 0.75rem; }
+    .key-hint { display: none; }
+
+    .explanation-panel { font-size: 0.83rem; padding: 12px 13px; }
+    .explanation-label { font-size: 0.62rem; }
+
+    /* Next: full-width large button */
+    #nextBtn {
+      width: 100%;
+      justify-content: center;
+      padding: 15px;
+      min-height: 50px;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      margin-top: 6px;
+    }
+
+    .results-card { padding: 22px 14px; }
+    .results-trophy { font-size: 2rem; margin-bottom: 8px; }
+    .results-tier { font-size: 1.25rem; }
+    .results-subtitle { font-size: 0.78rem; margin-bottom: 20px; }
+    .results-scores { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .score-block { padding: 12px 10px; }
+    .score-block-label { font-size: 0.62rem; }
+    .score-block-value { font-size: 1.5rem; }
+    .score-block-sub { font-size: 0.68rem; }
+
+    /* Results buttons: stacked, full width */
+    .results-actions { flex-direction: column; }
+    .results-actions .btn { width: 100%; justify-content: center; min-height: 48px; font-size: 0.9rem; }
+
+    .keyboard-hint-bar { display: none; }
+  }
+
+  /* Very small phones < 360px */
+  @media (max-width: 360px) {
+    .question-text { font-size: 0.94rem; }
+    .option-btn { font-size: 0.83rem; padding: 13px 11px; }
+    .results-scores { grid-template-columns: 1fr; }
+    .score-block-value { font-size: 1.35rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="app-header">
+  <div>
+    <div class="app-title"><span class="fin">BEP / CVP</span> Quiz</div>
+    <div class="app-subtitle">Finance — Prof. Sahoo · IIM Lucknow · Break-Even & Cost-Volume-Profit Analysis · 72 Questions · April 06, 2026</div>
+  </div>
+  <div class="score-display">
+    Score: <span class="score-num" id="scoreNum">0</span>
+    / <span id="scoreDen">0</span>
+  </div>
+</header>
+
+<!-- ── FILTER BAR ── -->
+<div class="filter-bar">
+  <button class="filter-btn active-all" id="btnAll" onclick="setFilter('all')">All 72</button>
+      <button class="filter-btn" id="btnFin" onclick="setFilter('fin')">BEP / CVP (72)</button>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main-wrap">
+
+  <!-- Progress -->
+  <div class="progress-area" id="progressArea">
+    <div class="progress-label">
+      <span id="progressText">Question 1 of 72</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Quiz Area -->
+  <div id="quizArea">
+    <div class="question-card" id="questionCard">
+
+      <div class="card-meta">
+        <span class="subject-tag" id="subjectTag">—</span>
+        <span class="session-label" id="sessionLabel">—</span>
+        <span class="question-num" id="questionNum">#1</span>
+      </div>
+
+      <div class="question-text" id="questionText">Loading...</div>
+
+      <div class="options-grid" id="optionsGrid"></div>
+
+      <div class="explanation-panel" id="explanationPanel">
+        <div class="explanation-label">Explanation</div>
+        <div id="explanationText"></div>
+      </div>
+
+      <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">
+        Next &rarr;
+      </button>
+    </div>
+
+    <div class="keyboard-hint-bar">
+      <div class="kh-item"><span class="kh-key">1–4</span> Select answer</div>
+      <div class="kh-item"><span class="kh-key">Enter</span> Next question</div>
+      <div class="kh-item"><span class="kh-key">R</span> Restart</div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" id="emptyState">No questions match this filter.</div>
+
+  <!-- Results Screen -->
+  <div class="results-screen" id="resultsScreen">
+    <div class="results-card">
+      <div class="results-trophy">🎓</div>
+      <div class="results-tier" id="resultsTier"></div>
+      <div class="results-subtitle" id="resultsSubtitle"></div>
+
+      <div class="results-scores">
+        
+        <div class="score-block">
+          <div class="score-block-label">Total</div>
+          <div class="score-block-value all" id="rTotal">—</div>
+          <div class="score-block-sub" id="rTotalSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">BEP / CVP</div>
+          <div class="score-block-value fin" id="rFin">—</div>
+          <div class="score-block-sub" id="rFinSub"></div>
+        </div>
+      </div>
+
+      <div class="results-actions">
+        <button class="btn btn-primary" onclick="startQuiz('all')">Restart All 72</button>
+        <button class="btn btn-fin" onclick="startQuiz('fin')">BEP / CVP Only (72)</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main-wrap -->
+
+<script>
+/* ═══════════════════════════════════
+   QUESTION DATA
+═══════════════════════════════════ */
+const ALL_QUESTIONS = [
+  {
+    "id": 1,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "CVP analysis requires costs to be categorized as",
+    "opts": [
+      "Either fixed or variable",
+      "Direct or indirect",
+      "Product or period",
+      "Standard or actual"
+    ],
+    "correct": 0,
+    "exp": "CVP requires all costs to be classified as either fixed (constant in total) or variable (constant per unit). This binary split is the foundation of break-even modeling."
+  },
+  {
+    "id": 2,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "With respect to fixed costs, CVP analysis assumes total fixed costs",
+    "opts": [
+      "Per unit remain constant as volume changes",
+      "Remain constant from one period to the next",
+      "Vary directly with volume",
+      "Remain constant across changes in volume"
+    ],
+    "correct": 3,
+    "exp": "CVP assumes TOTAL fixed costs remain constant across volume changes within the relevant range. Per-unit fixed costs actually decrease as volume rises — it is the total that stays fixed."
+  },
+  {
+    "id": 3,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "CVP relies on strict fixed/variable cost assumptions. As volume decreases, total",
+    "opts": [
+      "Fixed costs decrease",
+      "Variable costs remain constant",
+      "Costs decrease",
+      "Costs remain constant"
+    ],
+    "correct": 2,
+    "exp": "As volume decreases, total variable costs decrease proportionally while total fixed costs stay constant. Therefore total costs (FC + VC) decrease overall."
+  },
+  {
+    "id": 4,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "CVP analysis is based on concepts from",
+    "opts": [
+      "Standard costing",
+      "Variable costing",
+      "Job order costing",
+      "Process costing"
+    ],
+    "correct": 1,
+    "exp": "CVP is grounded in variable costing, which separates costs into fixed and variable components — the exact classification CVP requires. Absorption costing blends fixed costs into product costs, making CVP application difficult."
+  },
+  {
+    "id": 5,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "Which of the following is NOT a major assumption underlying CVP analysis?",
+    "opts": [
+      "All costs incurred by a firm can be separated into fixed and variable components",
+      "The product selling price per unit is constant at all volume levels",
+      "Operating efficiency and employee productivity are constant at all volume levels",
+      "For multi-product situations, the sales mix can vary at all volume levels"
+    ],
+    "correct": 3,
+    "exp": "CVP assumes a CONSTANT sales mix in multi-product situations — a variable mix would invalidate the weighted-average contribution margin approach. Options A, B, and C are all legitimate CVP assumptions."
+  },
+  {
+    "id": 6,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "In CVP analysis, linear functions are assumed for",
+    "opts": [
+      "Contribution margin per unit",
+      "Fixed cost per unit",
+      "Total costs per unit",
+      "All of the above"
+    ],
+    "correct": 0,
+    "exp": "CVP assumes a constant (linear) contribution margin per unit — i.e., selling price and variable cost per unit are constant. Fixed cost per unit changes as volume changes, so it is not linear."
+  },
+  {
+    "id": 7,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "Which of the following factors is involved in studying cost-volume-profit relationships?",
+    "opts": [
+      "Product mix only",
+      "Variable costs only",
+      "Fixed costs only",
+      "All of the above — product mix, variable costs, and fixed costs"
+    ],
+    "correct": 3,
+    "exp": "CVP examines all three: product mix determines the weighted contribution margin; variable costs set the contribution margin per unit; fixed costs set the threshold that must be covered to break even."
+  },
+  {
+    "id": 8,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "Cost-volume-profit relationships that are curvilinear may be analyzed linearly by considering only",
+    "opts": [
+      "Fixed and mixed costs",
+      "Relevant fixed costs",
+      "Relevant variable costs",
+      "A relevant range of volume"
+    ],
+    "correct": 3,
+    "exp": "Within a relevant range of volume, curvilinear cost and revenue relationships can be approximated as linear. Outside this range, the linear assumption breaks down and CVP results become unreliable."
+  },
+  {
+    "id": 9,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "After the level of volume exceeds the break-even point",
+    "opts": [
+      "The contribution margin ratio increases",
+      "The total contribution margin exceeds the total fixed costs",
+      "Total fixed costs per unit will remain constant",
+      "The total contribution margin will turn from negative to positive"
+    ],
+    "correct": 1,
+    "exp": "At break-even, total CM exactly equals total FC. Beyond break-even, total CM exceeds total FC, generating profit. The CM ratio doesn't change with volume; fixed costs per unit actually decrease as volume rises."
+  },
+  {
+    "id": 10,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "Which combination correctly shows what will DECREASE the break-even point? (Format: Decrease in fixed cost / Increase in direct labor cost / Increase in selling price)",
+    "opts": [
+      "Yes / Yes / Yes",
+      "Yes / No / Yes",
+      "Yes / No / No",
+      "No / Yes / No"
+    ],
+    "correct": 1,
+    "exp": "Decreasing fixed costs lowers BEP (less FC to cover). Increasing selling price raises CM per unit, lowering BEP. Increasing direct labor raises variable costs, reducing CM per unit and RAISING the BEP — so only options 1 and 3 decrease BEP."
+  },
+  {
+    "id": 11,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "At the break-even point, fixed costs are always",
+    "opts": [
+      "Less than the contribution margin",
+      "Equal to the contribution margin",
+      "More than the contribution margin",
+      "More than the variable cost"
+    ],
+    "correct": 1,
+    "exp": "At break-even: Profit = 0, so Contribution Margin − Fixed Costs = 0, therefore Fixed Costs = Contribution Margin exactly."
+  },
+  {
+    "id": 12,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "The method of cost accounting that lends itself to break-even analysis is",
+    "opts": [
+      "Variable costing",
+      "Standard costing",
+      "Absolute costing",
+      "Absorption costing"
+    ],
+    "correct": 0,
+    "exp": "Variable costing separates fixed and variable costs, making CVP directly applicable. Absorption costing blends fixed manufacturing costs into product costs, obscuring the cost behavior CVP requires."
+  },
+  {
+    "id": 13,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "Given: SP = selling price per unit, FC = total fixed cost, VC = variable cost per unit. What is the break-even sales level in units?",
+    "opts": [
+      "SP / (FC / VC)",
+      "FC / (VC / SP)",
+      "VC / (SP − FC)",
+      "FC / (SP − VC)"
+    ],
+    "correct": 3,
+    "exp": "Break-even units = Fixed Costs ÷ Contribution Margin per Unit = FC ÷ (SP − VC). The denominator (SP − VC) is the contribution margin per unit."
+  },
+  {
+    "id": 14,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "Consider the equation: X = Sales − [(CM/Sales) × Sales]. What is X?",
+    "opts": [
+      "Net income",
+      "Fixed costs",
+      "Contribution margin",
+      "Variable costs"
+    ],
+    "correct": 3,
+    "exp": "CM/Sales is the CM ratio. (CM/Sales) × Sales = CM itself. So X = Sales − CM = Variable Costs. This rearranges the identity: Sales = Variable Costs + Contribution Margin."
+  },
+  {
+    "id": 15,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "If a firm's net income does NOT change as its volume changes, the firm's",
+    "opts": [
+      "Must be in the service industry",
+      "Must have no fixed costs",
+      "Sales price must equal $0",
+      "Sales price must equal its variable costs"
+    ],
+    "correct": 3,
+    "exp": "If SP = VC, then contribution margin per unit = 0. No matter how many units are sold, total CM = 0 and net income = −Fixed Costs (a constant). Hence net income doesn't change with volume."
+  },
+  {
+    "id": 16,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "Break-even analysis assumes over the relevant range that",
+    "opts": [
+      "Total variable costs are linear",
+      "Fixed costs per unit are constant",
+      "Total variable costs are nonlinear",
+      "Total revenue is nonlinear"
+    ],
+    "correct": 0,
+    "exp": "CVP assumes total variable costs are linear — a constant VC per unit multiplied by volume. Fixed costs per unit are NOT constant (they decrease as volume rises). Total revenue is also assumed linear."
+  },
+  {
+    "id": 17,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "To compute the break-even point in UNITS, which formula is used?",
+    "opts": [
+      "FC / CM per unit",
+      "FC / CM ratio",
+      "CM / CM ratio",
+      "(FC + VC) / CM ratio"
+    ],
+    "correct": 0,
+    "exp": "Break-even units = Total Fixed Costs ÷ Contribution Margin per Unit. Use the CM ratio formula only when computing break-even in sales dollars."
+  },
+  {
+    "id": 18,
+    "subject": "fin",
+    "session": "Session 1 · CVP Fundamentals & Assumptions",
+    "q": "A firm's break-even point in DOLLARS can be found using which formula?",
+    "opts": [
+      "FC / CM per unit",
+      "VC / CM",
+      "FC / CM ratio",
+      "VC / CM ratio"
+    ],
+    "correct": 2,
+    "exp": "Break-even sales dollars = Total Fixed Costs ÷ CM Ratio. The CM ratio tells you what fraction of each dollar of sales is available to cover fixed costs."
+  },
+  {
+    "id": 19,
+    "subject": "fin",
+    "session": "Session 2 · CVP Graphs & Incremental Analysis",
+    "q": "The contribution margin ratio always increases when the",
+    "opts": [
+      "Variable costs as a percentage of net sales increase",
+      "Variable costs as a percentage of net sales decrease",
+      "Break-even point increases",
+      "Break-even point decreases"
+    ],
+    "correct": 1,
+    "exp": "CM Ratio = 1 − (Variable Costs / Sales). When VC as a % of sales decreases, the CM ratio increases. Break-even point changes can result from many factors, not necessarily CM ratio changes."
+  },
+  {
+    "id": 20,
+    "subject": "fin",
+    "session": "Session 2 · CVP Graphs & Incremental Analysis",
+    "q": "In a multiple-product firm, the product with the highest contribution margin per unit will",
+    "opts": [
+      "Generate more profit for each $1 of sales than other products",
+      "Have the highest contribution margin ratio",
+      "Generate the most profit for each unit sold",
+      "Have the lowest variable costs per unit"
+    ],
+    "correct": 2,
+    "exp": "Highest CM per unit means each unit sold contributes the most to covering fixed costs and generating profit. This doesn't necessarily mean the highest CM ratio (which compares CM to price)."
+  },
+  {
+    "id": 21,
+    "subject": "fin",
+    "session": "Session 2 · CVP Graphs & Incremental Analysis",
+    "q": "_____ focuses only on factors that change from one course of action to another.",
+    "opts": [
+      "Incremental analysis",
+      "Margin of safety",
+      "Operating leverage",
+      "A break-even chart"
+    ],
+    "correct": 0,
+    "exp": "Incremental analysis examines only the costs and revenues that differ between alternatives, ignoring sunk costs and unchanged items — making it efficient for management decisions."
+  },
+  {
+    "id": 22,
+    "subject": "fin",
+    "session": "Session 2 · CVP Graphs & Incremental Analysis",
+    "q": "On a break-even chart, the break-even point is located where the total",
+    "opts": [
+      "Revenue line crosses the total fixed cost line",
+      "Revenue line crosses the total contribution margin line",
+      "Fixed cost line intersects the total variable cost line",
+      "Revenue line crosses the total cost line"
+    ],
+    "correct": 3,
+    "exp": "The BEP is where Total Revenue = Total Cost, i.e., where the revenue line intersects the total cost line. At this intersection profit = 0."
+  },
+  {
+    "id": 23,
+    "subject": "fin",
+    "session": "Session 2 · CVP Graphs & Incremental Analysis",
+    "q": "In a CVP graph, the slope of the total revenue line indicates the",
+    "opts": [
+      "Rate at which profit changes as volume changes",
+      "Rate at which the contribution margin changes as volume changes",
+      "Ratio of increase of total fixed costs",
+      "Total costs per unit"
+    ],
+    "correct": 1,
+    "exp": "The slope of the total revenue line equals selling price per unit, which equals the rate at which contribution margin grows per unit (since VC per unit is also constant, CM grows at the same rate as revenue)."
+  },
+  {
+    "id": 24,
+    "subject": "fin",
+    "session": "Session 2 · CVP Graphs & Incremental Analysis",
+    "q": "In a CVP graph, the area between the total cost line and the total revenue line represents total",
+    "opts": [
+      "Contribution margin",
+      "Variable costs",
+      "Fixed costs",
+      "Profit (or loss)"
+    ],
+    "correct": 3,
+    "exp": "The vertical gap between the revenue line and the total cost line at any volume represents profit (above BEP) or loss (below BEP). At break-even, the lines intersect and the gap is zero."
+  },
+  {
+    "id": 25,
+    "subject": "fin",
+    "session": "Session 2 · CVP Graphs & Incremental Analysis",
+    "q": "In a CVP graph, the area between the total cost line and the total fixed cost line yields the",
+    "opts": [
+      "Fixed costs per unit",
+      "Total variable costs",
+      "Profit",
+      "Contribution margin"
+    ],
+    "correct": 1,
+    "exp": "Total cost = Fixed costs + Variable costs. The total cost line starts at the y-intercept of fixed costs and rises with volume. The area between the total cost line and the horizontal fixed cost line is total variable costs."
+  },
+  {
+    "id": 26,
+    "subject": "fin",
+    "session": "Session 2 · CVP Graphs & Incremental Analysis",
+    "q": "If a company's fixed costs increase, the effect on a profit-volume graph would be that the",
+    "opts": [
+      "Contribution margin line would shift upward parallel to the present line",
+      "Contribution margin line would shift downward parallel to the present line",
+      "Slope of the contribution margin line would be more pronounced (steeper)",
+      "Slope of the contribution margin line would be less pronounced (flatter)"
+    ],
+    "correct": 1,
+    "exp": "Higher fixed costs mean a larger loss at zero volume — the profit line starts lower and shifts downward in parallel (same slope since CM per unit is unchanged). Break-even moves to the right."
+  },
+  {
+    "id": 27,
+    "subject": "fin",
+    "session": "Session 2 · CVP Graphs & Incremental Analysis",
+    "q": "If a company's variable costs per unit increase but its unit selling price stays constant, the profit-volume graph would show the",
+    "opts": [
+      "Contribution margin line shifting upward parallel to the present line",
+      "Contribution margin line shifting downward parallel to the present line",
+      "Slope of the contribution margin line becoming steeper",
+      "Slope of the contribution margin line becoming flatter"
+    ],
+    "correct": 3,
+    "exp": "Higher variable costs reduce CM per unit, which is the slope of the profit-volume line. A lower slope means the line becomes flatter. Break-even volume increases because each unit covers less fixed cost."
+  },
+  {
+    "id": 28,
+    "subject": "fin",
+    "session": "Session 2 · CVP Graphs & Incremental Analysis",
+    "q": "The most useful information derived from a cost-volume-profit chart is the",
+    "opts": [
+      "Amount of sales revenue needed to cover variable costs",
+      "Amount of sales revenue needed to cover fixed costs",
+      "Relationship among revenues, variable costs, and fixed costs at various activity levels",
+      "Volume at which the enterprise breaks even"
+    ],
+    "correct": 2,
+    "exp": "A CVP chart's greatest value is visualising the complete interrelationship among revenues, VC, and FC across all activity levels — not just the single break-even point."
+  },
+  {
+    "id": 29,
+    "subject": "fin",
+    "session": "Session 2 · CVP Graphs & Incremental Analysis",
+    "q": "The margin of safety would be negative if a company",
+    "opts": [
+      "Was presently operating at a volume below the break-even point",
+      "Had fixed costs less than its contribution margin",
+      "Had variable costs exceeding its fixed costs",
+      "Had a degree of operating leverage greater than 100"
+    ],
+    "correct": 0,
+    "exp": "Margin of Safety = Actual Sales − Break-Even Sales. If actual sales are below break-even, the margin of safety is negative — the company is operating at a loss."
+  },
+  {
+    "id": 30,
+    "subject": "fin",
+    "session": "Session 2 · CVP Graphs & Incremental Analysis",
+    "q": "The margin of safety is defined as the",
+    "opts": [
+      "Contribution margin rate",
+      "Difference between budgeted CM and actual CM",
+      "Difference between budgeted CM and break-even CM",
+      "Difference between budgeted sales and break-even sales"
+    ],
+    "correct": 3,
+    "exp": "Margin of Safety = Budgeted (or Actual) Sales − Break-Even Sales. It measures how far sales can fall before losses begin."
+  },
+  {
+    "id": 31,
+    "subject": "fin",
+    "session": "Session 2 · CVP Graphs & Incremental Analysis",
+    "q": "Management is replacing a variable sales commission plan with a fixed salary plan. If adopted, the company's",
+    "opts": [
+      "Break-even point must increase",
+      "Margin of safety must decrease",
+      "Operating leverage must increase",
+      "Profit must increase"
+    ],
+    "correct": 2,
+    "exp": "Converting variable commissions to fixed salaries increases total FC and reduces VC. DOL = CM / Profit; higher FC raises CM (lower VC) but reduces profit more, so DOL rises. The BEP also increases, but the question asks what 'must' happen — operating leverage must increase."
+  },
+  {
+    "id": 32,
+    "subject": "fin",
+    "session": "Session 2 · CVP Graphs & Incremental Analysis",
+    "q": "As projected net income increases, the",
+    "opts": [
+      "Degree of operating leverage declines",
+      "Margin of safety stays constant",
+      "Break-even point goes down",
+      "Contribution margin ratio goes up"
+    ],
+    "correct": 0,
+    "exp": "DOL = CM / Net Income. As net income grows (denominator rises while CM changes proportionally less), DOL declines. BEP doesn't change with net income changes alone."
+  },
+  {
+    "id": 33,
+    "subject": "fin",
+    "session": "Session 2 · CVP Graphs & Incremental Analysis",
+    "q": "A managerial preference for a very low degree of operating leverage might indicate that",
+    "opts": [
+      "An increase in sales volume is expected",
+      "A decrease in sales volume is expected",
+      "The firm is very unprofitable",
+      "The firm has very high fixed costs"
+    ],
+    "correct": 1,
+    "exp": "Low DOL (low fixed / high variable cost mix) limits loss amplification when sales fall. Managers choose low DOL as protection against expected sales declines. High DOL amplifies both gains and losses."
+  },
+  {
+    "id": 34,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Parker Company: Sales $400,000 | Variable costs $125,000 | CM $275,000 | Fixed costs $200,000 | PBT $75,000. What is Parker's degree of operating leverage?",
+    "opts": [
+      "3.67",
+      "5.33",
+      "1.45",
+      "2.67"
+    ],
+    "correct": 0,
+    "exp": "DOL = CM ÷ PBT = $275,000 ÷ $75,000 = 3.67. A DOL of 3.67 means a 1% increase in sales produces a 3.67% increase in profit."
+  },
+  {
+    "id": 35,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Parker Company: Sales $400,000 | CM $275,000 | Fixed costs $200,000. What was Parker's break-even point in dollars?",
+    "opts": [
+      "$200,000",
+      "$325,000",
+      "$300,000",
+      "$290,909"
+    ],
+    "correct": 3,
+    "exp": "CM% = $275,000 ÷ $400,000 = 68.75%. BEP = $200,000 ÷ 0.6875 = $290,909. At this sales level, CM exactly covers fixed costs."
+  },
+  {
+    "id": 36,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Parker Company: Actual sales $400,000 | Break-even $290,909. What was Parker's margin of safety?",
+    "opts": [
+      "$200,000",
+      "$75,000",
+      "$100,000",
+      "$109,091"
+    ],
+    "correct": 3,
+    "exp": "MOS = Actual Sales − BEP = $400,000 − $290,909 = $109,091. Sales can fall by $109,091 before the company begins to lose money."
+  },
+  {
+    "id": 37,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Parker Company: CM $275,000 | Fixed costs $200,000. If sales rise to 130% of current year's level, what is profit before taxes?",
+    "opts": [
+      "$97,500",
+      "$195,000",
+      "$157,500",
+      "Cannot be predicted from the information given"
+    ],
+    "correct": 2,
+    "exp": "New CM = $275,000 × 1.30 = $357,500. Profit = New CM − Fixed Costs = $357,500 − $200,000 = $157,500. Fixed costs stay constant; only CM changes proportionally with sales."
+  },
+  {
+    "id": 38,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Real Products Co.: VC = $6/unit ($4 production + $2 SG&A), FC = $27,000. At 5,000 units with profit of $18,000, what was the sales price per unit?",
+    "opts": [
+      "$15.00",
+      "$11.40",
+      "$9.60",
+      "$10.00"
+    ],
+    "correct": 0,
+    "exp": "CM = Profit + FC = $18,000 + $27,000 = $45,000. CM/unit = $45,000 ÷ 5,000 = $9. SP = CM/unit + VC/unit = $9 + $6 = $15/unit."
+  },
+  {
+    "id": 39,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Real Products Co.: VC $6/unit, FC $27,000. Projected: 4,000 units at $16/unit. What is the projected margin of safety?",
+    "opts": [
+      "$7,000",
+      "$20,800",
+      "$18,400",
+      "$13,000"
+    ],
+    "correct": 1,
+    "exp": "CM/unit = $16 − $6 = $10; CM ratio = 62.5%. BEP = $27,000 ÷ 0.625 = $43,200. Sales = $64,000. MOS = $64,000 − $43,200 = $20,800."
+  },
+  {
+    "id": 40,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Harris Manufacturing: FC $250,000, 125,000 units, desired after-tax income $75,000 at 40% tax, SP $6/unit. Maximum variable cost per unit?",
+    "opts": [
+      "$3.37",
+      "$3.59",
+      "$3.00",
+      "$3.70"
+    ],
+    "correct": 2,
+    "exp": "Before-tax income = $75,000 ÷ 0.60 = $125,000. Required CM = $250,000 + $125,000 = $375,000. Sales = $750,000. Variable costs = $750,000 − $375,000 = $375,000. Max VC/unit = $375,000 ÷ 125,000 = $3.00."
+  },
+  {
+    "id": 41,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Stewart Company: SP $7, VC $2/unit, FC $50,000. How many units are needed to earn profit before taxes of $10,000?",
+    "opts": [
+      "25,714 units",
+      "10,000 units",
+      "8,571 units",
+      "12,000 units"
+    ],
+    "correct": 3,
+    "exp": "CM/unit = $7 − $2 = $5. Units = (FC + Target Profit) ÷ CM = ($50,000 + $10,000) ÷ $5 = 12,000 units."
+  },
+  {
+    "id": 42,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Stewart Company: 60,000 units, SP $7, VC $2/unit, FC $50,000. What is the degree of operating leverage if projections are achieved?",
+    "opts": [
+      "6.00",
+      "1.20",
+      "1.68",
+      "2.40"
+    ],
+    "correct": 1,
+    "exp": "CM = 60,000 × $5 = $300,000. Net profit = $300,000 − $50,000 = $250,000. DOL = $300,000 ÷ $250,000 = 1.20. High projected volume relative to fixed costs results in low leverage."
+  },
+  {
+    "id": 43,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Putnam Company: Sales $600,000 | VC $150,000 | CM $450,000 | FC $300,000 | PBT $150,000. What is Putnam's degree of operating leverage?",
+    "opts": [
+      "1.33",
+      "2.00",
+      "3.00",
+      "4.00"
+    ],
+    "correct": 2,
+    "exp": "DOL = CM ÷ PBT = $450,000 ÷ $150,000 = 3.00. Each 1% change in sales produces a 3% change in profit."
+  },
+  {
+    "id": 44,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Putnam Company: Sales $600,000 | CM $450,000 | FC $300,000. What was Putnam's break-even point in dollars?",
+    "opts": [
+      "$300,000",
+      "$400,000",
+      "$425,000",
+      "$450,000"
+    ],
+    "correct": 1,
+    "exp": "CM% = $450,000 ÷ $600,000 = 75%. BEP = $300,000 ÷ 0.75 = $400,000."
+  },
+  {
+    "id": 45,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Putnam Company: Actual sales $600,000 | Break-even $400,000. What was Putnam's margin of safety?",
+    "opts": [
+      "$150,000",
+      "$175,000",
+      "$200,000",
+      "$300,000"
+    ],
+    "correct": 2,
+    "exp": "MOS = $600,000 − $400,000 = $200,000. Sales can decline by $200,000 before the company begins making a loss."
+  },
+  {
+    "id": 46,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Putnam Company: CM $450,000 | FC $300,000. If sales rise to 125% of current year's level, what is profit before taxes?",
+    "opts": [
+      "$112,500",
+      "$187,500",
+      "$262,500",
+      "$300,000"
+    ],
+    "correct": 2,
+    "exp": "New CM = $450,000 × 1.25 = $562,500. Profit = $562,500 − $300,000 = $262,500."
+  },
+  {
+    "id": 47,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Blue Mountain Co.: Sales $90,000 | VC $50,000 | FC $30,000. Total sales expected to increase 20%. Net income should exceed prior year's by:",
+    "opts": [
+      "100 percent",
+      "80 percent",
+      "20 percent",
+      "50 percent"
+    ],
+    "correct": 1,
+    "exp": "Current CM = $40,000; current profit = $10,000. New CM = $40,000 × 1.20 = $48,000; new profit = $18,000. Increase = $8,000 ÷ $10,000 = 80%. Operating leverage amplifies the 20% sales gain."
+  },
+  {
+    "id": 48,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Daybreak Corp: A (3,000 units, $12 SP, $6 VC), B (4,000 units, $7 SP, $4 VC), FC $10,000. How many total units needed to break even?",
+    "opts": [
+      "333 units",
+      "1,111 units",
+      "2,333 units",
+      "3,332 units"
+    ],
+    "correct": 2,
+    "exp": "Mix 3A:4B, so B = (4/3)A. Weighted CM: 6A + 3(4/3)A = 10A. 10A = $10,000 → A = 1,000; B = 1,333. Total = 2,333 units."
+  },
+  {
+    "id": 49,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Daybreak Corp (mix 3A:4B). If 10,500 total units were sold, how many would be Product B?",
+    "opts": [
+      "5,250 units",
+      "6,000 units",
+      "7,000 units",
+      "7,875 units"
+    ],
+    "correct": 1,
+    "exp": "A + (4/3)A = 10,500 → (7/3)A = 10,500 → A = 4,500; B = 10,500 − 4,500 = 6,000 units."
+  },
+  {
+    "id": 50,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Daybreak Corp (mix 3A:4B, weighted CM = 10A units, FC $10,000). How many total units to produce before-tax profit of $20,000?",
+    "opts": [
+      "6,000 units",
+      "6,250 units",
+      "6,923 units",
+      "7,000 units"
+    ],
+    "correct": 3,
+    "exp": "10A − $10,000 = $20,000 → 10A = $30,000 → A = 3,000; B = 4,000. Total = 7,000 units."
+  },
+  {
+    "id": 51,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Surfside Corp: A (2,000 units, $10 SP, $7 VC), B (3,000 units, $5 SP, $3 VC), FC $9,000. How many total units to break even?",
+    "opts": [
+      "3,750 units",
+      "750 units",
+      "3,600 units",
+      "1,800 units"
+    ],
+    "correct": 0,
+    "exp": "Mix 2A:3B, so B = 1.5A. Weighted CM: 3A + 2(1.5A) = 6A. 6A = $9,000 → A = 1,500; B = 2,250. Total = 3,750 units."
+  },
+  {
+    "id": 52,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Surfside Corp (mix 2A:3B). If 6,000 total units were sold, how many would be Product B?",
+    "opts": [
+      "3,000 units",
+      "4,000 units",
+      "3,600 units",
+      "3,500 units"
+    ],
+    "correct": 2,
+    "exp": "A + 1.5A = 6,000 → 2.5A = 6,000 → A = 2,400; B = 6,000 − 2,400 = 3,600 units."
+  },
+  {
+    "id": 53,
+    "subject": "fin",
+    "session": "Session 3 · MOS & Leverage — Applied Problems",
+    "q": "Surfside Corp (mix 2A:3B, weighted CM = 6A, FC $9,000). How many total units to produce profit of $12,000?",
+    "opts": [
+      "8,750 units",
+      "20,000 units",
+      "10,000 units",
+      "8,400 units"
+    ],
+    "correct": 0,
+    "exp": "6A − $9,000 = $12,000 → 6A = $21,000 → A = 3,500; B = 5,250. Total = 8,750 units."
+  },
+  {
+    "id": 54,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "Jean Simmons Co.: Sales $300,000 | VC $150,000 | CM $150,000 | FC $100,000 | PBT $50,000. What was the margin of safety?",
+    "opts": [
+      "$50,000",
+      "$100,000",
+      "$150,000",
+      "$25,000"
+    ],
+    "correct": 1,
+    "exp": "CM ratio = 50%. BEP = $100,000 ÷ 0.50 = $200,000. MOS = $300,000 − $200,000 = $100,000."
+  },
+  {
+    "id": 55,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "Jean Simmons Co.: CM ratio 50%, FC $100,000. If unit price is $10, how many units needed to produce profit of $40,000?",
+    "opts": [
+      "27,500 units",
+      "29,000 units",
+      "28,000 units",
+      "Cannot be determined from the information given"
+    ],
+    "correct": 2,
+    "exp": "Required CM = $40,000 + $100,000 = $140,000. Sales needed = $140,000 ÷ 0.50 = $280,000. Units = $280,000 ÷ $10 = 28,000 units."
+  },
+  {
+    "id": 56,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "A firm: 100,000 units, $40/unit, CM ratio 60%, projected profit $500,000. What is the budgeted fixed cost?",
+    "opts": [
+      "$1,600,000",
+      "$2,400,000",
+      "$1,100,000",
+      "$1,900,000"
+    ],
+    "correct": 3,
+    "exp": "Total CM = 100,000 × ($40 × 60%) = $2,400,000. Fixed costs = CM − Profit = $2,400,000 − $500,000 = $1,900,000."
+  },
+  {
+    "id": 57,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "Broncho Lids Corp: $10/unit hat, BEP projected at 50,000 units, FC = $100,000. What is the projected contribution margin ratio?",
+    "opts": [
+      "80 percent",
+      "20 percent",
+      "40 percent",
+      "60 percent"
+    ],
+    "correct": 1,
+    "exp": "BEP sales = 50,000 × $10 = $500,000. At break-even, CM = FC = $100,000. CM ratio = $100,000 ÷ $500,000 = 20%."
+  },
+  {
+    "id": 58,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "Horner Co.: SP $15, VC $6/unit ($5 production + $1 SG&A), FC $100,000 total, 20,000 units projected. What is the projected margin of safety?",
+    "opts": [
+      "$133,333",
+      "$150,000",
+      "$80,000",
+      "$100,000"
+    ],
+    "correct": 0,
+    "exp": "CM/unit = $9; CM ratio = 60%. BEP = $100,000 ÷ 0.60 = $166,667. Sales = 20,000 × $15 = $300,000. MOS = $300,000 − $166,667 = $133,333."
+  },
+  {
+    "id": 59,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "Horner Co.: 20,000 units × $9 CM/unit = $180,000 CM | FC $100,000 | Net income $80,000. What is the projected degree of operating leverage?",
+    "opts": [
+      "2.25",
+      "1.80",
+      "3.75",
+      "1.67"
+    ],
+    "correct": 0,
+    "exp": "DOL = CM ÷ Net Income = $180,000 ÷ $80,000 = 2.25. A 10% increase in sales would result in a 22.5% increase in profit."
+  },
+  {
+    "id": 60,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "Austin Co. (CM 90%), Brown Co. (CM 80%), Freeman Co. (CM 70%) — each with Sales $100 and PBT $60. If sales go up by $1 for each firm, which has the greatest profit increase?",
+    "opts": [
+      "Austin Company",
+      "Brown Company",
+      "Freeman Company",
+      "Cannot be determined from the information given"
+    ],
+    "correct": 0,
+    "exp": "A $1 sales increase generates additional profit equal to the CM ratio. Austin's 90% CM ratio is highest — it retains 90 cents from every additional dollar of sales as profit."
+  },
+  {
+    "id": 61,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "Austin Co., Brown Co., Freeman Co. — all with Sales $100, PBT $60. If sales go up by ONE UNIT for each firm, which has the greatest net income increase?",
+    "opts": [
+      "Austin Company",
+      "Brown Company",
+      "Freeman Company",
+      "Cannot be determined from the information given"
+    ],
+    "correct": 3,
+    "exp": "To determine profit per additional unit, we need price per unit — which is not given. Total sales ($100) without knowing units or unit price makes it impossible to calculate per-unit CM."
+  },
+  {
+    "id": 62,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "Austin Co. (FC $30), Brown Co. (FC $20), Freeman Co. (FC $10) — each with Sales $100, PBT $60. At $100 sales, which firm has the highest margin of safety?",
+    "opts": [
+      "Austin Company",
+      "Brown Company",
+      "Freeman Company",
+      "They all have the same margin of safety"
+    ],
+    "correct": 2,
+    "exp": "Freeman has the lowest fixed costs ($10), so its break-even point is lowest relative to sales. Lower break-even → higher margin of safety. Freeman can sustain the largest drop in sales before incurring losses."
+  },
+  {
+    "id": 63,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "McDonald Co.: SP $8, VC $3/unit, FC $60,000. How many units to earn profit before taxes of $15,000?",
+    "opts": [
+      "9,375 units",
+      "12,000 units",
+      "15,000 units",
+      "37,500 units"
+    ],
+    "correct": 2,
+    "exp": "CM/unit = $8 − $3 = $5. Units = ($60,000 + $15,000) ÷ $5 = $75,000 ÷ $5 = 15,000 units."
+  },
+  {
+    "id": 64,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "McDonald Co.: 75,000 units, SP $8, VC $3/unit, FC $60,000. What is the degree of operating leverage if projections are achieved?",
+    "opts": [
+      "6.25",
+      "1.19",
+      "1.68",
+      "3.00"
+    ],
+    "correct": 1,
+    "exp": "CM = 75,000 × $5 = $375,000. Net profit = $375,000 − $60,000 = $315,000. DOL = $375,000 ÷ $315,000 = 1.19."
+  },
+  {
+    "id": 65,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "Lance's catfish farm: FC $50,000, VC = 30% of sales, price $2/catfish. To generate profit = 10% of sales, how many catfish must Lance sell?",
+    "opts": [
+      "40,000 catfish",
+      "41,667 catfish",
+      "35,000 catfish",
+      "No level of sales can generate a 10% net return on sales"
+    ],
+    "correct": 1,
+    "exp": "Let x = sales dollars: x − 0.30x − $50,000 = 0.10x → 0.60x = $50,000 → x = $83,333. Units = $83,333 ÷ $2 = 41,667 catfish."
+  },
+  {
+    "id": 66,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "Robert Wilson Co.: Sales $400,000 | VC $200,000 | CM $200,000 | FC $125,000 | PBT $75,000. What was the margin of safety?",
+    "opts": [
+      "$37,500",
+      "$75,000",
+      "$125,000",
+      "$150,000"
+    ],
+    "correct": 3,
+    "exp": "CM ratio = 50%. BEP = $125,000 ÷ 0.50 = $250,000. MOS = $400,000 − $250,000 = $150,000."
+  },
+  {
+    "id": 67,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "Robert Wilson Co.: MOS $150,000 | Sales $400,000 | CM $200,000 | PBT $75,000. What is the degree of operating leverage?",
+    "opts": [
+      "2.67",
+      "3.2",
+      "5.33",
+      "10.67"
+    ],
+    "correct": 0,
+    "exp": "DOL = 1 ÷ MOS% = 1 ÷ (150,000/400,000) = 1 ÷ 37.5% = 2.67. (Verified: DOL = CM/PBT = $200,000/$75,000 = 2.67.)"
+  },
+  {
+    "id": 68,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "Venus Company: BEP 1,000 units, VC $500/unit, FC $150,000. How much does the 1,001st unit sold contribute to profit before taxes?",
+    "opts": [
+      "$650",
+      "$500",
+      "$150",
+      "$0"
+    ],
+    "correct": 2,
+    "exp": "At break-even, CM = FC = $150,000. CM/unit = $150,000 ÷ 1,000 = $150. Every unit beyond break-even contributes its full CM of $150 to profit."
+  },
+  {
+    "id": 69,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "Gemini Company: BEP 1,500 units, VC $700/unit, FC $225,000. How much does the 1,501st unit sold contribute to profit before taxes?",
+    "opts": [
+      "$850",
+      "$700",
+      "$150",
+      "$0"
+    ],
+    "correct": 2,
+    "exp": "At break-even, CM = FC = $225,000. CM/unit = $225,000 ÷ 1,500 = $150. The 1,501st unit (first unit past break-even) contributes its full CM of $150 to profit."
+  },
+  {
+    "id": 70,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "Thompson Corp Product A: Sales $300,000 | VC $240,000 | FC $40,000. If Thompson increases sales by 20%, what is the new profit?",
+    "opts": [
+      "$20,000",
+      "$24,000",
+      "$32,000",
+      "$80,000"
+    ],
+    "correct": 2,
+    "exp": "Current CM = $60,000. New CM = $60,000 × 1.20 = $72,000. Profit = $72,000 − $40,000 = $32,000. Fixed costs don't change with volume."
+  },
+  {
+    "id": 71,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "Lynch Corp Product A: Sales $400,000 | VC $300,000 | FC $50,000. If Lynch increases sales by 25%, what is the new profit?",
+    "opts": [
+      "$50,000",
+      "$62,500",
+      "$75,000",
+      "$170,000"
+    ],
+    "correct": 2,
+    "exp": "Current CM = $100,000. New CM = $100,000 × 1.25 = $125,000. Profit = $125,000 − $50,000 = $75,000."
+  },
+  {
+    "id": 72,
+    "subject": "fin",
+    "session": "Session 4 · Advanced CVP Applications",
+    "q": "Tisdale Co.: 5,000 units at $40/unit, VC $120,000, FC $60,000, OI $20,000. If selling price is raised 10% to $44/unit, how many units to maintain $20,000 operating income?",
+    "opts": [
+      "4,000 units",
+      "4,300 units",
+      "4,545 units",
+      "5,000 units"
+    ],
+    "correct": 2,
+    "exp": "At $44/unit, the required revenue is still $200,000 (same CM and profit target). Units = $200,000 ÷ $44 = 4,545 units. The higher price means fewer units generate the same revenue."
+  }
+];
+
+/* ═══════════════════════════════════
+   STATE
+═══════════════════════════════════ */
+let state = {
+  filter: 'all',
+  deck: [],
+  idx: 0,
+  answered: false,
+  score: 0,
+  finCorrect: 0, finTotal: 0,
+};
+
+/* ═══════════════════════════════════
+   UTILITIES
+═══════════════════════════════════ */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pct(n, d) { return d === 0 ? 0 : Math.round((n / d) * 100); }
+
+function getTier(p) {
+  if (p >= 90) return { tier: "Distinction \u2014 Exam Ready", sub: "Exceptional command of CVP and break-even analysis." };
+  if (p >= 75) return { tier: "Pass with Merit \u2014 Strong Grasp", sub: "Solid understanding; revisit a few tricky areas." };
+  if (p >= 60) return { tier: "Adequate \u2014 Review Key Concepts", sub: "Core concepts present; reinforce operating leverage and multi-product CVP." };
+  return { tier: "Needs Work \u2014 Return to Notes", sub: "Systematic revision of CVP fundamentals recommended." };
+}
+
+/* ═══════════════════════════════════
+   FILTER
+═══════════════════════════════════ */
+function setFilter(f) {
+  state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  document.getElementById('btnAll').classList.add('active-all');
+  if (f !== 'all') {
+    const key = f.charAt(0).toUpperCase() + f.slice(1);
+    const el = document.getElementById('btn' + key);
+    if (el) el.classList.add('active-' + f);
+    document.getElementById('btnAll').classList.remove('active-all');
+  }
+  startQuiz(f);
+}
+
+/* ═══════════════════════════════════
+   QUIZ FLOW
+═══════════════════════════════════ */
+function startQuiz(f) {
+  if (f) state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  document.getElementById('btnAll').classList.add('active-all');
+  if (state.filter !== 'all') {
+    const key = state.filter.charAt(0).toUpperCase() + state.filter.slice(1);
+    const el = document.getElementById('btn' + key);
+    if (el) { el.classList.add('active-' + state.filter); document.getElementById('btnAll').classList.remove('active-all'); }
+  }
+
+  const pool = ALL_QUESTIONS.filter(q => state.filter === 'all' || q.subject === state.filter);
+  state.deck = shuffle(pool);
+  state.idx = 0;
+  state.score = 0;
+  state.finCorrect = 0; state.finTotal = 0;
+
+  state.deck.forEach(q => {
+    if (q.subject === 'fin') state.finTotal++;
+  });
+
+  updateScore();
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizArea').style.display = 'block';
+  document.getElementById('progressArea').style.display = 'block';
+  document.getElementById('emptyState').style.display = 'none';
+
+  if (state.deck.length === 0) {
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = state.deck[state.idx];
+  const total = state.deck.length;
+  const num = state.idx + 1;
+  state.answered = false;
+
+  const fillPct = ((num - 1) / total) * 100;
+  document.getElementById('progressFill').style.width = fillPct + '%';
+  document.getElementById('progressText').textContent = 'Question ' + num + ' of ' + total;
+  document.getElementById('progressPct').textContent = Math.round(fillPct) + '%';
+
+  const tag = document.getElementById('subjectTag');
+  tag.textContent = q.subject.toUpperCase();
+  tag.className = 'subject-tag ' + q.subject;
+
+  document.getElementById('sessionLabel').textContent = q.session;
+  document.getElementById('questionNum').textContent = '#' + q.id;
+  document.getElementById('questionText').textContent = q.q;
+
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = '<span class="option-letter">' + letters[i] + '</span>'
+                  + '<span class="option-text">' + opt + '</span>'
+                  + '<span class="key-hint">' + (i + 1) + '</span>';
+    btn.addEventListener('click', () => selectAnswer(i));
+    grid.appendChild(btn);
+  });
+
+  const ep = document.getElementById('explanationPanel');
+  ep.className = 'explanation-panel';
+  document.getElementById('explanationText').textContent = '';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'slideUp 0.3s ease';
+}
+
+function selectAnswer(chosen) {
+  if (state.answered) return;
+  state.answered = true;
+
+  const q = state.deck[state.idx];
+  const btns = document.querySelectorAll('.option-btn');
+  const correct = q.correct;
+
+  btns.forEach((btn, i) => {
+    btn.classList.add('disabled');
+    if (i === correct) btn.classList.add('correct');
+    else if (i === chosen) btn.classList.add('wrong');
+  });
+
+  if (chosen === correct) {
+    state.score++;
+    if (q.subject === 'fin') state.finCorrect++;
+  }
+
+  updateScore();
+
+  const ep = document.getElementById('explanationPanel');
+  document.getElementById('explanationText').textContent = q.exp;
+  ep.classList.add('show', q.subject + '-border');
+
+  document.getElementById('nextBtn').style.display = 'flex';
+  setTimeout(() => ep.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+}
+
+function nextQuestion() {
+  if (!state.answered) return;
+  state.idx++;
+  if (state.idx >= state.deck.length) {
+    showResults();
+  } else {
+    renderQuestion();
+    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function updateScore() {
+  const answeredSoFar = state.idx + (state.answered ? 1 : 0);
+  document.getElementById('scoreNum').textContent = state.score;
+  document.getElementById('scoreDen').textContent = Math.max(answeredSoFar, state.score);
+}
+
+/* ═══════════════════════════════════
+   RESULTS
+═══════════════════════════════════ */
+function showResults() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('progressArea').style.display = 'none';
+  document.getElementById('resultsScreen').classList.add('show');
+
+  const total = state.deck.length;
+  const p = pct(state.score, total);
+  const { tier, sub } = getTier(p);
+
+  document.getElementById('resultsTier').textContent = tier;
+  document.getElementById('resultsSubtitle').textContent = sub;
+  document.getElementById('rTotal').textContent = state.score + '/' + total;
+  document.getElementById('rTotalSub').textContent = p + '%';
+  document.getElementById('rFin').textContent = state.finCorrect + '/' + state.finTotal;
+  document.getElementById('rFinSub').textContent = pct(state.finCorrect, state.finTotal) + '%';
+
+  document.getElementById('resultsScreen').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ═══════════════════════════════════
+   KEYBOARD SHORTCUTS
+═══════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (['1','2','3','4'].includes(e.key)) {
+    const btns = document.querySelectorAll('.option-btn:not(.disabled)');
+    const idx = parseInt(e.key) - 1;
+    if (btns[idx]) btns[idx].click();
+  }
+  if ((e.key === 'Enter' || e.key === ' ') && state.answered) {
+    e.preventDefault();
+    nextQuestion();
+  }
+  if (e.key === 'r' || e.key === 'R') startQuiz(state.filter);
+});
+
+/* ═══════════════════════════════════
+   INIT
+═══════════════════════════════════ */
+startQuiz('all');
+</script>
+</body>
+</html>

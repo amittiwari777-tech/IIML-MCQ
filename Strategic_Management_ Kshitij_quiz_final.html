@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategic Management Quiz — Sessions 1 &amp; 2</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:         #1a1c22;
+    --card:       #252830;
+    --card-hover: #2d3040;
+    --border:     #353845;
+    --text:       #e8e6e1;
+    --text-muted: #9895a0;
+    --text-dim:   #6b6878;
+    --correct:    #3ecf8e;
+    --correct-dim:rgba(62,207,142,0.15);
+    --wrong:      #e05252;
+    --wrong-dim:  rgba(224,82,82,0.15);
+    --gold:       #f0c040;
+    --radius:     12px;
+    --radius-sm:  8px;
+    --shadow:     0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  .app-header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .app-title {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+  .app-subtitle {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .score-display {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    white-space: nowrap;
+  }
+  .score-display .score-num { color: var(--gold); font-weight: 500; }
+
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    padding: 20px 24px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .filter-btn {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.8rem;
+    padding: 7px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+  }
+  .filter-btn:hover { background: var(--card-hover); color: var(--text); }
+  .filter-btn.active-all { background: rgba(255,255,255,0.08); color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+  /* STRAT — Red */
+  .subject-tag.strat { background: rgba(192,57,43,0.15); color: #e07060; border: 1px solid rgba(192,57,43,0.35); }
+  .filter-btn.active-strat { background: rgba(192,57,43,0.15); color: #e07060; border-color: #e07060; }
+  .explanation-panel.strat-border { border-left-color: #e07060; background: rgba(192,57,43,0.1); }
+  .btn-strat { background: rgba(192,57,43,0.15); color: #e07060; border: 1px solid #e07060; }
+  .btn-strat:hover { filter: brightness(1.15); }
+  .score-block-value.strat { color: #e07060; }
+
+  /* ENV — Teal */
+  .subject-tag.env { background: rgba(26,82,118,0.2); color: #7ab8d8; border: 1px solid rgba(26,82,118,0.4); }
+  .filter-btn.active-env { background: rgba(26,82,118,0.2); color: #7ab8d8; border-color: #7ab8d8; }
+  .explanation-panel.env-border { border-left-color: #7ab8d8; background: rgba(26,82,118,0.12); }
+  .btn-env { background: rgba(26,82,118,0.2); color: #7ab8d8; border: 1px solid #7ab8d8; }
+  .btn-env:hover { filter: brightness(1.15); }
+  .score-block-value.env { color: #7ab8d8; }
+
+  /* INT — Green */
+  .subject-tag.int { background: rgba(44,122,75,0.18); color: #68c888; border: 1px solid rgba(44,122,75,0.38); }
+  .filter-btn.active-int { background: rgba(44,122,75,0.18); color: #68c888; border-color: #68c888; }
+  .explanation-panel.int-border { border-left-color: #68c888; background: rgba(44,122,75,0.12); }
+  .btn-int { background: rgba(44,122,75,0.18); color: #68c888; border: 1px solid #68c888; }
+  .btn-int:hover { filter: brightness(1.15); }
+  .score-block-value.int { color: #68c888; }
+
+  /* CORP — Gold */
+  .subject-tag.corp { background: rgba(184,134,11,0.15); color: #d4ac40; border: 1px solid rgba(184,134,11,0.35); }
+  .filter-btn.active-corp { background: rgba(184,134,11,0.15); color: #d4ac40; border-color: #d4ac40; }
+  .explanation-panel.corp-border { border-left-color: #d4ac40; background: rgba(184,134,11,0.1); }
+  .btn-corp { background: rgba(184,134,11,0.15); color: #d4ac40; border: 1px solid #d4ac40; }
+  .btn-corp:hover { filter: brightness(1.15); }
+  .score-block-value.corp { color: #d4ac40; }
+
+  .main-wrap { max-width: 760px; margin: 0 auto; padding: 28px 20px; }
+
+  .progress-area { margin-bottom: 24px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    margin-bottom: 8px;
+  }
+  .progress-track { height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    background: linear-gradient(90deg, #e07060, #7ab8d8, #68c888, #d4ac40);
+  }
+
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .subject-tag {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .session-label { font-size: 0.75rem; color: var(--text-dim); font-style: italic; font-family: Georgia, Cambria, 'Times New Roman', serif; }
+  .question-num { font-family: Consolas, 'Cascadia Code', 'Courier New', monospace; font-size: 0.72rem; color: var(--text-dim); margin-left: auto; }
+  .question-text { font-family: Georgia, Cambria, 'Times New Roman', serif; font-size: 1.05rem; line-height: 1.7; color: var(--text); margin-bottom: 24px; }
+
+  .options-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .option-btn {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 16px; background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); cursor: pointer; text-align: left;
+    color: var(--text); font-family: system-ui, sans-serif; font-size: 0.9rem;
+    line-height: 1.5; transition: all 0.15s ease; width: 100%;
+  }
+  .option-btn:hover:not(.disabled) { background: var(--card-hover); border-color: rgba(255,255,255,0.18); }
+  .option-btn.disabled { cursor: default; color: var(--text-muted); }
+  .option-btn.correct { background: var(--correct-dim) !important; border-color: var(--correct) !important; color: var(--correct) !important; }
+  .option-btn.wrong   { background: var(--wrong-dim) !important;   border-color: var(--wrong) !important;   color: var(--wrong) !important; }
+  .option-letter {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.78rem; font-weight: 600; color: var(--text-dim);
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 6px; padding: 2px 8px; flex-shrink: 0; margin-top: 1px; transition: all 0.15s;
+  }
+  .option-btn.correct .option-letter { background: rgba(62,207,142,0.2); border-color: var(--correct); color: var(--correct); }
+  .option-btn.wrong   .option-letter { background: rgba(224,82,82,0.2);  border-color: var(--wrong);   color: var(--wrong);   }
+  .option-text { flex: 1; }
+  .key-hint {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.65rem; color: var(--text-dim);
+    border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; flex-shrink: 0; align-self: center;
+  }
+  .option-btn.disabled .key-hint { display: none; }
+
+  .explanation-panel {
+    border-left: 3px solid var(--border); background: rgba(255,255,255,0.03);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 16px; margin-bottom: 20px;
+    font-size: 0.88rem; line-height: 1.65; color: var(--text-muted);
+    display: none; animation: slideUp 0.25s ease;
+  }
+  .explanation-panel.show { display: block; }
+  .explanation-label { font-family: Consolas, 'Cascadia Code', 'Courier New', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 6px; }
+
+  .btn {
+    font-family: system-ui, sans-serif; font-size: 0.85rem; font-weight: 500;
+    padding: 9px 22px; border-radius: 20px; border: 1px solid var(--border);
+    background: var(--card); color: var(--text); cursor: pointer;
+    transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn:hover { background: var(--card-hover); }
+  .btn-primary { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+  .btn-primary:hover { background: rgba(255,255,255,0.13); }
+  #nextBtn { display: none; margin-top: 4px; }
+
+  .results-screen { display: none; animation: slideUp 0.4s ease; }
+  .results-screen.show { display: block; }
+  .results-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px 32px; box-shadow: var(--shadow); text-align: center; }
+  .results-trophy { font-size: 2.5rem; margin-bottom: 12px; }
+  .results-tier {
+    font-family: Georgia, Cambria, 'Times New Roman', serif; font-size: 1.6rem; font-weight: 600; margin-bottom: 6px;
+    background: linear-gradient(135deg, #e07060, #d4ac40); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .results-subtitle { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 32px; font-style: italic; font-family: Georgia, Cambria, 'Times New Roman', serif; }
+  .results-scores { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .score-block { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 18px 12px; }
+  .score-block-label { font-family: Consolas, 'Cascadia Code', 'Courier New', monospace; font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .score-block-value { font-family: Georgia, Cambria, 'Times New Roman', serif; font-size: 2rem; font-weight: 600; }
+  .score-block-value.all { color: var(--gold); }
+  .score-block-sub { font-size: 0.75rem; color: var(--text-dim); margin-top: 2px; font-family: Consolas, 'Cascadia Code', 'Courier New', monospace; }
+  .results-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--text-dim); font-family: Georgia, Cambria, 'Times New Roman', serif; font-size: 0.95rem; display: none; }
+
+  .keyboard-hint-bar { text-align: center; margin-top: 20px; font-family: Consolas, 'Cascadia Code', 'Courier New', monospace; font-size: 0.7rem; color: var(--text-dim); display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
+  .kh-item { display: flex; align-items: center; gap: 6px; }
+  .kh-key { border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; color: var(--text-muted); }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  * { -webkit-tap-highlight-color: transparent; }
+  button, .option-btn, .filter-btn { touch-action: manipulation; }
+  .option-btn:active:not(.disabled) { opacity: 0.72; transform: scale(0.983); }
+  .btn:active { opacity: 0.78; transform: scale(0.972); }
+  .filter-btn:active { opacity: 0.72; }
+
+  @media (max-width: 640px) {
+    .app-header { padding: 10px 14px; flex-wrap: wrap; gap: 6px; }
+    .app-title { font-size: 0.9rem; }
+    .app-subtitle { display: none; }
+    .score-display { font-size: 0.78rem; padding: 4px 12px; }
+    .filter-bar { padding: 12px 14px 0; gap: 7px; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-btn { flex-shrink: 0; min-height: 40px; padding: 8px 18px; font-size: 0.78rem; }
+    .main-wrap { padding: 14px 12px; }
+    .question-card { padding: 18px 14px; border-radius: 10px; }
+    .question-text { font-size: 1rem; line-height: 1.65; margin-bottom: 18px; }
+    .options-grid { gap: 9px; margin-bottom: 16px; }
+    .option-btn { min-height: 52px; padding: 14px 13px; gap: 11px; font-size: 0.88rem; border-radius: 8px; align-items: center; }
+    .key-hint { display: none; }
+    #nextBtn { width: 100%; justify-content: center; padding: 15px; min-height: 50px; font-size: 0.95rem; border-radius: 10px; margin-top: 6px; }
+    .results-card { padding: 22px 14px; }
+    .results-tier { font-size: 1.25rem; }
+    .results-scores { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .results-actions { flex-direction: column; }
+    .results-actions .btn { width: 100%; justify-content: center; min-height: 48px; font-size: 0.9rem; }
+    .keyboard-hint-bar { display: none; }
+  }
+  @media (max-width: 360px) {
+    .question-text { font-size: 0.94rem; }
+    .option-btn { font-size: 0.83rem; padding: 13px 11px; }
+    .results-scores { grid-template-columns: 1fr; }
+    .score-block-value { font-size: 1.35rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div>
+    <div class="app-title"><span style="color:#e07060">Strategic</span> <span style="color:#d4ac40">Management</span> Quiz</div>
+    <div class="app-subtitle">IIM Lucknow · Prof. Kshitij Awasthi · Sessions 1 &amp; 2 · 50 Questions · April 2026</div>
+  </div>
+  <div class="score-display">
+    Score: <span class="score-num" id="scoreNum">0</span> / <span id="scoreDen">0</span>
+  </div>
+</header>
+
+<div class="filter-bar">
+  <button class="filter-btn active-all" id="btnAll" onclick="setFilter('all')">All 50</button>
+  <button class="filter-btn" id="btnStrat" onclick="setFilter('strat')">STRAT (13)</button>
+  <button class="filter-btn" id="btnEnv" onclick="setFilter('env')">ENV (13)</button>
+  <button class="filter-btn" id="btnInt" onclick="setFilter('int')">INT (12)</button>
+  <button class="filter-btn" id="btnCorp" onclick="setFilter('corp')">CORP (12)</button>
+</div>
+
+<div class="main-wrap">
+  <div class="progress-area" id="progressArea">
+    <div class="progress-label">
+      <span id="progressText">Question 1 of 50</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div id="quizArea">
+    <div class="question-card" id="questionCard">
+      <div class="card-meta">
+        <span class="subject-tag" id="subjectTag">—</span>
+        <span class="session-label" id="sessionLabel">—</span>
+        <span class="question-num" id="questionNum">#1</span>
+      </div>
+      <div class="question-text" id="questionText">Loading...</div>
+      <div class="options-grid" id="optionsGrid"></div>
+      <div class="explanation-panel" id="explanationPanel">
+        <div class="explanation-label">Explanation</div>
+        <div id="explanationText"></div>
+      </div>
+      <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Next &rarr;</button>
+    </div>
+    <div class="keyboard-hint-bar">
+      <div class="kh-item"><span class="kh-key">1–4</span> Select answer</div>
+      <div class="kh-item"><span class="kh-key">Enter</span> Next question</div>
+      <div class="kh-item"><span class="kh-key">R</span> Restart</div>
+    </div>
+  </div>
+
+  <div class="empty-state" id="emptyState">No questions match this filter.</div>
+
+  <div class="results-screen" id="resultsScreen">
+    <div class="results-card">
+      <div class="results-trophy">🎓</div>
+      <div class="results-tier" id="resultsTier"></div>
+      <div class="results-subtitle" id="resultsSubtitle"></div>
+      <div class="results-scores">
+        <div class="score-block">
+          <div class="score-block-label">Total</div>
+          <div class="score-block-value all" id="rTotal">—</div>
+          <div class="score-block-sub" id="rTotalSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">STRAT</div>
+          <div class="score-block-value strat" id="rStrat">—</div>
+          <div class="score-block-sub" id="rStratSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">ENV</div>
+          <div class="score-block-value env" id="rEnv">—</div>
+          <div class="score-block-sub" id="rEnvSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">INT</div>
+          <div class="score-block-value int" id="rInt">—</div>
+          <div class="score-block-sub" id="rIntSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">CORP</div>
+          <div class="score-block-value corp" id="rCorp">—</div>
+          <div class="score-block-sub" id="rCorpSub"></div>
+        </div>
+      </div>
+      <div class="results-actions">
+        <button class="btn btn-primary" onclick="startQuiz('all')">Restart All 50</button>
+        <button class="btn btn-strat" onclick="startQuiz('strat')">STRAT Only (13)</button>
+        <button class="btn btn-env" onclick="startQuiz('env')">ENV Only (13)</button>
+        <button class="btn btn-int" onclick="startQuiz('int')">INT Only (12)</button>
+        <button class="btn btn-corp" onclick="startQuiz('corp')">CORP Only (12)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ALL_QUESTIONS = [
+  /* ══════════ STRAT — Strategy Fundamentals (S1) ══════════ */
+  {
+    "id": 1, "subject": "strat",
+    "session": "S1 · What Is Strategy",
+    "q": "Strategic management simultaneously answers three questions. Which combination is correct?",
+    "opts": [
+      "Who are our customers? What do they need? How do we serve them?",
+      "Where are we now? Where do we want to go? How do we get there?",
+      "What is our mission? Who are our rivals? What is our budget?",
+      "What went wrong? What is working? What should we stop doing?"
+    ],
+    "correct": 1,
+    "exp": "Strategic management answers: Where are we now? (current position) → Where do we want to go? (setting targets) → How do we get there? (making and executing choices). Strategy is proactive — it means making competitive choices before the environment forces your hand."
+  },
+  {
+    "id": 2, "subject": "strat",
+    "session": "S1 · Strategy vs Tactics vs Plan",
+    "q": "Which statement correctly distinguishes strategy from a plan?",
+    "opts": [
+      "A plan is long-term and hard to reverse; a strategy is short-term and flexible",
+      "A plan tells you the sequence of actions; a strategy tells you how to win",
+      "Strategy is made by middle management; plans are made by the C-suite",
+      "A strategy is a specific milestone roadmap; a plan is a general directional aspiration"
+    ],
+    "correct": 1,
+    "exp": "A plan tells you what to do (specific, sequential, medium-term). A strategy tells you how to win (long-term, proactive, hard to reverse). Conflating the two is one of the most common managerial errors. Strategy answers HOW TO WIN; a plan answers WHAT TO DO IN WHAT ORDER."
+  },
+  {
+    "id": 3, "subject": "strat",
+    "session": "S1 · Strategy vs Tactics vs Plan",
+    "q": "'Offer a 10% discount this week to move inventory' is best classified as:",
+    "opts": [
+      "A strategic decision — it affects the firm's competitive position",
+      "A plan — it has a specific timeline and measurable outcome",
+      "A tactic — it is a short-term, adjustable, day-to-day move",
+      "A mission statement — it defines the purpose of the sales function"
+    ],
+    "correct": 2,
+    "exp": "Tactics are day-to-day monitoring moves — short-term, flexible, and iterative. Discounting inventory this week is a tactic. 'Price leadership across all markets' is the strategy. 'Launch product in Q3 in 5 cities' is a plan. Time horizon and reversibility are the key distinguishing factors."
+  },
+  {
+    "id": 4, "subject": "strat",
+    "session": "S1 · Hierarchy of Goals",
+    "q": "In the hierarchy of strategic goals, what distinguishes Strategic Objectives from a Vision?",
+    "opts": [
+      "Vision is set by the board; strategic objectives are set by middle management",
+      "Vision is specific and short-term; objectives are general and aspirational",
+      "Vision is general and long-term aspiration; objectives are specific, measurable, short-term milestones",
+      "Vision is external-facing; strategic objectives are purely internal documents"
+    ],
+    "correct": 2,
+    "exp": "VMO hierarchy: Vision (general, long-term aspiration — 'what we want to become') → Mission (purpose, why we exist) → Strategic Objectives (specific, measurable, shorter-term milestones reviewed in board meetings). Without clear objectives, strategy becomes vague — the hierarchy ensures every tactic on the ground traces back to a long-term aspiration."
+  },
+  {
+    "id": 5, "subject": "strat",
+    "session": "S1 · Grant's Framework",
+    "q": "Grant's four elements of successful strategy — mnemonic 'GCRI' — stand for:",
+    "opts": [
+      "Goals, Competition, Resources, Innovation",
+      "Goals, Competitive environment, Resources, Implementation",
+      "Growth, Culture, Risk, Integration",
+      "Geography, Customers, Rivals, Incentives"
+    ],
+    "correct": 1,
+    "exp": "Grant's GCRI: (1) Clear, Consistent, Long-Term Goals — know what winning means. (2) Competitive environment — profound understanding of external forces. (3) Resources — objective appraisal of strengths and weaknesses. (4) Implementation — effective execution with a continuous feedback loop. The feedback loop is the least discussed but most critical element."
+  },
+  {
+    "id": 6, "subject": "strat",
+    "session": "S1 · Grant's Framework",
+    "q": "Why is the feedback loop described as the 'least discussed but most important' part of Grant's model?",
+    "opts": [
+      "Because it helps measure ROI on strategic investments quarterly",
+      "Because strategy is never 'done' — without continuous review, it is an assumption the world has stopped changing",
+      "Because it allows the board to override management decisions in real-time",
+      "Because it ensures that tactics are aligned with plans before implementation begins"
+    ],
+    "correct": 1,
+    "exp": "A strategy without continuous review is an assumption that the world has stopped changing. The feedback loop ensures the strategy is continuously adjusted as competitive conditions evolve. Grant's model is not a one-time exercise — it is a continuous loop from goals through implementation and back to review."
+  },
+  {
+    "id": 7, "subject": "strat",
+    "session": "S1 · Strategic Decisions",
+    "q": "Which combination of characteristics distinguishes a 'strategic' decision from an operational one?",
+    "opts": [
+      "Made by senior management; affects only one department; reversible within 90 days",
+      "Long time horizon, significant resource commitment, not easily reversible, cross-functional implications",
+      "Involves competitive benchmarking, customer research, and supplier negotiation simultaneously",
+      "Any decision approved by the CEO is considered strategic by definition"
+    ],
+    "correct": 1,
+    "exp": "A decision rises to the level of strategy when it has: Big Picture impact (entire firm), Long-term horizon (years, not days), Significant resource commitment (capital, talent), Hard to reverse (costly or slow to undo), and Cross-functional implications (touches HR, Finance, Marketing, Ops simultaneously). Brand repositioning is strategic; a promotional discount is not."
+  },
+  {
+    "id": 8, "subject": "strat",
+    "session": "S1 · Business vs Corporate Strategy",
+    "q": "Business-level strategy and corporate-level strategy differ in that:",
+    "opts": [
+      "Business-level is for large companies; corporate-level is for SMEs and startups",
+      "Business-level answers 'how to compete in this market'; corporate-level answers 'where should we compete'",
+      "Business-level is created by marketing teams; corporate-level by operations teams",
+      "Corporate-level strategy is always more important than business-level strategy"
+    ],
+    "correct": 1,
+    "exp": "Business-level strategy: How do we compete in this particular market? (cost leadership, differentiation, focus — winning within a chosen arena). Corporate-level strategy: Where should we compete? (which businesses to enter, exit, or grow — diversification, portfolio management). The two operate at different levels and answer fundamentally different questions."
+  },
+  {
+    "id": 9, "subject": "strat",
+    "session": "S1 · Vietnam War Case",
+    "q": "The core strategic insight of General Giap in the Vietnam Wars was:",
+    "opts": [
+      "Guerrilla warfare is always superior to conventional military tactics",
+      "The US could win every battle but could not sustain political will for a prolonged conflict — so the real battlefield was American domestic opinion",
+      "Superior resources always defeat superior strategies in long-term conflicts",
+      "Technological parity with the enemy is the prerequisite for any successful military campaign"
+    ],
+    "correct": 1,
+    "exp": "Giap's core insight: The US can win every battle but cannot sustain political will for a prolonged, inconclusive conflict. So the strategy was not to defeat the US army — it was to outlast American patience. He weaponised American domestic anti-war sentiment. The real battlefield was public will, not firepower — proof that superior strategy beats superior resources."
+  },
+  {
+    "id": 10, "subject": "strat",
+    "session": "S1 · Vietnam War Case",
+    "q": "The 1968 Tet Offensive is strategically significant because it was:",
+    "opts": [
+      "A decisive military victory that turned the tide of the ground war for North Vietnam",
+      "Militarily a failure but strategically brilliant — it shattered American public confidence that the war could be won",
+      "The event that caused the US to officially declare war on North Vietnam",
+      "Giap's first application of Mao's three-phase model in the Vietnam conflict"
+    ],
+    "correct": 1,
+    "exp": "The Tet Offensive (1968) — North Vietnam lost heavily on the battlefield. But strategically it was brilliant: it shattered American public confidence that the war was winnable. This is one of the clearest examples of the principle that tactical defeat can be converted into strategic victory if it destroys the opponent's will to continue. The psychology dimension of strategy."
+  },
+  {
+    "id": 11, "subject": "strat",
+    "session": "S1 · Vietnam War Case",
+    "q": "Which Grant element most directly explains the US failure in Vietnam?",
+    "opts": [
+      "Effective Implementation — the US army was poorly trained for guerrilla warfare",
+      "Objective Appraisal of Resources — the US underestimated its own military capacity",
+      "Clear, Consistent, Long-Term Goals — the US had six different answers to what 'winning' meant",
+      "Profound Understanding of Competitive Environment — the US didn't conduct proper market research"
+    ],
+    "correct": 2,
+    "exp": "Clarity of objective is the first requirement of strategy. The US failed in Vietnam because it had multiple conflicting goals — support South Vietnam? Fight Vietcong? Fight communism globally? — and that is not a military problem, it is a strategic one. North Vietnam had one clear goal: outlast US will and unify the country. Unchanged for 30 years."
+  },
+  {
+    "id": 12, "subject": "strat",
+    "session": "S1 · Vietnam War Case",
+    "q": "Giap's three-phase model (borrowed from Mao Tse-tung) follows which sequence?",
+    "opts": [
+      "Guerrilla warfare → Political mobilisation → Conventional counter-offensive",
+      "Passive resistance (build political support) → Guerrilla warfare (weaken enemy) → General counter-offensive (decisive strike)",
+      "Conventional warfare → Guerrilla withdrawal → Peace negotiation",
+      "Intelligence gathering → Resource building → Surprise attack"
+    ],
+    "correct": 1,
+    "exp": "Mao's three-phase model: Phase 1 — Passive resistance, build political support among the population (win hearts before battles). Phase 2 — Guerrilla warfare, weaken enemy incrementally while building military strength. Phase 3 — General counter-offensive, strike decisively once the enemy's will has collapsed. Giap applied this consistently for 30 years."
+  },
+  {
+    "id": 13, "subject": "strat",
+    "session": "S1 · Operational Strategy",
+    "q": "The healthcare bottleneck example (100 patients, 37 available slots) illustrates that the strategic response to operational constraints is a cascade. The highest-order response is:",
+    "opts": [
+      "Operating excellence — high-volume throughput through lean workflows",
+      "Hiring more doctors to match the demand numerically",
+      "Process innovation — inventing a new way to deliver care (telemedicine, AI triage, modular units)",
+      "Service excellence — same cost, better patient experience through quality improvement"
+    ],
+    "correct": 2,
+    "exp": "The cascade of strategic responses: Operating Excellence (lean workflows, minimal waste) → Service Excellence (differentiation — same cost, better outcomes) → Process Innovation (highest-order — invent a new delivery model). Simply 'hiring more doctors' is not strategic thinking; it is reactive resource addition without examining the system design."
+  },
+
+  /* ══════════ ENV — External Analysis (PESTEL + Five Forces) ══════════ */
+  {
+    "id": 14, "subject": "env",
+    "session": "S2 · External Analysis Layers",
+    "q": "External analysis has two distinct layers. Which correctly maps them?",
+    "opts": [
+      "Financial analysis (Layer 1) and Human resources analysis (Layer 2)",
+      "Macro environment — PESTEL, affects all industries equally (Layer 1); Immediate/Industry environment — Porter's Five Forces, industry-specific (Layer 2)",
+      "Competitive intelligence (Layer 1) and Regulatory scanning (Layer 2)",
+      "Short-term market trends (Layer 1) and Long-term demographic shifts (Layer 2)"
+    ],
+    "correct": 1,
+    "exp": "Layer 1 — Macro environment (PESTEL): broad forces affecting all industries, beyond any firm's control. Layer 2 — Immediate/Industry environment (Porter's Five Forces): industry-specific forces that directly shape competitive intensity and profitability. The correct direction is macro → micro: start wide (general environment), narrow to industry, then to the firm."
+  },
+  {
+    "id": 15, "subject": "env",
+    "session": "S2 · PESTEL Framework",
+    "q": "Prof. Awasthi added a seventh factor to the standard PESTEL framework. What is it?",
+    "opts": [
+      "Governance (G) — corporate governance structures and accountability mechanisms",
+      "Geopolitical (g) — cross-border tensions, sanctions, regional instability",
+      "Global (G) — impact of globalisation on supply chains and talent markets",
+      "Growth (G) — macroeconomic growth rates and their sectoral impact"
+    ],
+    "correct": 1,
+    "exp": "The standard framework is PESTEL (Political, Economic, Sociocultural, Technological, Environmental, Legal). Prof. Awasthi added Geopolitical as a seventh factor: cross-border tensions, sanctions, and regional instability. Example: Russia–Middle East tensions affecting oil supply chains. In a globalised world, geopolitical risk operates at a level of impact that deserves its own analytical category."
+  },
+  {
+    "id": 16, "subject": "env",
+    "session": "S2 · PESTEL Framework",
+    "q": "PESTEL is described as 'not a checklist but a structured lens.' What does this mean in practice?",
+    "opts": [
+      "Every PESTEL factor must be analysed in equal depth for the analysis to be valid",
+      "The goal is to identify which factors are currently shifting, how fast, and in which direction — for this specific firm at this specific moment",
+      "PESTEL should be repeated monthly to track all macro-environmental changes",
+      "The legal and political factors should always be prioritised over economic and social factors"
+    ],
+    "correct": 1,
+    "exp": "PESTEL is a structured lens — not a box-ticking exercise. The goal is to identify which factors are shifting, how fast, and in what direction for THIS specific firm NOW. Each factor is then assessed as Opportunity (O) or Threat (T) — and crucially, a factor can be both simultaneously (climate change is a threat to oil but an opportunity for renewables)."
+  },
+  {
+    "id": 17, "subject": "env",
+    "session": "S2 · Industry Profitability",
+    "q": "Based on the Indian industry ROIC data (2010–2019), which type of industry structure consistently produces the HIGHEST profitability?",
+    "opts": [
+      "Many players, commoditised products, low capital requirements, B2B model",
+      "Few dominant players, capital-intensive barriers, B2C model, limited regulation enabling pricing power",
+      "Highly regulated industries with government-mandated price controls",
+      "Industries with the highest levels of consumer awareness and transparency"
+    ],
+    "correct": 1,
+    "exp": "High ROIC industries share: few dominant players (less destructive price competition), capital-intensive entry barriers (deter new entrants), B2C model (capture more margin vs. B2D/distributors), and monopolistic/oligopolistic structure. Examples: Cigarettes, Two-wheelers, IT Software, Paints. Low ROIC: Airlines, Shipping, Telecom — many players, regulation, thin margins."
+  },
+  {
+    "id": 18, "subject": "env",
+    "session": "S2 · Industry Profitability",
+    "q": "Why does B2C (direct to consumer) generate higher profitability than B2D (selling through distributors)?",
+    "opts": [
+      "Consumer demand is more stable and predictable than distributor demand",
+      "The distributor extracts value from every transaction — reducing the manufacturer's margin at each sale",
+      "B2C requires less capital investment than building a distribution network",
+      "Consumer markets have less bargaining power than distribution channel intermediaries"
+    ],
+    "correct": 1,
+    "exp": "In a B2D model, the distributor extracts value (margin) from every transaction between manufacturer and end customer. Every time product passes through an intermediary, that intermediary captures a share of the value. B2C eliminates this extraction — the manufacturer sells directly to the consumer and captures the full margin. Apple's direct retail stores are the classic example."
+  },
+  {
+    "id": 19, "subject": "env",
+    "session": "S2 · Porter's Five Forces",
+    "q": "Porter's Five Forces framework primarily answers which question?",
+    "opts": [
+      "Why do some firms outperform others within the same industry?",
+      "Why are some industries structurally more profitable than others?",
+      "How should a firm position its products to maximise market share?",
+      "What resources does a firm need to sustain competitive advantage?"
+    ],
+    "correct": 1,
+    "exp": "Porter's Five Forces answers: why are some industries structurally more profitable than others? VRINE answers why some firms outperform their own industry. Together they explain the full picture: Five Forces = industry-level profitability determinant; VRINE = firm-level performance determinant. Knowing which question each framework answers is critical for exam application."
+  },
+  {
+    "id": 20, "subject": "env",
+    "session": "S2 · Porter's Five Forces",
+    "q": "In Porter's model, high bargaining power of BUYERS reduces industry profitability because:",
+    "opts": [
+      "Buyers refuse to purchase products at any price point",
+      "Buyers force prices down, demand better quality, and play suppliers against each other",
+      "Buyers control the distribution channel and can block new products from reaching the market",
+      "Buyers file regulatory complaints that increase compliance costs for all firms in the industry"
+    ],
+    "correct": 1,
+    "exp": "High buyer power = Low profit. Powerful buyers: force prices down, demand better quality and terms, play suppliers off against each other. Buyer power is HIGH when: buyers are few and large, products are undifferentiated (easy to switch), buyers earn low profits themselves, or they can credibly threaten backward integration. Airlines post-2006: customers became increasingly price-sensitive and information-rich."
+  },
+  {
+    "id": 21, "subject": "env",
+    "session": "S2 · Porter's Five Forces",
+    "q": "Which factor specifically INCREASES the threat of new entrants in an industry?",
+    "opts": [
+      "High capital requirements to build manufacturing facilities",
+      "Strong incumbent brand loyalty and customer switching costs",
+      "Low capital requirements and easy access to manufacturing (e.g., China manufacturing access for white-box assemblers)",
+      "A small number of dominant players controlling key distribution channels"
+    ],
+    "correct": 2,
+    "exp": "Low capital requirements = High threat of entry. The PC industry example: low capital needed for white-box assemblers + China manufacturing access = very high entry threat. Entry is DETERRED by: economies of scale, product differentiation, high capital requirements, switching costs, restricted distribution, regulatory barriers, and credible retaliation by incumbents."
+  },
+  {
+    "id": 22, "subject": "env",
+    "session": "S2 · Porter's Five Forces",
+    "q": "In the airlines industry, which suppliers hold the most structural power?",
+    "opts": [
+      "In-flight catering companies and ground handling firms",
+      "Aircraft suppliers (Boeing/Airbus), pilots, and airports — all concentrated and critical",
+      "Fuel hedging and insurance companies",
+      "Online travel agencies (OTAs) that control ticket distribution"
+    ],
+    "correct": 1,
+    "exp": "Airlines face high supplier power from: Aircraft suppliers (Boeing/Airbus — duopoly), pilots (scarce, unionised, certified), airports (monopoly on slots in key cities), and logistics/ground handling. These are concentrated suppliers of critical inputs with built-in switching costs. This is a primary reason the airline industry structurally earns low returns despite high revenues."
+  },
+  {
+    "id": 23, "subject": "env",
+    "session": "S2 · Porter's Five Forces",
+    "q": "In the PC industry Five Forces analysis, the 'overall verdict' is:",
+    "opts": [
+      "Moderately attractive — a few strong players make consistent above-normal returns",
+      "Low attractiveness — all five forces are high, making it structurally difficult (except Apple, which differentiated itself out of the space)",
+      "Highly attractive — strong technology demand ensures consistent industry-wide profitability",
+      "Attractive for hardware but unattractive for software companies"
+    ],
+    "correct": 1,
+    "exp": "PC industry: all five forces are HIGH (Easy Entry + High Supplier Power [Intel/AMD, Microsoft] + High Buyer Power + High Substitutes [mobile, tablet] + Very High Rivalry [30-50% players, white-box wars]) = Low attractiveness, low margins. Apple survived by differentiating so thoroughly it effectively operates in a different competitive space — proving internal resources can override structural forces."
+  },
+  {
+    "id": 24, "subject": "env",
+    "session": "S2 · PESTEL Cases — BP",
+    "q": "In BP's 2016 PESTEL analysis, which factor combination represented the most severe threat cluster?",
+    "opts": [
+      "Political and Social — government policy instability and shifting cultural attitudes",
+      "Economic and Legal — slow world economic growth, low oil prices, and the $18.7bn Deepwater Horizon fine",
+      "Technological and Environmental — fuel-efficient vehicles reducing demand and climate events disrupting infrastructure",
+      "All factors were equally threatening — a perfect storm of macro headwinds"
+    ],
+    "correct": 1,
+    "exp": "The most severe threats for BP in 2016: Economic (slow global growth 2014-15, oil price collapse, Saudi Arabia maintaining output to suppress price) + Legal ($18.7bn Deepwater Horizon fine, Paris Agreement decarbonisation pressure). These combined to create an immediate revenue and cost crisis. Technological threats (fuel efficiency) were structural but longer-term in impact."
+  },
+  {
+    "id": 25, "subject": "env",
+    "session": "S2 · PESTEL Cases — Uber",
+    "q": "Uber's PESTEL lesson is best summarised as:",
+    "opts": [
+      "Technology platforms always eventually overcome regulatory opposition if they scale fast enough",
+      "Legal and political forces are not background noise — they are existential threats for platform businesses whose model depends on regulatory ambiguity",
+      "Sociocultural factors (passenger safety concerns) are more damaging than legal challenges in emerging markets",
+      "Economic growth in developing markets compensates for political headwinds in developed markets"
+    ],
+    "correct": 1,
+    "exp": "Uber ignored PESTEL — specifically Legal (driver classification battles, fines, bans) and Political (creating political enemies through aggressive lobbying tactics and regulatory circumvention). Technology advantage (the app, platform, algorithm) is a Temporary VRINE advantage — easily copied by Lyft, Didi, Ola, GrabTaxi. Regulatory legitimacy cannot be easily copied. Uber's failure to build legal and political capital was its most durable competitive disadvantage."
+  },
+  {
+    "id": 26, "subject": "env",
+    "session": "S2 · External Analysis Layers",
+    "q": "When the macro environment shifts (e.g., a new regulation or a GDP shock), the correct strategic response is to:",
+    "opts": [
+      "Wait until the shift stabilises before revising any strategic commitments",
+      "Adjust your strategy in response — the feedback arrow from 'Adjust' in the whiteboard model signals this is not optional",
+      "Focus on executing the existing strategy with greater rigour to overcome the external headwind",
+      "Immediately divest from the affected markets and reallocate resources to unaffected regions"
+    ],
+    "correct": 1,
+    "exp": "When the macro environment shifts, you must adjust your strategy. This is the feedback loop in the strategic management process. It is not optional — a strategy without continuous review is an assumption the world has stopped changing. The macro → adjust arrow in the whiteboard model captures this: external forces continuously feed back into strategic choice."
+  },
+
+  /* ══════════ INT — Internal Analysis (VRINE, Value Chain, Strategic Fit) ══════════ */
+  {
+    "id": 27, "subject": "int",
+    "session": "S2 · Resources vs Capabilities",
+    "q": "The distinction between resources and capabilities is:",
+    "opts": [
+      "Resources are financial assets; capabilities are human assets",
+      "Resources are assets the firm owns or controls; capabilities are what the firm can DO with those resources (organisational routines and processes)",
+      "Resources are short-term inputs; capabilities are long-term investments",
+      "There is no meaningful distinction — the two terms are used interchangeably in the literature"
+    ],
+    "correct": 1,
+    "exp": "Resources = assets a firm owns or controls (physical, financial, human, intangible — brand, patents, knowledge). Capabilities = what the firm can DO with those resources — the organisational routines and processes that convert inputs into competitive output. Resources without capabilities are inert. Capabilities without resources are impossible. Together they form the basis for competitive advantage."
+  },
+  {
+    "id": 28, "subject": "int",
+    "session": "S2 · VRINE Framework",
+    "q": "The steel industry data (Worthington Industries +6% vs. Ryerson Tull -12% economic spread) proves what about strategy?",
+    "opts": [
+      "Industry membership is the primary determinant of all firm performance",
+      "Even within the same industry and external environment, internal resources and capabilities explain dramatically different performance outcomes",
+      "Small firms always outperform large firms in capital-intensive industries",
+      "Economic cycles explain most of the variance in firm performance within a single industry"
+    ],
+    "correct": 1,
+    "exp": "Same industry, same external environment, same Five Forces — yet Worthington earned +6% while Ryerson Tull destroyed -12% economic spread. The explanation lives INSIDE the firm — in its resources and capabilities. This is why VRINE matters: industry structure (Five Forces) explains average industry profitability; internal resources (VRINE) explain firm-level deviation from that average."
+  },
+  {
+    "id": 29, "subject": "int",
+    "session": "S2 · VRINE Framework",
+    "q": "A resource that is Valuable, Rare, Inimitable, and Non-substitutable but NOT Exploited will generate:",
+    "opts": [
+      "Sustained competitive advantage — the resource is still available when needed",
+      "Temporary competitive advantage — exploitation is not strictly required",
+      "No competitive advantage — potential advantage is unrealised because the organisation is not using it",
+      "Below-normal returns — unexploited resources drain capital without contributing to output"
+    ],
+    "correct": 2,
+    "exp": "VRINE is a sequential test. All four previous tests (V + R + I/N) create potential for sustained advantage — but only when EXPLOITED (E) does that potential convert into actual economic returns. A resource the firm owns but doesn't use effectively is strategically inert. The 'E' converts potential into above-normal performance. Pass all four = sustained advantage = above-normal returns."
+  },
+  {
+    "id": 30, "subject": "int",
+    "session": "S2 · VRINE Framework",
+    "q": "A resource that is Valuable and Rare, but NOT Inimitable — what type of advantage does it create?",
+    "opts": [
+      "Sustained competitive advantage — rareness alone is sufficient for durability",
+      "Temporary competitive advantage — rivals can copy it, so the edge fades as they catch up",
+      "Competitive parity — everyone has similar resources so returns are normal",
+      "Below-normal returns — rare resources attract unwanted regulatory attention"
+    ],
+    "correct": 1,
+    "exp": "VRINE outcomes: Valuable + Not Rare = Parity (normal returns). Valuable + Rare + Not Inimitable = Temporary Advantage (above normal but fading as rivals copy). Valuable + Rare + Inimitable/Non-substitutable + Exploited = Sustained Advantage (above normal, durable). Must constantly innovate when you only have temporary advantage — competitors are catching up."
+  },
+  {
+    "id": 31, "subject": "int",
+    "session": "S2 · VRINE Framework",
+    "q": "Apple's resources in the PC industry (brand, ecosystem, proprietary OS, design, privacy features) all score V✓ R✓ I✓ N✓ E✓. What does this explain?",
+    "opts": [
+      "Why Apple earns above-normal returns in an industry where all other players earn normal or below-normal",
+      "Why Apple is invulnerable to the threat of new entrants and substitutes",
+      "Why Apple's corporate strategy of diversification has succeeded in multiple markets",
+      "Why Apple's supply chain costs are lower than all PC industry competitors"
+    ],
+    "correct": 0,
+    "exp": "Apple in the PC industry earns above-normal returns while everyone else earns normal or below-normal. All Apple resources pass the full VRINE test. Result: Apple operates in the PC industry but has strategically insulated itself from its structural forces through differentiation backed by inimitable resources. This proves that internal resources can override external structure — but only when genuinely inimitable."
+  },
+  {
+    "id": 32, "subject": "int",
+    "session": "S2 · Value Chain",
+    "q": "Porter's Value Chain divides firm activities into Primary and Support. The correct list of PRIMARY activities is:",
+    "opts": [
+      "HR, Finance, Procurement, Technology Development, Firm Infrastructure",
+      "Inbound Logistics, Operations, Outbound Logistics, Marketing & Sales, Service",
+      "R&D, Design, Manufacturing, Distribution, Customer Service",
+      "Sourcing, Production, Quality Control, Sales, After-sales"
+    ],
+    "correct": 1,
+    "exp": "Value Chain — Primary activities (direct value creation): Inbound Logistics (receiving/storing inputs) → Operations (core transformation) → Outbound Logistics (delivering to customer) → Marketing & Sales (creating demand) → Service (post-sale support). Support activities (enable primary): Firm Infrastructure, HRM, Technology Development, Procurement. Mnemonic: Primary = IOOMS, Support = FHTP."
+  },
+  {
+    "id": 33, "subject": "int",
+    "session": "S2 · Value Chain",
+    "q": "The strategic purpose of mapping the Value Chain is to:",
+    "opts": [
+      "Calculate the total cost of goods sold across the entire production process",
+      "Identify which activities are a source of differentiation, which are cost drivers, and where competitive advantage actually lives vs. competitors",
+      "Ensure that all business units are contributing proportionally to overall firm revenue",
+      "Map the organisational hierarchy to identify decision-making bottlenecks"
+    ],
+    "correct": 1,
+    "exp": "Value Chain is used strategically to: identify which activities are sources of differentiation, which activities are cost drivers, which can be outsourced without losing advantage, which activities are linked (changing one affects others), and where a competitor does it differently. The answers reveal WHERE competitive advantage actually lives — and where to invest or cut."
+  },
+  {
+    "id": 34, "subject": "int",
+    "session": "S2 · Capabilities Development",
+    "q": "Cisco made 'acquisition management itself' a core capability. This is an example of which capability-building route?",
+    "opts": [
+      "Internal development — building capabilities step-by-step from organic processes",
+      "Acquisition — M&A was used so systematically that managing acquisitions became a distinct organisational capability",
+      "Strategic alliance — Cisco shared acquisition processes with partner firms",
+      "Process innovation — Cisco invented a new approach to post-merger integration"
+    ],
+    "correct": 1,
+    "exp": "Firms build capabilities through two routes: (1) Acquisition/M&A/Alliances — P&G acquired Gillette for grooming capability; GM joint-ventured with Toyota for lean production. Cisco made serial acquisition management itself a core, inimitable capability. (2) Internal development — step-by-step leveraging and sequencing, e.g., Matsushita's systematic country-entry playbook."
+  },
+  {
+    "id": 35, "subject": "int",
+    "session": "S2 · Strategic Fit",
+    "q": "Strategic Fit is best defined as:",
+    "opts": [
+      "The alignment of a firm's compensation structure with its stated values",
+      "The match between internal capability and external opportunity — asking whether your strengths fit the environment you intend to compete in",
+      "A firm's ability to execute multiple strategies simultaneously across different markets",
+      "The cultural alignment between an acquiring firm and the target company in M&A"
+    ],
+    "correct": 1,
+    "exp": "Strategic Fit = Internal capability × External attractiveness. After doing both external (PESTEL + Five Forces) and internal (VRINE + Value Chain) analysis, the crucial question is: do your internal capabilities match the external environment? The only unambiguously correct strategic position: strong internal capability meets strongly favourable external environment (top-left of the Strategic Fit Matrix)."
+  },
+  {
+    "id": 36, "subject": "int",
+    "session": "S2 · Strategic Fit",
+    "q": "Why can a 'great firm fail in a bad industry' — and what does this imply for corporate strategy?",
+    "opts": [
+      "Because great firms attract more regulatory scrutiny in difficult industries",
+      "Because internal capability can partially compensate for poor external fit, but cannot fully override structural forces forever — choosing WHERE to compete is as important as HOW",
+      "Because great firms typically overpay for acquisitions in unattractive industries, destroying value",
+      "Because investors penalise even strong firms for operating in structurally challenged sectors"
+    ],
+    "correct": 1,
+    "exp": "Internal capability can partially compensate for poor external fit but cannot fully override structural forces forever. IndiGo in aviation and Nucor in steel are examples where exceptional capabilities offset poor industry structure — but they required extraordinary execution sustained over long periods. This is why choosing WHERE to compete (corporate strategy) is as important as HOW to compete (business strategy). Industry membership itself is a major performance determinant."
+  },
+  {
+    "id": 37, "subject": "int",
+    "session": "S2 · VRINE + Airlines",
+    "q": "IndiGo's key competitive advantage in the airline industry is best explained by which VRINE-passing capability?",
+    "opts": [
+      "Premium cabin configuration — Valuable but Not Rare",
+      "Route optimisation and single fleet type / lean maintenance — Valuable, Rare, Inimitable (partially), Exploited → above-normal advantage",
+      "Frequent flyer programme — Valuable but easily substituted by rivals",
+      "International route network — Valuable but available to all full-service carriers"
+    ],
+    "correct": 1,
+    "exp": "IndiGo's differentiators per class analysis: Route optimisation (V✓ R✓ I≈ E→ Above Normal) and Aircraft fleet standardisation/lean maintenance with 25-minute turnaround (V✓ R≈ I≈ E→ Temporary/Above Normal). Point-to-point model (vs. hub-and-spoke) is the structural cost leadership choice. Single fleet type = lower maintenance costs, crew training efficiencies, spare parts inventory reduction."
+  },
+  {
+    "id": 38, "subject": "int",
+    "session": "S2 · VRINE Framework",
+    "q": "The mnemonic 'Very Rare Instruments Need Exploitation' maps to VRINE as:",
+    "opts": [
+      "Value → Revenue → Inimitable → Non-transferable → Efficiency",
+      "Valuable → Rare → Inimitable/Non-substitutable → Exploited",
+      "Vision → Resources → Innovation → Networks → Execution",
+      "Vertical integration → Rivalry → Incremental → Niche → Ecosystem"
+    ],
+    "correct": 1,
+    "exp": "VRINE = Valuable (does it help exploit opportunities or neutralise threats?) → Rare (do few or no competitors currently possess it?) → Inimitable & Non-substitutable (is it costly to copy or substitute?) → Exploited (is the organisation actually using it?). All four = Sustained Advantage = Above Normal Returns. The mnemonic 'Very Rare Instruments Need Exploitation' locks this in."
+  },
+
+  /* ══════════ CORP — Corporate & Business Strategy ══════════ */
+  {
+    "id": 39, "subject": "corp",
+    "session": "S2 · Business-Level Strategy",
+    "q": "A firm pursuing Cost Advantage Strategy competes by:",
+    "opts": [
+      "Delivering a unique product with features that command a price premium",
+      "Targeting a narrow niche with highly customised, premium-priced offerings",
+      "Delivering a similar product at a lower cost than rivals — profiting from volume and efficiency",
+      "Competing in multiple segments simultaneously using a portfolio of differentiated sub-brands"
+    ],
+    "correct": 2,
+    "exp": "Cost Advantage Strategy: deliver a similar product at LOWER cost than rivals. Profit from volume and efficiency. Requires: lean operations, supply chain mastery, scale economies, process innovation. Examples: IndiGo (25-minute turnaround, single fleet, point-to-point), Walmart (supply chain mastery), Aravind Eye Care (high-volume, low-cost eye surgery). The strategy demands internal VRINE-passing operational capabilities."
+  },
+  {
+    "id": 40, "subject": "corp",
+    "session": "S2 · Business-Level Strategy",
+    "q": "Being 'stuck in the middle' in Porter's strategic positioning model means:",
+    "opts": [
+      "A firm that successfully balances both cost leadership and differentiation simultaneously",
+      "A firm that targets mid-market customers who want neither the cheapest nor the most premium product",
+      "A firm with neither a cost advantage nor a meaningful differentiation — squeezed from both sides",
+      "A firm in the Maturity stage of its industry lifecycle, facing declining growth"
+    ],
+    "correct": 2,
+    "exp": "'Stuck in the middle' = no cost advantage, no differentiation = the worst strategic position. You are not the cheapest (so cost-sensitive customers go to cost leaders) and not meaningfully differentiated (so premium-seeking customers go to differentiators). You must pick a lane and own it. The danger zone exists because firms try to please everyone and end up compelling to no one."
+  },
+  {
+    "id": 41, "subject": "corp",
+    "session": "S2 · Business-Level Strategy",
+    "q": "In Ansoff's Growth Matrix, 'Market Penetration' is described as the arena where business-level strategy is most intense because:",
+    "opts": [
+      "New products require the most marketing investment and customer education",
+      "Every incremental share gain comes directly from a rival — existing product in existing market",
+      "International markets offer less competitive resistance than home markets",
+      "Product development creates the most sustainable long-term growth for the firm"
+    ],
+    "correct": 1,
+    "exp": "Market Penetration = existing product × existing market. This is where competitive positioning is fought hardest — every incremental share gain comes DIRECTLY from a rival. It is the most competitively intense quadrant of Ansoff because there is no blue ocean — you are taking from someone else in a market where all players are known and capabilities are tested."
+  },
+  {
+    "id": 42, "subject": "corp",
+    "session": "S2 · Corporate-Level Strategy",
+    "q": "Vertical integration as a corporate strategy directly addresses which two of Porter's Five Forces?",
+    "opts": [
+      "Threat of New Entrants and Rivalry",
+      "Bargaining Power of Suppliers (upstream integration) and Bargaining Power of Buyers (downstream integration)",
+      "Substitutes and Rivalry",
+      "Threat of New Entrants and Bargaining Power of Suppliers"
+    ],
+    "correct": 1,
+    "exp": "Vertical integration directly counters: (1) Supplier power — by integrating upstream (acquiring/building supply chain capabilities) you reduce dependence on powerful suppliers. (2) Buyer power — by integrating downstream (distribution, retail) you reduce dependence on powerful buyers. Apple designing its own chips (M-series) reduced Intel's supplier power. Apple's own retail stores reduce dependence on third-party channels."
+  },
+  {
+    "id": 43, "subject": "corp",
+    "session": "S2 · Corporate-Level Strategy",
+    "q": "The three modes of entry into a new business in order of increasing speed and integration risk are:",
+    "opts": [
+      "M&A → Strategic Alliance → Internal Venture",
+      "Internal Venture → Strategic Alliance → M&A/Acquisition",
+      "Strategic Alliance → Internal Venture → M&A",
+      "Joint Venture → Greenfield Investment → Hostile Takeover"
+    ],
+    "correct": 1,
+    "exp": "Entry modes (ISA): Internal Venture (organic growth — slowest, lowest risk, builds proprietary capabilities) → Strategic Alliance (shared risk, shared learning — GM-Toyota JV for lean production) → Acquisition/M&A (fastest growth, highest integration risk — P&G-Gillette, Cisco's serial acquisitions). Risk and speed increase as you move from I to A. Cisco made M&A management itself a core capability."
+  },
+  {
+    "id": 44, "subject": "corp",
+    "session": "S2 · Corporate-Level Strategy",
+    "q": "Corporate diversification only creates value for shareholders when:",
+    "opts": [
+      "The new business is in a high-ROIC industry with favourable Five Forces",
+      "The new business creates more value than shareholders could achieve by independently diversifying their own portfolios",
+      "The acquiring firm has at least 10 years of operating experience in the target industry",
+      "The diversification reduces the firm's overall beta and lowers its cost of capital"
+    ],
+    "correct": 1,
+    "exp": "Corporate strategy must always answer: does entering this new business create VALUE beyond what shareholders could achieve on their own by holding diversified portfolios? If not, diversification destroys rather than creates value — shareholders can diversify cheaply through the stock market; the firm must create ADDITIONAL synergies (cost savings, capability sharing, revenue enhancement) to justify the premium paid."
+  },
+  {
+    "id": 45, "subject": "corp",
+    "session": "S2 · Ansoff Matrix",
+    "q": "Which Ansoff quadrant carries the HIGHEST risk and why?",
+    "opts": [
+      "Market Penetration — you are fighting rivals directly in your existing market",
+      "Product Development — new products always fail at higher rates than market expansions",
+      "Diversification — new product in a new market; the firm lacks existing knowledge of both product and market",
+      "Market Development — international expansion carries currency and political risk"
+    ],
+    "correct": 2,
+    "exp": "Ansoff risk increases as you move away from what you know. Diversification (New Product × New Market) = highest risk. You lack: market knowledge (new customers, new dynamics), product knowledge (new technology, new capabilities), distribution relationships, and competitive intelligence. Mnemonic: PMPD (Penetration → Market Development → Product Development → Diversification) — risk increases in that order."
+  },
+  {
+    "id": 46, "subject": "corp",
+    "session": "S2 · Business-Level Strategy",
+    "q": "Harley-Davidson as a Differentiation Advantage example illustrates that differentiation can extend beyond the product to:",
+    "opts": [
+      "Patents and proprietary technology that competitors cannot legally replicate",
+      "A lifestyle brand and community identity — where the premium is paid for belonging, not just performance",
+      "Exclusive distribution agreements that prevent rivals from accessing key retail channels",
+      "After-sales service superiority — the primary driver of premium pricing in mature markets"
+    ],
+    "correct": 1,
+    "exp": "Differentiation Advantage: deliver a UNIQUE product that commands a price premium. Profit from margin, not volume. Requires: brand, design, innovation, customer loyalty, ecosystem lock-in. Harley-Davidson exemplifies differentiation beyond the product itself — the brand creates a lifestyle identity and community (HOG — Harley Owners Group). Customers pay for belonging, not just horsepower. This is brand as inimitable VRINE resource."
+  },
+  {
+    "id": 47, "subject": "corp",
+    "session": "S2 · Corporate Strategy Cases",
+    "q": "Why does entering a new geography represent a corporate-level (not business-level) strategic decision?",
+    "opts": [
+      "Because geographic expansion always requires a change in pricing strategy",
+      "Because it changes WHERE the firm competes — extending the scope of the business across a new competitive arena requiring new PESTEL and Five Forces analysis",
+      "Because geographic expansion is always implemented through M&A, which is a corporate finance decision",
+      "Because new geographies require new brand positioning, which is a marketing strategy decision"
+    ],
+    "correct": 1,
+    "exp": "Corporate strategy answers WHERE to compete — which businesses, geographies, or value-chain positions to participate in. Geographic diversification changes WHERE the firm competes, spreads market risk, and leverages scale across larger volumes. It requires new PESTEL analysis (new political/legal/cultural context) and new competitive landscape (new Five Forces). Matsushita's systematic country-entry playbook is the textbook example."
+  },
+  {
+    "id": 48, "subject": "corp",
+    "session": "S2 · Strategic Fit + BLS",
+    "q": "The Strategic Fit Matrix states the only unambiguously correct strategic position is:",
+    "opts": [
+      "Moderate internal fit × Moderate external attractiveness — balanced risk and return",
+      "Strong internal capability × Strongly favourable external environment — pursue aggressively",
+      "Strong internal capability × Unfavourable external environment — use internal strengths to transform the industry",
+      "Weak internal fit × Strongly favourable external environment — build capabilities before entry"
+    ],
+    "correct": 1,
+    "exp": "The only unambiguously correct strategic position in the Strategic Fit Matrix is top-left: Strong Internal Capability + Strongly Favourable External Environment = Pursue Aggressively. All other combinations involve trade-offs, timing, or capability-building before entry. Even strong firms struggle when external fit is poor — internal capability partially compensates but cannot fully override structural forces permanently."
+  },
+  {
+    "id": 49, "subject": "corp",
+    "session": "S2 · Industry Profitability + Strategy",
+    "q": "The key strategic implication of the statement 'which industry a firm belongs to is a major determinant of its performance' is:",
+    "opts": [
+      "Firm-level strategy is irrelevant — only industry selection determines long-term profitability",
+      "Choosing WHERE to compete (corporate strategy — industry selection) is as important as HOW to compete (business-level strategy) within the industry",
+      "Firms should always diversify across industries to minimise the impact of any single industry's structural forces",
+      "VRINE analysis is more important than PESTEL because firm-specific factors dominate industry-level factors"
+    ],
+    "correct": 1,
+    "exp": "Industry structure (Five Forces) — not just firm effort — is a primary determinant of average profitability. A firm in a bad industry must work twice as hard to earn what a firm in a good industry earns by default. This is why corporate strategy (WHERE to compete) is equally as important as business strategy (HOW to compete). Industry selection is itself a strategic decision that constrains or enables everything below it."
+  },
+  {
+    "id": 50, "subject": "corp",
+    "session": "S2 · Memory Hooks",
+    "q": "The full Strategic Management Process mnemonic 'VOEAICS' maps to which correct sequence?",
+    "opts": [
+      "Vision → Objectives → External analysis → Internal analysis → Choice → Implementation → Sustained competitive advantage",
+      "Value Chain → Operations → Efficiency → Alliances → Innovation → Customers → Scale",
+      "Vertical integration → Objectives → Entry modes → Analysis → Internal → Cost leadership → Synergies",
+      "Vision → Opportunities → Evaluation → Alliances → Implementation → Competition → Strategy"
+    ],
+    "correct": 0,
+    "exp": "VOEAICS = Vision → Objectives → External analysis (OT) → + Internal analysis (SW) → Choice (Strategic Choice) → Implementation → Sustained competitive advantage. This is the complete strategic management process — the full loop from aspiration to execution. Every element feeds into the next, and the entire loop is subject to continuous review through the feedback mechanism."
+  }
+];
+
+/* ══ STATE ══ */
+let state = {
+  filter: 'all', deck: [], idx: 0, answered: false, score: 0,
+  stratCorrect: 0, stratTotal: 0,
+  envCorrect: 0, envTotal: 0,
+  intCorrect: 0, intTotal: 0,
+  corpCorrect: 0, corpTotal: 0,
+};
+
+/* ══ UTILITIES ══ */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function pct(n, d) { return d === 0 ? 0 : Math.round((n / d) * 100); }
+function getTier(p) {
+  if (p >= 90) return { tier: "IIM-Level — Distinction",          sub: "Exceptional command of strategic frameworks." };
+  if (p >= 75) return { tier: "Strong Command — Pass with Merit",  sub: "Solid understanding with minor gaps worth revisiting." };
+  if (p >= 60) return { tier: "Adequate — Revise Key Frameworks",  sub: "Core concepts present; reinforce weaker sessions." };
+  return         { tier: "Needs Work — Return to Notes",           sub: "Systematic revision recommended before the exam." };
+}
+
+/* ══ FILTER ══ */
+function setFilter(f) {
+  state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  document.getElementById('btnAll').classList.add('active-all');
+  if (f !== 'all') {
+    const key = f.charAt(0).toUpperCase() + f.slice(1);
+    const el = document.getElementById('btn' + key);
+    if (el) { el.classList.add('active-' + f); document.getElementById('btnAll').classList.remove('active-all'); }
+  }
+  startQuiz(f);
+}
+
+/* ══ QUIZ FLOW ══ */
+function startQuiz(f) {
+  if (f) state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  document.getElementById('btnAll').classList.add('active-all');
+  if (state.filter !== 'all') {
+    const key = state.filter.charAt(0).toUpperCase() + state.filter.slice(1);
+    const el = document.getElementById('btn' + key);
+    if (el) { el.classList.add('active-' + state.filter); document.getElementById('btnAll').classList.remove('active-all'); }
+  }
+
+  const pool = ALL_QUESTIONS.filter(q => state.filter === 'all' || q.subject === state.filter);
+  state.deck = shuffle(pool);
+  state.idx = 0; state.score = 0;
+  state.stratCorrect = 0; state.stratTotal = 0;
+  state.envCorrect = 0;   state.envTotal = 0;
+  state.intCorrect = 0;   state.intTotal = 0;
+  state.corpCorrect = 0;  state.corpTotal = 0;
+
+  state.deck.forEach(q => {
+    if (q.subject === 'strat') state.stratTotal++;
+    if (q.subject === 'env')   state.envTotal++;
+    if (q.subject === 'int')   state.intTotal++;
+    if (q.subject === 'corp')  state.corpTotal++;
+  });
+
+  updateScore();
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizArea').style.display = 'block';
+  document.getElementById('progressArea').style.display = 'block';
+  document.getElementById('emptyState').style.display = 'none';
+
+  if (state.deck.length === 0) {
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = state.deck[state.idx];
+  const total = state.deck.length;
+  const num = state.idx + 1;
+  state.answered = false;
+
+  const fillPct = ((num - 1) / total) * 100;
+  document.getElementById('progressFill').style.width = fillPct + '%';
+  document.getElementById('progressText').textContent = 'Question ' + num + ' of ' + total;
+  document.getElementById('progressPct').textContent = Math.round(fillPct) + '%';
+
+  const tag = document.getElementById('subjectTag');
+  tag.textContent = q.subject.toUpperCase();
+  tag.className = 'subject-tag ' + q.subject;
+
+  document.getElementById('sessionLabel').textContent = q.session;
+  document.getElementById('questionNum').textContent = '#' + q.id;
+  document.getElementById('questionText').textContent = q.q;
+
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = '<span class="option-letter">' + letters[i] + '</span>'
+                  + '<span class="option-text">' + opt + '</span>'
+                  + '<span class="key-hint">' + (i + 1) + '</span>';
+    btn.addEventListener('click', () => selectAnswer(i));
+    grid.appendChild(btn);
+  });
+
+  const ep = document.getElementById('explanationPanel');
+  ep.className = 'explanation-panel';
+  document.getElementById('explanationText').textContent = '';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'slideUp 0.3s ease';
+}
+
+function selectAnswer(chosen) {
+  if (state.answered) return;
+  state.answered = true;
+
+  const q = state.deck[state.idx];
+  const btns = document.querySelectorAll('.option-btn');
+  const correct = q.correct;
+
+  btns.forEach((btn, i) => {
+    btn.classList.add('disabled');
+    if (i === correct) btn.classList.add('correct');
+    else if (i === chosen) btn.classList.add('wrong');
+  });
+
+  if (chosen === correct) {
+    state.score++;
+    if (q.subject === 'strat') state.stratCorrect++;
+    else if (q.subject === 'env')  state.envCorrect++;
+    else if (q.subject === 'int')  state.intCorrect++;
+    else if (q.subject === 'corp') state.corpCorrect++;
+  }
+
+  updateScore();
+  const ep = document.getElementById('explanationPanel');
+  document.getElementById('explanationText').textContent = q.exp;
+  ep.classList.add('show', q.subject + '-border');
+  document.getElementById('nextBtn').style.display = 'flex';
+  setTimeout(() => ep.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+}
+
+function nextQuestion() {
+  if (!state.answered) return;
+  state.idx++;
+  if (state.idx >= state.deck.length) {
+    showResults();
+  } else {
+    renderQuestion();
+    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function updateScore() {
+  const answeredSoFar = state.idx + (state.answered ? 1 : 0);
+  document.getElementById('scoreNum').textContent = state.score;
+  document.getElementById('scoreDen').textContent = Math.max(answeredSoFar, state.score);
+}
+
+/* ══ RESULTS ══ */
+function showResults() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('progressArea').style.display = 'none';
+  document.getElementById('resultsScreen').classList.add('show');
+
+  const total = state.deck.length;
+  const p = pct(state.score, total);
+  const { tier, sub } = getTier(p);
+
+  document.getElementById('resultsTier').textContent = tier;
+  document.getElementById('resultsSubtitle').textContent = sub;
+  document.getElementById('rTotal').textContent = state.score + '/' + total;
+  document.getElementById('rTotalSub').textContent = p + '%';
+  document.getElementById('rStrat').textContent = state.stratCorrect + '/' + state.stratTotal;
+  document.getElementById('rStratSub').textContent = pct(state.stratCorrect, state.stratTotal) + '%';
+  document.getElementById('rEnv').textContent = state.envCorrect + '/' + state.envTotal;
+  document.getElementById('rEnvSub').textContent = pct(state.envCorrect, state.envTotal) + '%';
+  document.getElementById('rInt').textContent = state.intCorrect + '/' + state.intTotal;
+  document.getElementById('rIntSub').textContent = pct(state.intCorrect, state.intTotal) + '%';
+  document.getElementById('rCorp').textContent = state.corpCorrect + '/' + state.corpTotal;
+  document.getElementById('rCorpSub').textContent = pct(state.corpCorrect, state.corpTotal) + '%';
+
+  document.getElementById('resultsScreen').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ══ KEYBOARD ══ */
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (['1','2','3','4'].includes(e.key)) {
+    const btns = document.querySelectorAll('.option-btn:not(.disabled)');
+    const idx = parseInt(e.key) - 1;
+    if (btns[idx]) btns[idx].click();
+  }
+  if ((e.key === 'Enter' || e.key === ' ') && state.answered) { e.preventDefault(); nextQuestion(); }
+  if (e.key === 'r' || e.key === 'R') startQuiz(state.filter);
+});
+
+startQuiz('all');
+</script>
+</body>
+</html>

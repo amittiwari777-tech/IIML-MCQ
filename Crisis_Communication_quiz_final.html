@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crisis Communication — Revision Quiz</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:         #1a1c22;
+    --card:       #252830;
+    --card-hover: #2d3040;
+    --border:     #353845;
+    --text:       #e8e6e1;
+    --text-muted: #9895a0;
+    --text-dim:   #6b6878;
+    --correct:    #3ecf8e;
+    --correct-dim:rgba(62,207,142,0.15);
+    --wrong:      #e05252;
+    --wrong-dim:  rgba(224,82,82,0.15);
+    --gold:       #f0c040;
+    --radius:     12px;
+    --radius-sm:  8px;
+    --shadow:     0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ── Header ── */
+  .app-header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .app-title {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+  .app-subtitle {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .score-display {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    white-space: nowrap;
+  }
+  .score-display .score-num { color: var(--gold); font-weight: 500; }
+
+  /* ── Filter Bar ── */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    padding: 20px 24px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .filter-btn {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.8rem;
+    padding: 7px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+  }
+  .filter-btn:hover { background: var(--card-hover); color: var(--text); }
+  .filter-btn.active-all { background: rgba(255,255,255,0.08); color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+  /* ── Subject-specific CSS (generated) ── */
+
+  /* ── Subject: CRM ── */
+  .subject-tag.crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid rgba(139,127,240,0.3); }
+  .filter-btn.active-crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border-color:#8b7ff0; }
+  .explanation-panel.crm-border { border-left-color:#8b7ff0; background:rgba(139,127,240,0.15); }
+  .btn-crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid #8b7ff0; }
+  .btn-crm:hover { filter:brightness(1.15); }
+  .score-block-value.crm { color:#8b7ff0; }
+
+  /* ── Subject: PM ── */
+  .subject-tag.pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border:1px solid rgba(139,63,224,0.3); }
+  .filter-btn.active-pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border-color:#8b3fe0; }
+  .explanation-panel.pm-border { border-left-color:#8b3fe0; background:rgba(139,63,224,0.15); }
+  .btn-pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border:1px solid #8b3fe0; }
+  .btn-pm:hover { filter:brightness(1.15); }
+  .score-block-value.pm { color:#8b3fe0; }
+
+  /* ── Subject: SCM ── */
+  .subject-tag.scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border:1px solid rgba(46,196,165,0.3); }
+  .filter-btn.active-scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border-color:#2ec4a5; }
+  .explanation-panel.scm-border { border-left-color:#2ec4a5; background:rgba(46,196,165,0.15); }
+  .btn-scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border:1px solid #2ec4a5; }
+  .btn-scm:hover { filter:brightness(1.15); }
+  .score-block-value.scm { color:#2ec4a5; }
+
+  /* ── Subject: FIN ── */
+  .subject-tag.fin { background:rgba(224,139,32,0.15); color:#e08b20; border:1px solid rgba(224,139,32,0.3); }
+  .filter-btn.active-fin { background:rgba(224,139,32,0.15); color:#e08b20; border-color:#e08b20; }
+  .explanation-panel.fin-border { border-left-color:#e08b20; background:rgba(224,139,32,0.15); }
+  .btn-fin { background:rgba(224,139,32,0.15); color:#e08b20; border:1px solid #e08b20; }
+  .btn-fin:hover { filter:brightness(1.15); }
+  .score-block-value.fin { color:#e08b20; }
+
+  /* ── Subject: ECON ── */
+  .subject-tag.econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border:1px solid rgba(62,207,142,0.3); }
+  .filter-btn.active-econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border-color:#3ecf8e; }
+  .explanation-panel.econ-border { border-left-color:#3ecf8e; background:rgba(62,207,142,0.15); }
+  .btn-econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border:1px solid #3ecf8e; }
+  .btn-econ:hover { filter:brightness(1.15); }
+  .score-block-value.econ { color:#3ecf8e; }
+
+  /* ── Subject: OPS ── */
+  .subject-tag.ops { background:rgba(77,157,224,0.15); color:#4d9de0; border:1px solid rgba(77,157,224,0.3); }
+  .filter-btn.active-ops { background:rgba(77,157,224,0.15); color:#4d9de0; border-color:#4d9de0; }
+  .explanation-panel.ops-border { border-left-color:#4d9de0; background:rgba(77,157,224,0.15); }
+  .btn-ops { background:rgba(77,157,224,0.15); color:#4d9de0; border:1px solid #4d9de0; }
+  .btn-ops:hover { filter:brightness(1.15); }
+  .score-block-value.ops { color:#4d9de0; }
+
+  /* ── Subject: HR ── */
+  .subject-tag.hr { background:rgba(224,92,92,0.15); color:#e05c5c; border:1px solid rgba(224,92,92,0.3); }
+  .filter-btn.active-hr { background:rgba(224,92,92,0.15); color:#e05c5c; border-color:#e05c5c; }
+  .explanation-panel.hr-border { border-left-color:#e05c5c; background:rgba(224,92,92,0.15); }
+  .btn-hr { background:rgba(224,92,92,0.15); color:#e05c5c; border:1px solid #e05c5c; }
+  .btn-hr:hover { filter:brightness(1.15); }
+  .score-block-value.hr { color:#e05c5c; }
+
+  /* ── Subject: CRISIS ── */
+  .subject-tag.crisis { background:rgba(224,92,92,0.15); color:#e05c5c; border:1px solid rgba(224,92,92,0.3); }
+  .filter-btn.active-crisis { background:rgba(224,92,92,0.15); color:#e05c5c; border-color:#e05c5c; }
+  .explanation-panel.crisis-border { border-left-color:#e05c5c; background:rgba(224,92,92,0.15); }
+  .btn-crisis { background:rgba(224,92,92,0.15); color:#e05c5c; border:1px solid #e05c5c; }
+  .btn-crisis:hover { filter:brightness(1.15); }
+  .score-block-value.crisis { color:#e05c5c; }
+
+  /* ── Subject: LEAD ── */
+  .subject-tag.lead { background:rgba(77,157,224,0.15); color:#4d9de0; border:1px solid rgba(77,157,224,0.3); }
+  .filter-btn.active-lead { background:rgba(77,157,224,0.15); color:#4d9de0; border-color:#4d9de0; }
+  .explanation-panel.lead-border { border-left-color:#4d9de0; background:rgba(77,157,224,0.15); }
+  .btn-lead { background:rgba(77,157,224,0.15); color:#4d9de0; border:1px solid #4d9de0; }
+  .btn-lead:hover { filter:brightness(1.15); }
+  .score-block-value.lead { color:#4d9de0; }
+
+  /* ── Subject: COMM ── */
+  .subject-tag.comm { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid rgba(139,127,240,0.3); }
+  .filter-btn.active-comm { background:rgba(139,127,240,0.15); color:#8b7ff0; border-color:#8b7ff0; }
+  .explanation-panel.comm-border { border-left-color:#8b7ff0; background:rgba(139,127,240,0.15); }
+  .btn-comm { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid #8b7ff0; }
+  .btn-comm:hover { filter:brightness(1.15); }
+  .score-block-value.comm { color:#8b7ff0; }
+
+  /* ── Main layout ── */
+  .main-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 20px;
+  }
+
+  /* ── Progress ── */
+  .progress-area { margin-bottom: 24px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    margin-bottom: 8px;
+  }
+  .progress-track { height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    background: linear-gradient(90deg, #8b7ff0, #8b3fe0);
+  }
+
+  /* ── Question Card ── */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .subject-tag {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .session-label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-style: italic;
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+  }
+  .question-num {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-left: auto;
+  }
+  .question-text {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  /* ── Answer Options ── */
+  .options-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .option-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-align: left;
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    transition: all 0.15s ease;
+    width: 100%;
+    position: relative;
+  }
+  .option-btn:hover:not(.disabled) { background: var(--card-hover); border-color: rgba(255,255,255,0.18); }
+  .option-btn.disabled { cursor: default; color: var(--text-muted); }
+  .option-btn.correct {
+    background: var(--correct-dim) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+  }
+  .option-btn.wrong {
+    background: var(--wrong-dim) !important;
+    border-color: var(--wrong) !important;
+    color: var(--wrong) !important;
+  }
+  .option-letter {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px 8px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.15s;
+  }
+  .option-btn.correct .option-letter { background: rgba(62,207,142,0.2); border-color: var(--correct); color: var(--correct); }
+  .option-btn.wrong   .option-letter { background: rgba(224,82,82,0.2);  border-color: var(--wrong);   color: var(--wrong);   }
+  .option-text { flex: 1; }
+  .key-hint {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    flex-shrink: 0;
+    align-self: center;
+  }
+  .option-btn.disabled .key-hint { display: none; }
+
+  /* ── Explanation Panel ── */
+  .explanation-panel {
+    border-left: 3px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+    display: none;
+    animation: slideUp 0.25s ease;
+  }
+  .explanation-panel.show { display: block; }
+  .explanation-label {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 9px 22px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { background: var(--card-hover); }
+  .btn-primary { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+  .btn-primary:hover { background: rgba(255,255,255,0.13); }
+  #nextBtn { display: none; margin-top: 4px; }
+
+  /* ── Results Screen ── */
+  .results-screen { display: none; animation: slideUp 0.4s ease; }
+  .results-screen.show { display: block; }
+  .results-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 32px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .results-trophy { font-size: 2.5rem; margin-bottom: 12px; }
+  .results-tier {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, #8b7ff0, #8b3fe0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .results-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    font-style: italic;
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+  }
+  .results-scores {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .score-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 12px;
+  }
+  .score-block-label {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .score-block-value {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+  .score-block-value.all { color: var(--gold); }
+  .score-block-sub {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+  }
+  .results-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 0.95rem;
+    display: none;
+  }
+
+  /* ── Keyboard hints ── */
+  .keyboard-hint-bar {
+    text-align: center;
+    margin-top: 20px;
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+  .kh-item { display: flex; align-items: center; gap: 6px; }
+  .kh-key { border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; color: var(--text-muted); }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+
+  /* ── Touch UX: kill 300ms delay, remove tap highlight ── */
+  * { -webkit-tap-highlight-color: transparent; }
+  button, .option-btn, .filter-btn { touch-action: manipulation; }
+  .option-btn:active:not(.disabled) { opacity: 0.72; transform: scale(0.983); }
+  .btn:active        { opacity: 0.78; transform: scale(0.972); }
+  .filter-btn:active { opacity: 0.72; }
+
+  /* ── Mobile: max 640px ── */
+  @media (max-width: 640px) {
+
+    .app-header { padding: 10px 14px; flex-wrap: wrap; gap: 6px; }
+    .app-title { font-size: 0.9rem; }
+    .app-subtitle { display: none; }
+    .score-display { font-size: 0.78rem; padding: 4px 12px; }
+
+    .filter-bar {
+      padding: 12px 14px 0;
+      gap: 7px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-btn { flex-shrink: 0; min-height: 40px; padding: 8px 18px; font-size: 0.78rem; }
+
+    .main-wrap { padding: 14px 12px; }
+    .progress-area { margin-bottom: 16px; }
+    .progress-label { font-size: 0.7rem; }
+    .progress-track { height: 5px; }
+
+    .question-card { padding: 18px 14px; border-radius: 10px; }
+    .card-meta { gap: 7px; margin-bottom: 14px; }
+    .subject-tag { font-size: 0.65rem; }
+    .session-label { font-size: 0.68rem; }
+    .question-num { font-size: 0.65rem; }
+
+    /* 16px minimum stops iOS zooming the page on focus */
+    .question-text { font-size: 1rem; line-height: 1.65; margin-bottom: 18px; }
+
+    /* Option buttons: 52px min tap target */
+    .options-grid { gap: 9px; margin-bottom: 16px; }
+    .option-btn {
+      min-height: 52px;
+      padding: 14px 13px;
+      gap: 11px;
+      font-size: 0.88rem;
+      border-radius: 8px;
+      align-items: center;
+    }
+    .option-letter { min-width: 26px; text-align: center; padding: 2px 6px; font-size: 0.75rem; }
+    .key-hint { display: none; }
+
+    .explanation-panel { font-size: 0.83rem; padding: 12px 13px; }
+    .explanation-label { font-size: 0.62rem; }
+
+    /* Next: full-width large button */
+    #nextBtn {
+      width: 100%;
+      justify-content: center;
+      padding: 15px;
+      min-height: 50px;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      margin-top: 6px;
+    }
+
+    .results-card { padding: 22px 14px; }
+    .results-trophy { font-size: 2rem; margin-bottom: 8px; }
+    .results-tier { font-size: 1.25rem; }
+    .results-subtitle { font-size: 0.78rem; margin-bottom: 20px; }
+    .results-scores { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .score-block { padding: 12px 10px; }
+    .score-block-label { font-size: 0.62rem; }
+    .score-block-value { font-size: 1.5rem; }
+    .score-block-sub { font-size: 0.68rem; }
+
+    /* Results buttons: stacked, full width */
+    .results-actions { flex-direction: column; }
+    .results-actions .btn { width: 100%; justify-content: center; min-height: 48px; font-size: 0.9rem; }
+
+    .keyboard-hint-bar { display: none; }
+  }
+
+  /* Very small phones < 360px */
+  @media (max-width: 360px) {
+    .question-text { font-size: 0.94rem; }
+    .option-btn { font-size: 0.83rem; padding: 13px 11px; }
+    .results-scores { grid-template-columns: 1fr; }
+    .score-block-value { font-size: 1.35rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="app-header">
+  <div>
+    <div class="app-title"><span class="comm">COMM</span> &amp; <span class="crisis">CRISIS</span> &amp; <span class="lead">LEAD</span> Quiz</div>
+    <div class="app-subtitle">IIM Lucknow · Senior Leadership Programme · Communication Skills & Critical Thinking · Crisis Communication & SCCT · Leadership, Power & Problem Solving · 50 Questions · April 08, 2026</div>
+  </div>
+  <div class="score-display">
+    Score: <span class="score-num" id="scoreNum">0</span>
+    / <span id="scoreDen">0</span>
+  </div>
+</header>
+
+<!-- ── FILTER BAR ── -->
+<div class="filter-bar">
+  <button class="filter-btn active-all" id="btnAll" onclick="setFilter('all')">All 50</button>
+      <button class="filter-btn" id="btnComm" onclick="setFilter('comm')">COMM (15)</button>
+      <button class="filter-btn" id="btnCrisis" onclick="setFilter('crisis')">CRISIS (18)</button>
+      <button class="filter-btn" id="btnLead" onclick="setFilter('lead')">LEAD (17)</button>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main-wrap">
+
+  <!-- Progress -->
+  <div class="progress-area" id="progressArea">
+    <div class="progress-label">
+      <span id="progressText">Question 1 of 50</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Quiz Area -->
+  <div id="quizArea">
+    <div class="question-card" id="questionCard">
+
+      <div class="card-meta">
+        <span class="subject-tag" id="subjectTag">—</span>
+        <span class="session-label" id="sessionLabel">—</span>
+        <span class="question-num" id="questionNum">#1</span>
+      </div>
+
+      <div class="question-text" id="questionText">Loading...</div>
+
+      <div class="options-grid" id="optionsGrid"></div>
+
+      <div class="explanation-panel" id="explanationPanel">
+        <div class="explanation-label">Explanation</div>
+        <div id="explanationText"></div>
+      </div>
+
+      <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">
+        Next &rarr;
+      </button>
+    </div>
+
+    <div class="keyboard-hint-bar">
+      <div class="kh-item"><span class="kh-key">1–4</span> Select answer</div>
+      <div class="kh-item"><span class="kh-key">Enter</span> Next question</div>
+      <div class="kh-item"><span class="kh-key">R</span> Restart</div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" id="emptyState">No questions match this filter.</div>
+
+  <!-- Results Screen -->
+  <div class="results-screen" id="resultsScreen">
+    <div class="results-card">
+      <div class="results-trophy">🎓</div>
+      <div class="results-tier" id="resultsTier"></div>
+      <div class="results-subtitle" id="resultsSubtitle"></div>
+
+      <div class="results-scores">
+        
+        <div class="score-block">
+          <div class="score-block-label">Total</div>
+          <div class="score-block-value all" id="rTotal">—</div>
+          <div class="score-block-sub" id="rTotalSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">COMM</div>
+          <div class="score-block-value comm" id="rComm">—</div>
+          <div class="score-block-sub" id="rCommSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">CRISIS</div>
+          <div class="score-block-value crisis" id="rCrisis">—</div>
+          <div class="score-block-sub" id="rCrisisSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">LEAD</div>
+          <div class="score-block-value lead" id="rLead">—</div>
+          <div class="score-block-sub" id="rLeadSub"></div>
+        </div>
+      </div>
+
+      <div class="results-actions">
+        <button class="btn btn-primary" onclick="startQuiz('all')">Restart All 50</button>
+        <button class="btn btn-comm" onclick="startQuiz('comm')">COMM Only (15)</button>
+        <button class="btn btn-crisis" onclick="startQuiz('crisis')">CRISIS Only (18)</button>
+        <button class="btn btn-lead" onclick="startQuiz('lead')">LEAD Only (17)</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main-wrap -->
+
+<script>
+/* ═══════════════════════════════════
+   QUESTION DATA
+═══════════════════════════════════ */
+const ALL_QUESTIONS = [
+  {
+    "id": 1,
+    "subject": "crisis",
+    "session": "Topic 1 · Crisis Communication & SCCT",
+    "q": "According to SCCT, how is a crisis best defined?",
+    "opts": [
+      "A natural disaster or external shock affecting an organisation",
+      "The stakeholder perception of an unpredictable event threatening expectations and organisational performance",
+      "Any negative media coverage about a company",
+      "A financial loss event triggering regulatory action"
+    ],
+    "correct": 1,
+    "exp": "SCCT defines a crisis not as the event itself, but as the stakeholder perception of an unpredictable event that threatens what stakeholders expect and can seriously hurt organisational performance and reputation. Perception, not the event, is what must be managed."
+  },
+  {
+    "id": 2,
+    "subject": "crisis",
+    "session": "Topic 1 · Crisis Communication & SCCT",
+    "q": "What is the central diagnostic question SCCT requires leaders to ask before choosing a crisis response strategy?",
+    "opts": [
+      "How much revenue will be lost from this crisis?",
+      "Who leaked the story to the media?",
+      "How much will stakeholders hold the organisation responsible or blameworthy?",
+      "Which spokesperson should face the cameras?"
+    ],
+    "correct": 2,
+    "exp": "SCCT (Situational Crisis Communication Theory) says the right response strategy depends entirely on attribution of blame — how much stakeholders hold the organisation responsible. This single diagnostic question determines everything: which cluster the crisis belongs to and which response posture is appropriate."
+  },
+  {
+    "id": 3,
+    "subject": "crisis",
+    "session": "Topic 1 · Crisis Communication & SCCT",
+    "q": "What is the correct sequence of the four-stage crisis management process?",
+    "opts": [
+      "Response → Preparation → Prevention → Revision",
+      "Prevention → Response → Preparation → Revision",
+      "Preparation → Prevention → Response → Revision",
+      "Prevention → Preparation → Response → Revision"
+    ],
+    "correct": 3,
+    "exp": "The correct order is Prevention (reduce risks before a crisis occurs) → Preparation (plan, train spokespersons, pre-draft messages) → Response (execute the plan with the right message to the right audience) → Revision (post-crisis learning and plan updates). Organisations that skip Prevention and Preparation always fumble the Response."
+  },
+  {
+    "id": 4,
+    "subject": "crisis",
+    "session": "Topic 1 · Crisis Communication & SCCT",
+    "q": "When an organisation has HIGH attribution of responsibility — it clearly caused the harm — which crisis response posture is most appropriate?",
+    "opts": [
+      "Bolstering",
+      "Denial",
+      "Diminishment",
+      "Rebuilding"
+    ],
+    "correct": 3,
+    "exp": "High attribution means the organisation is seen as fully responsible (Preventable cluster). The Rebuilding posture — full apology and compensation — is the correct strategy. Using Denial in a high-attribution crisis backfires catastrophically, as the Volkswagen emissions scandal demonstrated."
+  },
+  {
+    "id": 5,
+    "subject": "crisis",
+    "session": "Topic 1 · Crisis Communication & SCCT",
+    "q": "The Bolstering posture in crisis communication is best used when:",
+    "opts": [
+      "The organisation is fully responsible for the crisis and must compensate victims",
+      "The organisation is also a victim or carries minimal responsibility",
+      "There is strong media pressure demanding a senior resignation",
+      "The crisis involves deliberate organisational misconduct"
+    ],
+    "correct": 1,
+    "exp": "Bolstering — reminding stakeholders of your positive track record and values — is appropriate when attribution is low (Victim cluster). The organisation is also harmed by the crisis event. J&J's Tylenol response (1982) is the classic example of Bolstering done right."
+  },
+  {
+    "id": 6,
+    "subject": "crisis",
+    "session": "Topic 1 · Crisis Communication & SCCT",
+    "q": "Which strategies fall under the Diminishment posture?",
+    "opts": [
+      "Apology and Compensation",
+      "Reminding and Ingratiation",
+      "Excusing and Justification",
+      "Denial and Attack the Accuser"
+    ],
+    "correct": 2,
+    "exp": "Diminishment posture aims to reduce the perceived control the organisation had over the event. Its strategies are Excusing (claiming no intent or foreseeability) and Justification (minimising perceived damage). This posture fits the Accident cluster — unintentional or technical failures."
+  },
+  {
+    "id": 7,
+    "subject": "crisis",
+    "session": "Topic 6 · Crisis Competencies",
+    "q": "J&J's Tylenol recall in 1982 is a textbook example of which SCCT crisis cluster?",
+    "opts": [
+      "Preventable — the company was fully responsible for the tampered product",
+      "Accident — a technical failure in J&J's manufacturing process",
+      "Victim — J&J was itself harmed by external product tampering",
+      "Reputational — triggered by social media backlash"
+    ],
+    "correct": 2,
+    "exp": "Tylenol involved external tampering by a third party — J&J was itself a victim. This places it in the Victim cluster, where Bolstering is the correct strategy. J&J's transparent, proactive product recall is now the gold standard for crisis communication."
+  },
+  {
+    "id": 8,
+    "subject": "crisis",
+    "session": "Topic 6 · Crisis Competencies",
+    "q": "The Volkswagen emissions scandal (2015) became a reputational catastrophe primarily because VW initially chose which crisis response strategy?",
+    "opts": [
+      "Rebuilding — they over-apologised and compensated too quickly",
+      "Bolstering — they reminded the public of their engineering quality",
+      "Diminishment — they justified the emissions data as within acceptable range",
+      "Denial — they denied responsibility despite clear evidence of deliberate action"
+    ],
+    "correct": 3,
+    "exp": "VW attempted denial in a Preventable crisis — engineers deliberately programmed cars to cheat emissions tests (high attribution). Denial in a high-attribution crisis obliterates credibility. VW's reputation and market value were devastated precisely because they denied what evidence made undeniable."
+  },
+  {
+    "id": 9,
+    "subject": "crisis",
+    "session": "Topic 6 · Crisis Competencies",
+    "q": "Which of the 10 crisis management principles warns that 'the first hours define how the narrative gets written' and that silence is read as guilt?",
+    "opts": [
+      "Be Prepared (Principle 1)",
+      "Take the Initiative (Principle 2)",
+      "Seize the Agenda (Principle 4)",
+      "Front Up Your Defence (Principle 8)"
+    ],
+    "correct": 1,
+    "exp": "Principle 2 — Take the Initiative — states that organisations must not wait. The first hours define the narrative. Silence by an organisation under crisis pressure is consistently interpreted by audiences and media as an admission of guilt, even when it is not."
+  },
+  {
+    "id": 10,
+    "subject": "crisis",
+    "session": "Topic 6 · Crisis Competencies",
+    "q": "Which crisis management principle recommends building journalist relationships before any crisis occurs?",
+    "opts": [
+      "Create Effective Channels (Principle 6)",
+      "Make Media Your Ally (Principle 5)",
+      "Find Authoritative Allies (Principle 9)",
+      "Know Your Target Audience (Principle 7)"
+    ],
+    "correct": 1,
+    "exp": "Principle 5 — Make Media Your Ally — stresses building journalist relationships in calm times. Media allies give you a fair hearing when you need it most. This relationship cannot be built mid-crisis. Media who know you trust you; media who don't know you treat you with suspicion."
+  },
+  {
+    "id": 11,
+    "subject": "crisis",
+    "session": "Topic 6 · Crisis Competencies",
+    "q": "The three SCCT crisis clusters classify crises according to which criterion?",
+    "opts": [
+      "Industry sector and company size",
+      "Duration of the crisis and geographic spread",
+      "Attribution of responsibility assigned by stakeholders",
+      "Type and volume of media coverage generated"
+    ],
+    "correct": 2,
+    "exp": "SCCT's three clusters — Preventable (high blame), Accident (partial blame), and Victim (minimal blame) — are distinguished by how much responsibility stakeholders attribute to the organisation. The same event type can fall into different clusters depending on what stakeholders believe the organisation could have controlled."
+  },
+  {
+    "id": 12,
+    "subject": "crisis",
+    "session": "Topic 6 · Crisis Competencies",
+    "q": "Which type of crisis falls into the Accident cluster in SCCT?",
+    "opts": [
+      "Organisational misdeeds with intent",
+      "Natural disasters",
+      "Human error product harm",
+      "Technical error product harm"
+    ],
+    "correct": 3,
+    "exp": "The Accident cluster includes Technical Error Accidents and Technical Error Product Harm — events caused by unintentional technical failures, not deliberate decisions. The recommended strategy is Diminishment (excuse or justify, not a full apology). Technical failure differs fundamentally from human negligence."
+  },
+  {
+    "id": 13,
+    "subject": "crisis",
+    "session": "Topic 6 · Crisis Competencies",
+    "q": "The three essential crisis leadership competencies form an interdependent triangle. What are they?",
+    "opts": [
+      "Prepare, Communicate, Recover",
+      "Lead, Build, Know",
+      "Assess, Respond, Review",
+      "Plan, Train, Execute"
+    ],
+    "correct": 1,
+    "exp": "LEAD (not just manage — authenticity, behaviour, values under pressure), BUILD crisis muscle (train, assess vulnerabilities before crisis hits), and KNOW your environment (media landscape, audience mindset, public trust). The SmartArt presentation shows these as a cycle — they must coexist simultaneously, not sequentially."
+  },
+  {
+    "id": 14,
+    "subject": "crisis",
+    "session": "Topic 6 · Crisis Competencies",
+    "q": "'BUILD crisis muscle' as a leadership competency is best compared to which analogy?",
+    "opts": [
+      "You cannot read a map during a car accident",
+      "You cannot get fit during a marathon — build fitness before the race",
+      "You cannot negotiate terms after the contract is signed",
+      "You cannot change course after the ship has already sailed"
+    ],
+    "correct": 1,
+    "exp": "BUILD uses the fitness analogy: crisis capability must be built before it is needed, just as physical fitness cannot be developed during a marathon. This includes vulnerability assessments, crisis communication infrastructure, spokesperson training, and media relationship building — all done in advance."
+  },
+  {
+    "id": 15,
+    "subject": "crisis",
+    "session": "Topic 6 · Crisis Competencies",
+    "q": "According to crisis management Principle 9, what is the role of third-party validators such as experts, regulators, or NGOs?",
+    "opts": [
+      "They replace the organisation's spokesperson entirely during a crisis",
+      "They provide credibility the organisation cannot claim for itself",
+      "They negotiate with regulators on the organisation's behalf",
+      "They manage social media channels during the acute crisis phase"
+    ],
+    "correct": 1,
+    "exp": "Principle 9 — Find Authoritative Allies — recognises that in a crisis, the organisation itself has low credibility. Independent validators (scientists, regulators, NGOs, industry bodies) provide endorsement that the organisation cannot self-declare. Their voice carries weight because they have no vested interest in the outcome."
+  },
+  {
+    "id": 16,
+    "subject": "crisis",
+    "session": "Topic 1 · Crisis Communication & SCCT",
+    "q": "The Rebuilding posture in crisis communication includes which two specific strategies?",
+    "opts": [
+      "Excusing and Justification",
+      "Reminding and Ingratiation",
+      "Compensation and Apology",
+      "Denial and Attack the Accuser"
+    ],
+    "correct": 2,
+    "exp": "Rebuilding strategies are Compensation (offering financial or material redress to victims) and Apology (full acceptance of responsibility). This posture is used in Preventable crises where attribution is highest. A partial apology in a Preventable crisis is often worse than none — it signals acknowledgment without accountability."
+  },
+  {
+    "id": 17,
+    "subject": "crisis",
+    "session": "Topic 1 · Crisis Communication & SCCT",
+    "q": "Corporate communication's scope spans which two dimensions simultaneously during a crisis?",
+    "opts": [
+      "Social media messaging and traditional press release management",
+      "Short-term crisis response and long-term brand building",
+      "Internal communication (employees) and external communication (public, regulators, media)",
+      "Legal disclosure requirements and marketing narrative control"
+    ],
+    "correct": 2,
+    "exp": "Corporate communication spans both internal (employees, culture, leadership messaging) and external (regulators, media, public, business associates) audiences — and a crisis affects all of them simultaneously. Internal trust is the foundation for credible external messaging."
+  },
+  {
+    "id": 18,
+    "subject": "crisis",
+    "session": "Topic 6 · Crisis Competencies",
+    "q": "Crisis Principle 10 — 'Don't Reinvent the Wheel' — recommends which approach to crisis preparedness?",
+    "opts": [
+      "Hire new crisis PR professionals for every major incident",
+      "Rely on instinct and improvisation since every crisis is unique",
+      "Learn from past crises — yours and others' — and build playbooks on real precedent",
+      "Conduct post-crisis analysis only after reputational recovery is confirmed"
+    ],
+    "correct": 2,
+    "exp": "Principle 10 stresses learning from precedent. Playbooks built on real crisis experience — including benchmarking how other organisations handled similar events — consistently outperform improvised responses. Every crisis has antecedents worth studying."
+  },
+  {
+    "id": 19,
+    "subject": "lead",
+    "session": "Topic 2 · Principled Negotiation",
+    "q": "Fisher & Ury's 'Getting to Yes' proposes moving away from which type of negotiation?",
+    "opts": [
+      "Interest-based bargaining",
+      "Principled negotiation",
+      "Positional bargaining",
+      "Collaborative bargaining"
+    ],
+    "correct": 2,
+    "exp": "Positional bargaining — 'I want X, no I want Y' — creates deadlocks and damages relationships. Fisher & Ury's Principled Negotiation replaces it with a focus on underlying interests, creative options, and objective standards. Solving the problem replaces beating the person."
+  },
+  {
+    "id": 20,
+    "subject": "lead",
+    "session": "Topic 2 · Principled Negotiation",
+    "q": "In Fisher & Ury's framework, what is the key difference between a 'position' and an 'interest'?",
+    "opts": [
+      "A position is long-term; an interest is short-term",
+      "A position is what you say you want; an interest is why you want it",
+      "A position is public; an interest is confidential",
+      "A position is negotiable; an interest is fixed and non-negotiable"
+    ],
+    "correct": 1,
+    "exp": "Positions are stated demands ('I want the corner office'). Interests are the underlying motivation ('I need quiet for client calls and natural light for presentations'). Digging into interests almost always reveals compatible solutions that positional bargaining never reaches."
+  },
+  {
+    "id": 21,
+    "subject": "lead",
+    "session": "Topic 2 · Principled Negotiation",
+    "q": "Which of the following correctly lists Fisher & Ury's four principles of principled negotiation?",
+    "opts": [
+      "Separate the people, focus on positions, invent options, use force",
+      "Separate the people from the problem, focus on interests, invent options for mutual gain, use independent standards",
+      "Build rapport, share information, brainstorm, finalise",
+      "Identify BATNA, establish interests, generate options, vote on the best"
+    ],
+    "correct": 1,
+    "exp": "The four principles: (1) Separate the People from the Problem — handle emotions and substance separately; (2) Focus on Interests, Not Positions — dig into why; (3) Invent Options for Mutual Gain — brainstorm freely before evaluating; (4) Use Independent Standards — market value, precedent, expert opinion breaks deadlocks."
+  },
+  {
+    "id": 22,
+    "subject": "lead",
+    "session": "Topic 2 · Principled Negotiation",
+    "q": "Why must 'Inventing Options' and 'Deciding on Options' be kept as strictly separate steps in negotiation?",
+    "opts": [
+      "Because inventing creates legal liability if promises are made before approval",
+      "Because simultaneous inventing and deciding kills creative thinking",
+      "Because different team members are responsible for each step",
+      "Because inventing requires senior authority that most negotiators lack"
+    ],
+    "correct": 1,
+    "exp": "Evaluating ideas as they are generated kills the creative space. People stop proposing when their ideas are immediately criticised. The brainstorm phase must be free of all judgment. Separating invention from decision consistently produces more creative and mutually beneficial solutions. Fisher & Ury call this 'Invent before Decide.'"
+  },
+  {
+    "id": 23,
+    "subject": "lead",
+    "session": "Topic 2 · Principled Negotiation",
+    "q": "When negotiations stall due to conflicting demands, Fisher & Ury recommend introducing which element?",
+    "opts": [
+      "A neutral mediator to represent both parties equally",
+      "Additional parties to build coalition pressure",
+      "Objective criteria — market value, legal norms, industry precedent, expert opinion",
+      "A hard deadline to force a decision"
+    ],
+    "correct": 2,
+    "exp": "Independent Standards — objective, external criteria like market benchmarks, legal norms, or competing bids — break deadlocks without anyone losing face. The standard, not you or the other party, makes the argument. This removes the negotiation from personality and returns it to verifiable fact."
+  },
+  {
+    "id": 24,
+    "subject": "lead",
+    "session": "Topic 7 · Forms of Power",
+    "q": "French and Raven (1959) originally identified how many bases of power?",
+    "opts": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "correct": 1,
+    "exp": "French and Raven originally identified 5 power bases: Legitimate, Reward, Coercive, Expert, and Referent. Raven added a 6th — Informational Power — in 1965. This sixth power base accounts for the influence derived from controlling what others need to know."
+  },
+  {
+    "id": 25,
+    "subject": "lead",
+    "session": "Topic 7 · Forms of Power",
+    "q": "Which power base did Raven add in 1965, recognising its particular importance in knowledge economies?",
+    "opts": [
+      "Expert Power",
+      "Referent Power",
+      "Coercive Power",
+      "Informational Power"
+    ],
+    "correct": 3,
+    "exp": "Informational Power (1965) — the power derived from controlling access to what others need to know: financial reports, strategic plans, layoff lists. Especially potent in knowledge economies. Its key risk is that it can be weaponised through distortion or deliberate withholding of critical information."
+  },
+  {
+    "id": 26,
+    "subject": "lead",
+    "session": "Topic 7 · Forms of Power",
+    "q": "The 'golden combination' of power bases that produces the most effective, durable, and ethical leadership is:",
+    "opts": [
+      "Legitimate + Reward Power",
+      "Coercive + Informational Power",
+      "Expert + Referent Power",
+      "Legitimate + Expert Power"
+    ],
+    "correct": 2,
+    "exp": "Expert Power (deep knowledge, sound judgment — people follow you, not your title) combined with Referent Power (genuine respect and admiration — influence without force) creates the most durable foundation. Both survive restructures and role changes. No title required, and no restructure can remove them."
+  },
+  {
+    "id": 27,
+    "subject": "lead",
+    "session": "Topic 7 · Forms of Power",
+    "q": "Coercive power achieves which of the following outcomes?",
+    "opts": [
+      "Genuine commitment and discretionary effort from team members",
+      "Short-term compliance but breeds resentment and eventual attrition",
+      "Strong loyalty and trust built through consistent consequences",
+      "Expanded influence beyond the immediate team into peer networks"
+    ],
+    "correct": 1,
+    "exp": "Coercive power relies on threats of punishment, demotion, or denial of privileges. It achieves short-term compliance but causes dissatisfaction, resentment, and attrition over time. It may also constitute bullying. The instruction: use only as a genuine last resort, and never as a default management style."
+  },
+  {
+    "id": 28,
+    "subject": "lead",
+    "session": "Topic 7 · Forms of Power",
+    "q": "Legitimate power carries which critical limitation?",
+    "opts": [
+      "It only works with employees below manager level",
+      "It disappears instantly when the title or role is lost",
+      "It requires constant renewal through formal performance reviews",
+      "It cannot be applied during a crisis or emergency"
+    ],
+    "correct": 1,
+    "exp": "Legitimate power is derived entirely from a formal title or role. The moment the title is lost — through restructuring, promotion, or departure — the power vanishes. It is also scope-limited: it only applies where stakeholders believe you have the right to decide. This is why building personal power (Expert + Referent) is essential for long-term leadership."
+  },
+  {
+    "id": 29,
+    "subject": "lead",
+    "session": "Topic 5 · Seven Critical Steps",
+    "q": "At which step in the Seven-Step framework should Evaluation Criteria be established?",
+    "opts": [
+      "Before Step 1, as a preliminary framing activity",
+      "After generating options in Step 4, to avoid constraining creativity",
+      "At Step 3, before options are generated in Step 4",
+      "At Step 5, simultaneously with the evaluation process itself"
+    ],
+    "correct": 2,
+    "exp": "Evaluation Criteria (Step 3) must be set before generating options (Step 4). If criteria are defined after brainstorming, evaluators unconsciously favour options already proposed — bias masquerading as logic. Pre-agreed criteria make the final decision auditable and defensible."
+  },
+  {
+    "id": 30,
+    "subject": "lead",
+    "session": "Topic 5 · Seven Critical Steps",
+    "q": "The Seven Steps framework issues a critical rule: NEVER mix Steps 4 and 5. What are these two steps?",
+    "opts": [
+      "Step 4: Define the Problem · Step 5: Establish Criteria",
+      "Step 4: Generate Options · Step 5: Evaluate and Choose",
+      "Step 4: Situational Analysis · Step 5: Generate Options",
+      "Step 4: Action Plan · Step 5: Contingency Plan"
+    ],
+    "correct": 1,
+    "exp": "Step 4 (Generate Options) requires free, non-judgmental brainstorming — volume and creative breadth matter, no idea is rejected. Step 5 (Evaluate & Choose) requires critical assessment against pre-set criteria. Mixing them prematurely shuts down creative space: people stop proposing when their ideas are immediately critiqued."
+  },
+  {
+    "id": 31,
+    "subject": "lead",
+    "session": "Topic 5 · Seven Critical Steps",
+    "q": "Step 7 of the Seven Steps is described as 'if X happens, we will do Y — written in advance, not improvised under duress.' Which step is this?",
+    "opts": [
+      "Action Plan",
+      "Situational Analysis",
+      "Contingency Plan",
+      "Evaluation Criteria"
+    ],
+    "correct": 2,
+    "exp": "Step 7 is the Contingency Plan — identifying the most likely failure points in the Action Plan and pre-planning responses before pressure hits. 'If X, then Y' is written in advance to transform panic into protocol. A decision without a contingency plan is wishful thinking."
+  },
+  {
+    "id": 32,
+    "subject": "lead",
+    "session": "Topic 5 · Seven Critical Steps",
+    "q": "Problem-solving fails most often at which two of the Seven Steps?",
+    "opts": [
+      "Steps 4 and 5 — options generation and evaluation",
+      "Steps 6 and 7 — action plan and contingency",
+      "Steps 1 and 2 — situational analysis and problem definition",
+      "Steps 2 and 3 — problem definition and criteria"
+    ],
+    "correct": 2,
+    "exp": "Problem solving fails most often at Step 1 (wrong context understood — a problem viewed narrowly will be solved narrowly) or Step 2 (wrong problem defined — solving a symptom instead of the root cause). Get these right and the rest of the steps flow naturally."
+  },
+  {
+    "id": 33,
+    "subject": "lead",
+    "session": "Topic 3 · Evolutionary Leadership",
+    "q": "Evolutionary Leadership recommends that leaders replace statements of dismissal with which approach?",
+    "opts": [
+      "Written performance feedback to document concerns formally",
+      "Clear authority-based directives to reduce ambiguity",
+      "Questions of curiosity and invitation — inviting, not declaring",
+      "Factual historical data about previous failed attempts"
+    ],
+    "correct": 2,
+    "exp": "The core pattern in cross-generational communication is replacing dismissive statements ('we've tried that before') with questions and invitations ('here's what we tried — how is your concept different?'). Every 'don't say' in the framework is a statement; every 'say instead' is a question. Evolutionary leaders invite, they don't declare."
+  },
+  {
+    "id": 34,
+    "subject": "lead",
+    "session": "Topic 3 · Evolutionary Leadership",
+    "q": "Satya Nadella's transformation of Microsoft's culture from 'know-it-all' to 'learn-it-all' is cited as an example of which concept?",
+    "opts": [
+      "SCCT crisis management applied to corporate culture change",
+      "Evolutionary Leadership — adapting communication style for a changing workforce",
+      "Mary Munter's CONSULT mode applied at the CEO level",
+      "Expert Power replacing Legitimate Power in the C-suite"
+    ],
+    "correct": 1,
+    "exp": "Nadella's cultural shift is a textbook Evolutionary Leadership example — recognising that leading a 2025 workforce requires fundamentally different communication patterns than those of previous decades. Curiosity replaced authority as the primary leadership currency. Baby Boomers and Gen X/Y speak different leadership languages."
+  },
+  {
+    "id": 35,
+    "subject": "lead",
+    "session": "Topic 2 · Principled Negotiation",
+    "q": "In Fisher & Ury's interest mapping, 'different interests' (as opposed to conflicting interests) are significant because:",
+    "opts": [
+      "They represent the truly opposing positions that require objective standards to resolve",
+      "They can be dovetailed to create mutual gain — each party gets what the other doesn't need",
+      "They must be disclosed to a mediator before negotiation can proceed",
+      "They represent shared goals that both parties can easily agree on"
+    ],
+    "correct": 1,
+    "exp": "Different interests — where each party wants different things — are actually negotiation gold. They can be dovetailed: party A gets what B doesn't value, and vice versa, creating mutual gain. Conflicting interests are the genuinely opposing ones that require objective standards. Most negotiators miss this distinction entirely."
+  },
+  {
+    "id": 36,
+    "subject": "comm",
+    "session": "Topic 8 · Audience Analysis",
+    "q": "What are the two axes of Mary Munter's Communication Strategy Matrix?",
+    "opts": [
+      "Audience Size vs. Message Complexity",
+      "Content Control vs. Audience Involvement",
+      "Formality Level vs. Communication Channel",
+      "Decision Authority vs. Communication Speed"
+    ],
+    "correct": 1,
+    "exp": "Munter's 2×2 matrix maps Content Control (how much you control what's communicated, Low → High) against Audience Involvement (how much you involve the audience, Low → High). Your position on both axes determines which of four modes to use: Tell, Sell, Consult, or Join."
+  },
+  {
+    "id": 37,
+    "subject": "comm",
+    "session": "Topic 8 · Audience Analysis",
+    "q": "Mary Munter's 'TELL' mode is correctly described as:",
+    "opts": [
+      "Low control and high involvement — collaborative consensus without authority",
+      "Low control and some involvement — facilitated dialogue toward a shared conclusion",
+      "High control and low involvement — authority-based directive for urgent or mandatory messages",
+      "High control and high involvement — participatory leadership with a preset outcome"
+    ],
+    "correct": 2,
+    "exp": "TELL = High Control, Low Involvement. The communicator owns the message entirely; the audience receives, not participates. Used for urgent directives, legal disclosures, mandatory announcements, or safety communications where debate would be inappropriate or dangerous."
+  },
+  {
+    "id": 38,
+    "subject": "comm",
+    "session": "Topic 8 · Audience Analysis",
+    "q": "Munter's Iron Law states that the relationship between control and involvement in communication is:",
+    "opts": [
+      "The more you control, the more you involve — they reinforce each other",
+      "Control and involvement are independent variables you can maximise simultaneously",
+      "The more you control, the less you involve; the less you involve, the more you control",
+      "Involvement increases automatically as control decreases to compensate"
+    ],
+    "correct": 2,
+    "exp": "Munter's Iron Law: 'The More You Control, The Less You Involve; The Less You Involve, The More You Control.' This is a deliberate strategic trade-off. Choosing between high control (Tell/Sell) and high involvement (Consult/Join) is a leadership judgment call that must vary deliberately by situation."
+  },
+  {
+    "id": 39,
+    "subject": "comm",
+    "session": "Topic 8 · Audience Analysis",
+    "q": "The Primary Audience in a communication is best defined as:",
+    "opts": [
+      "The largest group who will receive the communication",
+      "Those most affected by the outcome of the decision",
+      "Decision makers — those with authority to approve, reject, or act",
+      "Media and external stakeholders watching the process"
+    ],
+    "correct": 2,
+    "exp": "The Primary Audience are the decision makers — the people with authority to say yes or no. Everything should first answer their question: 'What's the risk? What's the gain? Why now?' In a board presentation, the CFO is the primary audience even if 20 others are present."
+  },
+  {
+    "id": 40,
+    "subject": "comm",
+    "session": "Topic 8 · Audience Analysis",
+    "q": "Why does ignoring the secondary audience cause communication plan failures?",
+    "opts": [
+      "Secondary audiences often leak sensitive information to competitors",
+      "Regulators classify secondary audiences as formally required recipients",
+      "Secondary audiences must implement the decision — passive resistance from them derails execution",
+      "Secondary audiences typically hold veto power in most organisations"
+    ],
+    "correct": 2,
+    "exp": "The secondary audience — those who won't decide but who must implement, or who influence the decision maker — cannot be ignored. Employees rolling out a new policy are the classic secondary audience. Skip them in the communication plan and watch passive resistance derail what looked like a clear decision."
+  },
+  {
+    "id": 41,
+    "subject": "comm",
+    "session": "Topic 8 · Audience Analysis",
+    "q": "The 'Master Question' of audience analysis that should drive every communication decision is:",
+    "opts": [
+      "'What is the most important single fact I want to communicate?'",
+      "'What channel will reach my audience most efficiently and at lowest cost?'",
+      "'What does my audience need to KNOW or BELIEVE in order to support me?'",
+      "'How many stakeholders have already been consulted on this topic?'"
+    ],
+    "correct": 2,
+    "exp": "This question — not 'what do I want to say?' — forces you to think from the audience's perspective. What information, evidence, or belief shift is required for them to support your proposal? It reframes communication from presenter-centred to audience-centred. Sell benefits, not features."
+  },
+  {
+    "id": 42,
+    "subject": "comm",
+    "session": "Topic 8 · Audience Analysis",
+    "q": "According to audience analysis, which attitude group is described as 'most susceptible to rational persuasion' and should be your primary conversion target?",
+    "opts": [
+      "Positive — they are already supportive and should be reinforced",
+      "Hostile — their opposition makes them the most important to convert",
+      "Neutral",
+      "Indifferent — they have no existing view at all"
+    ],
+    "correct": 2,
+    "exp": "Neutral audiences have no fixed view and are most responsive to logic, evidence, and clear benefits (the SELL mode). They are your primary conversion target. Positive audiences should be reinforced. Hostile audiences should be neutralised — not converted. Trying to convert committed opposition wastes energy better spent on the persuadable middle."
+  },
+  {
+    "id": 43,
+    "subject": "comm",
+    "session": "Topic 12 · 3M Communication Framework",
+    "q": "According to Mehrabian's research, what percentage of meaning in a face-to-face communication is conveyed through words alone?",
+    "opts": [
+      "55%",
+      "38%",
+      "17%",
+      "7%"
+    ],
+    "correct": 3,
+    "exp": "Mehrabian's breakdown: 7% Words (verbal content), 38% Voice (tone, pitch, speed, inflection), 55% Visual (non-verbal body behaviour). Words are the smallest component of any message. This is why tone, posture, eye contact, and delivery matter as much as — or more than — the content of what is said."
+  },
+  {
+    "id": 44,
+    "subject": "comm",
+    "session": "Topic 12 · 3M Communication Framework",
+    "q": "In the 3M Framework, which 'M' corresponds to the journalistic 5W1H questions (Who, Why, What, Where, When, How)?",
+    "opts": [
+      "Mind",
+      "Matter",
+      "Manner",
+      "Mode"
+    ],
+    "correct": 1,
+    "exp": "Matter is the content and structure of your communication, planned using 5W1H: Who (receiver), Why (purpose and urgency), What (audience knowledge and attitude), Where (reception context), When (optimal timing), How (organisation — headings, structure, signposts). Apply 5W1H before drafting to ensure audience-centred content."
+  },
+  {
+    "id": 45,
+    "subject": "comm",
+    "session": "Topic 12 · 3M Communication Framework",
+    "q": "Kris Cole's '7-word test' in the 3M framework demonstrates which principle about vocal communication?",
+    "opts": [
+      "Every word beyond the 7th in a sentence reduces comprehension by a measurable amount",
+      "Leaders should limit key messages to a maximum of 7 words for clarity",
+      "Changing the emphasis on each word in the same sentence completely changes its meaning",
+      "Seven strategic pauses per minute is the optimal vocal pacing for executive delivery"
+    ],
+    "correct": 2,
+    "exp": "The sentence 'I never said he stole our money' can be said 7 times — each time emphasising a different word — producing 7 entirely different meanings with the same words. This illustrates why vocal tone, stress, and emphasis are not decorations on your words: they ARE your words. Manner is meaning."
+  },
+  {
+    "id": 46,
+    "subject": "comm",
+    "session": "Topic 10 · Body Language",
+    "q": "Body language decodes on two axes. What are these two axes?",
+    "opts": [
+      "Active/Passive and Verbal/Non-verbal",
+      "Open/Closed and Forward/Back",
+      "Positive/Negative and Visible/Hidden",
+      "Receptive/Resistant and Fast/Slow"
+    ],
+    "correct": 1,
+    "exp": "All body language decodes on two axes: Open/Closed (is the person accepting or rejecting your message — open hands, full facing posture vs. arms folded, body turned away) and Forward/Back (is the person actively or passively engaged — leaning in vs. leaning back, doodling, avoiding eye contact). These two axes combine to create four business modes."
+  },
+  {
+    "id": 47,
+    "subject": "comm",
+    "session": "Topic 10 · Body Language",
+    "q": "In the body language framework, which mode is described as 'Open + Forward — actively accepting your message'?",
+    "opts": [
+      "Reflective",
+      "Fugitive",
+      "Combative",
+      "Responsive"
+    ],
+    "correct": 3,
+    "exp": "Responsive mode = Open + Forward. The person is actively accepting your message. Signals: leaning forward, open hands, feet under chair, papers closed, pen down. This is your window of opportunity — close the deal, ask for the decision, request the concession. Now. Only close in Responsive mode."
+  },
+  {
+    "id": 48,
+    "subject": "comm",
+    "session": "Topic 10 · Body Language",
+    "q": "When an audience member is in 'Fugitive' mode (Closed + Back), signalling disengagement, what is the correct response?",
+    "opts": [
+      "Push harder with your strongest evidence to re-engage them",
+      "Ask them a direct question to put them on the spot publicly",
+      "Urgently change your approach, topic, or tone to spark renewed interest",
+      "Give them space and continue your presentation as planned"
+    ],
+    "correct": 2,
+    "exp": "Fugitive mode = Closed + Back — the person is mentally trying to escape. Signals: doodling, staring into space, slumped posture, feet pointing toward the door. The correct response is immediate change in approach, topic, or tone. If you continue unchanged, you'll lose the audience entirely. Never push for a close in Fugitive mode."
+  },
+  {
+    "id": 49,
+    "subject": "comm",
+    "session": "Topic 13 · Critical Thinking & BANI",
+    "q": "The BANI framework, introduced by Jamais Cascio as a successor to VUCA, uses 'B' to represent:",
+    "opts": [
+      "Bold — organisations must be bold to succeed in disruptive environments",
+      "Brittle — systems that appear strong but shatter suddenly without warning",
+      "Balanced — the need for equilibrium in high-volatility contexts",
+      "Biased — the systemic bias embedded in organisational decision-making"
+    ],
+    "correct": 1,
+    "exp": "BANI: Brittle (systems appear strong but break suddenly — strength is an illusion), Anxious (every choice feels consequential; paralysis from fear of error), Nonlinear (small actions produce disproportionate, unpredictable effects), Incomprehensible (too much information, too fast — even with data, the situation resists understanding). More accurate than VUCA for the post-pandemic world."
+  },
+  {
+    "id": 50,
+    "subject": "comm",
+    "session": "Topic 13 · Critical Thinking & Aristotle",
+    "q": "Aristotle's three classical modes of persuasion — the foundation of rhetoric and effective crisis communication — are:",
+    "opts": [
+      "Ethos, Logos, Kairos",
+      "Pathos, Pragma, Logos",
+      "Ethos, Pathos, Logos",
+      "Logos, Mythos, Kairos"
+    ],
+    "correct": 2,
+    "exp": "Aristotle's three appeals: Ethos (credibility — who you are, your character and authority), Pathos (emotion — how you make people feel, connecting to their values and fears), Logos (logic — the evidence, argument, and data you present). Effective persuasion in crisis communication must use all three. Logos without Ethos lacks trust; Pathos without Logos feels manipulative."
+  }
+];
+
+/* ═══════════════════════════════════
+   STATE
+═══════════════════════════════════ */
+let state = {
+  filter: 'all',
+  deck: [],
+  idx: 0,
+  answered: false,
+  score: 0,
+  commCorrect: 0, commTotal: 0,
+  crisisCorrect: 0, crisisTotal: 0,
+  leadCorrect: 0, leadTotal: 0,
+};
+
+/* ═══════════════════════════════════
+   UTILITIES
+═══════════════════════════════════ */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pct(n, d) { return d === 0 ? 0 : Math.round((n / d) * 100); }
+
+function getTier(p) {
+  if (p >= 90) return { tier: "IIM-Level \u2014 Distinction", sub: "Exceptional command of all SLP frameworks." };
+  if (p >= 75) return { tier: "Strong Command \u2014 Pass with Merit", sub: "Solid understanding with minor gaps to revisit." };
+  if (p >= 60) return { tier: "Adequate \u2014 Revise Key Frameworks", sub: "Core concepts present; reinforce the weaker sessions." };
+  return { tier: "Needs Work \u2014 Return to Notes", sub: "Systematic revision recommended before the exam." };
+}
+
+/* ═══════════════════════════════════
+   FILTER
+═══════════════════════════════════ */
+function setFilter(f) {
+  state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  document.getElementById('btnAll').classList.add('active-all');
+  if (f !== 'all') {
+    const key = f.charAt(0).toUpperCase() + f.slice(1);
+    const el = document.getElementById('btn' + key);
+    if (el) el.classList.add('active-' + f);
+    document.getElementById('btnAll').classList.remove('active-all');
+  }
+  startQuiz(f);
+}
+
+/* ═══════════════════════════════════
+   QUIZ FLOW
+═══════════════════════════════════ */
+function startQuiz(f) {
+  if (f) state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  document.getElementById('btnAll').classList.add('active-all');
+  if (state.filter !== 'all') {
+    const key = state.filter.charAt(0).toUpperCase() + state.filter.slice(1);
+    const el = document.getElementById('btn' + key);
+    if (el) { el.classList.add('active-' + state.filter); document.getElementById('btnAll').classList.remove('active-all'); }
+  }
+
+  const pool = ALL_QUESTIONS.filter(q => state.filter === 'all' || q.subject === state.filter);
+  state.deck = shuffle(pool);
+  state.idx = 0;
+  state.score = 0;
+  state.commCorrect = 0; state.commTotal = 0;
+  state.crisisCorrect = 0; state.crisisTotal = 0;
+  state.leadCorrect = 0; state.leadTotal = 0;
+
+  state.deck.forEach(q => {
+    if (q.subject === 'comm') state.commTotal++;
+    if (q.subject === 'crisis') state.crisisTotal++;
+    if (q.subject === 'lead') state.leadTotal++;
+  });
+
+  updateScore();
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizArea').style.display = 'block';
+  document.getElementById('progressArea').style.display = 'block';
+  document.getElementById('emptyState').style.display = 'none';
+
+  if (state.deck.length === 0) {
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = state.deck[state.idx];
+  const total = state.deck.length;
+  const num = state.idx + 1;
+  state.answered = false;
+
+  const fillPct = ((num - 1) / total) * 100;
+  document.getElementById('progressFill').style.width = fillPct + '%';
+  document.getElementById('progressText').textContent = 'Question ' + num + ' of ' + total;
+  document.getElementById('progressPct').textContent = Math.round(fillPct) + '%';
+
+  const tag = document.getElementById('subjectTag');
+  tag.textContent = q.subject.toUpperCase();
+  tag.className = 'subject-tag ' + q.subject;
+
+  document.getElementById('sessionLabel').textContent = q.session;
+  document.getElementById('questionNum').textContent = '#' + q.id;
+  document.getElementById('questionText').textContent = q.q;
+
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = '<span class="option-letter">' + letters[i] + '</span>'
+                  + '<span class="option-text">' + opt + '</span>'
+                  + '<span class="key-hint">' + (i + 1) + '</span>';
+    btn.addEventListener('click', () => selectAnswer(i));
+    grid.appendChild(btn);
+  });
+
+  const ep = document.getElementById('explanationPanel');
+  ep.className = 'explanation-panel';
+  document.getElementById('explanationText').textContent = '';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'slideUp 0.3s ease';
+}
+
+function selectAnswer(chosen) {
+  if (state.answered) return;
+  state.answered = true;
+
+  const q = state.deck[state.idx];
+  const btns = document.querySelectorAll('.option-btn');
+  const correct = q.correct;
+
+  btns.forEach((btn, i) => {
+    btn.classList.add('disabled');
+    if (i === correct) btn.classList.add('correct');
+    else if (i === chosen) btn.classList.add('wrong');
+  });
+
+  if (chosen === correct) {
+    state.score++;
+    if (q.subject === 'comm') state.commCorrect++;
+    else if (q.subject === 'crisis') state.crisisCorrect++;
+    else if (q.subject === 'lead') state.leadCorrect++;
+  }
+
+  updateScore();
+
+  const ep = document.getElementById('explanationPanel');
+  document.getElementById('explanationText').textContent = q.exp;
+  ep.classList.add('show', q.subject + '-border');
+
+  document.getElementById('nextBtn').style.display = 'flex';
+  setTimeout(() => ep.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+}
+
+function nextQuestion() {
+  if (!state.answered) return;
+  state.idx++;
+  if (state.idx >= state.deck.length) {
+    showResults();
+  } else {
+    renderQuestion();
+    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function updateScore() {
+  const answeredSoFar = state.idx + (state.answered ? 1 : 0);
+  document.getElementById('scoreNum').textContent = state.score;
+  document.getElementById('scoreDen').textContent = Math.max(answeredSoFar, state.score);
+}
+
+/* ═══════════════════════════════════
+   RESULTS
+═══════════════════════════════════ */
+function showResults() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('progressArea').style.display = 'none';
+  document.getElementById('resultsScreen').classList.add('show');
+
+  const total = state.deck.length;
+  const p = pct(state.score, total);
+  const { tier, sub } = getTier(p);
+
+  document.getElementById('resultsTier').textContent = tier;
+  document.getElementById('resultsSubtitle').textContent = sub;
+  document.getElementById('rTotal').textContent = state.score + '/' + total;
+  document.getElementById('rTotalSub').textContent = p + '%';
+  document.getElementById('rComm').textContent = state.commCorrect + '/' + state.commTotal;
+  document.getElementById('rCommSub').textContent = pct(state.commCorrect, state.commTotal) + '%';
+  document.getElementById('rCrisis').textContent = state.crisisCorrect + '/' + state.crisisTotal;
+  document.getElementById('rCrisisSub').textContent = pct(state.crisisCorrect, state.crisisTotal) + '%';
+  document.getElementById('rLead').textContent = state.leadCorrect + '/' + state.leadTotal;
+  document.getElementById('rLeadSub').textContent = pct(state.leadCorrect, state.leadTotal) + '%';
+
+  document.getElementById('resultsScreen').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ═══════════════════════════════════
+   KEYBOARD SHORTCUTS
+═══════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (['1','2','3','4'].includes(e.key)) {
+    const btns = document.querySelectorAll('.option-btn:not(.disabled)');
+    const idx = parseInt(e.key) - 1;
+    if (btns[idx]) btns[idx].click();
+  }
+  if ((e.key === 'Enter' || e.key === ' ') && state.answered) {
+    e.preventDefault();
+    nextQuestion();
+  }
+  if (e.key === 'r' || e.key === 'R') startQuiz(state.filter);
+});
+
+/* ═══════════════════════════════════
+   INIT
+═══════════════════════════════════ */
+startQuiz('all');
+</script>
+</body>
+</html>

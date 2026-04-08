@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR & Global Leadership — Revision Quiz</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:         #1a1c22;
+    --card:       #252830;
+    --card-hover: #2d3040;
+    --border:     #353845;
+    --text:       #e8e6e1;
+    --text-muted: #9895a0;
+    --text-dim:   #6b6878;
+    --correct:    #3ecf8e;
+    --correct-dim:rgba(62,207,142,0.15);
+    --wrong:      #e05252;
+    --wrong-dim:  rgba(224,82,82,0.15);
+    --gold:       #f0c040;
+    --radius:     12px;
+    --radius-sm:  8px;
+    --shadow:     0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ── Header ── */
+  .app-header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .app-title {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+  .app-subtitle {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .score-display {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    white-space: nowrap;
+  }
+  .score-display .score-num { color: var(--gold); font-weight: 500; }
+
+  /* ── Filter Bar ── */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    padding: 20px 24px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .filter-btn {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.8rem;
+    padding: 7px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+  }
+  .filter-btn:hover { background: var(--card-hover); color: var(--text); }
+  .filter-btn.active-all { background: rgba(255,255,255,0.08); color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+  /* ── Subject-specific CSS (generated) ── */
+
+  /* ── Subject: CRM ── */
+  .subject-tag.crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid rgba(139,127,240,0.3); }
+  .filter-btn.active-crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border-color:#8b7ff0; }
+  .explanation-panel.crm-border { border-left-color:#8b7ff0; background:rgba(139,127,240,0.15); }
+  .btn-crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid #8b7ff0; }
+  .btn-crm:hover { filter:brightness(1.15); }
+  .score-block-value.crm { color:#8b7ff0; }
+
+  /* ── Subject: PM ── */
+  .subject-tag.pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border:1px solid rgba(139,63,224,0.3); }
+  .filter-btn.active-pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border-color:#8b3fe0; }
+  .explanation-panel.pm-border { border-left-color:#8b3fe0; background:rgba(139,63,224,0.15); }
+  .btn-pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border:1px solid #8b3fe0; }
+  .btn-pm:hover { filter:brightness(1.15); }
+  .score-block-value.pm { color:#8b3fe0; }
+
+  /* ── Subject: SCM ── */
+  .subject-tag.scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border:1px solid rgba(46,196,165,0.3); }
+  .filter-btn.active-scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border-color:#2ec4a5; }
+  .explanation-panel.scm-border { border-left-color:#2ec4a5; background:rgba(46,196,165,0.15); }
+  .btn-scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border:1px solid #2ec4a5; }
+  .btn-scm:hover { filter:brightness(1.15); }
+  .score-block-value.scm { color:#2ec4a5; }
+
+  /* ── Subject: FIN ── */
+  .subject-tag.fin { background:rgba(224,139,32,0.15); color:#e08b20; border:1px solid rgba(224,139,32,0.3); }
+  .filter-btn.active-fin { background:rgba(224,139,32,0.15); color:#e08b20; border-color:#e08b20; }
+  .explanation-panel.fin-border { border-left-color:#e08b20; background:rgba(224,139,32,0.15); }
+  .btn-fin { background:rgba(224,139,32,0.15); color:#e08b20; border:1px solid #e08b20; }
+  .btn-fin:hover { filter:brightness(1.15); }
+  .score-block-value.fin { color:#e08b20; }
+
+  /* ── Subject: ECON ── */
+  .subject-tag.econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border:1px solid rgba(62,207,142,0.3); }
+  .filter-btn.active-econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border-color:#3ecf8e; }
+  .explanation-panel.econ-border { border-left-color:#3ecf8e; background:rgba(62,207,142,0.15); }
+  .btn-econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border:1px solid #3ecf8e; }
+  .btn-econ:hover { filter:brightness(1.15); }
+  .score-block-value.econ { color:#3ecf8e; }
+
+  /* ── Subject: OPS ── */
+  .subject-tag.ops { background:rgba(77,157,224,0.15); color:#4d9de0; border:1px solid rgba(77,157,224,0.3); }
+  .filter-btn.active-ops { background:rgba(77,157,224,0.15); color:#4d9de0; border-color:#4d9de0; }
+  .explanation-panel.ops-border { border-left-color:#4d9de0; background:rgba(77,157,224,0.15); }
+  .btn-ops { background:rgba(77,157,224,0.15); color:#4d9de0; border:1px solid #4d9de0; }
+  .btn-ops:hover { filter:brightness(1.15); }
+  .score-block-value.ops { color:#4d9de0; }
+
+  /* ── Subject: HR ── */
+  .subject-tag.hr { background:rgba(224,92,92,0.15); color:#e05c5c; border:1px solid rgba(224,92,92,0.3); }
+  .filter-btn.active-hr { background:rgba(224,92,92,0.15); color:#e05c5c; border-color:#e05c5c; }
+  .explanation-panel.hr-border { border-left-color:#e05c5c; background:rgba(224,92,92,0.15); }
+  .btn-hr { background:rgba(224,92,92,0.15); color:#e05c5c; border:1px solid #e05c5c; }
+  .btn-hr:hover { filter:brightness(1.15); }
+  .score-block-value.hr { color:#e05c5c; }
+
+  /* ── Subject: ORG ── */
+  .subject-tag.org { background:rgba(46,125,50,0.15); color:#2e7d32; border:1px solid rgba(46,125,50,0.3); }
+  .filter-btn.active-org { background:rgba(46,125,50,0.15); color:#2e7d32; border-color:#2e7d32; }
+  .explanation-panel.org-border { border-left-color:#2e7d32; background:rgba(46,125,50,0.15); }
+  .btn-org { background:rgba(46,125,50,0.15); color:#2e7d32; border:1px solid #2e7d32; }
+  .btn-org:hover { filter:brightness(1.15); }
+  .score-block-value.org { color:#2e7d32; }
+
+  /* ── Subject: TALENT ── */
+  .subject-tag.talent { background:rgba(21,101,192,0.15); color:#1565c0; border:1px solid rgba(21,101,192,0.3); }
+  .filter-btn.active-talent { background:rgba(21,101,192,0.15); color:#1565c0; border-color:#1565c0; }
+  .explanation-panel.talent-border { border-left-color:#1565c0; background:rgba(21,101,192,0.15); }
+  .btn-talent { background:rgba(21,101,192,0.15); color:#1565c0; border:1px solid #1565c0; }
+  .btn-talent:hover { filter:brightness(1.15); }
+  .score-block-value.talent { color:#1565c0; }
+
+  /* ── Subject: FUTURE ── */
+  .subject-tag.future { background:rgba(224,139,32,0.15); color:#e08b20; border:1px solid rgba(224,139,32,0.3); }
+  .filter-btn.active-future { background:rgba(224,139,32,0.15); color:#e08b20; border-color:#e08b20; }
+  .explanation-panel.future-border { border-left-color:#e08b20; background:rgba(224,139,32,0.15); }
+  .btn-future { background:rgba(224,139,32,0.15); color:#e08b20; border:1px solid #e08b20; }
+  .btn-future:hover { filter:brightness(1.15); }
+  .score-block-value.future { color:#e08b20; }
+
+  /* ── Main layout ── */
+  .main-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 20px;
+  }
+
+  /* ── Progress ── */
+  .progress-area { margin-bottom: 24px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    margin-bottom: 8px;
+  }
+  .progress-track { height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    background: linear-gradient(90deg, #8b7ff0, #8b3fe0);
+  }
+
+  /* ── Question Card ── */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .subject-tag {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .session-label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-style: italic;
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+  }
+  .question-num {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-left: auto;
+  }
+  .question-text {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  /* ── Answer Options ── */
+  .options-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .option-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-align: left;
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    transition: all 0.15s ease;
+    width: 100%;
+    position: relative;
+  }
+  .option-btn:hover:not(.disabled) { background: var(--card-hover); border-color: rgba(255,255,255,0.18); }
+  .option-btn.disabled { cursor: default; color: var(--text-muted); }
+  .option-btn.correct {
+    background: var(--correct-dim) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+  }
+  .option-btn.wrong {
+    background: var(--wrong-dim) !important;
+    border-color: var(--wrong) !important;
+    color: var(--wrong) !important;
+  }
+  .option-letter {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px 8px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.15s;
+  }
+  .option-btn.correct .option-letter { background: rgba(62,207,142,0.2); border-color: var(--correct); color: var(--correct); }
+  .option-btn.wrong   .option-letter { background: rgba(224,82,82,0.2);  border-color: var(--wrong);   color: var(--wrong);   }
+  .option-text { flex: 1; }
+  .key-hint {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    flex-shrink: 0;
+    align-self: center;
+  }
+  .option-btn.disabled .key-hint { display: none; }
+
+  /* ── Explanation Panel ── */
+  .explanation-panel {
+    border-left: 3px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+    display: none;
+    animation: slideUp 0.25s ease;
+  }
+  .explanation-panel.show { display: block; }
+  .explanation-label {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 9px 22px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { background: var(--card-hover); }
+  .btn-primary { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+  .btn-primary:hover { background: rgba(255,255,255,0.13); }
+  #nextBtn { display: none; margin-top: 4px; }
+
+  /* ── Results Screen ── */
+  .results-screen { display: none; animation: slideUp 0.4s ease; }
+  .results-screen.show { display: block; }
+  .results-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 32px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .results-trophy { font-size: 2.5rem; margin-bottom: 12px; }
+  .results-tier {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, #8b7ff0, #8b3fe0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .results-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    font-style: italic;
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+  }
+  .results-scores {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .score-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 12px;
+  }
+  .score-block-label {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .score-block-value {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+  .score-block-value.all { color: var(--gold); }
+  .score-block-sub {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+  }
+  .results-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 0.95rem;
+    display: none;
+  }
+
+  /* ── Keyboard hints ── */
+  .keyboard-hint-bar {
+    text-align: center;
+    margin-top: 20px;
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+  .kh-item { display: flex; align-items: center; gap: 6px; }
+  .kh-key { border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; color: var(--text-muted); }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+
+  /* ── Touch UX: kill 300ms delay, remove tap highlight ── */
+  * { -webkit-tap-highlight-color: transparent; }
+  button, .option-btn, .filter-btn { touch-action: manipulation; }
+  .option-btn:active:not(.disabled) { opacity: 0.72; transform: scale(0.983); }
+  .btn:active        { opacity: 0.78; transform: scale(0.972); }
+  .filter-btn:active { opacity: 0.72; }
+
+  /* ── Mobile: max 640px ── */
+  @media (max-width: 640px) {
+
+    .app-header { padding: 10px 14px; flex-wrap: wrap; gap: 6px; }
+    .app-title { font-size: 0.9rem; }
+    .app-subtitle { display: none; }
+    .score-display { font-size: 0.78rem; padding: 4px 12px; }
+
+    .filter-bar {
+      padding: 12px 14px 0;
+      gap: 7px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-btn { flex-shrink: 0; min-height: 40px; padding: 8px 18px; font-size: 0.78rem; }
+
+    .main-wrap { padding: 14px 12px; }
+    .progress-area { margin-bottom: 16px; }
+    .progress-label { font-size: 0.7rem; }
+    .progress-track { height: 5px; }
+
+    .question-card { padding: 18px 14px; border-radius: 10px; }
+    .card-meta { gap: 7px; margin-bottom: 14px; }
+    .subject-tag { font-size: 0.65rem; }
+    .session-label { font-size: 0.68rem; }
+    .question-num { font-size: 0.65rem; }
+
+    /* 16px minimum stops iOS zooming the page on focus */
+    .question-text { font-size: 1rem; line-height: 1.65; margin-bottom: 18px; }
+
+    /* Option buttons: 52px min tap target */
+    .options-grid { gap: 9px; margin-bottom: 16px; }
+    .option-btn {
+      min-height: 52px;
+      padding: 14px 13px;
+      gap: 11px;
+      font-size: 0.88rem;
+      border-radius: 8px;
+      align-items: center;
+    }
+    .option-letter { min-width: 26px; text-align: center; padding: 2px 6px; font-size: 0.75rem; }
+    .key-hint { display: none; }
+
+    .explanation-panel { font-size: 0.83rem; padding: 12px 13px; }
+    .explanation-label { font-size: 0.62rem; }
+
+    /* Next: full-width large button */
+    #nextBtn {
+      width: 100%;
+      justify-content: center;
+      padding: 15px;
+      min-height: 50px;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      margin-top: 6px;
+    }
+
+    .results-card { padding: 22px 14px; }
+    .results-trophy { font-size: 2rem; margin-bottom: 8px; }
+    .results-tier { font-size: 1.25rem; }
+    .results-subtitle { font-size: 0.78rem; margin-bottom: 20px; }
+    .results-scores { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .score-block { padding: 12px 10px; }
+    .score-block-label { font-size: 0.62rem; }
+    .score-block-value { font-size: 1.5rem; }
+    .score-block-sub { font-size: 0.68rem; }
+
+    /* Results buttons: stacked, full width */
+    .results-actions { flex-direction: column; }
+    .results-actions .btn { width: 100%; justify-content: center; min-height: 48px; font-size: 0.9rem; }
+
+    .keyboard-hint-bar { display: none; }
+  }
+
+  /* Very small phones < 360px */
+  @media (max-width: 360px) {
+    .question-text { font-size: 0.94rem; }
+    .option-btn { font-size: 0.83rem; padding: 13px 11px; }
+    .results-scores { grid-template-columns: 1fr; }
+    .score-block-value { font-size: 1.35rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="app-header">
+  <div>
+    <div class="app-title"><span class="future">FUTURE</span> &amp; <span class="org">ORG</span> &amp; <span class="talent">TALENT</span> Quiz</div>
+    <div class="app-subtitle">IIM Lucknow · Prof. Anjali Bansal · Future of Work · Organisation Design & Structure · Talent Management & HR · 35 Questions · April 08, 2026</div>
+  </div>
+  <div class="score-display">
+    Score: <span class="score-num" id="scoreNum">0</span>
+    / <span id="scoreDen">0</span>
+  </div>
+</header>
+
+<!-- ── FILTER BAR ── -->
+<div class="filter-bar">
+  <button class="filter-btn active-all" id="btnAll" onclick="setFilter('all')">All 35</button>
+      <button class="filter-btn" id="btnFuture" onclick="setFilter('future')">FUTURE (11)</button>
+      <button class="filter-btn" id="btnOrg" onclick="setFilter('org')">ORG (12)</button>
+      <button class="filter-btn" id="btnTalent" onclick="setFilter('talent')">TALENT (12)</button>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main-wrap">
+
+  <!-- Progress -->
+  <div class="progress-area" id="progressArea">
+    <div class="progress-label">
+      <span id="progressText">Question 1 of 35</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Quiz Area -->
+  <div id="quizArea">
+    <div class="question-card" id="questionCard">
+
+      <div class="card-meta">
+        <span class="subject-tag" id="subjectTag">—</span>
+        <span class="session-label" id="sessionLabel">—</span>
+        <span class="question-num" id="questionNum">#1</span>
+      </div>
+
+      <div class="question-text" id="questionText">Loading...</div>
+
+      <div class="options-grid" id="optionsGrid"></div>
+
+      <div class="explanation-panel" id="explanationPanel">
+        <div class="explanation-label">Explanation</div>
+        <div id="explanationText"></div>
+      </div>
+
+      <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">
+        Next &rarr;
+      </button>
+    </div>
+
+    <div class="keyboard-hint-bar">
+      <div class="kh-item"><span class="kh-key">1–4</span> Select answer</div>
+      <div class="kh-item"><span class="kh-key">Enter</span> Next question</div>
+      <div class="kh-item"><span class="kh-key">R</span> Restart</div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" id="emptyState">No questions match this filter.</div>
+
+  <!-- Results Screen -->
+  <div class="results-screen" id="resultsScreen">
+    <div class="results-card">
+      <div class="results-trophy">🎓</div>
+      <div class="results-tier" id="resultsTier"></div>
+      <div class="results-subtitle" id="resultsSubtitle"></div>
+
+      <div class="results-scores">
+        
+        <div class="score-block">
+          <div class="score-block-label">Total</div>
+          <div class="score-block-value all" id="rTotal">—</div>
+          <div class="score-block-sub" id="rTotalSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">FUTURE</div>
+          <div class="score-block-value future" id="rFuture">—</div>
+          <div class="score-block-sub" id="rFutureSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">ORG</div>
+          <div class="score-block-value org" id="rOrg">—</div>
+          <div class="score-block-sub" id="rOrgSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">TALENT</div>
+          <div class="score-block-value talent" id="rTalent">—</div>
+          <div class="score-block-sub" id="rTalentSub"></div>
+        </div>
+      </div>
+
+      <div class="results-actions">
+        <button class="btn btn-primary" onclick="startQuiz('all')">Restart All 35</button>
+        <button class="btn btn-future" onclick="startQuiz('future')">FUTURE Only (11)</button>
+        <button class="btn btn-org" onclick="startQuiz('org')">ORG Only (12)</button>
+        <button class="btn btn-talent" onclick="startQuiz('talent')">TALENT Only (12)</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main-wrap -->
+
+<script>
+/* ═══════════════════════════════════
+   QUESTION DATA
+═══════════════════════════════════ */
+const ALL_QUESTIONS = [
+  {
+    "id": 1,
+    "subject": "org",
+    "session": "Topic 1 · Organisation Alignment Model",
+    "q": "In the Organisation Alignment Model, what sits at the very top as the single starting point for everything that follows?",
+    "opts": [
+      "Strategy",
+      "Leadership",
+      "Vision",
+      "Culture"
+    ],
+    "correct": 2,
+    "exp": "Vision sits at the apex. It cascades down into Mission, which is then translated by Leadership into two parallel tracks — Strategy (Goals → Objectives → Activities) and Culture (Values → Practices → Behaviours) — both of which converge to produce Results. Breaking any link causes misalignment."
+  },
+  {
+    "id": 2,
+    "subject": "org",
+    "session": "Topic 1 · Organisation Alignment Model",
+    "q": "The Organisation Alignment Model runs two parallel tracks below Leadership. What are they?",
+    "opts": [
+      "Finance and Operations",
+      "Strategy and Culture",
+      "People and Processes",
+      "Planning and Execution"
+    ],
+    "correct": 1,
+    "exp": "Below Leadership, two tracks run in parallel: the Strategy track (Strategic Goals → Objectives → Activities) and the Culture track (Values → Practices → Behaviours). Both tracks converge in Structure and ultimately produce Results. If Strategy and Culture point in opposite directions, Results will always disappoint."
+  },
+  {
+    "id": 3,
+    "subject": "org",
+    "session": "Topic 1 · Organisation Alignment Model",
+    "q": "Apple's 'Think Different' vision cascading into product design, HR hiring philosophy, and store structure is cited as an example of what?",
+    "opts": [
+      "Mintzberg's Operating Core in action",
+      "Successful organisation alignment — Vision shaping every element",
+      "The Hollywood Model applied to a consumer brand",
+      "Talent Management Stage 4 — developing employees"
+    ],
+    "correct": 1,
+    "exp": "Apple is the textbook Organisation Alignment example: the 'Think Different' vision cascades consistently into every element — product design decisions, hiring philosophy, and even physical store structure. This is alignment — all parts serving a single vision."
+  },
+  {
+    "id": 4,
+    "subject": "org",
+    "session": "Topic 1 · Mintzberg's 5-Part Structure",
+    "q": "In Mintzberg's 5-Part Organisational Structure, which component 'does the actual work' — delivering the product or service at the frontline?",
+    "opts": [
+      "Strategic Apex",
+      "Technostructure",
+      "Operating Core",
+      "Support Staff"
+    ],
+    "correct": 2,
+    "exp": "The Operating Core is the frontline layer — doctors in a hospital, engineers building software, assembly-line workers in manufacturing. They produce the actual output. The Strategic Apex sets direction, the Middle Apex coordinates, and the Technostructure and Support Staff enable."
+  },
+  {
+    "id": 5,
+    "subject": "org",
+    "session": "Topic 1 · Mintzberg's 5-Part Structure",
+    "q": "In Mintzberg's model, the Technostructure and Support Staff appear as the two 'bubbles' flanking the core structure. Which correctly identifies their roles?",
+    "opts": [
+      "Technostructure = IT and legal teams · Support Staff = analysts and planners",
+      "Technostructure = analysts and planners · Support Staff = HR, IT, legal",
+      "Technostructure = top leadership · Support Staff = middle managers",
+      "Technostructure = frontline workers · Support Staff = external consultants"
+    ],
+    "correct": 1,
+    "exp": "Technostructure = analysts, planners, and standardisers (they design the systems others follow). Support Staff = HR, IT, legal, cafeteria — functions that support the core without directly producing output. In the gig economy, organisations increasingly outsource both to TVCs."
+  },
+  {
+    "id": 6,
+    "subject": "org",
+    "session": "Topic 1 · Mintzberg's 5-Part Structure",
+    "q": "In a hospital, which Mintzberg component would the Hospital Administration team (CEO, Board) represent?",
+    "opts": [
+      "Operating Core",
+      "Middle Apex",
+      "Technostructure",
+      "Strategic Apex"
+    ],
+    "correct": 3,
+    "exp": "The Strategic Apex = top leadership setting direction. In a hospital, the Board and CEO constitute the Strategic Apex. Doctors are the Operating Core (they do the actual work). Medical records, HR, and billing are Support Staff. Middle managers (department heads, charge nurses) are the Middle Apex."
+  },
+  {
+    "id": 7,
+    "subject": "org",
+    "session": "Topic 1 · Organisational Decisions",
+    "q": "Which organisational-level decision determines how many levels of hierarchy exist within an organisation?",
+    "opts": [
+      "Horizontal Differentiation",
+      "Formalization",
+      "Vertical Differentiation",
+      "Centralization"
+    ],
+    "correct": 2,
+    "exp": "Vertical Differentiation refers to the number of levels in the hierarchy — from frontline workers up to the CEO. A tall organisation has many vertical levels; a flat one has few. This decision affects communication speed, decision-making authority, and how distant leadership feels from the Operating Core."
+  },
+  {
+    "id": 8,
+    "subject": "org",
+    "session": "Topic 1 · Organisational Decisions",
+    "q": "Amazon having separate, specialist teams for AWS, Retail, and Devices is an example of which organisational decision?",
+    "opts": [
+      "Vertical Differentiation — many levels of hierarchy",
+      "Horizontal Differentiation — specialisation by function or business unit",
+      "Centralisation — all decisions made at headquarters",
+      "Formalization — rigid rules governing each division"
+    ],
+    "correct": 1,
+    "exp": "Horizontal Differentiation = how work is divided across units or departments at the same hierarchical level. Amazon's specialist divisions (AWS, Retail, Devices, Alexa) are all horizontally differentiated — each is a focused, expert unit. High horizontal differentiation allows depth but requires strong integration mechanisms."
+  },
+  {
+    "id": 9,
+    "subject": "org",
+    "session": "Topic 1 · Organisational Decisions",
+    "q": "Centralization as an organisational decision refers to:",
+    "opts": [
+      "The geographical concentration of the company's physical offices",
+      "The extent to which decision-making authority is held at the top vs. distributed downward",
+      "The number of layers of management between the CEO and frontline workers",
+      "The degree to which work processes are governed by written rules and procedures"
+    ],
+    "correct": 1,
+    "exp": "Centralisation determines where decision-making authority sits. High centralisation = top leadership makes most decisions. High decentralisation = authority is distributed downward to business units or frontline managers. The right level depends on the environment — stable environments favour centralisation; volatile, diverse ones favour decentralisation."
+  },
+  {
+    "id": 10,
+    "subject": "org",
+    "session": "Topic 1 · Organisation Alignment Model",
+    "q": "In the Organisation Alignment Model, which element sits between Vision and the two parallel tracks of Strategy and Culture?",
+    "opts": [
+      "Structure",
+      "Mission",
+      "Results",
+      "Systems & Processes"
+    ],
+    "correct": 1,
+    "exp": "Mission sits between Vision and Leadership. Vision → Mission → Leadership → (Strategy track + Culture track) → Structure → Results. Mission translates the broad aspirational Vision into a more specific statement of purpose that Leadership can then operationalise through strategy and culture."
+  },
+  {
+    "id": 11,
+    "subject": "org",
+    "session": "Topic 1 · Mintzberg's 5-Part Structure",
+    "q": "Mintzberg's Middle Apex serves which primary function in the organisational structure?",
+    "opts": [
+      "Setting the long-term strategic direction of the organisation",
+      "Delivering the frontline product or service to customers",
+      "Connecting and coordinating between the Strategic Apex and the Operating Core",
+      "Designing systems and procedures that standardise work across the organisation"
+    ],
+    "correct": 2,
+    "exp": "The Middle Apex (middle managers, department heads) is the connective tissue of the organisation. They translate strategic direction from the top into operational instructions for the frontline, and relay feedback from the Operating Core back to leadership. Without an effective Middle Apex, strategy never reaches execution."
+  },
+  {
+    "id": 12,
+    "subject": "org",
+    "session": "Topic 1 · Organisation Alignment Model",
+    "q": "The Culture track in the Organisation Alignment Model flows through which sequence?",
+    "opts": [
+      "Goals → Objectives → Activities",
+      "Mission → Leadership → Strategy",
+      "Values → Practices → Behaviours",
+      "Structure → Systems → Results"
+    ],
+    "correct": 2,
+    "exp": "The Culture track flows: Values (what the organisation believes) → Practices (how those beliefs manifest in everyday norms and routines) → Behaviours (the observable actions of people). This is the 'soft' track alongside the 'hard' Strategy track. Both must converge for Results to match the Vision."
+  },
+  {
+    "id": 13,
+    "subject": "talent",
+    "session": "Topic 2 · Talent Management",
+    "q": "How is Talent Management best defined in Prof. Anjali Bansal's framework?",
+    "opts": [
+      "The administrative process of managing payroll, contracts, and compliance documentation",
+      "The strategic process of acquiring, developing, retaining, and motivating the right people to meet organisational goals",
+      "The technology-driven process of automating recruitment and performance reviews",
+      "The legal framework governing employee rights and employer obligations"
+    ],
+    "correct": 1,
+    "exp": "Talent Management is a strategic, end-to-end process — not just hiring. It covers the full 6-stage cycle: Strategy & Planning → Sourcing → Selecting → Developing → Retaining → Transitioning. Every stage must align with business goals. Google's investment in development and retention (free meals, equity, 20% projects) illustrates this."
+  },
+  {
+    "id": 14,
+    "subject": "talent",
+    "session": "Topic 2 · Talent Management",
+    "q": "What is the correct sequence of the 6-stage Talent Management cycle?",
+    "opts": [
+      "Hire → Train → Pay → Promote → Retire → Replace",
+      "Strategy & Planning → Sourcing → Selecting → Developing → Retaining → Transitioning",
+      "Attract → Screen → Onboard → Assess → Reward → Exit",
+      "Plan → Advertise → Interview → Offer → Manage → Terminate"
+    ],
+    "correct": 1,
+    "exp": "The 6 stages: (1) Strategy & Planning — anticipate workforce needs; (2) Sourcing & Recruiting — attract candidates; (3) Selecting & Hiring — choose best fit; (4) Developing — L&D and onboarding; (5) Retaining & Engaging — keep talent invested; (6) Transitioning — succession planning and identifying the next generation of leaders."
+  },
+  {
+    "id": 15,
+    "subject": "talent",
+    "session": "Topic 2 · Talent Management",
+    "q": "According to the Talent Management framework, which stage do most companies fail at despite investing heavily in earlier stages?",
+    "opts": [
+      "Stage 2 — Sourcing & Recruiting (failing to attract top talent)",
+      "Stage 3 — Selecting & Hiring (choosing the wrong candidates)",
+      "Stage 5 — Retaining & Engaging (failing to keep people invested)",
+      "Stage 6 — Transitioning (no succession planning)"
+    ],
+    "correct": 2,
+    "exp": "Stage 5 — Retaining & Engaging — is where most organisations fall short. They invest enormous resources in hiring (stages 2–3) but treat retention as automatic. The Great Resignation proved that salary alone does not retain talent — ongoing engagement, purpose, flexibility, and growth opportunities are required."
+  },
+  {
+    "id": 16,
+    "subject": "talent",
+    "session": "Topic 2 · Talent Management",
+    "q": "Google's famous 'free meals, equity, and 20% projects' policies are cited as examples of which stage of the Talent Management cycle?",
+    "opts": [
+      "Stage 2 — Sourcing & Recruiting",
+      "Stage 3 — Selecting & Hiring",
+      "Stage 4 — Developing",
+      "Stage 5 — Retaining & Engaging"
+    ],
+    "correct": 3,
+    "exp": "Google's perks and the 20% projects (allowing engineers to spend 20% of their time on personal initiatives) are retention and engagement tools — Stage 5. They also serve Stage 4 (Development) — the 20% projects specifically develop skills and innovation capability. But their primary function is keeping top talent engaged and preventing attrition."
+  },
+  {
+    "id": 17,
+    "subject": "talent",
+    "session": "Topic 2 · Talent Management",
+    "q": "The four HR 'human decisions' pillars that underpin Talent Management are:",
+    "opts": [
+      "Attract, Screen, Train, Pay",
+      "Hire, Fire, Promote, Transfer",
+      "Talent Acquisition, Talent Development, Talent Retention, Talent Motivation",
+      "Plan, Recruit, Manage, Review"
+    ],
+    "correct": 2,
+    "exp": "The four pillars: Talent Acquisition (getting the right people in), Talent Development (growing their capability), Talent Retention (keeping them engaged), and Talent Motivation (ensuring they perform at their best). All four must be addressed — neglecting any one creates a gap that undermines the others."
+  },
+  {
+    "id": 18,
+    "subject": "talent",
+    "session": "Topic 3 · 21st Century HR Challenges",
+    "q": "The Great Resignation was primarily triggered by which combination of factors?",
+    "opts": [
+      "Economic recession and mass layoffs forcing workers into unemployment",
+      "Burnout, lack of flexibility, and a post-pandemic rethinking of work-life priorities",
+      "Automation replacing jobs at unprecedented speed across all sectors",
+      "Government incentives encouraging early retirement and entrepreneurship"
+    ],
+    "correct": 1,
+    "exp": "The Great Resignation (2021–22) saw over 47 million Americans quit voluntarily. Indian IT companies saw attrition of 20–25%. It was driven by burnout from pandemic overwork, lack of flexibility (return-to-office mandates), and a deeper rethinking of purpose and work-life balance — especially among Millennials and Gen Z."
+  },
+  {
+    "id": 19,
+    "subject": "talent",
+    "session": "Topic 3 · 21st Century HR Challenges",
+    "q": "What does the concept of 'comparable worth' argue in the context of the Glass Ceiling?",
+    "opts": [
+      "That all employees in the same organisation should receive identical salaries regardless of role",
+      "That jobs of equal value should receive equal pay, regardless of who traditionally holds them",
+      "That women should be given preferential promotion to compensate for historical discrimination",
+      "That market-rate benchmarking should be the sole determinant of salary levels"
+    ],
+    "correct": 1,
+    "exp": "Comparable worth argues that jobs of equal value — equal skill, effort, responsibility, and working conditions — should receive equal pay, even if those jobs are held predominantly by different genders. A female CFO earning less than a male peer for the same output is the textbook violation. HR must audit pay equity and create transparent promotion criteria."
+  },
+  {
+    "id": 20,
+    "subject": "talent",
+    "session": "Topic 3 · 21st Century HR Challenges",
+    "q": "IBM's Watson HR analytics system is cited as being able to predict which employees are likely to quit with approximately what accuracy level — and how far in advance?",
+    "opts": [
+      "~60% accuracy — 1 month in advance",
+      "~80% accuracy — 3 months in advance",
+      "~95% accuracy — months before they resign",
+      "~99% accuracy — 1 week before they submit notice"
+    ],
+    "correct": 2,
+    "exp": "IBM's Watson uses HR Big Data to predict attrition with ~95% accuracy — months before the employee even decides to leave. This allows HR to intervene proactively with retention strategies rather than reacting after a resignation is submitted. This is the power of evidence-based HR over intuition-based HR."
+  },
+  {
+    "id": 21,
+    "subject": "talent",
+    "session": "Topic 3 · 21st Century HR Challenges",
+    "q": "HR-Tech and AI are described as shifting HR from which approach to which?",
+    "opts": [
+      "From digital to manual — AI creates compliance risks that require human oversight",
+      "From evidence-based to intuition-based — AI removes human judgment from decisions",
+      "From gut/intuition-based decisions to evidence-based people management",
+      "From decentralised to centralised — AI concentrates all HR power with analytics teams"
+    ],
+    "correct": 2,
+    "exp": "AI tools now screen resumes, predict attrition, personalise L&D paths, and analyse employee sentiment at scale. Big Data allows HR to make decisions based on evidence — patterns, trends, and predictive models — rather than manager intuition and gut feel. This is a fundamental shift in HR's epistemology."
+  },
+  {
+    "id": 22,
+    "subject": "talent",
+    "session": "Topic 4 · Google TVC Model",
+    "q": "In Google's TVC model, what does TVC stand for?",
+    "opts": [
+      "Technology, Ventures, and Contractors",
+      "Temporary, Vendor, and Contractor",
+      "Talent, Vendors, and Contingent",
+      "Temporary, Virtual, and Contract"
+    ],
+    "correct": 1,
+    "exp": "TVC = Temporary, Vendor, Contractor. These are non-full-time employees who work alongside Google's regular FTEs (Full-Time Employees). TVCs outnumber FTEs at Google and do critical work — from AI research to content moderation — but have different benefits, contracts, and legal standing."
+  },
+  {
+    "id": 23,
+    "subject": "talent",
+    "session": "Topic 4 · Google TVC Model",
+    "q": "The core strategic question behind Google's TVC debate is:",
+    "opts": [
+      "Should TVCs be paid the same as FTEs for equivalent work?",
+      "Is this work core to our identity? Core = hire permanently. Peripheral/temporary/scalable = TVC.",
+      "Should TVCs be allowed to attend the same internal meetings as FTEs?",
+      "Can TVCs be given stock options to align their incentives with FTE performance?"
+    ],
+    "correct": 1,
+    "exp": "The TVC framework rests on one diagnostic question: Is this role core to what we are? If yes — hire permanently (FTE). If the work is peripheral, temporary, requires specialist expertise for a bounded project, or is scalable/outsourceable — use TVCs. Misclassifying core roles as TVCs creates ethical, legal, and strategic risks."
+  },
+  {
+    "id": 24,
+    "subject": "talent",
+    "session": "Topic 4 · Google TVC Model",
+    "q": "Which of the following Google roles would be most appropriately classified as a TVC rather than an FTE, according to the TVC framework?",
+    "opts": [
+      "A senior product manager leading Google Search algorithm development",
+      "A campus recruiter contracted for 6 months to visit universities on Google's behalf",
+      "A core engineering lead overseeing YouTube's recommendation system",
+      "A senior data scientist building Google's core advertising revenue models"
+    ],
+    "correct": 1,
+    "exp": "A seasonal, time-bounded need (6-month campus recruiting) is exactly the use case for TVCs — temporary, non-core, scalable. Senior product managers, core engineering leads, and data scientists building revenue-critical systems are core roles that should be FTEs. Misclassifying them as TVCs undermines loyalty, institutional knowledge, and legal standing."
+  },
+  {
+    "id": 25,
+    "subject": "future",
+    "session": "Topic 4 · Shamrock Framework",
+    "q": "Charles Handy's Shamrock Framework comes from which book?",
+    "opts": [
+      "The Age of Information",
+      "Age of Unreason",
+      "The Future of Management",
+      "The Flexible Firm"
+    ],
+    "correct": 1,
+    "exp": "Charles Handy introduced the Shamrock Framework in 'The Age of Unreason.' The three-leaf shamrock describes the modern organisation's workforce: Leaf 1 = Core Professionals (FTEs), Leaf 2 = Self-Employed Specialists (contracted for expertise), Leaf 3 = Contingent Workforce (flexible, project-based). Traditional single-type employment is disappearing."
+  },
+  {
+    "id": 26,
+    "subject": "future",
+    "session": "Topic 4 · Shamrock Framework",
+    "q": "In Handy's Shamrock Framework, Leaf 2 represents:",
+    "opts": [
+      "Core permanent employees who hold institutional knowledge",
+      "Temporary workers hired during peak demand periods",
+      "Self-employed specialists or consultants contracted for their specific expertise",
+      "Overseas workers hired through outsourcing partnerships"
+    ],
+    "correct": 2,
+    "exp": "Leaf 2 = Self-Employed Professionals / Specialists. These are independent experts contracted specifically for their niche skill — a UI/UX designer, McKinsey consultant, or AI professor brought in for a defined project. They bring depth without permanent headcount. The distinction from Leaf 3 is their expertise level and typically higher status."
+  },
+  {
+    "id": 27,
+    "subject": "future",
+    "session": "Topic 4 · Shamrock Framework",
+    "q": "A startup with 5 full-time engineers, a contracted UI/UX designer, and a Fiverr copywriter maps to which Shamrock leaves respectively?",
+    "opts": [
+      "Leaf 1, Leaf 1, Leaf 2",
+      "Leaf 2, Leaf 3, Leaf 1",
+      "Leaf 1, Leaf 2, Leaf 3",
+      "Leaf 3, Leaf 2, Leaf 1"
+    ],
+    "correct": 2,
+    "exp": "5 full-time engineers = Leaf 1 (Core Professionals/FTEs). Contracted UI/UX designer = Leaf 2 (Self-Employed Specialist). Fiverr copywriter = Leaf 3 (Contingent/temporary worker). This is the textbook Shamrock example from the revision sheet."
+  },
+  {
+    "id": 28,
+    "subject": "future",
+    "session": "Topic 4 · Shamrock Framework",
+    "q": "What is the risk of over-relying exclusively on Leaf 3 (contingent workers) in the Shamrock model?",
+    "opts": [
+      "Excessive permanent headcount costs that reduce organisational flexibility",
+      "A fragmented, low-loyalty culture with no institutional memory",
+      "Over-investment in development for workers who will eventually leave",
+      "Regulatory non-compliance with employment protection legislation"
+    ],
+    "correct": 1,
+    "exp": "Leaf 3 workers — contingent, temporary, gig — bring flexibility but not loyalty or institutional memory. Over-relying on them creates a transactional workforce with shallow organisational commitment, no accumulated knowledge, and weak culture. The best organisations manage all three leaves strategically — flexibility (Leaf 3), expertise (Leaf 2), and memory (Leaf 1)."
+  },
+  {
+    "id": 29,
+    "subject": "future",
+    "session": "Topic 4 · McKinsey Matrix",
+    "q": "In McKinsey's Matrix of Independent Workers, 'Free Agents' are defined as workers who:",
+    "opts": [
+      "Work for free in exchange for equity or experience",
+      "Choose independent work as their primary source of income",
+      "Are forced into gig work due to lack of permanent employment options",
+      "Supplement a full-time salary with occasional freelance projects"
+    ],
+    "correct": 1,
+    "exp": "Free Agents = Preferred Choice + Primary Income. They actively choose independent work as their main livelihood — not because they have to, but because they value autonomy, variety, or earning potential. Examples: a self-employed plumber or private chiropractor. They represent approximately 30% (~49 million) of independent workers."
+  },
+  {
+    "id": 30,
+    "subject": "future",
+    "session": "Topic 4 · McKinsey Matrix",
+    "q": "The McKinsey Matrix categorises independent workers on two axes. What are these axes?",
+    "opts": [
+      "Skill level vs. Income level",
+      "Industry sector vs. Geographic location",
+      "Primary vs. Supplemental income, and Preferred choice vs. Necessary choice",
+      "Full-time equivalent hours vs. Years of independent work experience"
+    ],
+    "correct": 2,
+    "exp": "The two axes: (1) Income type — Primary (gig work is the main income source) vs. Supplemental (a side income alongside other work); (2) Motivation — Preferred/By choice vs. Necessary/Forced. These create four quadrants: Free Agents, Casual Earners, Reluctants, and Financially Strapped."
+  },
+  {
+    "id": 31,
+    "subject": "future",
+    "session": "Topic 4 · McKinsey Matrix",
+    "q": "What percentage of gig/independent workers in the McKinsey Matrix are there 'by choice' (i.e., in the Preferred quadrants)?",
+    "opts": [
+      "30%",
+      "50%",
+      "70%",
+      "85%"
+    ],
+    "correct": 2,
+    "exp": "70% of independent workers are there by choice: Free Agents (30%, ~49 million) + Casual Earners (40%, ~64 million). Only 30% are in the 'Necessary' quadrants — Reluctants (14%) and Financially Strapped (16%). This challenges the narrative that gig work is inherently exploitative — the majority actively prefer it."
+  },
+  {
+    "id": 32,
+    "subject": "future",
+    "session": "Topic 4 · McKinsey Matrix",
+    "q": "'Reluctants' in the McKinsey Matrix are best described as:",
+    "opts": [
+      "Workers who chose independent work for lifestyle reasons but now regret it",
+      "Workers whose primary income comes from gig work, but who would prefer permanent employment",
+      "Workers who supplement a full-time salary with side gigs but resent the extra workload",
+      "Workers who were laid off and are temporarily between permanent roles"
+    ],
+    "correct": 1,
+    "exp": "Reluctants = Necessary Choice + Primary Income. Their gig work IS their main income, but they would strongly prefer a permanent, stable job. They are trapped in gig work by circumstance, not desire. Example: a short-term temp who wants a full-time role but cannot find one. They represent ~14% (~23 million workers) and need the most policy protection."
+  },
+  {
+    "id": 33,
+    "subject": "future",
+    "session": "Topic 4 · Contingent Workforce",
+    "q": "Which of the following is NOT listed as a category within the contingent workforce?",
+    "opts": [
+      "Freelancers",
+      "On-call workers",
+      "Permanent part-time employees",
+      "Independent contractors"
+    ],
+    "correct": 2,
+    "exp": "The contingent workforce includes: freelancers, temporary workers, on-call workers, outsourced workers, and independent contractors. Permanent part-time employees have an ongoing employment relationship — they are not 'contingent' in the true sense. Contingent = non-permanent, needs-based, provisional."
+  },
+  {
+    "id": 34,
+    "subject": "future",
+    "session": "Topic 4 · Hollywood Model",
+    "q": "The 'Hollywood Model' of work is described as the future of complex project delivery. What is its core characteristic?",
+    "opts": [
+      "Permanent creative studios employing full-time specialists in every discipline",
+      "Project-based, ad-hoc teams assembled on demand for a specific project, then dissolved",
+      "Franchise-based organisations where regional offices operate independently",
+      "Vertically integrated companies that own every stage of the production process"
+    ],
+    "correct": 1,
+    "exp": "The Hollywood Model: a director, producer, scriptwriter, actors, and crew assemble for a specific film, deliver the project, then disband. No permanent team — just expert specialists assembled on demand. This model is increasingly applied globally, especially for workers with high-demand, niche skills. It is particularly powerful for the Leaf 2 (Self-Employed Specialists) in Handy's model."
+  },
+  {
+    "id": 35,
+    "subject": "future",
+    "session": "Topic 4 · Future of Work",
+    "q": "In the gig economy context, Mintzberg's model predicts that organisations are 'hollowing out.' What does this mean?",
+    "opts": [
+      "Companies are reducing headcount at the Strategic Apex as AI automates leadership tasks",
+      "Companies are outsourcing the Operating Core and Support Staff, keeping only the Strategic Apex in-house",
+      "Companies are eliminating the Middle Apex through flatter organisational structures",
+      "Companies are removing Technostructure teams as analytics are automated by AI"
+    ],
+    "correct": 1,
+    "exp": "'Hollowing out' refers to organisations outsourcing their Operating Core (Leaf 3 — contingent, gig workers doing frontline work) and even Support Staff (TVCs doing HR, legal, IT functions), while retaining only the Strategic Apex internally. This maximises flexibility but risks losing institutional memory and core competence over time."
+  }
+];
+
+/* ═══════════════════════════════════
+   STATE
+═══════════════════════════════════ */
+let state = {
+  filter: 'all',
+  deck: [],
+  idx: 0,
+  answered: false,
+  score: 0,
+  futureCorrect: 0, futureTotal: 0,
+  orgCorrect: 0, orgTotal: 0,
+  talentCorrect: 0, talentTotal: 0,
+};
+
+/* ═══════════════════════════════════
+   UTILITIES
+═══════════════════════════════════ */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pct(n, d) { return d === 0 ? 0 : Math.round((n / d) * 100); }
+
+function getTier(p) {
+  if (p >= 90) return { tier: "IIM-Level \u2014 Distinction", sub: "Exceptional command of HR and global leadership frameworks." };
+  if (p >= 75) return { tier: "Strong Command \u2014 Pass with Merit", sub: "Solid understanding with minor gaps worth revisiting." };
+  if (p >= 60) return { tier: "Adequate \u2014 Revise Key Frameworks", sub: "Core concepts present; reinforce the weaker topics." };
+  return { tier: "Needs Work \u2014 Return to Notes", sub: "Systematic revision recommended before the exam." };
+}
+
+/* ═══════════════════════════════════
+   FILTER
+═══════════════════════════════════ */
+function setFilter(f) {
+  state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  document.getElementById('btnAll').classList.add('active-all');
+  if (f !== 'all') {
+    const key = f.charAt(0).toUpperCase() + f.slice(1);
+    const el = document.getElementById('btn' + key);
+    if (el) el.classList.add('active-' + f);
+    document.getElementById('btnAll').classList.remove('active-all');
+  }
+  startQuiz(f);
+}
+
+/* ═══════════════════════════════════
+   QUIZ FLOW
+═══════════════════════════════════ */
+function startQuiz(f) {
+  if (f) state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  document.getElementById('btnAll').classList.add('active-all');
+  if (state.filter !== 'all') {
+    const key = state.filter.charAt(0).toUpperCase() + state.filter.slice(1);
+    const el = document.getElementById('btn' + key);
+    if (el) { el.classList.add('active-' + state.filter); document.getElementById('btnAll').classList.remove('active-all'); }
+  }
+
+  const pool = ALL_QUESTIONS.filter(q => state.filter === 'all' || q.subject === state.filter);
+  state.deck = shuffle(pool);
+  state.idx = 0;
+  state.score = 0;
+  state.futureCorrect = 0; state.futureTotal = 0;
+  state.orgCorrect = 0; state.orgTotal = 0;
+  state.talentCorrect = 0; state.talentTotal = 0;
+
+  state.deck.forEach(q => {
+    if (q.subject === 'future') state.futureTotal++;
+    if (q.subject === 'org') state.orgTotal++;
+    if (q.subject === 'talent') state.talentTotal++;
+  });
+
+  updateScore();
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizArea').style.display = 'block';
+  document.getElementById('progressArea').style.display = 'block';
+  document.getElementById('emptyState').style.display = 'none';
+
+  if (state.deck.length === 0) {
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = state.deck[state.idx];
+  const total = state.deck.length;
+  const num = state.idx + 1;
+  state.answered = false;
+
+  const fillPct = ((num - 1) / total) * 100;
+  document.getElementById('progressFill').style.width = fillPct + '%';
+  document.getElementById('progressText').textContent = 'Question ' + num + ' of ' + total;
+  document.getElementById('progressPct').textContent = Math.round(fillPct) + '%';
+
+  const tag = document.getElementById('subjectTag');
+  tag.textContent = q.subject.toUpperCase();
+  tag.className = 'subject-tag ' + q.subject;
+
+  document.getElementById('sessionLabel').textContent = q.session;
+  document.getElementById('questionNum').textContent = '#' + q.id;
+  document.getElementById('questionText').textContent = q.q;
+
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = '<span class="option-letter">' + letters[i] + '</span>'
+                  + '<span class="option-text">' + opt + '</span>'
+                  + '<span class="key-hint">' + (i + 1) + '</span>';
+    btn.addEventListener('click', () => selectAnswer(i));
+    grid.appendChild(btn);
+  });
+
+  const ep = document.getElementById('explanationPanel');
+  ep.className = 'explanation-panel';
+  document.getElementById('explanationText').textContent = '';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'slideUp 0.3s ease';
+}
+
+function selectAnswer(chosen) {
+  if (state.answered) return;
+  state.answered = true;
+
+  const q = state.deck[state.idx];
+  const btns = document.querySelectorAll('.option-btn');
+  const correct = q.correct;
+
+  btns.forEach((btn, i) => {
+    btn.classList.add('disabled');
+    if (i === correct) btn.classList.add('correct');
+    else if (i === chosen) btn.classList.add('wrong');
+  });
+
+  if (chosen === correct) {
+    state.score++;
+    if (q.subject === 'future') state.futureCorrect++;
+    else if (q.subject === 'org') state.orgCorrect++;
+    else if (q.subject === 'talent') state.talentCorrect++;
+  }
+
+  updateScore();
+
+  const ep = document.getElementById('explanationPanel');
+  document.getElementById('explanationText').textContent = q.exp;
+  ep.classList.add('show', q.subject + '-border');
+
+  document.getElementById('nextBtn').style.display = 'flex';
+  setTimeout(() => ep.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+}
+
+function nextQuestion() {
+  if (!state.answered) return;
+  state.idx++;
+  if (state.idx >= state.deck.length) {
+    showResults();
+  } else {
+    renderQuestion();
+    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function updateScore() {
+  const answeredSoFar = state.idx + (state.answered ? 1 : 0);
+  document.getElementById('scoreNum').textContent = state.score;
+  document.getElementById('scoreDen').textContent = Math.max(answeredSoFar, state.score);
+}
+
+/* ═══════════════════════════════════
+   RESULTS
+═══════════════════════════════════ */
+function showResults() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('progressArea').style.display = 'none';
+  document.getElementById('resultsScreen').classList.add('show');
+
+  const total = state.deck.length;
+  const p = pct(state.score, total);
+  const { tier, sub } = getTier(p);
+
+  document.getElementById('resultsTier').textContent = tier;
+  document.getElementById('resultsSubtitle').textContent = sub;
+  document.getElementById('rTotal').textContent = state.score + '/' + total;
+  document.getElementById('rTotalSub').textContent = p + '%';
+  document.getElementById('rFuture').textContent = state.futureCorrect + '/' + state.futureTotal;
+  document.getElementById('rFutureSub').textContent = pct(state.futureCorrect, state.futureTotal) + '%';
+  document.getElementById('rOrg').textContent = state.orgCorrect + '/' + state.orgTotal;
+  document.getElementById('rOrgSub').textContent = pct(state.orgCorrect, state.orgTotal) + '%';
+  document.getElementById('rTalent').textContent = state.talentCorrect + '/' + state.talentTotal;
+  document.getElementById('rTalentSub').textContent = pct(state.talentCorrect, state.talentTotal) + '%';
+
+  document.getElementById('resultsScreen').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ═══════════════════════════════════
+   KEYBOARD SHORTCUTS
+═══════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (['1','2','3','4'].includes(e.key)) {
+    const btns = document.querySelectorAll('.option-btn:not(.disabled)');
+    const idx = parseInt(e.key) - 1;
+    if (btns[idx]) btns[idx].click();
+  }
+  if ((e.key === 'Enter' || e.key === ' ') && state.answered) {
+    e.preventDefault();
+    nextQuestion();
+  }
+  if (e.key === 'r' || e.key === 'R') startQuiz(state.filter);
+});
+
+/* ═══════════════════════════════════
+   INIT
+═══════════════════════════════════ */
+startQuiz('all');
+</script>
+</body>
+</html>

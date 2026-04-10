@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Economics — Master Quiz</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:         #1a1c22;
+    --card:       #252830;
+    --card-hover: #2d3040;
+    --border:     #353845;
+    --text:       #e8e6e1;
+    --text-muted: #9895a0;
+    --text-dim:   #6b6878;
+    --correct:    #3ecf8e;
+    --correct-dim:rgba(62,207,142,0.15);
+    --wrong:      #e05252;
+    --wrong-dim:  rgba(224,82,82,0.15);
+    --gold:       #f0c040;
+    --radius:     12px;
+    --radius-sm:  8px;
+    --shadow:     0 4px 24px rgba(0,0,0,0.4);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ── Header ── */
+  .app-header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .app-title {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+  .app-subtitle {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .score-display {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    white-space: nowrap;
+  }
+  .score-display .score-num { color: var(--gold); font-weight: 500; }
+
+  /* ── Filter Bar ── */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    padding: 20px 24px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .filter-btn {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.8rem;
+    padding: 7px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+  }
+  .filter-btn:hover { background: var(--card-hover); color: var(--text); }
+  .filter-btn.active-all { background: rgba(255,255,255,0.08); color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+  /* ── Subject-specific CSS (generated) ── */
+
+  /* ── Subject: CRM ── */
+  .subject-tag.crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid rgba(139,127,240,0.3); }
+  .filter-btn.active-crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border-color:#8b7ff0; }
+  .explanation-panel.crm-border { border-left-color:#8b7ff0; background:rgba(139,127,240,0.15); }
+  .btn-crm { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid #8b7ff0; }
+  .btn-crm:hover { filter:brightness(1.15); }
+  .score-block-value.crm { color:#8b7ff0; }
+
+  /* ── Subject: PM ── */
+  .subject-tag.pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border:1px solid rgba(139,63,224,0.3); }
+  .filter-btn.active-pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border-color:#8b3fe0; }
+  .explanation-panel.pm-border { border-left-color:#8b3fe0; background:rgba(139,63,224,0.15); }
+  .btn-pm { background:rgba(139,63,224,0.15); color:#8b3fe0; border:1px solid #8b3fe0; }
+  .btn-pm:hover { filter:brightness(1.15); }
+  .score-block-value.pm { color:#8b3fe0; }
+
+  /* ── Subject: SCM ── */
+  .subject-tag.scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border:1px solid rgba(46,196,165,0.3); }
+  .filter-btn.active-scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border-color:#2ec4a5; }
+  .explanation-panel.scm-border { border-left-color:#2ec4a5; background:rgba(46,196,165,0.15); }
+  .btn-scm { background:rgba(46,196,165,0.15); color:#2ec4a5; border:1px solid #2ec4a5; }
+  .btn-scm:hover { filter:brightness(1.15); }
+  .score-block-value.scm { color:#2ec4a5; }
+
+  /* ── Subject: FIN ── */
+  .subject-tag.fin { background:rgba(224,139,32,0.15); color:#e08b20; border:1px solid rgba(224,139,32,0.3); }
+  .filter-btn.active-fin { background:rgba(224,139,32,0.15); color:#e08b20; border-color:#e08b20; }
+  .explanation-panel.fin-border { border-left-color:#e08b20; background:rgba(224,139,32,0.15); }
+  .btn-fin { background:rgba(224,139,32,0.15); color:#e08b20; border:1px solid #e08b20; }
+  .btn-fin:hover { filter:brightness(1.15); }
+  .score-block-value.fin { color:#e08b20; }
+
+  /* ── Subject: ECON ── */
+  .subject-tag.econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border:1px solid rgba(62,207,142,0.3); }
+  .filter-btn.active-econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border-color:#3ecf8e; }
+  .explanation-panel.econ-border { border-left-color:#3ecf8e; background:rgba(62,207,142,0.15); }
+  .btn-econ { background:rgba(62,207,142,0.15); color:#3ecf8e; border:1px solid #3ecf8e; }
+  .btn-econ:hover { filter:brightness(1.15); }
+  .score-block-value.econ { color:#3ecf8e; }
+
+  /* ── Subject: OPS ── */
+  .subject-tag.ops { background:rgba(77,157,224,0.15); color:#4d9de0; border:1px solid rgba(77,157,224,0.3); }
+  .filter-btn.active-ops { background:rgba(77,157,224,0.15); color:#4d9de0; border-color:#4d9de0; }
+  .explanation-panel.ops-border { border-left-color:#4d9de0; background:rgba(77,157,224,0.15); }
+  .btn-ops { background:rgba(77,157,224,0.15); color:#4d9de0; border:1px solid #4d9de0; }
+  .btn-ops:hover { filter:brightness(1.15); }
+  .score-block-value.ops { color:#4d9de0; }
+
+  /* ── Subject: HR ── */
+  .subject-tag.hr { background:rgba(224,92,92,0.15); color:#e05c5c; border:1px solid rgba(224,92,92,0.3); }
+  .filter-btn.active-hr { background:rgba(224,92,92,0.15); color:#e05c5c; border-color:#e05c5c; }
+  .explanation-panel.hr-border { border-left-color:#e05c5c; background:rgba(224,92,92,0.15); }
+  .btn-hr { background:rgba(224,92,92,0.15); color:#e05c5c; border:1px solid #e05c5c; }
+  .btn-hr:hover { filter:brightness(1.15); }
+  .score-block-value.hr { color:#e05c5c; }
+
+  /* ── Subject: S1 ── */
+  .subject-tag.s1 { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid rgba(139,127,240,0.3); }
+  .filter-btn.active-s1 { background:rgba(139,127,240,0.15); color:#8b7ff0; border-color:#8b7ff0; }
+  .explanation-panel.s1-border { border-left-color:#8b7ff0; background:rgba(139,127,240,0.15); }
+  .btn-s1 { background:rgba(139,127,240,0.15); color:#8b7ff0; border:1px solid #8b7ff0; }
+  .btn-s1:hover { filter:brightness(1.15); }
+  .score-block-value.s1 { color:#8b7ff0; }
+
+  /* ── Subject: S2 ── */
+  .subject-tag.s2 { background:rgba(46,196,165,0.15); color:#2ec4a5; border:1px solid rgba(46,196,165,0.3); }
+  .filter-btn.active-s2 { background:rgba(46,196,165,0.15); color:#2ec4a5; border-color:#2ec4a5; }
+  .explanation-panel.s2-border { border-left-color:#2ec4a5; background:rgba(46,196,165,0.15); }
+  .btn-s2 { background:rgba(46,196,165,0.15); color:#2ec4a5; border:1px solid #2ec4a5; }
+  .btn-s2:hover { filter:brightness(1.15); }
+  .score-block-value.s2 { color:#2ec4a5; }
+
+  /* ── Subject: MACRO ── */
+  .subject-tag.macro { background:rgba(224,139,32,0.15); color:#e08b20; border:1px solid rgba(224,139,32,0.3); }
+  .filter-btn.active-macro { background:rgba(224,139,32,0.15); color:#e08b20; border-color:#e08b20; }
+  .explanation-panel.macro-border { border-left-color:#e08b20; background:rgba(224,139,32,0.15); }
+  .btn-macro { background:rgba(224,139,32,0.15); color:#e08b20; border:1px solid #e08b20; }
+  .btn-macro:hover { filter:brightness(1.15); }
+  .score-block-value.macro { color:#e08b20; }
+
+  /* ── Subject: POLICY ── */
+  .subject-tag.policy { background:rgba(192,127,224,0.15); color:#c07fe0; border:1px solid rgba(192,127,224,0.3); }
+  .filter-btn.active-policy { background:rgba(192,127,224,0.15); color:#c07fe0; border-color:#c07fe0; }
+  .explanation-panel.policy-border { border-left-color:#c07fe0; background:rgba(192,127,224,0.15); }
+  .btn-policy { background:rgba(192,127,224,0.15); color:#c07fe0; border:1px solid #c07fe0; }
+  .btn-policy:hover { filter:brightness(1.15); }
+  .score-block-value.policy { color:#c07fe0; }
+
+  /* ── Main layout ── */
+  .main-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 20px;
+  }
+
+  /* ── Progress ── */
+  .progress-area { margin-bottom: 24px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    margin-bottom: 8px;
+  }
+  .progress-track { height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    background: linear-gradient(90deg, #8b7ff0, #8b3fe0);
+  }
+
+  /* ── Question Card ── */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .subject-tag {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .session-label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-style: italic;
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+  }
+  .question-num {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-left: auto;
+  }
+  .question-text {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  /* ── Answer Options ── */
+  .options-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .option-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-align: left;
+    color: var(--text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    transition: all 0.15s ease;
+    width: 100%;
+    position: relative;
+  }
+  .option-btn:hover:not(.disabled) { background: var(--card-hover); border-color: rgba(255,255,255,0.18); }
+  .option-btn.disabled { cursor: default; color: var(--text-muted); }
+  .option-btn.correct {
+    background: var(--correct-dim) !important;
+    border-color: var(--correct) !important;
+    color: var(--correct) !important;
+  }
+  .option-btn.wrong {
+    background: var(--wrong-dim) !important;
+    border-color: var(--wrong) !important;
+    color: var(--wrong) !important;
+  }
+  .option-letter {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px 8px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.15s;
+  }
+  .option-btn.correct .option-letter { background: rgba(62,207,142,0.2); border-color: var(--correct); color: var(--correct); }
+  .option-btn.wrong   .option-letter { background: rgba(224,82,82,0.2);  border-color: var(--wrong);   color: var(--wrong);   }
+  .option-text { flex: 1; }
+  .key-hint {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    flex-shrink: 0;
+    align-self: center;
+  }
+  .option-btn.disabled .key-hint { display: none; }
+
+  /* ── Explanation Panel ── */
+  .explanation-panel {
+    border-left: 3px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+    display: none;
+    animation: slideUp 0.25s ease;
+  }
+  .explanation-panel.show { display: block; }
+  .explanation-label {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 9px 22px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn:hover { background: var(--card-hover); }
+  .btn-primary { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+  .btn-primary:hover { background: rgba(255,255,255,0.13); }
+  #nextBtn { display: none; margin-top: 4px; }
+
+  /* ── Results Screen ── */
+  .results-screen { display: none; animation: slideUp 0.4s ease; }
+  .results-screen.show { display: block; }
+  .results-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 32px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .results-trophy { font-size: 2.5rem; margin-bottom: 12px; }
+  .results-tier {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, #8b7ff0, #8b3fe0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .results-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 32px;
+    font-style: italic;
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+  }
+  .results-scores {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .score-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 12px;
+  }
+  .score-block-label {
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .score-block-value {
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+  .score-block-value.all { color: var(--gold); }
+  .score-block-sub {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 2px;
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+  }
+  .results-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+    font-family: Georgia, Cambria, 'Times New Roman', serif;
+    font-size: 0.95rem;
+    display: none;
+  }
+
+  /* ── Keyboard hints ── */
+  .keyboard-hint-bar {
+    text-align: center;
+    margin-top: 20px;
+    font-family: Consolas, 'Cascadia Code', 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+  .kh-item { display: flex; align-items: center; gap: 6px; }
+  .kh-key { border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px; color: var(--text-muted); }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+
+  /* ── Touch UX: kill 300ms delay, remove tap highlight ── */
+  * { -webkit-tap-highlight-color: transparent; }
+  button, .option-btn, .filter-btn { touch-action: manipulation; }
+  .option-btn:active:not(.disabled) { opacity: 0.72; transform: scale(0.983); }
+  .btn:active        { opacity: 0.78; transform: scale(0.972); }
+  .filter-btn:active { opacity: 0.72; }
+
+  /* ── Mobile: max 640px ── */
+  @media (max-width: 640px) {
+
+    .app-header { padding: 10px 14px; flex-wrap: wrap; gap: 6px; }
+    .app-title { font-size: 0.9rem; }
+    .app-subtitle { display: none; }
+    .score-display { font-size: 0.78rem; padding: 4px 12px; }
+
+    .filter-bar {
+      padding: 12px 14px 0;
+      gap: 7px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-btn { flex-shrink: 0; min-height: 40px; padding: 8px 18px; font-size: 0.78rem; }
+
+    .main-wrap { padding: 14px 12px; }
+    .progress-area { margin-bottom: 16px; }
+    .progress-label { font-size: 0.7rem; }
+    .progress-track { height: 5px; }
+
+    .question-card { padding: 18px 14px; border-radius: 10px; }
+    .card-meta { gap: 7px; margin-bottom: 14px; }
+    .subject-tag { font-size: 0.65rem; }
+    .session-label { font-size: 0.68rem; }
+    .question-num { font-size: 0.65rem; }
+
+    /* 16px minimum stops iOS zooming the page on focus */
+    .question-text { font-size: 1rem; line-height: 1.65; margin-bottom: 18px; }
+
+    /* Option buttons: 52px min tap target */
+    .options-grid { gap: 9px; margin-bottom: 16px; }
+    .option-btn {
+      min-height: 52px;
+      padding: 14px 13px;
+      gap: 11px;
+      font-size: 0.88rem;
+      border-radius: 8px;
+      align-items: center;
+    }
+    .option-letter { min-width: 26px; text-align: center; padding: 2px 6px; font-size: 0.75rem; }
+    .key-hint { display: none; }
+
+    .explanation-panel { font-size: 0.83rem; padding: 12px 13px; }
+    .explanation-label { font-size: 0.62rem; }
+
+    /* Next: full-width large button */
+    #nextBtn {
+      width: 100%;
+      justify-content: center;
+      padding: 15px;
+      min-height: 50px;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      margin-top: 6px;
+    }
+
+    .results-card { padding: 22px 14px; }
+    .results-trophy { font-size: 2rem; margin-bottom: 8px; }
+    .results-tier { font-size: 1.25rem; }
+    .results-subtitle { font-size: 0.78rem; margin-bottom: 20px; }
+    .results-scores { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .score-block { padding: 12px 10px; }
+    .score-block-label { font-size: 0.62rem; }
+    .score-block-value { font-size: 1.5rem; }
+    .score-block-sub { font-size: 0.68rem; }
+
+    /* Results buttons: stacked, full width */
+    .results-actions { flex-direction: column; }
+    .results-actions .btn { width: 100%; justify-content: center; min-height: 48px; font-size: 0.9rem; }
+
+    .keyboard-hint-bar { display: none; }
+  }
+
+  /* Very small phones < 360px */
+  @media (max-width: 360px) {
+    .question-text { font-size: 0.94rem; }
+    .option-btn { font-size: 0.83rem; padding: 13px 11px; }
+    .results-scores { grid-template-columns: 1fr; }
+    .score-block-value { font-size: 1.35rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="app-header">
+  <div>
+    <div class="app-title"><span class="macro">Macro</span> &amp; <span class="policy">Policy</span> &amp; <span class="s1">Demand</span> &amp; <span class="s2">Costs</span> Quiz</div>
+    <div class="app-subtitle">IIM Lucknow · Prof. Pal · Business Environment & Macroeconomics · Fiscal & Monetary Policy · Demand, Supply & Elasticity · Costs, Markets & Disruption · 50 Questions · April 2026</div>
+  </div>
+  <div class="score-display">
+    Score: <span class="score-num" id="scoreNum">0</span>
+    / <span id="scoreDen">0</span>
+  </div>
+</header>
+
+<!-- ── FILTER BAR ── -->
+<div class="filter-bar">
+  <button class="filter-btn active-all" id="btnAll" onclick="setFilter('all')">All 50</button>
+      <button class="filter-btn" id="btnMacro" onclick="setFilter('macro')">Macro (12)</button>
+      <button class="filter-btn" id="btnPolicy" onclick="setFilter('policy')">Policy (12)</button>
+      <button class="filter-btn" id="btnS1" onclick="setFilter('s1')">Demand (13)</button>
+      <button class="filter-btn" id="btnS2" onclick="setFilter('s2')">Costs (13)</button>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main-wrap">
+
+  <!-- Progress -->
+  <div class="progress-area" id="progressArea">
+    <div class="progress-label">
+      <span id="progressText">Question 1 of 50</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Quiz Area -->
+  <div id="quizArea">
+    <div class="question-card" id="questionCard">
+
+      <div class="card-meta">
+        <span class="subject-tag" id="subjectTag">—</span>
+        <span class="session-label" id="sessionLabel">—</span>
+        <span class="question-num" id="questionNum">#1</span>
+      </div>
+
+      <div class="question-text" id="questionText">Loading...</div>
+
+      <div class="options-grid" id="optionsGrid"></div>
+
+      <div class="explanation-panel" id="explanationPanel">
+        <div class="explanation-label">Explanation</div>
+        <div id="explanationText"></div>
+      </div>
+
+      <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">
+        Next &rarr;
+      </button>
+    </div>
+
+    <div class="keyboard-hint-bar">
+      <div class="kh-item"><span class="kh-key">1–4</span> Select answer</div>
+      <div class="kh-item"><span class="kh-key">Enter</span> Next question</div>
+      <div class="kh-item"><span class="kh-key">R</span> Restart</div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" id="emptyState">No questions match this filter.</div>
+
+  <!-- Results Screen -->
+  <div class="results-screen" id="resultsScreen">
+    <div class="results-card">
+      <div class="results-trophy">🎓</div>
+      <div class="results-tier" id="resultsTier"></div>
+      <div class="results-subtitle" id="resultsSubtitle"></div>
+
+      <div class="results-scores">
+        
+        <div class="score-block">
+          <div class="score-block-label">Total</div>
+          <div class="score-block-value all" id="rTotal">—</div>
+          <div class="score-block-sub" id="rTotalSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">Macro</div>
+          <div class="score-block-value macro" id="rMacro">—</div>
+          <div class="score-block-sub" id="rMacroSub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">Policy</div>
+          <div class="score-block-value policy" id="rPolicy">—</div>
+          <div class="score-block-sub" id="rPolicySub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">Demand</div>
+          <div class="score-block-value s1" id="rS1">—</div>
+          <div class="score-block-sub" id="rS1Sub"></div>
+        </div>
+        <div class="score-block">
+          <div class="score-block-label">Costs</div>
+          <div class="score-block-value s2" id="rS2">—</div>
+          <div class="score-block-sub" id="rS2Sub"></div>
+        </div>
+      </div>
+
+      <div class="results-actions">
+        <button class="btn btn-primary" onclick="startQuiz('all')">Restart All 50</button>
+        <button class="btn btn-macro" onclick="startQuiz('macro')">Macro Only (12)</button>
+        <button class="btn btn-policy" onclick="startQuiz('policy')">Policy Only (12)</button>
+        <button class="btn btn-s1" onclick="startQuiz('s1')">Demand Only (13)</button>
+        <button class="btn btn-s2" onclick="startQuiz('s2')">Costs Only (13)</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main-wrap -->
+
+<script>
+/* ═══════════════════════════════════
+   QUESTION DATA
+═══════════════════════════════════ */
+const ALL_QUESTIONS = [
+  {
+    "id": 1,
+    "subject": "s1",
+    "session": "Session 1 · Demand, Supply & Elasticity",
+    "q": "What does economics fundamentally study?",
+    "opts": [
+      "How governments set tax rates and spending priorities",
+      "How society manages scarce resources against unlimited wants",
+      "How firms maximize profit through production decisions",
+      "How financial markets allocate capital across industries"
+    ],
+    "correct": 1,
+    "exp": "Economics is the study of how society manages scarce resources — limited inputs against unlimited wants. This is the foundational problem economics seeks to address. It divides into microeconomics (individual units) and macroeconomics (aggregate variables like GDP and inflation)."
+  },
+  {
+    "id": 2,
+    "subject": "s1",
+    "session": "Session 1 · Demand, Supply & Elasticity",
+    "q": "The demand shift factors are remembered using the mnemonic 'ITEMS.' What does the 'M' stand for?",
+    "opts": [
+      "Manufacturing costs",
+      "Monetary supply in the economy",
+      "Market-related goods (substitutes and complements)",
+      "Marginal utility of the good"
+    ],
+    "correct": 2,
+    "exp": "ITEMS = Income · Tastes & Preferences · Expectations · Market-related goods (substitutes/complements) · Size of population. The 'M' stands for Market-related goods. All five shift the entire demand curve. A change in price only causes movement along the curve — never a shift."
+  },
+  {
+    "id": 3,
+    "subject": "s1",
+    "session": "Session 1 · Demand, Supply & Elasticity",
+    "q": "What is the key distinction between a 'change in demand' and a 'change in quantity demanded'?",
+    "opts": [
+      "Change in demand refers to large movements; change in quantity demanded refers to small movements",
+      "Change in demand = entire demand curve shifts (non-price factors); change in quantity demanded = movement along existing curve (price only)",
+      "Change in demand applies to luxury goods; change in quantity demanded applies to necessities",
+      "They are interchangeable terms for the same phenomenon"
+    ],
+    "correct": 1,
+    "exp": "The most commonly tested distinction: Change in Demand = the entire curve shifts (caused by non-price factors like income, tastes, substitutes). Change in Quantity Demanded = movement along the existing curve (caused ONLY by a price change). Confusing these two is the most common exam error."
+  },
+  {
+    "id": 4,
+    "subject": "s1",
+    "session": "Session 1 · Demand, Supply & Elasticity",
+    "q": "If demand for a product is price-elastic (|Ed| > 1), what happens to total revenue when the firm raises its price?",
+    "opts": [
+      "Revenue rises — consumers pay more per unit",
+      "Revenue stays unchanged — elastic demand offsets the price rise",
+      "Revenue falls — consumers switch away rapidly, reducing quantity more than price rose",
+      "Revenue is indeterminate without knowing the exact elasticity value"
+    ],
+    "correct": 2,
+    "exp": "The revenue rule: with elastic demand (|Ed| > 1), price and revenue move in OPPOSITE directions. Raising price causes a proportionally larger fall in quantity demanded — so total revenue falls. With inelastic demand, they move in the SAME direction (raise price → raise revenue). This is the manager's pricing compass."
+  },
+  {
+    "id": 5,
+    "subject": "s1",
+    "session": "Session 1 · Demand, Supply & Elasticity",
+    "q": "The Price Elasticity of Demand formula is Ed = (ΔQ/Q) ÷ (ΔP/P). If price rises from ₹20 to ₹22 and quantity demanded falls from 100 to 85 units, what is the approximate |Ed|?",
+    "opts": [
+      "0.48",
+      "1.00",
+      "1.57",
+      "2.15"
+    ],
+    "correct": 2,
+    "exp": "ΔQ/Q = (85-100)/100 = -15%. ΔP/P = (22-20)/20 = +10%. Ed = -15% ÷ +10% = -1.5, so |Ed| ≈ 1.57. Since |Ed| > 1, demand is elastic. Verify the revenue test: Revenue falls from ₹2,000 (20×100) to ₹1,870 (22×85) — consistent with elastic demand where a price rise reduces revenue."
+  },
+  {
+    "id": 6,
+    "subject": "s1",
+    "session": "Session 1 · Demand, Supply & Elasticity",
+    "q": "A market is in equilibrium at price P* and quantity Q*. If the price is set ABOVE P* (e.g. by regulation), what results?",
+    "opts": [
+      "A shortage — quantity demanded exceeds quantity supplied",
+      "A surplus — quantity supplied exceeds quantity demanded",
+      "No change — the equilibrium is self-sustaining",
+      "Prices will immediately rise further due to excess demand"
+    ],
+    "correct": 1,
+    "exp": "Above P*: suppliers want to supply more (QS rises) but buyers demand less (QD falls) → QS > QD = SURPLUS. Below P*: buyers demand more but suppliers supply less → QD > QS = SHORTAGE. Markets self-correct: surplus pushes price down; shortage pushes price up until equilibrium is restored."
+  },
+  {
+    "id": 7,
+    "subject": "s1",
+    "session": "Session 1 · Demand, Supply & Elasticity",
+    "q": "Which type of elasticity describes a perfectly horizontal demand curve where any price increase causes demand to drop to zero?",
+    "opts": [
+      "Perfectly inelastic (|Ed| = 0)",
+      "Unit elastic (|Ed| = 1)",
+      "Perfectly elastic (|Ed| = ∞)",
+      "Highly inelastic (|Ed| < 0.5)"
+    ],
+    "correct": 2,
+    "exp": "Perfectly elastic demand (|Ed| = ∞) has a horizontal curve — firms are pure price-takers who cannot charge above the market price. Any price increase causes demand to drop to zero. This is the assumption underlying the perfect competition market structure. Perfectly inelastic (|Ed| = 0) is a vertical curve."
+  },
+  {
+    "id": 8,
+    "subject": "s1",
+    "session": "Session 1 · Demand, Supply & Elasticity",
+    "q": "Why is demand generally more elastic in the long run than in the short run?",
+    "opts": [
+      "Prices always fall in the long run, increasing quantity demanded",
+      "Governments regulate prices more strictly over longer time periods",
+      "Consumers have more time to find alternatives, change habits, or switch technologies",
+      "Firms reduce their prices to retain customers over longer periods"
+    ],
+    "correct": 2,
+    "exp": "Demand is more elastic in the long run because consumers have time to adapt: find substitute goods, switch technologies, change habits, or relocate. Classic example: gasoline — in the short run, consumers are stuck with existing cars (inelastic), but over 5 years they can buy fuel-efficient vehicles, reducing gasoline demand significantly (elastic)."
+  },
+  {
+    "id": 9,
+    "subject": "s1",
+    "session": "Session 1 · Demand, Supply & Elasticity",
+    "q": "Cars and petrol are complementary goods. If the price of cars rises sharply, what happens to the demand for petrol?",
+    "opts": [
+      "Petrol demand rises — consumers seek cheaper travel alternatives",
+      "Petrol demand falls — fewer cars are sold, so less petrol is needed",
+      "Petrol demand is unaffected — it is a separate market",
+      "Petrol demand rises temporarily, then returns to baseline"
+    ],
+    "correct": 1,
+    "exp": "Complements are consumed together — if cars become more expensive, fewer cars are sold, reducing petrol demand. Cross-price elasticity for complements is NEGATIVE (price of one rises → demand for other falls). Contrast with substitutes (Coke & Pepsi) where cross-price elasticity is POSITIVE — price of one rises → demand for the other rises."
+  },
+  {
+    "id": 10,
+    "subject": "s1",
+    "session": "Session 1 · Demand, Supply & Elasticity",
+    "q": "In the international oil market example, both demand AND supply shifted left simultaneously. What was the net effect on price?",
+    "opts": [
+      "Price rose, because supply fell more than demand",
+      "Price fell, because demand fell more than supply",
+      "Price was unchanged, because both shifts cancelled out",
+      "Price was indeterminate — you cannot know without more information"
+    ],
+    "correct": 1,
+    "exp": "In the oil market case: both D and S shifted left, but demand fell MORE than supply. Net result: price fell from $80 to $65, and quantity collapsed from 120M to 10M barrels. Key principle: when two markets shift simultaneously, the net price direction is indeterminate without knowing WHICH shift dominates — this is a classic MCQ trap."
+  },
+  {
+    "id": 11,
+    "subject": "s1",
+    "session": "Session 1 · Demand, Supply & Elasticity",
+    "q": "What are the TWO factors that cause the supply curve to SHIFT (not move along the curve)?",
+    "opts": [
+      "Changes in consumer income and consumer tastes",
+      "Changes in the product's own price and market equilibrium",
+      "Changes in input/production costs and improvements in technology",
+      "Changes in government subsidies to consumers and import tariffs"
+    ],
+    "correct": 2,
+    "exp": "Supply shifts are caused by non-price factors: (1) Input/production costs — if wages or raw material costs rise, supply decreases (shifts left); (2) Technology improvements — better technology reduces costs, increasing supply (shifts right). A change in the product's own price causes movement ALONG the supply curve, not a shift."
+  },
+  {
+    "id": 12,
+    "subject": "s1",
+    "session": "Session 1 · Demand, Supply & Elasticity",
+    "q": "Which good best exemplifies a 'perfectly inelastic' demand in the real world?",
+    "opts": [
+      "Luxury branded handbags",
+      "Life-saving prescription medicine with no substitutes",
+      "Petrol in the long run",
+      "Any good sold in a perfectly competitive market"
+    ],
+    "correct": 1,
+    "exp": "Perfectly inelastic (|Ed| = 0) demand means price changes have zero effect on quantity demanded — a vertical demand curve. Life-saving medicines with no substitutes approach this: patients must buy regardless of price. This is a theoretical extreme, but life-critical drugs with no alternatives come closest in practice."
+  },
+  {
+    "id": 13,
+    "subject": "s1",
+    "session": "Session 1 · Demand, Supply & Elasticity",
+    "q": "At unit elastic demand (|Ed| = 1), what happens to total revenue when price changes?",
+    "opts": [
+      "Revenue rises proportionally with the price increase",
+      "Revenue falls proportionally with the price increase",
+      "Revenue remains unchanged — the % change in price exactly offsets the % change in quantity",
+      "Revenue becomes unpredictable without knowing consumer incomes"
+    ],
+    "correct": 2,
+    "exp": "At unit elasticity (|Ed| = 1), a 10% price rise causes exactly a 10% fall in quantity demanded — the effects exactly cancel, leaving total revenue unchanged. This is the boundary between elastic (price rise → revenue falls) and inelastic (price rise → revenue rises). Revenue is maximised at the unit-elastic point on a linear demand curve."
+  },
+  {
+    "id": 14,
+    "subject": "s2",
+    "session": "Session 2 · Costs, Markets & Disruption",
+    "q": "A firm has Fixed Costs of ₹50,000, Selling Price of ₹200 per unit, and Variable Cost of ₹150 per unit. What is the Break-Even Point in units?",
+    "opts": [
+      "100 units",
+      "250 units",
+      "500 units",
+      "1,000 units"
+    ],
+    "correct": 3,
+    "exp": "BEP = FC ÷ (Selling Price per unit − Variable Cost per unit) = ₹50,000 ÷ (₹200 − ₹150) = ₹50,000 ÷ ₹50 = 1,000 units. The denominator (₹50) is the 'contribution per unit.' Below 1,000 units = loss zone; above 1,000 units = profit zone. This is the single most important cost formula for managerial decisions."
+  },
+  {
+    "id": 15,
+    "subject": "s2",
+    "session": "Session 2 · Costs, Markets & Disruption",
+    "q": "What is the correct definition of Marginal Cost (MC)?",
+    "opts": [
+      "Total Cost divided by total quantity produced (TC ÷ Q)",
+      "Fixed Cost divided by quantity produced (FC ÷ Q)",
+      "The cost of producing exactly one additional unit (ΔTC ÷ ΔQ)",
+      "The difference between Average Total Cost and Average Fixed Cost"
+    ],
+    "correct": 2,
+    "exp": "Marginal Cost = ΔTC ÷ ΔQ — the cost of expanding output by exactly one additional unit. It is the most important cost concept for pricing decisions: profit is maximised where MC = MR (Marginal Revenue). Average Total Cost = TC ÷ Q. Average Fixed Cost = FC ÷ Q. ATC = AFC + AVC."
+  },
+  {
+    "id": 16,
+    "subject": "s2",
+    "session": "Session 2 · Costs, Markets & Disruption",
+    "q": "In the long run, what is the expected economic profit for a firm in a perfectly competitive market?",
+    "opts": [
+      "Positive profits, sustained by economies of scale",
+      "Zero — free entry and exit erode all economic profits",
+      "Negative — competitive pressure forces firms below break-even",
+      "Unpredictable — depends entirely on individual firm efficiency"
+    ],
+    "correct": 1,
+    "exp": "In perfect competition, long-run profit = ZERO. Because entry is free and products are identical, any positive profit attracts new entrants who increase supply until price falls to ATC (zero economic profit). This is the most important long-run result of perfect competition — it is the theoretical benchmark showing why monopoly power is economically valuable."
+  },
+  {
+    "id": 17,
+    "subject": "s2",
+    "session": "Session 2 · Costs, Markets & Disruption",
+    "q": "Why is Average Total Cost (ATC) described as U-shaped?",
+    "opts": [
+      "Initially rises due to high fixed costs, then falls as variable costs dominate",
+      "Initially falls as fixed costs spread over more units, then rises as diminishing returns push MC above ATC",
+      "Flat in the short run, then curved in the long run due to technology changes",
+      "Determined entirely by the firm's market structure position"
+    ],
+    "correct": 1,
+    "exp": "ATC is U-shaped for two reasons: (1) Initially FALLS: as output rises, Fixed Costs spread over more units (AFC falls), pulling ATC down. (2) Eventually RISES: diminishing returns to variable inputs push Marginal Cost above Average Cost, pulling ATC up. The minimum of the ATC curve is the most efficient output level for the firm."
+  },
+  {
+    "id": 18,
+    "subject": "s2",
+    "session": "Session 2 · Costs, Markets & Disruption",
+    "q": "What does 'Increasing Returns to Scale' mean?",
+    "opts": [
+      "As output rises, the firm must hire more workers than capital",
+      "Doubling all inputs produces more than double the output — average cost falls",
+      "Fixed costs increase in proportion to variable costs at higher outputs",
+      "Revenue increases faster than costs at any scale of production"
+    ],
+    "correct": 1,
+    "exp": "Increasing Returns to Scale (economies of scale): when all inputs double, output more than doubles → Average Cost falls. This creates competitive advantage for larger firms. Contrast: Constant Returns = inputs double → output exactly doubles → ATC constant. Decreasing Returns = inputs double → output less than doubles → ATC rises."
+  },
+  {
+    "id": 19,
+    "subject": "s2",
+    "session": "Session 2 · Costs, Markets & Disruption",
+    "q": "Which of the following is the defining characteristic of an Oligopoly market structure?",
+    "opts": [
+      "One dominant seller with no close substitutes",
+      "Many sellers with differentiated products and low entry barriers",
+      "A few large firms with high entry barriers and strategic interdependence in pricing",
+      "Many identical sellers with perfect information and free entry/exit"
+    ],
+    "correct": 2,
+    "exp": "Oligopoly = few large firms, high entry barriers, restricted information flow, and strategic interdependence — each firm's pricing decision is shaped by expectations of rivals' responses. Examples: Telecom (Airtel, Jio, Vi), aviation, banking. Pepsi vs. Coca-Cola's 1996 World Cup guerrilla campaign is the textbook oligopoly non-price competition example."
+  },
+  {
+    "id": 20,
+    "subject": "s2",
+    "session": "Session 2 · Costs, Markets & Disruption",
+    "q": "The Freemium model is best illustrated by which combination?",
+    "opts": [
+      "Amazon Prime and Netflix — recurring monthly fees",
+      "LinkedIn and Spotify — basic features free, pay for premium",
+      "Uber and Airbnb — access to assets without ownership",
+      "Google and Facebook — free service monetised through advertising"
+    ],
+    "correct": 1,
+    "exp": "Freemium = Free basic tier + Premium paid tier. LinkedIn (free profile vs. LinkedIn Premium) and Spotify (free with ads vs. Premium ad-free) are the canonical examples. The model hooks users with free value, then converts a fraction to paid. Near-zero marginal cost of digital services makes the free tier economically viable."
+  },
+  {
+    "id": 21,
+    "subject": "s2",
+    "session": "Session 2 · Costs, Markets & Disruption",
+    "q": "Pepsi's 1996 'Nothing Official About It' campaign during the Cricket World Cup is a classic example of which competitive behaviour?",
+    "opts": [
+      "Price-cutting strategy in a perfectly competitive market",
+      "Predatory pricing to drive Coca-Cola out of the market",
+      "Non-price competition in an oligopoly — brand and positioning vs. price",
+      "Monopolistic competition where product differentiation creates pricing power"
+    ],
+    "correct": 2,
+    "exp": "When Coca-Cola became the official drink of the 1996 Wills Cricket World Cup, Pepsi responded with 'Nothing Official About It' — repositioning itself as the anti-establishment choice through guerrilla marketing. This is textbook oligopoly non-price competition: attacking brand and positioning rather than cutting price, because price wars in oligopolies destroy everyone's margins."
+  },
+  {
+    "id": 22,
+    "subject": "s2",
+    "session": "Session 2 · Costs, Markets & Disruption",
+    "q": "Which disruptive business model is described as 'Access, not Ownership' — using digital platforms to temporarily connect users with assets they don't own?",
+    "opts": [
+      "Freemium model",
+      "Subscription model",
+      "Free + Scale model",
+      "Sharing Economy model"
+    ],
+    "correct": 3,
+    "exp": "The Sharing Economy model (Airbnb, Uber, DiDi) enables users to access assets temporarily via digital platforms without ownership or capital expenditure on inventory. The platform owner bears no asset cost while earning commissions. This fundamentally disrupts traditional asset-heavy businesses (hotels, taxi companies) by converting fixed costs into variable marketplace fees."
+  },
+  {
+    "id": 23,
+    "subject": "s2",
+    "session": "Session 2 · Costs, Markets & Disruption",
+    "q": "Moving rightward on the market structure spectrum from Perfect Competition to Pure Monopoly, which TWO things consistently increase?",
+    "opts": [
+      "Number of sellers and product differentiation",
+      "Entry barriers and monopoly pricing power",
+      "Information flow and factor mobility",
+      "Competition intensity and consumer surplus"
+    ],
+    "correct": 1,
+    "exp": "Moving right on the spectrum (Perfect Competition → Monopolistic → Oligopoly → Duopoly → Pure Monopoly): entry barriers increase (harder to enter) AND monopoly pricing power increases (more control over price). Simultaneously: number of sellers decreases, information flow decreases, factor mobility decreases. Pure Monopoly = maximum entry barriers + full price-making power."
+  },
+  {
+    "id": 24,
+    "subject": "s2",
+    "session": "Session 2 · Costs, Markets & Disruption",
+    "q": "Netflix and Amazon Prime are examples of which disruptive business model?",
+    "opts": [
+      "Freemium — basic features free with paid premium tier",
+      "Subscription — recurring revenue with predictable cash flows",
+      "Free + Scale — invest free until advertising monetises at critical mass",
+      "Marketplace — connecting buyers and sellers for commission"
+    ],
+    "correct": 1,
+    "exp": "Subscription model = recurring fee-based revenue (monthly/annual). Netflix and Amazon Prime deliver predictable cash flow and high retention economics — once subscribed, users rarely cancel. Contrast with Freemium (LinkedIn, Spotify — partial free access) or Free+Scale (Google, Facebook — completely free, monetised via advertising)."
+  },
+  {
+    "id": 25,
+    "subject": "s2",
+    "session": "Session 2 · Costs, Markets & Disruption",
+    "q": "In the short run, a firm should continue operating even if it is making a loss, provided which condition is met?",
+    "opts": [
+      "Price exceeds Average Total Cost (P > ATC)",
+      "Price exceeds Average Fixed Cost (P > AFC)",
+      "Price exceeds Average Variable Cost (P > AVC) — covering variable costs and contributing to fixed costs",
+      "Marginal Revenue exceeds Marginal Cost at all output levels"
+    ],
+    "correct": 2,
+    "exp": "In the short run, a firm should operate if Price > Average Variable Cost. Why? Fixed costs are sunk (paid regardless of production). If revenue covers variable costs AND contributes something toward fixed costs, the loss from operating is SMALLER than the loss from shutting down (which would still incur all fixed costs). Only shut down if Price < AVC."
+  },
+  {
+    "id": 26,
+    "subject": "s2",
+    "session": "Session 2 · Costs, Markets & Disruption",
+    "q": "In a Marketplace/Platform business model, how does the platform primarily generate revenue?",
+    "opts": [
+      "Subscription fees charged to users for access",
+      "Advertising revenue from brands targeting platform users",
+      "Commission or brokerage fees from transactions between buyers and sellers",
+      "Selling data about user behaviour to third parties"
+    ],
+    "correct": 2,
+    "exp": "Marketplace/Platform model (Amazon, eBay): revenue comes from commission/brokerage fees on transactions between buyers and sellers. The platform creates a two-sided network — providing liquidity on both sides creates lock-in. Seller + buyer liquidity makes the marketplace more valuable to both sides (Metcalfe's Law in action). The platform owns no inventory."
+  },
+  {
+    "id": 27,
+    "subject": "macro",
+    "session": "Session 3A · Business Environment & Country Risk",
+    "q": "The 'Hindu Rate of Growth' refers to what, and who coined it?",
+    "opts": [
+      "India's 8%+ post-reform growth rate; coined by Manmohan Singh",
+      "India's ~4% p.a. pre-reform stagnant growth rate; coined by economist Raj Krishna in 1978",
+      "A religious policy restricting foreign investment; coined by Jawaharlal Nehru",
+      "India's average GDP growth of ~6% over its entire post-independence history"
+    ],
+    "correct": 1,
+    "exp": "Hindu Rate of Growth (~4% p.a.) was coined by economist Raj Krishna in 1978 to describe India's sluggish, below-potential pre-reform growth rate under the License Raj (1950s–1980s). It was NOT fate — it was policy failure: the License Raj rationed entrepreneurship and suppressed competition. Raghuram Rajan warned in 2023 that India was 'dangerously close' to returning to this level."
+  },
+  {
+    "id": 28,
+    "subject": "macro",
+    "session": "Session 3A · Business Environment & Country Risk",
+    "q": "India's Ease of Doing Business ranking improved from 142nd to 63rd between 2014 and 2019. Which indicator showed the single biggest improvement?",
+    "opts": [
+      "Paying Taxes: 156 → 115 (−41 places)",
+      "Trading Across Borders: 126 → 68 (−58 places)",
+      "Getting Electricity: 137 → 22 (−115 places)",
+      "Dealing with Construction Permits: 184 → 27 (−157 places)"
+    ],
+    "correct": 3,
+    "exp": "The biggest improvement was in 'Dealing with Construction Permits': from 184th to 27th — a rise of 157 places. Other major improvements: Getting Electricity (137→22, +115), Resolving Insolvency (137→52, +85), Trading Across Borders (126→68, +58). Overall ranking rose 79 places (142→63). This demonstrates that targeted, indicator-specific reform works."
+  },
+  {
+    "id": 29,
+    "subject": "macro",
+    "session": "Session 3A · Business Environment & Country Risk",
+    "q": "Rostow's 5-stage model of economic growth identifies the 'Take-Off' stage as critical. What is the primary precondition for Take-Off?",
+    "opts": [
+      "A democratic political system with free elections and rule of law",
+      "Investment rate rising to 10%+ of national income, enabling rapid industrialisation",
+      "Foreign direct investment exceeding domestic savings for three consecutive years",
+      "Achievement of full employment and elimination of the agricultural sector"
+    ],
+    "correct": 1,
+    "exp": "Rostow's Take-Off (Stage 3) requires the investment rate to rise to 10%+ of national income, triggering rapid industrialisation. India's 1991 liberalisation reforms are considered its Take-Off catalyst. Stages: 1. Traditional Society → 2. Pre-conditions → 3. Take-Off → 4. Drive to Maturity → 5. Age of High Mass Consumption (US, Western Europe)."
+  },
+  {
+    "id": 30,
+    "subject": "macro",
+    "session": "Session 3A · Business Environment & Country Risk",
+    "q": "According to the global wealth distribution data, approximately what percentage of global wealth do the top 1% own?",
+    "opts": [
+      "10%",
+      "25%",
+      "40%",
+      "60%"
+    ],
+    "correct": 2,
+    "exp": "The top 1% own approximately 40% of global wealth, while the bottom 40% own only 3%. This represents the equity-efficiency trade-off central to macroeconomic policy: growth without redistribution eventually undermines social stability. This is why economic policy has twin goals — prosperity (growth) AND equity (redistribution)."
+  },
+  {
+    "id": 31,
+    "subject": "macro",
+    "session": "Session 3B · National Income, Inflation & Macro Theory",
+    "q": "What is the correct relationship between GDP, GNP, and NNP?",
+    "opts": [
+      "GDP > GNP > NNP always",
+      "GDP = GNP − Depreciation; NNP = GDP + Net income from abroad",
+      "GNP = GDP + Net income from abroad; NNP = GNP − Depreciation",
+      "NNP = GDP + GNP; Per Capita Income = NNP × Population"
+    ],
+    "correct": 2,
+    "exp": "GNP = GDP + income earned by residents abroad − income earned by foreigners domestically (territory → nationality adjustment). NNP = GNP − Depreciation of Capital (gross → net adjustment). Per Capita Income = NNP ÷ Population. NNP is the true welfare measure — it accounts for what actually 'wore out' in producing that output."
+  },
+  {
+    "id": 32,
+    "subject": "macro",
+    "session": "Session 3B · National Income, Inflation & Macro Theory",
+    "q": "Say's Law — the foundational axiom of Classical Economics — states what?",
+    "opts": [
+      "Demand creates its own supply through price signals",
+      "Supply creates its own demand — if goods are produced, income is generated to purchase them",
+      "Government spending always crowds out private investment",
+      "Prices adjust instantly to clear markets in both the short and long run"
+    ],
+    "correct": 1,
+    "exp": "Say's Law: 'Supply creates its own demand.' Classical economists believed that production generates the income needed to purchase that output — full employment equilibrium is automatic. This collapsed empirically during the Great Depression: America produced massively but demand vanished. This failure proved supply does NOT automatically create purchasing power, giving birth to Keynesian economics."
+  },
+  {
+    "id": 33,
+    "subject": "macro",
+    "session": "Session 3B · National Income, Inflation & Macro Theory",
+    "q": "According to Keynesian economics, what causes unemployment and how should it be fixed?",
+    "opts": [
+      "Unemployment is caused by excessive wages; fix by cutting minimum wage",
+      "Unemployment is voluntary — workers prefer leisure to available jobs at market wages",
+      "Unemployment reflects demand deficiency; fix via compensatory government spending to shift AD rightward",
+      "Unemployment is a natural market phenomenon that self-corrects if governments do not interfere"
+    ],
+    "correct": 2,
+    "exp": "Keynes reversed Classical theory: unemployment is INVOLUNTARY and caused by demand deficiency (insufficient aggregate demand), not worker preference. Fix: government must spend to fill the demand gap — shifting the AD curve rightward, raising output and employment. The Keynesian logic chain: demand falls → unemployment → government spends → AD rises → output rises → jobs restored."
+  },
+  {
+    "id": 34,
+    "subject": "macro",
+    "session": "Session 3B · National Income, Inflation & Macro Theory",
+    "q": "Why is the GNP Deflator preferred over the WPI (Wholesale Price Index) by economists as a measure of inflation?",
+    "opts": [
+      "The GNP Deflator is easier to calculate and requires less data collection",
+      "The WPI only tracks services; the GNP Deflator tracks goods",
+      "The GNP Deflator covers ALL goods and services in the economy, not just a pre-set basket",
+      "The GNP Deflator is legally mandated for government reporting unlike the WPI"
+    ],
+    "correct": 2,
+    "exp": "GNP Deflator = Nominal GNP ÷ Real GNP. Economists prefer it because it covers ALL goods and services produced in the economy — a comprehensive price index. WPI and CPI only track a pre-determined basket of goods, missing products not in the basket. Real GNP = GNP adjusted to base-year prices (inflation removed). Always use Real GNP for meaningful growth comparisons across years."
+  },
+  {
+    "id": 35,
+    "subject": "macro",
+    "session": "Session 3B · National Income, Inflation & Macro Theory",
+    "q": "What is the critical distinction between 'Disinflation' and 'Deflation'?",
+    "opts": [
+      "Disinflation occurs in developed economies; deflation occurs in developing economies",
+      "Disinflation = falling price LEVEL (prices declining); Deflation = slowing rate of price increase",
+      "Disinflation = slowing rate of price increase (prices still rising, but more slowly); Deflation = actual fall in price level",
+      "They are synonymous — both describe a falling general price level"
+    ],
+    "correct": 2,
+    "exp": "Critical exam distinction: Disinflation = the RATE of inflation is declining (prices still rising, just more slowly). Example: India's CPI falling from 10%+ to ~4% — goods are NOT cheaper, price rises just slowed. Deflation = the price LEVEL actually falls below base year. Deflation is dangerous: consumers delay purchases, revenues fall, unemployment rises. Japan's 'Lost Decade' is the canonical deflation case."
+  },
+  {
+    "id": 36,
+    "subject": "macro",
+    "session": "Session 3B · National Income, Inflation & Macro Theory",
+    "q": "What is 'Stagflation' and what causes it in the AD-AS model?",
+    "opts": [
+      "High growth combined with zero inflation; caused by a rightward AD shift",
+      "High unemployment combined with falling prices; caused by a leftward AD shift",
+      "Rising prices combined with falling output; caused by a leftward AS shift (supply shock)",
+      "High growth combined with rising wages; caused by excessive government spending"
+    ],
+    "correct": 2,
+    "exp": "Stagflation = stagnation + inflation simultaneously — rising prices AND falling output. Caused by an adverse AS shift (leftward): supply shocks (oil price rises, wars, pandemics) increase production costs, shifting AS left. Output falls AND prices rise. This is the worst policy dilemma: cutting rates raises output but worsens inflation; raising rates reduces inflation but deepens recession."
+  },
+  {
+    "id": 37,
+    "subject": "macro",
+    "session": "Session 3B · National Income, Inflation & Macro Theory",
+    "q": "Zimbabwe's 2008 hyperinflation is an example of which inflation category?",
+    "opts": [
+      "Moderate inflation: below 10% p.a.",
+      "Galloping inflation: 10–999% p.a.",
+      "Hyperinflation: above 1,000% p.a.",
+      "Disinflation: declining rate of inflation"
+    ],
+    "correct": 2,
+    "exp": "Three inflation types by threshold: Moderate = below 10% (manageable, central bank targets ~2–4%); Galloping = 10–999% (seriously damaging, erodes savings, distorts investment); Hyperinflation = above 1,000% (Zimbabwe 2008, Weimar Germany 1923 — currency collapse, barter replaces money). Zimbabwe's currency became worthless; trillion-dollar notes became everyday items."
+  },
+  {
+    "id": 38,
+    "subject": "macro",
+    "session": "Session 3B · National Income, Inflation & Macro Theory",
+    "q": "In the 4-sector circular flow model, what is the correct national income identity?",
+    "opts": [
+      "National Income = Consumption + Investment only",
+      "National Income = C + I + G + (X − M)",
+      "National Income = GDP + GNP + NNP",
+      "National Income = Government Spending + Tax Revenue"
+    ],
+    "correct": 1,
+    "exp": "4-sector circular flow: National Income = C (consumption) + I (investment) + G (government spending) + (X − M) (net exports). Government injects via G, withdraws via taxes (T). Foreign sector: exports (X) inject demand, imports (M) withdraw demand. Key identity: All income = All expenditure = All output. GDP can be measured three equivalent ways: expenditure, income, or output approach."
+  },
+  {
+    "id": 39,
+    "subject": "policy",
+    "session": "Session 4A · Fiscal Policy",
+    "q": "What is the definition of Fiscal Policy?",
+    "opts": [
+      "The central bank's programme to regulate money supply and credit flow",
+      "Government's programme of discretionary changes in expenditure, taxation, and borrowings to achieve macroeconomic goals",
+      "The World Bank's framework for evaluating country creditworthiness",
+      "International trade agreements that affect tariffs and export subsidies"
+    ],
+    "correct": 1,
+    "exp": "Fiscal Policy = government's programme of making discretionary changes in the pattern and level of its expenditure, taxation, and borrowings to achieve economic goals. Instruments: budgetary policy, government expenditure, taxation, public borrowings (BETB mnemonic). Targets: growth, employment, price stability, income equality. NOT monetary policy — that is the central bank's domain."
+  },
+  {
+    "id": 40,
+    "subject": "policy",
+    "session": "Session 4A · Fiscal Policy",
+    "q": "A Deficit Budget is expansionary. What does this mean for Aggregate Demand?",
+    "opts": [
+      "AD falls because higher borrowing raises interest rates, crowding out investment",
+      "AD is unchanged because government spending exactly replaces private spending",
+      "AD rises because government spending (injection) exceeds taxation (withdrawal), adding net demand",
+      "AD falls because higher taxes needed to repay debt reduce consumer spending"
+    ],
+    "correct": 2,
+    "exp": "Deficit Budget: G (spending) > T (taxation). G is an injection into the economy; T is a withdrawal. Net result: G − T > 0 → net injection → AD shifts rightward → expansionary. India has historically run deficit budgets as a deliberate development-financing strategy since the First Five-Year Plan. Financed by domestic bonds, T-bills, or external borrowing (World Bank, IMF)."
+  },
+  {
+    "id": 41,
+    "subject": "policy",
+    "session": "Session 4A · Fiscal Policy",
+    "q": "Which of the following is the best example of an Automatic Stabiliser?",
+    "opts": [
+      "The government passes a ₹2 lakh crore COVID-19 relief package in Parliament",
+      "The RBI cuts the repo rate in response to a recession",
+      "Income tax revenue automatically falls during a recession as fewer people earn income",
+      "The government announces a new infrastructure spending programme"
+    ],
+    "correct": 2,
+    "exp": "Automatic Stabilisers act without new legislation: income tax revenue falls automatically in recessions (fewer people earning) and unemployment benefits rise automatically. Both cushion the fall in AD without requiring parliamentary approval. Contrast with Discretionary Fiscal Policy: the COVID-19 relief package required deliberate legislation — ad hoc, targeted, but slower to implement."
+  },
+  {
+    "id": 42,
+    "subject": "policy",
+    "session": "Session 4A · Fiscal Policy",
+    "q": "What is the key difference between Direct and Indirect taxes?",
+    "opts": [
+      "Direct taxes are paid by corporations; indirect taxes are paid by individuals",
+      "Direct taxes are levied on income/wealth of the earner (cannot be shifted); indirect taxes are levied on goods/services and shifted to the consumer via higher prices",
+      "Direct taxes are collected by state governments; indirect taxes by the central government",
+      "Direct taxes rise with inflation; indirect taxes are fixed in nominal terms"
+    ],
+    "correct": 1,
+    "exp": "Direct Tax (income tax, corporate tax): levied directly on the earner, cannot be shifted to another party. Reduces disposable income → consumption falls → AD falls. Indirect Tax (GST, excise duty): levied on goods/services, burden shifted from seller to consumer via higher prices. Raises prices → reduces real consumption → AD falls. Both withdraw demand but through different channels."
+  },
+  {
+    "id": 43,
+    "subject": "policy",
+    "session": "Session 4A · Fiscal Policy",
+    "q": "The fiscal policy instruments mnemonic 'BETB' stands for what four tools?",
+    "opts": [
+      "Banking rates · Exchange rates · Trade policy · Balance of payments",
+      "Budgetary policy · Expenditure · Taxation · Borrowings",
+      "Business environment · Equity markets · Treasury · Bonds",
+      "Base money · Exchange controls · Transfer payments · Bonds"
+    ],
+    "correct": 1,
+    "exp": "BETB = Budgetary policy · Expenditure (government spending) · Taxation · Borrowings. These are the four instruments in every fiscal policy toolkit. Memory hook: 'Budget Everything Through Borrowing.' The targets fiscal policy seeks to achieve are: growth, employment, price stability, and income equality."
+  },
+  {
+    "id": 44,
+    "subject": "policy",
+    "session": "Session 4A · Fiscal Policy",
+    "q": "What makes taxation fundamentally different from other government charges (e.g. fees, fines)?",
+    "opts": [
+      "Taxes are optional; fees are compulsory",
+      "Taxes fund government salaries; fees fund public services",
+      "Taxes are non-quid-pro-quo — the taxpayer receives no direct individual return for their specific payment",
+      "Taxes are proportional to income; fees are flat amounts"
+    ],
+    "correct": 2,
+    "exp": "Taxation is non-quid-pro-quo: taxpayers receive no direct, individual return for their payment. You pay ₹5 lakh in income tax but cannot demand ₹5 lakh worth of specific government services in return. Contrast with fees (you pay → you receive a specific service) or fines (penalty for rule-breaking). This is the fundamental legal and economic definition of a tax."
+  },
+  {
+    "id": 45,
+    "subject": "policy",
+    "session": "Session 4B · Monetary Policy & Financial Markets",
+    "q": "The Money Multiplier formula is 1/R, where R is the reserve ratio. If the RBI sets a reserve ratio of 5%, how much broad money does ₹100 of base money generate?",
+    "opts": [
+      "₹500",
+      "₹1,000",
+      "₹2,000",
+      "₹5,000"
+    ],
+    "correct": 2,
+    "exp": "Money Multiplier = 1/R = 1/0.05 = 20. Total broad money = ₹100 × 20 = ₹2,000. This shows why reserve ratio changes are powerful: lowering R from 10% (multiplier=10) to 5% (multiplier=20) DOUBLES the money-creating capacity of the same base money. Higher R → smaller multiplier → less money created → tighter monetary conditions."
+  },
+  {
+    "id": 46,
+    "subject": "policy",
+    "session": "Session 4B · Monetary Policy & Financial Markets",
+    "q": "When the RBI (or Federal Reserve) conducts an Open-Market Operation by BUYING government bonds, what is the direct effect on the money supply?",
+    "opts": [
+      "Money supply contracts — the public must pay cash to the RBI for the bonds",
+      "Money supply expands — RBI pays cash for bonds, injecting funds into the banking system",
+      "Money supply is unchanged — bonds and cash are equivalent assets",
+      "Only long-term interest rates fall; the money supply is unaffected"
+    ],
+    "correct": 1,
+    "exp": "OMO Purchase (Expansionary): RBI buys government bonds from the public → pays cash → cash enters bank reserves → money supply EXPANDS → interest rates fall → investment rises → AD rises. OMO Sale (Contractionary): RBI sells bonds → public pays cash → cash leaves circulation → money supply CONTRACTS → rates rise → demand cools. Buy = inject = expand. Sell = extract = contract."
+  },
+  {
+    "id": 47,
+    "subject": "policy",
+    "session": "Session 4B · Monetary Policy & Financial Markets",
+    "q": "In fractional-reserve banking with a 10% reserve ratio, a ₹100 initial deposit leads to what total expansion of money in the banking system?",
+    "opts": [
+      "₹190",
+      "₹500",
+      "₹900",
+      "₹1,000"
+    ],
+    "correct": 3,
+    "exp": "Fractional-Reserve Chain with R=10%: Bank 1 keeps ₹10, lends ₹90 → Bank 2 keeps ₹9, lends ₹81 → Bank 3 keeps ₹8.10, lends ₹72.90 → ... Total broad money = ₹100 / 0.10 = ₹1,000. Formula: Total = Initial Deposit / Reserve Ratio = a / R. The ₹100 base creates ₹1,000 — a 10× multiplication through the lending chain."
+  },
+  {
+    "id": 48,
+    "subject": "policy",
+    "session": "Session 4B · Monetary Policy & Financial Markets",
+    "q": "What distinguishes a Depository Financial Institution from a Non-Depository Financial Institution?",
+    "opts": [
+      "Depository FIs are government-owned; non-depository FIs are privately owned",
+      "Depository FIs accept insured deposits (banks, credit unions); non-depository FIs do not (insurance companies, mutual funds)",
+      "Depository FIs only serve retail customers; non-depository FIs serve institutional clients",
+      "Depository FIs are regulated by RBI; non-depository FIs are unregulated"
+    ],
+    "correct": 1,
+    "exp": "Depository FIs accept INSURED deposits: commercial banks, savings associations, savings banks, credit unions. They must be government-regulated because the government bears the insurance liability. Non-Depository FIs: Contractual (insurance companies, pension funds — steady premium income) and Non-Contractual (mutual funds, investment banks — market-dependent funding). The deposit insurance creates moral hazard → regulation is mandatory."
+  },
+  {
+    "id": 49,
+    "subject": "policy",
+    "session": "Session 4B · Monetary Policy & Financial Markets",
+    "q": "What is 'Maturity Intermediation' as a function of Financial Institutions?",
+    "opts": [
+      "Converting small individual deposits into large-scale loans for major projects",
+      "Transforming short-term deposits (savers' preference) into long-term loans (borrowers' need) by absorbing the mismatch at scale",
+      "Matching the maturity dates of bonds with investors' holding periods",
+      "Setting interest rates on deposits equal to inflation to preserve purchasing power"
+    ],
+    "correct": 1,
+    "exp": "Maturity Intermediation: savers want liquidity (short-term, can withdraw anytime) while borrowers need tenure (long-term mortgages, business loans). FIs absorb this mismatch by pooling thousands of short-term deposits to fund long-term loans. Contrast with Denomination Intermediation: pooling thousands of small deposits (₹5,000 SIPs) to fund large investments inaccessible to individual small savers."
+  },
+  {
+    "id": 50,
+    "subject": "policy",
+    "session": "Session 4B · Monetary Policy & Financial Markets",
+    "q": "The monetary policy transmission chain follows a specific sequence. Which correctly describes the full chain from central bank action to economic outcome?",
+    "opts": [
+      "RBI → changes GDP directly → interest rates adjust → FIs respond",
+      "RBI (OMO/Repo Rate) → Money Supply changes → Interest Rates change → Investment changes → AD shifts → Output and Prices adjust",
+      "RBI → Tax policy changes → Government spending adjusts → Multiplier effect → GDP changes",
+      "RBI → Exchange rate changes → Export competitiveness shifts → Trade balance improves → GDP rises"
+    ],
+    "correct": 1,
+    "exp": "Monetary Policy Transmission Chain: RBI/Central Bank (OMO or Repo Rate change) → Money Supply rises/falls → Interest Rates fall/rise → Investment rises/falls → Aggregate Demand shifts right/left → Output and Prices adjust. Each link has lags and leakages, which is why monetary policy takes 6–18 months to show full effects — unlike fiscal policy's more direct injection via G spending."
+  }
+];
+
+/* ═══════════════════════════════════
+   STATE
+═══════════════════════════════════ */
+let state = {
+  filter: 'all',
+  deck: [],
+  idx: 0,
+  answered: false,
+  score: 0,
+  macroCorrect: 0, macroTotal: 0,
+  policyCorrect: 0, policyTotal: 0,
+  s1Correct: 0, s1Total: 0,
+  s2Correct: 0, s2Total: 0,
+};
+
+/* ═══════════════════════════════════
+   UTILITIES
+═══════════════════════════════════ */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pct(n, d) { return d === 0 ? 0 : Math.round((n / d) * 100); }
+
+function getTier(p) {
+  if (p >= 90) return { tier: "Distinction \u2014 Exam-Ready", sub: "Outstanding command of Business Economics frameworks." };
+  if (p >= 75) return { tier: "Strong Command \u2014 Pass with Merit", sub: "Solid understanding; minor gaps worth revisiting." };
+  if (p >= 60) return { tier: "Adequate \u2014 Revise Key Topics", sub: "Core concepts present; reinforce weaker sessions." };
+  return { tier: "Needs Work \u2014 Return to Notes", sub: "Systematic revision recommended before the exam." };
+}
+
+/* ═══════════════════════════════════
+   FILTER
+═══════════════════════════════════ */
+function setFilter(f) {
+  state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  document.getElementById('btnAll').classList.add('active-all');
+  if (f !== 'all') {
+    const key = f.charAt(0).toUpperCase() + f.slice(1);
+    const el = document.getElementById('btn' + key);
+    if (el) el.classList.add('active-' + f);
+    document.getElementById('btnAll').classList.remove('active-all');
+  }
+  startQuiz(f);
+}
+
+/* ═══════════════════════════════════
+   QUIZ FLOW
+═══════════════════════════════════ */
+function startQuiz(f) {
+  if (f) state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  document.getElementById('btnAll').classList.add('active-all');
+  if (state.filter !== 'all') {
+    const key = state.filter.charAt(0).toUpperCase() + state.filter.slice(1);
+    const el = document.getElementById('btn' + key);
+    if (el) { el.classList.add('active-' + state.filter); document.getElementById('btnAll').classList.remove('active-all'); }
+  }
+
+  const pool = ALL_QUESTIONS.filter(q => state.filter === 'all' || q.subject === state.filter);
+  state.deck = shuffle(pool);
+  state.idx = 0;
+  state.score = 0;
+  state.macroCorrect = 0; state.macroTotal = 0;
+  state.policyCorrect = 0; state.policyTotal = 0;
+  state.s1Correct = 0; state.s1Total = 0;
+  state.s2Correct = 0; state.s2Total = 0;
+
+  state.deck.forEach(q => {
+    if (q.subject === 'macro') state.macroTotal++;
+    if (q.subject === 'policy') state.policyTotal++;
+    if (q.subject === 's1') state.s1Total++;
+    if (q.subject === 's2') state.s2Total++;
+  });
+
+  updateScore();
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizArea').style.display = 'block';
+  document.getElementById('progressArea').style.display = 'block';
+  document.getElementById('emptyState').style.display = 'none';
+
+  if (state.deck.length === 0) {
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = state.deck[state.idx];
+  const total = state.deck.length;
+  const num = state.idx + 1;
+  state.answered = false;
+
+  const fillPct = ((num - 1) / total) * 100;
+  document.getElementById('progressFill').style.width = fillPct + '%';
+  document.getElementById('progressText').textContent = 'Question ' + num + ' of ' + total;
+  document.getElementById('progressPct').textContent = Math.round(fillPct) + '%';
+
+  const tag = document.getElementById('subjectTag');
+  tag.textContent = q.subject.toUpperCase();
+  tag.className = 'subject-tag ' + q.subject;
+
+  document.getElementById('sessionLabel').textContent = q.session;
+  document.getElementById('questionNum').textContent = '#' + q.id;
+  document.getElementById('questionText').textContent = q.q;
+
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = '<span class="option-letter">' + letters[i] + '</span>'
+                  + '<span class="option-text">' + opt + '</span>'
+                  + '<span class="key-hint">' + (i + 1) + '</span>';
+    btn.addEventListener('click', () => selectAnswer(i));
+    grid.appendChild(btn);
+  });
+
+  const ep = document.getElementById('explanationPanel');
+  ep.className = 'explanation-panel';
+  document.getElementById('explanationText').textContent = '';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'slideUp 0.3s ease';
+}
+
+function selectAnswer(chosen) {
+  if (state.answered) return;
+  state.answered = true;
+
+  const q = state.deck[state.idx];
+  const btns = document.querySelectorAll('.option-btn');
+  const correct = q.correct;
+
+  btns.forEach((btn, i) => {
+    btn.classList.add('disabled');
+    if (i === correct) btn.classList.add('correct');
+    else if (i === chosen) btn.classList.add('wrong');
+  });
+
+  if (chosen === correct) {
+    state.score++;
+    if (q.subject === 'macro') state.macroCorrect++;
+    else if (q.subject === 'policy') state.policyCorrect++;
+    else if (q.subject === 's1') state.s1Correct++;
+    else if (q.subject === 's2') state.s2Correct++;
+  }
+
+  updateScore();
+
+  const ep = document.getElementById('explanationPanel');
+  document.getElementById('explanationText').textContent = q.exp;
+  ep.classList.add('show', q.subject + '-border');
+
+  document.getElementById('nextBtn').style.display = 'flex';
+  setTimeout(() => ep.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+}
+
+function nextQuestion() {
+  if (!state.answered) return;
+  state.idx++;
+  if (state.idx >= state.deck.length) {
+    showResults();
+  } else {
+    renderQuestion();
+    document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function updateScore() {
+  const answeredSoFar = state.idx + (state.answered ? 1 : 0);
+  document.getElementById('scoreNum').textContent = state.score;
+  document.getElementById('scoreDen').textContent = Math.max(answeredSoFar, state.score);
+}
+
+/* ═══════════════════════════════════
+   RESULTS
+═══════════════════════════════════ */
+function showResults() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('progressArea').style.display = 'none';
+  document.getElementById('resultsScreen').classList.add('show');
+
+  const total = state.deck.length;
+  const p = pct(state.score, total);
+  const { tier, sub } = getTier(p);
+
+  document.getElementById('resultsTier').textContent = tier;
+  document.getElementById('resultsSubtitle').textContent = sub;
+  document.getElementById('rTotal').textContent = state.score + '/' + total;
+  document.getElementById('rTotalSub').textContent = p + '%';
+  document.getElementById('rMacro').textContent = state.macroCorrect + '/' + state.macroTotal;
+  document.getElementById('rMacroSub').textContent = pct(state.macroCorrect, state.macroTotal) + '%';
+  document.getElementById('rPolicy').textContent = state.policyCorrect + '/' + state.policyTotal;
+  document.getElementById('rPolicySub').textContent = pct(state.policyCorrect, state.policyTotal) + '%';
+  document.getElementById('rS1').textContent = state.s1Correct + '/' + state.s1Total;
+  document.getElementById('rS1Sub').textContent = pct(state.s1Correct, state.s1Total) + '%';
+  document.getElementById('rS2').textContent = state.s2Correct + '/' + state.s2Total;
+  document.getElementById('rS2Sub').textContent = pct(state.s2Correct, state.s2Total) + '%';
+
+  document.getElementById('resultsScreen').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ═══════════════════════════════════
+   KEYBOARD SHORTCUTS
+═══════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (['1','2','3','4'].includes(e.key)) {
+    const btns = document.querySelectorAll('.option-btn:not(.disabled)');
+    const idx = parseInt(e.key) - 1;
+    if (btns[idx]) btns[idx].click();
+  }
+  if ((e.key === 'Enter' || e.key === ' ') && state.answered) {
+    e.preventDefault();
+    nextQuestion();
+  }
+  if (e.key === 'r' || e.key === 'R') startQuiz(state.filter);
+});
+
+/* ═══════════════════════════════════
+   INIT
+═══════════════════════════════════ */
+startQuiz('all');
+</script>
+</body>
+</html>
